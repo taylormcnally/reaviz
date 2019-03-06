@@ -1,14 +1,14 @@
 export const simpleSankeyNodes = [
-  { title: 'A1', id: '123' },
-  { title: 'A2', id: '124' },
-  { title: 'B1', id: '146' },
-  { title: 'B2', id: '167' }
+  { title: 'A1', id: '1' },
+  { title: 'A2', id: '2' },
+  { title: 'B1', id: '3' },
+  { title: 'B2', id: '4' }
 ];
 
 export const simpleSankeyLinks = [
-  { source: '123', target: '146', value: 50 },
-  { source: '123', target: '146', value: 15 },
-  { source: '124', target: '167', value: 10 }
+  { source: '1', target: '3', value: 8 },
+  { source: '2', target: '4', value: 4 },
+  { source: '1', target: '4', value: 2 }
 ];
 
 export const sankeyNodes = [
