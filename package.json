@@ -11,6 +11,8 @@
   },
   "source": "src/index.ts",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "jsnext:main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
