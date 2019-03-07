@@ -1,7 +1,8 @@
 import { configure, addDecorator, addParameters } from '@storybook/react';
-import centered from '@storybook/addon-centered/react';
 import { themes } from '@storybook/theming';
 import { withInfo } from '@storybook/addon-info';
+import centered from '@storybook/addon-centered/react';
+import ReavizLogo from './assets/reaviz.png';
 
 addParameters({
   options: {
@@ -9,10 +10,8 @@ addParameters({
     theme: {
       ...themes.dark,
       animation: false,
-      name: 'REAVIZ',
-      brand: 'REAVIZ',
-      title: 'REAVIZ',
-      image: '',
+      brandImage: ReavizLogo,
+      brandTitle: 'REAVIZ',
       url: 'https://jask-oss.github.io/reaviz/'
     }
   },
