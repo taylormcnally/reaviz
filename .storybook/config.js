@@ -2,7 +2,7 @@ import { configure, addDecorator, addParameters } from '@storybook/react';
 import { themes } from '@storybook/theming';
 import { withInfo } from '@storybook/addon-info';
 import centered from '@storybook/addon-centered/react';
-import ReavizLogo from './assets/reaviz.png';
+import ReavizLogo from './assets/reaviz.svg';
 
 addParameters({
   options: {
