@@ -18,8 +18,8 @@
   - [Sparklines](charts/sparklines.md)
   - [Sankey Chart](charts/sankey.md)
   - [Hive Plot](charts/hive-plot.md)
-  - Scatter Plot
-  - Bubble Chart
+  - [Scatter Plot](charts/scatter-plot.md)
+  - [Bubble Chart](charts/bubble-chart.md)
 - Utilities
   - Brush
   - Pan Zoom

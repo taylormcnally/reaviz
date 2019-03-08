@@ -17,6 +17,7 @@ import * as mapDoc from '../docs/charts/map.md';
 import * as sankeyDoc from '../docs/charts/sankey.md';
 import * as hiveDoc from '../docs/charts/hive-plot.md';
 import * as scatterPlot from '../docs/charts/scatter-plot.md';
+import * as bubbleChart from '../docs/charts/bubble-chart.md';
 
 import * as customChartsDoc from '../docs/advanced/custom-charts.md';
 import * as animationsDoc from '../docs/advanced/animations.md';
@@ -36,14 +37,15 @@ storiesOf('Documentation/Getting Started', module)
 
 storiesOf('Documentation/Charts', module)
   .add('Area Chart', () => <Markdown source={areaChartDoc} />)
-  .add('Line Chart', () => <Markdown source={lineChartDoc} />)
   .add('Bar Chart', () => <Markdown source={barChartDoc} />)
+  .add('Line Chart', () => <Markdown source={lineChartDoc} />)
+  .add('Map', () => <Markdown source={mapDoc} />)
   .add('Pie Chart', () => <Markdown source={pieChartDoc} />)
   .add('Sparklines', () => <Markdown source={sparklineDoc} />)
-  .add('Map', () => <Markdown source={mapDoc} />)
   .add('Sankey Diagram', () => <Markdown source={sankeyDoc} />)
   .add('Hive Plot', () => <Markdown source={hiveDoc} />)
-  .add('Scatter Plot', () => <Markdown source={scatterPlot} />);
+  .add('Scatter Plot', () => <Markdown source={scatterPlot} />)
+  .add('Bubble Chart', () => <Markdown source={bubbleChart} />);
 
 storiesOf('Documentation/Advanced', module)
   .add('Custom Charts', () => <Markdown source={customChartsDoc} />)
