@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
 import { ScatterPlot } from './ScatterPlot';
 import {
@@ -15,9 +15,7 @@ import { ScatterSeries, ScatterPoint } from './ScatterSeries';
 import {
   LinearYAxis,
   LinearYAxisTickSeries,
-  LinearYAxisTickLabel,
-  LinearXAxis,
-  LinearXAxisTickSeries
+  LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Scatter Plot', module)
@@ -147,7 +145,7 @@ class BubbleChartLiveUpdate extends React.Component<any, any> {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <ScatterPlot
           height={400}
           width={750}
@@ -168,7 +166,7 @@ class BubbleChartLiveUpdate extends React.Component<any, any> {
         />
         <br />
         <button onClick={this.updateData}>Update</button>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }
