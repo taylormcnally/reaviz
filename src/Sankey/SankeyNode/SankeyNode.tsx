@@ -1,5 +1,6 @@
 import React, { Component, Fragment, createRef } from 'react';
 import classNames from 'classnames';
+import posed from 'react-pose';
 import { ChartInternalDataTypes } from '../../common/data';
 import { CloneElement } from '../../common/utils/children';
 import { formatValue } from '../../common/utils/formatting';
@@ -10,8 +11,26 @@ import bind from 'memoize-bind';
 import * as css from './SankeyNode.module.scss';
 import { transition } from '../../common/utils/animations';
 
+export const PosedNode = posed.rect({
+  enter: {
+    opacity: 1,
+    transition: {
+      ...transition,
+      opacity: {
+        type: 'tween',
+        ease: 'linear',
+        duration: 250
+      }
+    }
+  },
+  exit: {
+    opacity: 0
+  }
+});
+
 export interface SankeyNodeProps extends Node {
   active: boolean;
+  animated: boolean;
   disabled: boolean;
   className?: string;
   style?: object;
@@ -39,6 +58,7 @@ const modifiers = {
 export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
   static defaultProps: Partial<SankeyNodeProps> = {
     active: false,
+    animated: true,
     color: DEFAULT_COLOR,
     disabled: false,
     label: <SankeyLabel />,
@@ -94,6 +114,7 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
 
   renderNode() {
     const {
+      animated,
       disabled,
       className,
       style,
@@ -110,8 +131,10 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
     const nodeHeight = y1 && y0 && y1 - y0 > 0 ? y1 - y0 : 0;
 
     return (
-      <rect
-        key={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
+      <PosedNode
+        pose="enter"
+        poseKey={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
+        animated={animated}
         className={classNames(css.node, className)}
         style={style}
         ref={this.rect}

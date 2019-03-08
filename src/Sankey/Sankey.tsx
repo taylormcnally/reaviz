@@ -116,6 +116,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
         element={nodes[index]}
         key={`node-${index}`}
         active={active}
+        animated={animated}
         disabled={disabled}
         chartWidth={chartWidth}
         onMouseEnter={bind(this.onNodeActive, this, computedNode)}

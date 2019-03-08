@@ -40,7 +40,7 @@ storiesOf('Charts/Sankey', module)
         <SankeyNode key={`node-${i}`} {...node} />
       ))}
       links={simpleSankeyLinks.map((link, i) => (
-        <SankeyLink key={`link-${i}`} gradient={false} {...link} />
+        <SankeyLink key={`link-${i}`} {...link} />
       ))}
     />
   ))
