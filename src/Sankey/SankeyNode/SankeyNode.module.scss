@@ -1,5 +1,10 @@
 .node {
+  fill-opacity: 0.9;
   transition: opacity 100ms ease-in-out;
+
+  &:hover {
+    fill-opacity: 1;
+  }
 }
 
 .tooltip {

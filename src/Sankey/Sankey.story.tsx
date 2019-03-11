@@ -44,7 +44,7 @@ storiesOf('Charts/Sankey', module)
       ))}
     />
   ))
-  .add('Simple (No gradient)', () => (
+  .add('Multilevels', () => (
     <Sankey
       colorScheme={colorScheme}
       height={600}
@@ -53,7 +53,7 @@ storiesOf('Charts/Sankey', module)
         <SankeyNode key={`node-${i}`} {...node} />
       ))}
       links={sankeyLinks.map((link, i) => (
-        <SankeyLink key={`link-${i}`} gradient={false} {...link} />
+        <SankeyLink key={`link-${i}`} {...link} />
       ))}
     />
   ))
@@ -65,7 +65,7 @@ storiesOf('Charts/Sankey', module)
           <SankeyNode key={`node-${i}`} {...node} />
         ))}
         links={sankeyLinks.map((link, i) => (
-          <SankeyLink key={`link-${i}`} gradient={false} {...link} />
+          <SankeyLink key={`link-${i}`} {...link} />
         ))}
       />
     </div>
@@ -78,7 +78,8 @@ storiesOf('Charts/Sankey', module)
         {
           Left: 'left',
           Center: 'center',
-          Right: 'right'
+          Right: 'right',
+          Justified: 'justify'
         },
         'left',
         1
@@ -94,7 +95,7 @@ storiesOf('Charts/Sankey', module)
             <SankeyNode key={`node-${i}`} {...node} />
           ))}
           links={sankeyLinks.map((link, i) => (
-            <SankeyLink key={`link-${i}`} gradient={false} {...link} />
+            <SankeyLink key={`link-${i}`} {...link} />
           ))}
         />
       );

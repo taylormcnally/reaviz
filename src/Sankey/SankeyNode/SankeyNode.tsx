@@ -13,7 +13,6 @@ import { transition } from '../../common/utils/animations';
 
 export const PosedNode = posed.rect({
   enter: {
-    x: ({ x0 }) => x0,
     opacity: 1,
     transition: {
       ...transition,
@@ -25,7 +24,6 @@ export const PosedNode = posed.rect({
     }
   },
   exit: {
-    x: ({ x0 }) => x0,
     opacity: 0
   }
 });
@@ -116,6 +114,7 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
 
   renderNode() {
     const {
+      animated,
       disabled,
       className,
       style,
@@ -128,13 +127,14 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
       y1,
       onClick
     } = this.props;
-    const nodeWidth = width || (x1 && x0 ? x1 - x0 : 0);
-    const nodeHeight = y1 && y0 ? y1 - y0 : 0;
+    const nodeWidth = width || (x1 && x0 && x1 - x0 > 0 ? x1 - x0 : 0);
+    const nodeHeight = y1 && y0 && y1 - y0 > 0 ? y1 - y0 : 0;
 
     return (
       <PosedNode
         pose="enter"
         poseKey={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
+        animated={animated}
         className={classNames(css.node, className)}
         style={style}
         ref={this.rect}
