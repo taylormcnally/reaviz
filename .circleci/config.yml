@@ -19,7 +19,7 @@ var_4: &checkout_code
     # After checkout, rebase on top of master. By default, PRs are not rebased on top of master,
     # which we want. See https://discuss.circleci.com/t/1662
     post: git pull --ff-only origin "refs/pull/${CI_PULL_REQUEST//*pull\//}/merge"
-    
+
 # Restores the cache that could be available for the current Yarn lock file. The cache usually
 # includes the node modules and the Bazel repository cache.
 var_5: &restore_cache
@@ -32,17 +32,17 @@ var_6: &save_cache
     key: *cache_key
     paths:
       - "node_modules"
-      
+
 # Ensure depedencies installed
 var_7: &npm_install
   run: npm install
-  
+
 # Publish branches
 var_8: &publish_branches_filter
   branches:
     only:
       - master
-      
+
 # Ignore branches
 var_9: &ignore_branch_filter
   branches:
@@ -59,7 +59,7 @@ jobs:
       - *npm_install
       - run: npm run build
       - *save_cache
-      
+
   build_storybook:
     <<: *job_defaults
     steps:
@@ -67,7 +67,7 @@ jobs:
       - *restore_cache
       - *npm_install
       - run: npm run build-storybook
-      
+
   test:
     <<: *job_defaults
     steps:
@@ -75,12 +75,13 @@ jobs:
       - *restore_cache
       - *npm_install
       - run: npm test -- --runInBand --no-cache --coverage
-      
+
 workflows:
   version: 2
   build-test:
     jobs:
-      - build_package
+      - build_package:
+          filters: *ignore_branch_filter
       - test:
           filters: *ignore_branch_filter
           requires:
