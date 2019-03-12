@@ -101,6 +101,7 @@
     "autoprefixer": "^9.4.10",
     "gh-pages": "^2.0.1",
     "jest": "^24.1.0",
+    "jest-junit": "^6.3.0",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
     "postcss-focus-visible": "^4.0.0",
@@ -123,6 +124,12 @@
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}"
     ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/.storybook/",
+      "<rootDir>/storybook-static/",
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/"
+    ],
     "setupFilesAfterEnv": [
       "react-testing-library/cleanup-after-each.js"
     ],
@@ -134,6 +141,14 @@
     ],
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "reporters": [
+      "default",
+      [
+        "jest-junit", {
+          "outputDirectory": "./coverage"
+        }
+      ]
     ],
     "moduleFileExtensions": [
       "ts",

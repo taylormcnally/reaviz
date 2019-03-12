@@ -28,7 +28,14 @@ export default [
           autoprefixer()
         ]
       }),
-      typescript(),
+      typescript({
+        clean: true,
+        exclude: [
+          '*.d.ts',
+          '**/*.d.ts',
+          '**/*.story.tsx'
+        ]
+      }),
       resolve(),
       sourceMaps()
     ]
