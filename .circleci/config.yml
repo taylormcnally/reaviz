@@ -58,6 +58,8 @@ jobs:
       - *restore_cache
       - *npm_install
       - run: npm run build
+      - store_artifacts:
+          path: ./dist
       - *save_cache
 
   build_storybook:
@@ -67,6 +69,8 @@ jobs:
       - *restore_cache
       - *npm_install
       - run: npm run build-storybook
+      - store_artifacts:
+          path: ./storybook-static
 
   test:
     <<: *job_defaults
@@ -75,6 +79,10 @@ jobs:
       - *restore_cache
       - *npm_install
       - run: npm test -- --runInBand --no-cache --coverage
+      - store_test_results:
+          path: ./coverage
+      - store_artifacts:
+          path: ./coverage
 
 workflows:
   version: 2
