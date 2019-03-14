@@ -1,4 +1,4 @@
-import React, { Component, ReactNode, cloneElement } from 'react';
+import React, { Component, cloneElement } from 'react';
 import { Tooltip, TooltipProps } from '../../common/TooltipArea/Tooltip';
 import { TooltipTemplate } from './TooltipTemplate';
 import { isFunction } from 'lodash-es';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import bind from 'memoize-bind';
-import { ZoomPan, ZoomPanEvent, ZoomPanProps } from './ZoomPan';
+import { ZoomPan, ZoomPanEvent } from './ZoomPan';
 import { ChartInternalDataShape, ChartDataTypes } from '../data';
 import { getXScale } from '../scales';
 

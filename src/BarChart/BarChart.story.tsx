@@ -22,7 +22,7 @@ import {
   StackedNormalizedBarSeries,
   MarimekkoBarSeries
 } from './BarSeries';
-import { GridlineSeries, Gridline, GridStripe } from '../common/Gridline';
+import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Bar/Single Series', module)
