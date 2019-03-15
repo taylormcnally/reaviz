@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 
 export const degrees = (radians: number) => (radians / Math.PI) * 180 - 90;
 
-interface RadialAxisLineProps {
+export interface RadialAxisLineProps {
   index: number;
   radius: any;
   angle: any;
   stroke: ((index: number) => string) | string;
 }
 
-export class RadialAxisLine extends Component<RadialAxisLineProps, {}> {
-  static defaultProps = {
-    style: () => {}
+export class RadialAxisLine extends Component<RadialAxisLineProps> {
+  static defaultProps: Partial<RadialAxisLineProps> = {
+    stroke: '#054856'
   };
 
   render() {

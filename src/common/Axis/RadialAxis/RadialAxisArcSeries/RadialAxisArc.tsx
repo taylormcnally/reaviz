@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-interface RadialAxisArcProps {
+export interface RadialAxisArcProps {
   width: number;
   padding: number;
   minRadius: number;
@@ -10,7 +10,12 @@ interface RadialAxisArcProps {
   strokeDasharray: ((index: number) => string) | string;
 }
 
-export class RadialAxisArc extends Component<RadialAxisArcProps, {}> {
+export class RadialAxisArc extends Component<RadialAxisArcProps> {
+  static defaultProps: Partial<RadialAxisArcProps> = {
+    stroke: '#054856',
+    strokeDasharray: '1,4'
+  };
+
   getInnerRadius(index: number) {
     const { minRadius, count, padding, width } = this.props;
     return minRadius + (count - (index + 1)) * (width + padding);

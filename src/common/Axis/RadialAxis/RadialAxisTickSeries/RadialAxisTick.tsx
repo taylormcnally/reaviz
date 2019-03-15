@@ -1,44 +1,43 @@
 import React, { Component } from 'react';
-import { RadialAxisTickLine } from './RadialAxisTickLine';
-import { RadialAxisTickLabel } from './RadialAxisTickLabel';
+import { RadialAxisTickLineProps, RadialAxisTickLine } from './RadialAxisTickLine';
+import { RadialAxisTickLabelProps, RadialAxisTickLabel } from './RadialAxisTickLabel';
+import { CloneElement } from '../../../utils/children';
 
-interface RadialAxisTickProps {
+export interface RadialAxisTickProps {
   scale: any;
   outerRadius: number;
-  tick: any;
+  data: any;
   index: number;
-  line: {
-    show: boolean;
-    stroke: string;
-    size: number;
-  };
-  label: {
-    show: boolean;
-    fill: string;
-    fontSize: number;
-    fontFamily: string;
-    format?: (value: any, index: number) => any;
-  };
+  line: JSX.Element | null;
+  label: JSX.Element | null;
 }
 
-export class RadialAxisTick extends Component<RadialAxisTickProps, {}> {
+export class RadialAxisTick extends Component<RadialAxisTickProps> {
+  static defaultProps: Partial<RadialAxisTickProps> = {
+    outerRadius: 0,
+    line: <RadialAxisTickLine />,
+    label: <RadialAxisTickLabel />
+  };
+
   render() {
-    const { line, label, scale, outerRadius, tick, index } = this.props;
-    const rotation = (scale(tick) * 180) / Math.PI - 90;
+    const { line, label, scale, outerRadius, data, index } = this.props;
+    const rotation = (scale(data) * 180) / Math.PI - 90;
     const transform = `rotate(${rotation}) translate(${outerRadius + 25},0)`;
 
     return (
       <g transform={transform}>
-        {line.show && (
-          <RadialAxisTickLine size={line.size} stroke={line.stroke} />
+        {line && (
+          <CloneElement<RadialAxisTickLineProps>
+            element={line}
+          />
         )}
-        {label.show && (
-          <RadialAxisTickLabel
-            {...label}
+        {label && (
+          <CloneElement<RadialAxisTickLabelProps>
+            element={label}
             index={index}
             rotation={rotation}
-            lineSize={line.size}
-            tick={tick}
+            lineSize={line.props.size}
+            data={data}
           />
         )}
       </g>

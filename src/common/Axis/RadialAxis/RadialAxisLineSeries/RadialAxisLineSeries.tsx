@@ -1,28 +1,31 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { scaleLinear, scalePoint } from 'd3-scale';
 import { range } from 'd3-array';
-import { RadialAxisLine } from './RadialAxisLine';
+import { RadialAxisLine, RadialAxisLineProps } from './RadialAxisLine';
+import { CloneElement } from '../../../utils/children';
 
-interface RadialAxisLineSeriesProps {
+export interface RadialAxisLineSeriesProps {
   minRadius: number;
   count: number;
   padding: number;
   arcWidth: number;
   height: number;
-  stroke: ((index: number) => string) | string;
+  line: JSX.Element;
 }
 
-export class RadialAxisLineSeries extends Component<
-  RadialAxisLineSeriesProps,
-  {}
-> {
+export class RadialAxisLineSeries extends Component<RadialAxisLineSeriesProps> {
+  static defaultProps: Partial<RadialAxisLineSeriesProps> = {
+    count: 12,
+    line: <RadialAxisLine />
+  };
+
   getInnerArcRadius(arcWidth: number) {
     const { minRadius, count, padding } = this.props;
     return minRadius + (count - (count - 3)) * (arcWidth + padding);
   }
 
   render() {
-    const { count, stroke, height, arcWidth } = this.props;
+    const { count, height, arcWidth, line } = this.props;
     const outerRadius = height / 2;
     const lines = range(count);
     const innerRadius = this.getInnerArcRadius(arcWidth);
@@ -32,17 +35,17 @@ export class RadialAxisLineSeries extends Component<
       .range([0.75, 2.25 * Math.PI]);
 
     return (
-      <g>
+      <Fragment>
         {lines.map((_, i) => (
-          <RadialAxisLine
+          <CloneElement<RadialAxisLineProps>
+            element={line}
             key={i}
             radius={radius}
             index={i}
             angle={angle}
-            stroke={stroke}
           />
         ))}
-      </g>
+      </Fragment>
     );
   }
 }
