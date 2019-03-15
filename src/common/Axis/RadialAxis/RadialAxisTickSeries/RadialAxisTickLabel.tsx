@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import { formatValue } from '../../../utils/formatting';
 
-interface RadialAxisTickLabelProps {
-  tick: any;
+export interface RadialAxisTickLabelProps {
+  data: any;
   lineSize: number;
   rotation: number;
   fill: string;
   fontSize: number;
   fontFamily: string;
   index: number;
-  format?: (value: any, index: number) => any;
+  format?: (value: any, index: number) => any | string;
 }
 
-export class RadialAxisTickLabel extends Component<
-  RadialAxisTickLabelProps,
-  {}
-> {
+export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
+  static defaultProps: Partial<RadialAxisTickLabelProps> = {
+    fill: '#3B5F6A',
+    fontSize: 11,
+    fontFamily: 'sans-serif'
+  };
+
   render() {
     const {
-      tick,
+      data,
       fill,
       fontFamily,
       fontSize,
@@ -27,7 +30,7 @@ export class RadialAxisTickLabel extends Component<
       rotation,
       index
     } = this.props;
-    const text = format ? format(tick, index) : formatValue(tick);
+    const text = format ? format(data, index) : formatValue(data);
     const shouldRotate = rotation > 100 && rotation;
     const rotate = shouldRotate ? 180 : 0;
     const translate = shouldRotate ? -30 : 0;

@@ -1,46 +1,48 @@
-import React, { Component } from 'react';
-import { RadialAxisArc } from './RadialAxisArc';
+import React, { Component, Fragment } from 'react';
+import { RadialAxisArc, RadialAxisArcProps } from './RadialAxisArc';
 import { range } from 'd3-array';
+import { CloneElement } from '../../../utils/children';
 
-interface RadialAxisArcSeriesProps {
+export interface RadialAxisArcSeriesProps {
+  arc: JSX.Element;
   count: number;
   padding: number;
   minRadius: number;
-  stroke: ((index: number) => string) | string;
-  strokeDasharray: ((index: number) => string) | string;
   arcWidth: number;
 }
 
-export class RadialAxisArcSeries extends Component<
-  RadialAxisArcSeriesProps,
-  {}
-> {
+export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
+  static defaultProps: Partial<RadialAxisArcSeriesProps> = {
+    padding: 50,
+    minRadius: 10,
+    count: 13,
+    arc: <RadialAxisArc />
+  };
+
   render() {
     const {
       count,
       padding,
       minRadius,
-      stroke,
-      strokeDasharray,
+      arc,
       arcWidth
     } = this.props;
     const arcs = range(count);
 
     return (
-      <g>
+      <Fragment>
         {arcs.map(i => (
-          <RadialAxisArc
+          <CloneElement<RadialAxisArcProps>
+            element={arc}
             key={i}
             index={i}
             minRadius={minRadius}
             count={count}
             width={arcWidth}
             padding={padding}
-            stroke={stroke}
-            strokeDasharray={strokeDasharray}
           />
         ))}
-      </g>
+      </Fragment>
     );
   }
 }

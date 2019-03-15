@@ -37,10 +37,6 @@ storiesOf('Charts/Axis/Radial', module)
             <RadialAxis
               height={600}
               xScale={xScale}
-              line={{
-                ...RadialAxis.defaultProps.line,
-                show: false
-              }}
             />
           </g>
         </svg>

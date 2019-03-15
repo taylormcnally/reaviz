@@ -1,46 +1,37 @@
-import React, { Component } from 'react';
-import { RadialAxisTick } from './RadialAxisTick';
+import React, { Component, Fragment } from 'react';
+import { RadialAxisTick, RadialAxisTickProps } from './RadialAxisTick';
+import { CloneElement } from '../../../utils/children';
 
-interface RadialAxisTickSeriesProps {
+export interface RadialAxisTickSeriesProps {
   scale: any;
   count: number;
   outerRadius: number;
-  line: {
-    show: boolean;
-    stroke: string;
-    size: number;
-  };
-  label: {
-    show: boolean;
-    fill: string;
-    fontSize: number;
-    fontFamily: string;
-    format?: (value: any, index: number) => any;
-  };
+  tick: JSX.Element | null;
 }
 
-export class RadialAxisTickSeries extends Component<
-  RadialAxisTickSeriesProps,
-  {}
-> {
+export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
+  static defaultProps: Partial<RadialAxisTickSeriesProps> = {
+    count: 12,
+    tick: <RadialAxisTick />
+  };
+
   render() {
-    const { scale, count, outerRadius, line, label } = this.props;
+    const { scale, count, outerRadius, tick } = this.props;
     const ticks = scale.ticks(count);
 
     return (
-      <g>
-        {ticks.map((tick, i) => (
-          <RadialAxisTick
+      <Fragment>
+        {ticks.map((data, i) => (
+          <CloneElement<RadialAxisTickProps>
+            element={tick}
             key={i}
             index={i}
             scale={scale}
-            tick={tick}
-            line={line}
-            label={label}
+            data={data}
             outerRadius={outerRadius}
           />
         ))}
-      </g>
+      </Fragment>
     );
   }
 }
