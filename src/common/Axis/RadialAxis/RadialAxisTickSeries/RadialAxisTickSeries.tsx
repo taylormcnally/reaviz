@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { RadialAxisTick, RadialAxisTickProps } from './RadialAxisTick';
 import { CloneElement } from '../../../utils/children';
+import { reduceTicks } from '../../../utils/ticks';
 
 export interface RadialAxisTickSeriesProps {
   scale: any;
@@ -15,9 +16,18 @@ export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
     tick: <RadialAxisTick />
   };
 
+  getTicks(scale, count) {
+    if (scale.ticks) {
+      return scale.ticks.apply(scale, [count]);
+    } else {
+      const tickValues = scale.domain();
+      return reduceTicks(tickValues, count);
+    }
+  }
+
   render() {
     const { scale, count, outerRadius, tick } = this.props;
-    const ticks = scale.ticks(count);
+    const ticks = this.getTicks(scale, count);
 
     return (
       <Fragment>
