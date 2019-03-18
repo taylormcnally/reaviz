@@ -25,7 +25,7 @@ const options = {
 export function formatValue(value: ChartInternalDataTypes): string {
   if (value !== undefined) {
     if (isDate(value)) {
-      return value.toLocaleDateString(locale, options);
+      return (value as Date).toLocaleDateString(locale, options);
     } else if (isNumber(value)) {
       return value.toLocaleString();
     }

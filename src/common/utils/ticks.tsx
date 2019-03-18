@@ -3,7 +3,7 @@ import { TimeInterval } from 'd3-time';
 /**
  * Reduce the ticks to the max number of ticks.
  */
-function reduceTicks<T>(ticks: T[], maxTicks: number) {
+export function reduceTicks<T>(ticks: T[], maxTicks: number) {
   if (ticks.length > maxTicks) {
     const reduced: T[] = [];
     const modulus = Math.floor(ticks.length / maxTicks);
@@ -22,7 +22,7 @@ function reduceTicks<T>(ticks: T[], maxTicks: number) {
 /**
  * Determine the max ticks for the available width.
  */
-function getMaxTicks(size: number, dimension: number) {
+export function getMaxTicks(size: number, dimension: number) {
   const tickWidth = Math.max(size, 0);
   return Math.floor(dimension / tickWidth);
 }
