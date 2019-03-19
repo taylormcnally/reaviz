@@ -8,7 +8,7 @@ export interface RadialScatterPointProps {
   animated: boolean;
   xScale: any;
   yScale: any;
-  color: any;
+  fill: string;
   id: string;
   className?: any;
   size?: ((d) => number) | number;
@@ -35,8 +35,8 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps> {
     return transform;
   }
 
-  renderCircle(fill: string) {
-    const { size, data } = this.props;
+  renderCircle() {
+    const { size, data, fill } = this.props;
     const transform = this.getTranslate(data);
     const sizeVal = typeof size === 'function' ? size(data) : size;
 
@@ -50,12 +50,9 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps> {
   }
 
   render() {
-    const { data, index, color } = this.props;
-    const fill = color(data, index);
-
     return (
       <Fragment>
-        {this.renderCircle(fill)}
+        {this.renderCircle()}
       </Fragment>
     );
   }

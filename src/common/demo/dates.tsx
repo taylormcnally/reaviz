@@ -5,6 +5,7 @@ import { generateDate, randomNumber } from './utils';
 const generateData = (count, minVal = 1, maxVal = 50) =>
   range(count)
     .map(i => ({
+      id: (i + 1).toString(),
       key: generateDate(i),
       data: randomNumber(minVal, maxVal)
     }))
@@ -17,18 +18,22 @@ export const smallDateData = generateData(15);
 export const singleDateData = [
   {
     key: generateDate(14),
+    id: '1',
     data: 10
   },
   {
     key: generateDate(10),
+    id: '2',
     data: 8
   },
   {
     key: generateDate(5),
+    id: '3',
     data: 18
   },
   {
     key: generateDate(2),
+    id: '4',
     data: 10
   }
 ];
