@@ -9,6 +9,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
   .addDecorator(withKnobs)
   .add('Simple', () => {
     const innerRadius = number('Inner Radius', 80);
+    const size = number('Size', 5);
     const animated = boolean('Animated', true);
     const data = object('Data', medDateData);
     const fill = color('Fill', 'rgba(174, 52, 255, .5)');
@@ -24,6 +25,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
             animated={animated}
             point={
               <RadialScatterPoint
+                size={size}
                 fill={fill}
               />
             }
