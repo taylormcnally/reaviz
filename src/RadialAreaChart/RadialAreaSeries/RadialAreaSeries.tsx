@@ -14,8 +14,8 @@ export interface RadialAreaSeriesProps {
   xScale: any;
   yScale: any;
   id: string;
-  area?: JSX.Element;
-  line?: JSX.Element;
+  area: JSX.Element | null;
+  line: JSX.Element | null;
   animated: boolean;
 }
 
@@ -41,7 +41,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
     return (
       <CloneElement<RadialAreaProps>
         element={area}
-        id={`${id}-rarea-0`}
+        id={`${id}-radial-area`}
         xScale={xScale}
         yScale={yScale}
         animated={animated}
@@ -53,7 +53,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
   }
 
   renderLine() {
-    const { line, id, xScale, yScale, data, animated } = this.props;
+    const { line, xScale, yScale, data, animated } = this.props;
 
     return (
       <CloneElement<RadialLineProps>
@@ -72,7 +72,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
 
     return (
       <PoseGroup animateOnMount={animated}>
-        <PoseSVGGElement key={1}>
+        <PoseSVGGElement key="1">
           {area && this.renderArea()}
           {line && this.renderLine()}
         </PoseSVGGElement>

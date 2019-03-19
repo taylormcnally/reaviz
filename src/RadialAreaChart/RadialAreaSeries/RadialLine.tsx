@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialLine, curveCardinalClosed } from 'd3-shape';
 import { PosedRadialArea } from './PosedRadialArea';
