@@ -1,4 +1,4 @@
-import React, { Component, Fragment, createRef } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialLine } from 'd3-shape';
 import { PosedGroupTransform } from '../../common/utils/animations';
@@ -12,6 +12,7 @@ export interface RadialScatterPointProps {
   fill: string;
   id: string;
   className?: any;
+  symbol: ((value) => ReactNode);
   size?: ((d) => number) | number;
 }
 
@@ -37,7 +38,7 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps> {
   }
 
   render() {
-    const { size, data, fill, index, animated } = this.props;
+    const { size, data, fill, index, animated, symbol } = this.props;
     const transform = this.getTranslate(data);
     const exitTransform = this.getTranslate({ ...data, y: 0 });
     const sizeVal = typeof size === 'function' ? size(data) : size;
@@ -49,10 +50,13 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps> {
         animated={animated}
         exitProps={{ transform: exitTransform }}
       >
-        <circle
-          r={sizeVal}
-          fill={fill}
-        />
+        {symbol && symbol(data)}
+        {!symbol && (
+          <circle
+            r={sizeVal}
+            fill={fill}
+          />
+        )}
       </PosedGroupTransform>
     );
   }
