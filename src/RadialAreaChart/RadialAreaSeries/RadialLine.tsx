@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialLine, curveCardinalClosed } from 'd3-shape';
-import { PosedRadialLine } from './PosedRadialLine';
+import { PosedRadialArea } from './PosedRadialArea';
 
 export interface RadialLineProps {
   data: ChartInternalShallowDataShape[];
@@ -42,7 +42,7 @@ export class RadialLine extends Component<RadialLineProps> {
     };
 
     return (
-      <PosedRadialLine
+      <PosedRadialArea
         pose="enter"
         poseKey={enterProps.d}
         animated={animated}
