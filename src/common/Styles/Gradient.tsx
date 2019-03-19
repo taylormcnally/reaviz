@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-interface GradientProps {
+export interface GradientProps {
   id?: string;
   color?: string;
   offsets: Array<{
@@ -10,7 +10,7 @@ interface GradientProps {
   }>;
 }
 
-export class Gradient extends React.Component<GradientProps, {}> {
+export class Gradient extends Component<GradientProps> {
   static defaultProps: GradientProps = {
     offsets: [
       { offset: '0%', stopOpacity: 0.3 },
@@ -20,6 +20,7 @@ export class Gradient extends React.Component<GradientProps, {}> {
 
   render() {
     const { id, color, offsets } = this.props;
+
     return (
       <linearGradient
         spreadMethod="pad"

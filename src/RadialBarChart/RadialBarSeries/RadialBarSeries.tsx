@@ -63,7 +63,7 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
 
     return (
       <PoseGroup animateOnMount={animated}>
-        {data.map(this.renderBar.bind(this))}
+        {data.map((d, i) => this.renderBar(d, i))}
       </PoseGroup>
     );
   }

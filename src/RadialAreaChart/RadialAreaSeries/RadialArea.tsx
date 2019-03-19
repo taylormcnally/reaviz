@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialArea, curveCardinalClosed } from 'd3-shape';
+import { RadialGradient, RadialGradientProps } from '../../common/Styles';
+import { CloneElement } from '../../common/utils';
 
 export interface RadialAreaProps {
   data: ChartInternalShallowDataShape[];
@@ -11,11 +13,23 @@ export interface RadialAreaProps {
   id: string;
   className?: any;
   innerRadius: number;
+  gradient?: JSX.Element;
 }
 
 export class RadialArea extends Component<RadialAreaProps> {
   static defaultProps: Partial<RadialAreaProps> = {
+    gradient: <RadialGradient />
   };
+
+  getFill(color: string) {
+    const { id, gradient } = this.props;
+
+    if (!gradient) {
+      return color;
+    }
+
+    return `url(#${id}-gradient)`;
+  }
 
   getArc(data: ChartInternalShallowDataShape[]) {
     const { xScale, yScale, innerRadius } = this.props;
@@ -27,28 +41,10 @@ export class RadialArea extends Component<RadialAreaProps> {
       .curve(curveCardinalClosed)
 
     return radialFn(data as any);
-
-    /*
-    const { innerRadius, xScale, yScale } = this.props;
-
-    const outerRadius = yScale(data.y);
-    const startAngle = xScale(data.x);
-    const endAngle = xScale(data.x) + xScale.bandwidth();
-
-    const arcFn = arc()
-      .innerRadius(innerRadius)
-      .outerRadius(() => outerRadius)
-      .startAngle(() => startAngle)
-      .endAngle(() => endAngle)
-      .padAngle(0.01)
-      .padRadius(innerRadius);
-
-    return arcFn(data as any);
-    */
   }
 
   render() {
-    const { data, color, id } = this.props;
+    const { data, color, id, gradient, innerRadius } = this.props;
 
     const d = this.getArc(data);
     const fill = color(data, 0);
@@ -57,8 +53,16 @@ export class RadialArea extends Component<RadialAreaProps> {
       <Fragment>
         <path
           d={d}
-          fill={fill}
+          fill={this.getFill(fill)}
         />
+        {gradient && (
+          <CloneElement<RadialGradientProps>
+            element={gradient}
+            id={`${id}-gradient`}
+            radius={`${innerRadius}%`}
+            color={fill}
+          />
+        )}
       </Fragment>
     );
   }
