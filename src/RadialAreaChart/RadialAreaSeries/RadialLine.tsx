@@ -24,7 +24,7 @@ export class RadialLine extends Component<RadialLineProps> {
     const radialFn = radialLine()
       .angle((d: any) => xScale(d.x))
       .radius((d: any) => yScale(d.y))
-      .curve(curveCardinalClosed)
+      .curve(curveCardinalClosed);
 
     return radialFn(data as any);
   }
