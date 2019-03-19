@@ -7,6 +7,7 @@ import { PosedRadialBar } from './PosedRadialBar';
 import chroma from 'chroma-js';
 import { CloneElement } from '../../common/utils/children';
 import { ChartTooltipProps, ChartTooltip } from '../../common/TooltipArea';
+import { path } from 'd3-path';
 
 export interface RadialBarProps {
   data: ChartInternalShallowDataShape;
@@ -21,6 +22,7 @@ export interface RadialBarProps {
   barCount: number;
   className?: any;
   tooltip: JSX.Element;
+  curved: boolean;
   onClick: (event) => void;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
@@ -34,6 +36,7 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
   static defaultProps: Partial<RadialBarProps> = {
     gradient: true,
     tooltip: <ChartTooltip />,
+    curved: false,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
@@ -82,21 +85,38 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
   }
 
   getArc(data: ChartInternalShallowDataShape) {
-    const { innerRadius, xScale, yScale } = this.props;
+    const { innerRadius, xScale, yScale, curved } = this.props;
 
     const outerRadius = yScale(data.y);
-    const startAngle = xScale(data.x);
-    const endAngle = xScale(data.x) + xScale.bandwidth();
 
-    const arcFn = arc()
-      .innerRadius(innerRadius)
-      .outerRadius(() => outerRadius)
-      .startAngle(() => startAngle)
-      .endAngle(() => endAngle)
-      .padAngle(0.01)
-      .padRadius(innerRadius);
+    if (curved) {
+      const startAngle = xScale(data.x);
+      const endAngle = startAngle + xScale.bandwidth();
 
-    return arcFn(data as any);
+      const arcFn = arc()
+        .innerRadius(innerRadius)
+        .outerRadius(() => outerRadius)
+        .startAngle(() => startAngle)
+        .endAngle(() => endAngle)
+        .padAngle(0.01)
+        .padRadius(innerRadius);
+
+      return arcFn(data as any);
+    } else {
+      const startAngle = xScale(data.x) - Math.PI * 0.5;
+      const endAngle = startAngle + xScale.bandwidth();
+
+      const innerAngleDistance = endAngle - startAngle;
+      const arcLength = innerRadius * innerAngleDistance;
+      const outerAngleDistance = arcLength / outerRadius;
+      const halfAngleDistanceDelta = (innerAngleDistance - outerAngleDistance) / 2;
+
+      const pathFn = path();
+      pathFn.arc(0, 0, innerRadius, startAngle, endAngle);
+      pathFn.arc(0, 0, outerRadius, endAngle - halfAngleDistanceDelta, startAngle + halfAngleDistanceDelta, true);
+
+      return pathFn.toString();
+    }
   }
 
   renderBar(color: string) {
