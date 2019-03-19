@@ -18,7 +18,8 @@ export interface RadialScatterPointProps {
 
 export class RadialScatterPoint extends Component<RadialScatterPointProps> {
   static defaultProps: Partial<RadialScatterPointProps> = {
-    size: 3
+    size: 3,
+    fill: 'rgba(174, 52, 255, .5)'
   };
 
   getTranslate(data: ChartInternalShallowDataShape) {
