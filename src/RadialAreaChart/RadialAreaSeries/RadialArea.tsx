@@ -3,6 +3,7 @@ import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialArea, curveCardinalClosed } from 'd3-shape';
 import { RadialGradient, RadialGradientProps } from '../../common/Styles';
 import { CloneElement } from '../../common/utils';
+import { PosedRadialArea } from './PosedRadialArea';
 
 export interface RadialAreaProps {
   data: ChartInternalShallowDataShape[];
@@ -43,18 +44,36 @@ export class RadialArea extends Component<RadialAreaProps> {
     return radialFn(data as any);
   }
 
+  renderArea(fill: string) {
+    const { data, className, animated } = this.props;
+    const enterProps = {
+      d: this.getPath(data)
+    };
+
+    const exitProps = {
+      d: this.getPath(data.map(d => ({ ...d, y: 0 })))
+    };
+
+    return (
+      <PosedRadialArea
+        pose="enter"
+        poseKey={enterProps.d}
+        animated={animated}
+        enterProps={enterProps}
+        exitProps={exitProps}
+        className={className}
+        fill={this.getFill(fill)}
+      />
+    );
+  }
+
   render() {
     const { data, color, id, gradient, innerRadius } = this.props;
-
-    const d = this.getPath(data);
     const fill = color(data, 0);
 
     return (
       <Fragment>
-        <path
-          d={d}
-          fill={this.getFill(fill)}
-        />
+        {this.renderArea(fill)}
         {gradient && (
           <CloneElement<RadialGradientProps>
             element={gradient}

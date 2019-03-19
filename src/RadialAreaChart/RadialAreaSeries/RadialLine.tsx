@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialLine, curveCardinalClosed } from 'd3-shape';
+import { PosedRadialLine } from './PosedRadialLine';
 
 export interface RadialLineProps {
   data: ChartInternalShallowDataShape[];
@@ -29,20 +30,29 @@ export class RadialLine extends Component<RadialLineProps> {
   }
 
   render() {
-    const { data, color, strokeWidth } = this.props;
-
-    const d = this.getPath(data);
+    const { data, color, strokeWidth, animated, className } = this.props;
     const fill = color(data, 0);
 
+    const enterProps = {
+      d: this.getPath(data)
+    };
+
+    const exitProps = {
+      d: this.getPath(data.map(d => ({ ...d, y: 0 })))
+    };
+
     return (
-      <Fragment>
-        <path
-          d={d}
-          stroke={fill}
-          fill="none"
-          strokeWidth={strokeWidth}
-        />
-      </Fragment>
+      <PosedRadialLine
+        pose="enter"
+        poseKey={enterProps.d}
+        animated={animated}
+        enterProps={enterProps}
+        exitProps={exitProps}
+        className={className}
+        stroke={fill}
+        fill="none"
+        strokeWidth={strokeWidth}
+      />
     );
   }
 }
