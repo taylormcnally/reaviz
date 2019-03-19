@@ -31,6 +31,11 @@
   - Gridlines
   - Tooltips
   - Markline
+  - Styles
+      - Gradient
+          - Linear
+          - Radial
+      - Pattern
 - Advanced
   - [Creating Custom Charts](advanced/custom-charts.md)
   - [Animations](advanced/animations.md)
