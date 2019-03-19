@@ -31,7 +31,7 @@ export class RadialArea extends Component<RadialAreaProps> {
     return `url(#${id}-gradient)`;
   }
 
-  getArc(data: ChartInternalShallowDataShape[]) {
+  getPath(data: ChartInternalShallowDataShape[]) {
     const { xScale, yScale, innerRadius } = this.props;
 
     const radialFn = radialArea()
@@ -46,7 +46,7 @@ export class RadialArea extends Component<RadialAreaProps> {
   render() {
     const { data, color, id, gradient, innerRadius } = this.props;
 
-    const d = this.getArc(data);
+    const d = this.getPath(data);
     const fill = color(data, 0);
 
     return (

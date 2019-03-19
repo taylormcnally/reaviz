@@ -5,6 +5,7 @@ import { CloneElement } from '../../common/utils/children';
 import { PoseSVGGElement } from '../../common/utils/animations';
 import { PoseGroup } from 'react-pose';
 import { RadialAreaProps, RadialArea } from './RadialArea';
+import { RadialLine, RadialLineProps } from './RadialLine';
 
 export interface RadialAreaSeriesProps {
   data: ChartInternalShallowDataShape[];
@@ -13,7 +14,8 @@ export interface RadialAreaSeriesProps {
   xScale: any;
   yScale: any;
   id: string;
-  area: JSX.Element;
+  area?: JSX.Element;
+  line?: JSX.Element;
   animated: boolean;
 }
 
@@ -21,6 +23,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
   static defaultProps: Partial<RadialAreaSeriesProps> = {
     colorScheme: [...sequentialScheme],
     area: <RadialArea />,
+    line: <RadialLine />,
     animated: true
   };
 
@@ -36,27 +39,43 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
     const { area, id, xScale, yScale, data, animated, innerRadius } = this.props;
 
     return (
-      <PoseSVGGElement key={1}>
-        <CloneElement<RadialAreaProps>
-          element={area}
-          id={`${id}-rarea-0`}
-          xScale={xScale}
-          yScale={yScale}
-          animated={animated}
-          color={this.getColor.bind(this)}
-          data={data}
-          innerRadius={innerRadius}
-        />
-      </PoseSVGGElement>
+      <CloneElement<RadialAreaProps>
+        element={area}
+        id={`${id}-rarea-0`}
+        xScale={xScale}
+        yScale={yScale}
+        animated={animated}
+        color={this.getColor.bind(this)}
+        data={data}
+        innerRadius={innerRadius}
+      />
+    );
+  }
+
+  renderLine() {
+    const { line, id, xScale, yScale, data, animated } = this.props;
+
+    return (
+      <CloneElement<RadialLineProps>
+        element={line}
+        xScale={xScale}
+        yScale={yScale}
+        animated={animated}
+        color={this.getColor.bind(this)}
+        data={data}
+      />
     );
   }
 
   render() {
-    const { data, animated } = this.props;
+    const { area, line, animated } = this.props;
 
     return (
       <PoseGroup animateOnMount={animated}>
-        {this.renderArea()}
+        <PoseSVGGElement key={1}>
+          {area && this.renderArea()}
+          {line && this.renderLine()}
+        </PoseSVGGElement>
       </PoseGroup>
     );
   }
