@@ -24,7 +24,10 @@
   - Brush
   - Pan Zoom
   - Axis
+      - Linear
+      - Radial
   - Legends
+      - Discrete
   - Gridlines
   - Tooltips
   - Markline
