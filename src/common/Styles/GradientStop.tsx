@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 export interface GradientStopProps {
   offset: number | string;
@@ -6,10 +6,16 @@ export interface GradientStopProps {
   color?: string;
 }
 
-export const GradientStop = ({ offset, stopOpacity, color }: GradientStopProps) => (
-  <stop
-    offset={offset}
-    stopOpacity={stopOpacity}
-    stopColor={color}
-  />
-);
+export class GradientStop extends Component<GradientStopProps> {
+  render() {
+    const { offset, stopOpacity, color } = this.props;
+
+    return (
+      <stop
+        offset={offset}
+        stopOpacity={stopOpacity}
+        stopColor={color}
+      />
+    );
+  }
+}

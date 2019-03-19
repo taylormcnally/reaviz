@@ -4,7 +4,7 @@ import { CloneElement } from '../utils';
 
 export interface RadialGradientProps {
   id: string;
-  stops: GradientStop[];
+  stops: JSX.Element[];
   color?: string;
   radius: number | string;
 }
