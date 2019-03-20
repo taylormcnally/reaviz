@@ -13,8 +13,8 @@ export class RadialGradient extends Component<RadialGradientProps> {
   static defaultProps: Partial<RadialGradientProps> = {
     radius: '30%',
     stops: [
-      <GradientStop offset="0%" stopOpacity={0.3} />,
-      <GradientStop offset="80%" stopOpacity={1} />
+      <GradientStop offset="0%" stopOpacity={0.2} />,
+      <GradientStop offset="80%" stopOpacity={.7} />
     ]
   };
 

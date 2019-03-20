@@ -1,19 +1,22 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
-import { radialArea, curveCardinalClosed } from 'd3-shape';
+import { radialArea, curveCardinalClosed, curveLinear } from 'd3-shape';
 import { RadialGradient, RadialGradientProps } from '../../common/Styles';
 import { CloneElement } from '../../common/utils';
 import { PosedRadialArea } from './PosedRadialArea';
+import { RadialInterpolationTypes } from '../../common/utils/interpolation';
 
 export interface RadialAreaProps {
   data: ChartInternalShallowDataShape[];
   animated: boolean;
   xScale: any;
   yScale: any;
+  interpolation: RadialInterpolationTypes;
   color: any;
   id: string;
-  className?: any;
   innerRadius: number;
+  outerRadius: number;
+  className?: any;
   gradient?: JSX.Element;
 }
 
@@ -33,13 +36,14 @@ export class RadialArea extends Component<RadialAreaProps> {
   }
 
   getPath(data: ChartInternalShallowDataShape[]) {
-    const { xScale, yScale, innerRadius } = this.props;
+    const { xScale, yScale, innerRadius, interpolation } = this.props;
+    const curve = interpolation === 'smooth' ? curveCardinalClosed : curveLinear;
 
     const radialFn = radialArea()
       .angle((d: any) => xScale(d.x))
       .innerRadius(d => innerRadius)
       .outerRadius((d: any) => yScale(d.y))
-      .curve(curveCardinalClosed)
+      .curve(curve);
 
     return radialFn(data as any);
   }
@@ -68,7 +72,7 @@ export class RadialArea extends Component<RadialAreaProps> {
   }
 
   render() {
-    const { data, color, id, gradient, innerRadius } = this.props;
+    const { data, color, id, gradient, outerRadius } = this.props;
     const fill = color(data, 0);
 
     return (
@@ -78,7 +82,7 @@ export class RadialArea extends Component<RadialAreaProps> {
           <CloneElement<RadialGradientProps>
             element={gradient}
             id={`${id}-gradient`}
-            radius={`${innerRadius}%`}
+            radius={outerRadius}
             color={fill}
           />
         )}

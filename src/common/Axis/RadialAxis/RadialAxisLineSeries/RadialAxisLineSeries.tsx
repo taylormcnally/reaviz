@@ -5,11 +5,10 @@ import { RadialAxisLine, RadialAxisLineProps } from './RadialAxisLine';
 import { CloneElement } from '../../../utils/children';
 
 export interface RadialAxisLineSeriesProps {
-  minRadius: number;
+  innerRadius: number;
+  outerRadius: number;
   count: number;
-  padding: number;
   arcWidth: number;
-  height: number;
   line: JSX.Element;
 }
 
@@ -19,16 +18,9 @@ export class RadialAxisLineSeries extends Component<RadialAxisLineSeriesProps> {
     line: <RadialAxisLine />
   };
 
-  getInnerArcRadius(arcWidth: number) {
-    const { minRadius, count, padding } = this.props;
-    return minRadius + (count - (count - 3)) * (arcWidth + padding);
-  }
-
   render() {
-    const { count, height, arcWidth, line } = this.props;
-    const outerRadius = height / 2;
+    const { count, outerRadius, innerRadius, line } = this.props;
     const lines = range(count);
-    const innerRadius = this.getInnerArcRadius(arcWidth);
     const radius = scaleLinear().range([innerRadius, outerRadius]);
     const angle = scalePoint()
       .domain(range(count + 1) as any)

@@ -6,6 +6,7 @@ import { CloneElement } from '../../../utils/children';
 export interface RadialAxisTickProps {
   scale: any;
   outerRadius: number;
+  padding: number;
   data: any;
   index: number;
   line: JSX.Element | null;
@@ -15,14 +16,15 @@ export interface RadialAxisTickProps {
 export class RadialAxisTick extends Component<RadialAxisTickProps> {
   static defaultProps: Partial<RadialAxisTickProps> = {
     outerRadius: 0,
+    padding: 0,
     line: <RadialAxisTickLine />,
     label: <RadialAxisTickLabel />
   };
 
   render() {
-    const { line, label, scale, outerRadius, data, index } = this.props;
+    const { line, label, scale, outerRadius, data, index, padding } = this.props;
     const rotation = (scale(data) * 180) / Math.PI - 90;
-    const transform = `rotate(${rotation}) translate(${outerRadius + 25},0)`;
+    const transform = `rotate(${rotation}) translate(${outerRadius + padding},0)`;
 
     return (
       <g transform={transform}>

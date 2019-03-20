@@ -6,14 +6,17 @@ import { PoseSVGGElement } from '../../common/utils/animations';
 import { PoseGroup } from 'react-pose';
 import { RadialAreaProps, RadialArea } from './RadialArea';
 import { RadialLine, RadialLineProps } from './RadialLine';
+import { RadialInterpolationTypes } from '../../common/utils/interpolation';
 
 export interface RadialAreaSeriesProps {
   data: ChartInternalShallowDataShape[];
   colorScheme: ((data, index: number) => string) | string[];
+  outerRadius: number;
   innerRadius: number;
   xScale: any;
   yScale: any;
   id: string;
+  interpolation: RadialInterpolationTypes;
   area: JSX.Element | null;
   line: JSX.Element | null;
   animated: boolean;
@@ -24,6 +27,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
     colorScheme: [...sequentialScheme],
     area: <RadialArea />,
     line: <RadialLine />,
+    interpolation: 'linear',
     animated: true
   };
 
@@ -36,7 +40,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
   }
 
   renderArea() {
-    const { area, id, xScale, yScale, data, animated, innerRadius } = this.props;
+    const { area, id, xScale, yScale, data, interpolation, animated, innerRadius, outerRadius } = this.props;
 
     return (
       <CloneElement<RadialAreaProps>
@@ -47,13 +51,15 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
         animated={animated}
         color={this.getColor.bind(this)}
         data={data}
+        interpolation={interpolation}
+        outerRadius={outerRadius}
         innerRadius={innerRadius}
       />
     );
   }
 
   renderLine() {
-    const { line, xScale, yScale, data, animated } = this.props;
+    const { line, xScale, yScale, data, animated, interpolation } = this.props;
 
     return (
       <CloneElement<RadialLineProps>
@@ -61,6 +67,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
         xScale={xScale}
         yScale={yScale}
         animated={animated}
+        interpolation={interpolation}
         color={this.getColor.bind(this)}
         data={data}
       />

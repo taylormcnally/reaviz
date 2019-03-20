@@ -3,27 +3,32 @@ import { storiesOf } from '@storybook/react';
 import { RadialAreaChart } from './RadialAreaChart';
 import { medDateData } from '../common/demo';
 import { RadialAreaSeries } from './RadialAreaSeries';
-import { number, boolean, withKnobs, object, array } from '@storybook/addon-knobs';
+import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
 
 storiesOf('Charts/Area/Radial', module)
   .addDecorator(withKnobs)
   .add('Simple Area', () => {
-    const innerRadius = number('Inner Radius', 80);
+    const innerRadius = number('Inner Radius', .1);
     const animated = boolean('Animated', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
+    const interpolation = select('Interpolation', {
+      linear: 'linear',
+      smooth: 'smooth'
+    }, 'smooth');
     const data = object('Data', medDateData);
 
     return (
       <RadialAreaChart
-        height={300}
-        width={300}
+        height={450}
+        width={450}
         data={data}
         innerRadius={innerRadius}
         series={
           <RadialAreaSeries
             colorScheme={colorScheme}
             animated={animated}
+            interpolation={interpolation}
           />
         }
       />
@@ -33,12 +38,16 @@ storiesOf('Charts/Area/Radial', module)
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
+    const interpolation = select('Interpolation', {
+      linear: 'linear',
+      smooth: 'smooth'
+    }, 'smooth');
     const data = object('Data', medDateData);
 
     return (
       <RadialAreaChart
-        height={300}
-        width={300}
+        height={450}
+        width={450}
         data={data}
         innerRadius={innerRadius}
         series={
@@ -46,6 +55,7 @@ storiesOf('Charts/Area/Radial', module)
             area={null}
             colorScheme={colorScheme}
             animated={animated}
+            interpolation={interpolation}
           />
         }
       />

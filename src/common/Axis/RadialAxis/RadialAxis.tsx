@@ -4,48 +4,42 @@ import { RadialAxisTickSeries, RadialAxisTickSeriesProps } from './RadialAxisTic
 import { RadialAxisArcSeries, RadialAxisArcSeriesProps } from './RadialAxisArcSeries';
 import { CloneElement } from '../../utils/children';
 
-interface RadialAxisProps {
+export interface RadialAxisProps {
   height: number;
+  width: number;
   xScale: any;
-  arcs: JSX.Element;
+  innerRadius: number;
+  arcs: JSX.Element | null;
   ticks: JSX.Element | null;
   lines: JSX.Element | null;
 }
 
 export class RadialAxis extends Component<RadialAxisProps, {}> {
   static defaultProps: Partial<RadialAxisProps> = {
+    innerRadius: 10,
     arcs: <RadialAxisArcSeries />,
     ticks: <RadialAxisTickSeries />,
     lines: <RadialAxisLineSeries />
   };
 
-  getArcWidth(chartRadius: number) {
-    const { minRadius, count, padding } = this.props.arcs.props;
-    return (chartRadius - minRadius - count * padding) / count;
-  }
-
   render() {
-    const { arcs, ticks, xScale, height, lines } = this.props;
-    const chartRadius = height / 2 - 40;
-    const arcWidth = this.getArcWidth(chartRadius);
-    const outerRadius = chartRadius + arcWidth;
-    const { minRadius, padding } = this.props.arcs.props;
+    const { arcs, ticks, xScale, height, width, lines, innerRadius } = this.props;
+    const outerRadius = Math.min(height, width) / 2;
 
     return (
       <Fragment>
         {arcs && (
           <CloneElement<RadialAxisArcSeriesProps>
             element={arcs}
-            arcWidth={arcWidth}
+            outerRadius={outerRadius}
+            innerRadius={innerRadius}
           />
         )}
         {lines && (
           <CloneElement<RadialAxisLineSeriesProps>
             element={lines}
-            height={height}
-            arcWidth={arcWidth}
-            minRadius={minRadius}
-            padding={padding}
+            outerRadius={outerRadius}
+            innerRadius={innerRadius}
           />
         )}
         {ticks && (
