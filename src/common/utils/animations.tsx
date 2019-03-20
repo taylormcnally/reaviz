@@ -6,7 +6,7 @@ export const VELOCITY = 10;
 export const DAMPING = 100;
 
 // https://github.com/Popmotion/popmotion/issues/645
-export const pathTransition = ({ from, to }) =>
+export const d3Interpolate = ({ from, to }) =>
   spring({
     from: 0,
     to: 1,
@@ -24,7 +24,8 @@ export const transition = {
     type: 'tween',
     duration: 500
   },
-  d: pathTransition,
+  d: d3Interpolate,
+  transform: d3Interpolate,
   default: {
     type: 'spring',
     velocity: VELOCITY,
