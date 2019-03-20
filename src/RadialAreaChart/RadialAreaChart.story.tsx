@@ -9,7 +9,7 @@ import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel, 
 
 storiesOf('Charts/Area/Radial', module)
   .addDecorator(withKnobs)
-  .add('Simple Area', () => {
+  .add('Simple', () => {
     const innerRadius = number('Inner Radius', .1);
     const animated = boolean('Animated', true);
     const hasGradient = boolean('Gradient', true);
@@ -68,7 +68,18 @@ storiesOf('Charts/Area/Radial', module)
       />
     );
   }, { options: { showAddonPanel: true } })
-  .add('Simple Line', () => {
+  .add('Resizable', () => (
+    <div style={{ width: '50vw', height: '75vh', border: 'solid 1px red' }}>
+      <RadialAreaChart
+        data={medDateData}
+      />
+    </div>
+  ));
+
+
+storiesOf('Charts/Line/Radial', module)
+  .addDecorator(withKnobs)
+  .add('Simple', () => {
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);
     const autoRotate = boolean('Auto Rotate Labels', true);
@@ -121,10 +132,3 @@ storiesOf('Charts/Area/Radial', module)
       />
     );
   }, { options: { showAddonPanel: true } })
-  .add('Resizable', () => (
-    <div style={{ width: '50vw', height: '75vh', border: 'solid 1px red' }}>
-      <RadialAreaChart
-        data={medDateData}
-      />
-    </div>
-  ));
