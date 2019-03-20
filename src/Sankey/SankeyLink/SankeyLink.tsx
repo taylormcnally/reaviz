@@ -115,9 +115,9 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
         pose="enter"
         poseKey={`sankey-link-${enterProps.d}-${index}`}
         animated={animated}
-        className={classNames(css.link, {
+        className={classNames(css.link, className, {
           [css.disabled]: disabled
-        }, className)}
+        })}
         style={style}
         ref={this.link}
         enterProps={enterProps}

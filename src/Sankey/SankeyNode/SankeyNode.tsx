@@ -132,9 +132,9 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
         pose="enter"
         poseKey={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
         animated={animated}
-        className={classNames(css.node, {
+        className={classNames(css.node, className, {
           [css.disabled]: disabled
-        }, className)}
+        })}
         style={style}
         ref={this.rect}
         x={x0}
