@@ -43,7 +43,8 @@ export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
       const l = d >= Math.PI;
       const r = d < 2 * Math.PI;
 
-      if (rotation >= 85 && rotation <= 95) {
+      // TODO: This centers the text, determine better way later
+      if ((rotation >= 85 && rotation <= 95) || (rotation <= -85 && rotation >= -95)) {
         textAnchor = 'middle';
       } else if (l && r) {
         textAnchor = 'end';
