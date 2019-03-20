@@ -4,6 +4,7 @@ import { RadialScatterPoint, RadialScatterPointProps } from './RadialScatterPoin
 import { CloneElement } from '../../common/utils/children';
 import { PoseSVGGElement } from '../../common/utils/animations';
 import { PoseGroup } from 'react-pose';
+import bind from 'memoize-bind';
 
 export interface RadialScatterSeriesProps {
   data: ChartInternalShallowDataShape[];
@@ -12,13 +13,40 @@ export interface RadialScatterSeriesProps {
   id: string;
   point: JSX.Element;
   animated: boolean;
+  activeIds?: string[];
 }
 
-export class RadialScatterSeries extends Component<RadialScatterSeriesProps> {
+interface RadialScatterSeriesState {
+  activeIds: string[];
+}
+
+export class RadialScatterSeries extends Component<RadialScatterSeriesProps, RadialScatterSeriesState> {
   static defaultProps: Partial<RadialScatterSeriesProps> = {
     point: <RadialScatterPoint />,
     animated: true
   };
+
+  state: RadialScatterSeriesState = {
+    activeIds: []
+  };
+
+  onMouseEnter({ value }) {
+    // Only perform this on unmanaged activations
+    if (!this.props.activeIds) {
+      this.setState({
+        activeIds: [value.id]
+      });
+    }
+  }
+
+  onMouseLeave() {
+    // Only perform this on unmanaged activations
+    if (!this.props.activeIds) {
+      this.setState({
+        activeIds: []
+      });
+    }
+  }
 
   renderPoint(data: ChartInternalShallowDataShape, index: number) {
     const { point, xScale, yScale, animated } = this.props;
@@ -33,6 +61,9 @@ export class RadialScatterSeries extends Component<RadialScatterSeriesProps> {
     }
 
     const key = dataId || index;
+    const activeIds = this.props.activeIds || this.state.activeIds;
+    const active =
+      !(activeIds && activeIds.length) || activeIds.includes(dataId);
 
     return (
       <PoseSVGGElement key={key}>
@@ -40,9 +71,12 @@ export class RadialScatterSeries extends Component<RadialScatterSeriesProps> {
           element={point}
           data={data}
           index={index}
+          active={active}
           xScale={xScale}
           yScale={yScale}
           animated={animated}
+          onMouseEnter={bind(this.onMouseEnter, this)}
+          onMouseLeave={bind(this.onMouseLeave, this)}
         />
       </PoseSVGGElement>
     );

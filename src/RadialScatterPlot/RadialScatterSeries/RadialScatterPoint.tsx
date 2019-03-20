@@ -1,7 +1,12 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactNode, createRef, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialLine } from 'd3-shape';
 import { PosedGroupTransform } from '../../common/utils/animations';
+import bind from 'memoize-bind';
+import classNames from 'classnames';
+import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { CloneElement } from '../../common/utils/children';
+import * as css from './RadialScatterPoint.module.scss';
 
 export interface RadialScatterPointProps {
   data: ChartInternalShallowDataShape;
@@ -12,15 +17,62 @@ export interface RadialScatterPointProps {
   fill: string;
   id: string;
   className?: any;
+  active?: boolean;
   symbol: ((value) => ReactNode);
   size?: ((d) => number) | number;
+  tooltip: JSX.Element | null;
+  onClick: (event) => void;
+  onMouseEnter: (event) => void;
+  onMouseLeave: (event) => void;
 }
 
-export class RadialScatterPoint extends Component<RadialScatterPointProps> {
+interface RadialScatterPointState {
+  hovered: boolean;
+}
+
+export class RadialScatterPoint extends Component<RadialScatterPointProps, RadialScatterPointState> {
   static defaultProps: Partial<RadialScatterPointProps> = {
     size: 3,
-    fill: 'rgba(174, 52, 255, .5)'
+    fill: 'rgba(174, 52, 255, .5)',
+    tooltip: <ChartTooltip />,
+    active: true,
+    onClick: () => undefined,
+    onMouseEnter: () => undefined,
+    onMouseLeave: () => undefined
   };
+
+  ref = createRef<SVGGElement>();
+  state: RadialScatterPointState = {
+    hovered: false
+  };
+
+  onMouseEnter(event: MouseEvent) {
+    this.setState({ hovered: true });
+
+    const { onMouseEnter, data } = this.props;
+    onMouseEnter({
+      value: data,
+      nativeEvent: event
+    });
+  }
+
+  onMouseLeave(event: MouseEvent) {
+    this.setState({ hovered: false });
+
+    const { onMouseLeave, data } = this.props;
+    onMouseLeave({
+      value: data,
+      nativeEvent: event
+    });
+  }
+
+  onClick(event: MouseEvent) {
+    const { onClick, data } = this.props;
+    onClick({
+      value: data,
+      nativeEvent: event
+    });
+  }
 
   getTranslate(data: ChartInternalShallowDataShape) {
     const { xScale, yScale } = this.props;
@@ -39,26 +91,47 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps> {
   }
 
   render() {
-    const { size, data, fill, index, animated, symbol } = this.props;
+    const { size, data, fill, index, animated, symbol, active, tooltip } = this.props;
+    const { hovered } = this.state;
+
     const transform = this.getTranslate(data);
     const exitTransform = this.getTranslate({ ...data, y: 0 });
     const sizeVal = typeof size === 'function' ? size(data) : size;
 
     return (
-      <PosedGroupTransform
-        enterProps={{ transform }}
-        index={index}
-        animated={animated}
-        exitProps={{ transform: exitTransform }}
-      >
-        {symbol && symbol(data)}
-        {!symbol && (
-          <circle
-            r={sizeVal}
-            fill={fill}
+      <Fragment>
+        <PosedGroupTransform
+          pose="enter"
+          poseKey={transform}
+          enterProps={{ transform }}
+          exitProps={{ transform: exitTransform }}
+          index={index}
+          animated={animated}
+          ref={this.ref}
+          onMouseEnter={bind(this.onMouseEnter, this)}
+          onMouseLeave={bind(this.onMouseLeave, this)}
+          onClick={bind(this.onClick, this)}
+          className={classNames({
+            [css.inactive]: !active
+          })}
+        >
+          {symbol && symbol(data)}
+          {!symbol && (
+            <circle
+              r={sizeVal}
+              fill={fill}
+            />
+          )}
+        </PosedGroupTransform>
+        {tooltip && (
+          <CloneElement<ChartTooltipProps>
+            element={tooltip}
+            visible={hovered}
+            reference={this.ref}
+            value={data}
           />
         )}
-      </PosedGroupTransform>
+      </Fragment>
     );
   }
 }
