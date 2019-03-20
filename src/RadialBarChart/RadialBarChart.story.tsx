@@ -9,16 +9,18 @@ import { RadialBarSeries, RadialBar } from './RadialBarSeries';
 storiesOf('Charts/Bar/Radial', module)
   .addDecorator(withKnobs)
   .add('Simple', () => {
-    const innerRadius = number('Inner Radius', 80);
+    const innerRadius = number('Inner Radius', 50);
     const curved = boolean('Curved', false);
+    const hasGradient = boolean('Gradient', true);
     const animated = boolean('Animated', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
     const data = object('Data', largeCategoryData);
+    const gradient = hasGradient ? RadialBar.defaultProps.gradient : null;
 
     return (
       <RadialBarChart
-        height={300}
-        width={300}
+        height={450}
+        width={450}
         innerRadius={innerRadius}
         data={data}
         series={
@@ -28,6 +30,7 @@ storiesOf('Charts/Bar/Radial', module)
             bar={
               <RadialBar
                 curved={curved}
+                gradient={gradient}
               />
             }
           />

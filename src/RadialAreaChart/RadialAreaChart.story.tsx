@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialAreaChart } from './RadialAreaChart';
 import { medDateData } from '../common/demo';
-import { RadialAreaSeries } from './RadialAreaSeries';
+import { RadialAreaSeries, RadialArea } from './RadialAreaSeries';
 import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
 import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel } from '../common/Axis';
@@ -12,8 +12,10 @@ storiesOf('Charts/Area/Radial', module)
   .add('Simple Area', () => {
     const innerRadius = number('Inner Radius', .1);
     const animated = boolean('Animated', true);
+    const hasGradient = boolean('Gradient', true);
     const autoRotate = boolean('Auto Rotate Labels', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
+    const gradient = hasGradient ? RadialArea.defaultProps.gradient : null;
     const interpolation = select('Interpolation', {
       linear: 'linear',
       smooth: 'smooth'
@@ -31,6 +33,11 @@ storiesOf('Charts/Area/Radial', module)
             colorScheme={colorScheme}
             animated={animated}
             interpolation={interpolation}
+            area={
+              <RadialArea
+                gradient={gradient}
+              />
+            }
           />
         }
         axis={
