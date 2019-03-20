@@ -5,12 +5,14 @@ import { medDateData } from '../common/demo';
 import { RadialAreaSeries } from './RadialAreaSeries';
 import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
+import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel } from '../common/Axis';
 
 storiesOf('Charts/Area/Radial', module)
   .addDecorator(withKnobs)
   .add('Simple Area', () => {
     const innerRadius = number('Inner Radius', .1);
     const animated = boolean('Animated', true);
+    const autoRotate = boolean('Auto Rotate Labels', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
     const interpolation = select('Interpolation', {
       linear: 'linear',
@@ -31,12 +33,30 @@ storiesOf('Charts/Area/Radial', module)
             interpolation={interpolation}
           />
         }
+        axis={
+          <RadialAxis
+            ticks={
+              <RadialAxisTickSeries
+                tick={
+                  <RadialAxisTick
+                    label={
+                      <RadialAxisTickLabel
+                        autoRotate={autoRotate}
+                      />
+                    }
+                  />
+                }
+              />
+            }
+          />
+        }
       />
     );
   }, { options: { showAddonPanel: true } })
   .add('Simple Line', () => {
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);
+    const autoRotate = boolean('Auto Rotate Labels', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
     const interpolation = select('Interpolation', {
       linear: 'linear',
@@ -56,6 +76,23 @@ storiesOf('Charts/Area/Radial', module)
             colorScheme={colorScheme}
             animated={animated}
             interpolation={interpolation}
+          />
+        }
+        axis={
+          <RadialAxis
+            ticks={
+              <RadialAxisTickSeries
+                tick={
+                  <RadialAxisTick
+                    label={
+                      <RadialAxisTickLabel
+                        autoRotate={autoRotate}
+                      />
+                    }
+                  />
+                }
+              />
+            }
           />
         }
       />

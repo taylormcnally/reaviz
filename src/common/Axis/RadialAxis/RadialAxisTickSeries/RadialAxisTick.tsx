@@ -37,6 +37,7 @@ export class RadialAxisTick extends Component<RadialAxisTickProps> {
           <CloneElement<RadialAxisTickLabelProps>
             element={label}
             index={index}
+            scale={scale}
             rotation={rotation}
             lineSize={line.props.size}
             data={data}
