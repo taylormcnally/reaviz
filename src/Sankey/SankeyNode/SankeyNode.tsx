@@ -48,13 +48,6 @@ interface SankeyNodeState {
   hovered?: boolean;
 }
 
-// Set padding modifier for the tooltips
-export const modifiers = {
-  offset: {
-    offset: '0, 5px'
-  }
-};
-
 export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
   static defaultProps: Partial<SankeyNodeProps> = {
     active: false,
@@ -63,7 +56,11 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
     disabled: false,
     label: <SankeyLabel />,
     showLabel: true,
-    tooltip: <Tooltip followCursor={true} modifiers={modifiers} />,
+    tooltip: <Tooltip followCursor={true} modifiers={{
+      offset: {
+        offset: '0, 5px'
+      }
+    }} />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined

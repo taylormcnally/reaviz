@@ -42,13 +42,6 @@ interface SankeyLinkState {
   hovered?: boolean;
 }
 
-// Set padding modifier for the tooltips
-export const modifiers = {
-  offset: {
-    offset: '0, 5px'
-  }
-};
-
 export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
   static defaultProps: Partial<SankeyLinkProps> = {
     active: false,
@@ -57,7 +50,11 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
     disabled: false,
     gradient: true,
     opacity: active => active ? 0.5 : 0.35,
-    tooltip: <Tooltip followCursor={true} modifiers={modifiers} />,
+    tooltip: <Tooltip followCursor={true} modifiers={{
+      offset: {
+        offset: '0, 5px'
+      }
+    }} />,
     width: 0,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
