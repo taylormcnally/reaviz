@@ -4,8 +4,9 @@ import { RadialAxis } from './RadialAxis';
 import { scaleTime } from 'd3-scale';
 import { extent, range } from 'd3-array';
 import moment from 'moment';
+import { RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel } from './RadialAxisTickSeries';
 
-const getData = () => {
+const xScale = (() => {
   const date = moment()
     .subtract(1, 'day')
     .startOf('day');
@@ -24,23 +25,33 @@ const getData = () => {
     .domain(domain);
 
   return xScale;
-};
+})();
 
 storiesOf('Charts/Axis/Radial', module)
-  .add('Simple', () => {
-    const xScale = getData();
-
-    return (
-      <div style={{ background: '#07111D', padding: '10px' }}>
-        <svg width={600} height={600}>
-          <g transform="translate(300, 300)">
-            <RadialAxis
-              height={600}
-              xScale={xScale}
-            />
-          </g>
-        </svg>
-      </div>
-    );
-  });
-
+  .add('Simple', () => (
+    <div style={{ background: '#07111D', padding: '10px' }}>
+      <svg width={600} height={600}>
+        <g transform="translate(300, 300)">
+          <RadialAxis
+            height={600}
+            width={600}
+            innerRadius={10}
+            xScale={xScale}
+            ticks={
+              <RadialAxisTickSeries
+                tick={
+                  <RadialAxisTick
+                    label={
+                      <RadialAxisTickLabel
+                        format={(d) => moment(d).format('h a')}
+                      />
+                    }
+                  />
+                }
+              />
+            }
+          />
+        </g>
+      </svg>
+    </div>
+  ));
