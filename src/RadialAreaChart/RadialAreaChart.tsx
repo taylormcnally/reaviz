@@ -6,17 +6,21 @@ import { memoize } from 'lodash-es';
 import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/containers';
 import { CloneElement } from '../common/utils/children';
 import { RadialAreaSeries, RadialAreaSeriesProps } from './RadialAreaSeries';
+import { RadialAxis, RadialAxisProps, RadialAxisArcSeries } from '../common/Axis/RadialAxis';
 
 export interface RadialAreaChartProps extends ChartProps {
   data: ChartShallowDataShape[];
   series: JSX.Element;
   innerRadius: number;
+  axis: JSX.Element | null;
 }
 
 export class RadialAreaChart extends Component<RadialAreaChartProps> {
   static defaultProps: Partial<RadialAreaChartProps> = {
     innerRadius: 80,
-    series: <RadialAreaSeries />
+    series: <RadialAreaSeries />,
+    axis: <RadialAxis />,
+    margins: 75
   };
 
   getScales = memoize((preData: ChartShallowDataShape[], outerRadius: number, innerRadius: number) => {
@@ -44,18 +48,28 @@ export class RadialAreaChart extends Component<RadialAreaChartProps> {
 
  renderChart(containerProps: ChartContainerChildProps) {
     const { chartWidth, chartHeight, id } = containerProps;
-    const { innerRadius, series } = this.props;
+    const { innerRadius, series, axis } = this.props;
     const outerRadius = Math.min(chartWidth, chartHeight) / 2;
     const { yScale, xScale, data } = this.getScales(this.props.data, outerRadius, innerRadius);
 
     return (
       <Fragment>
+        {axis && (
+          <CloneElement<RadialAxisProps>
+            element={axis}
+            xScale={xScale}
+            height={chartHeight}
+            width={chartWidth}
+            innerRadius={innerRadius}
+          />
+        )}
         <CloneElement<RadialAreaSeriesProps>
           element={series}
           id={id}
           data={data}
           xScale={xScale}
           yScale={yScale}
+          outerRadius={outerRadius}
           innerRadius={innerRadius}
         />
       </Fragment>

@@ -7,7 +7,7 @@ export interface RadialAxisTickSeriesProps {
   scale: any;
   count: number;
   outerRadius: number;
-  tick: JSX.Element | null;
+  tick: JSX.Element;
 }
 
 export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
@@ -16,7 +16,7 @@ export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
     tick: <RadialAxisTick />
   };
 
-  getTicks(scale, count) {
+  getTicks(scale, count: number) {
     if (scale.ticks) {
       return scale.ticks.apply(scale, [count]);
     } else {

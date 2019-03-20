@@ -1,5 +1,5 @@
 import posed from 'react-pose';
-import { transition, pathTransition } from '../../common/utils/animations';
+import { transition, d3Interpolate } from '../../common/utils/animations';
 
 export const PosedCircle = posed.circle({
   enter: {
@@ -10,8 +10,8 @@ export const PosedCircle = posed.circle({
     transition: {
       ...transition,
       // Circles need same easing as area/line
-      cx: pathTransition,
-      cy: pathTransition
+      cx: d3Interpolate,
+      cy: d3Interpolate
     }
     // https://github.com/Popmotion/popmotion/issues/646
     // transition: ({ animated }) => (animated ? transition : { duration: 0 })

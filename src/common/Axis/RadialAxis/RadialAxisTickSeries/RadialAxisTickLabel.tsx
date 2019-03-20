@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { formatValue } from '../../../utils/formatting';
 
+const rad2deg = (angle) => angle * 180 / Math.PI;
+
 export interface RadialAxisTickLabelProps {
   data: any;
   lineSize: number;
-  rotation: number;
   fill: string;
   fontSize: number;
+  rotation: number;
   fontFamily: string;
   index: number;
+  padding: number;
+  scale: any;
+  autoRotate: boolean;
   format?: (value: any, index: number) => any | string;
 }
 
@@ -16,8 +21,51 @@ export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
   static defaultProps: Partial<RadialAxisTickLabelProps> = {
     fill: '#3B5F6A',
     fontSize: 11,
-    fontFamily: 'sans-serif'
+    padding: 15,
+    fontFamily: 'sans-serif',
+    autoRotate: true
   };
+
+  getPosition() {
+    const {
+      data,
+      scale,
+      autoRotate,
+      rotation,
+      padding
+    } = this.props;
+
+    let textAnchor;
+    let transform;
+
+    if (autoRotate) {
+      const d = scale(data);
+      const l = d >= Math.PI;
+      const r = d < 2 * Math.PI;
+
+      // TODO: This centers the text, determine better way later
+      if ((rotation >= 85 && rotation <= 95) || (rotation <= -85 && rotation >= -95)) {
+        textAnchor = 'middle';
+      } else if (l && r) {
+        textAnchor = 'end';
+      } else {
+        textAnchor = 'start';
+      }
+
+      transform = `rotate(${(90 - rad2deg(scale(data)))}, ${padding}, 0)`;
+    } else {
+      const shouldRotate = rotation > 100 && rotation;
+      const rotate = shouldRotate ? 180 : 0;
+      const translate = shouldRotate ? -30 : 0;
+      textAnchor = shouldRotate ? 'end' : 'start';
+      transform = `rotate(${rotate}) translate(${translate})`;
+    }
+
+    return {
+      transform,
+      textAnchor
+    };
+  }
 
   render() {
     const {
@@ -27,17 +75,13 @@ export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
       fontSize,
       format,
       lineSize,
-      rotation,
       index
     } = this.props;
     const text = format ? format(data, index) : formatValue(data);
-    const shouldRotate = rotation > 100 && rotation;
-    const rotate = shouldRotate ? 180 : 0;
-    const translate = shouldRotate ? -30 : 0;
-    const textAnchor = shouldRotate ? 'end' : 'start';
+    const { transform, textAnchor } = this.getPosition();
 
     return (
-      <g transform={`rotate(${rotate}) translate(${translate})`}>
+      <g transform={transform}>
         <title>{text}</title>
         <text
           dy="0.35em"

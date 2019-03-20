@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export interface RadialAxisArcProps {
   width: number;
   padding: number;
-  minRadius: number;
+  innerRadius: number;
   count: number;
   index: number;
   stroke: ((index: number) => string) | string;
@@ -17,8 +17,8 @@ export class RadialAxisArc extends Component<RadialAxisArcProps> {
   };
 
   getInnerRadius(index: number) {
-    const { minRadius, count, padding, width } = this.props;
-    return minRadius + (count - (index + 1)) * (width + padding);
+    const { innerRadius, count, padding, width } = this.props;
+    return innerRadius + (count - (index + 1)) * (width + padding);
   }
 
   getOuterRadius(index: number) {

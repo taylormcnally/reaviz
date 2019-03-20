@@ -4,6 +4,7 @@ import { medDateData, largeSignalChartData, medSignalChartData } from '../common
 import { number, boolean, withKnobs, object, color } from '@storybook/addon-knobs';
 import { RadialScatterPlot } from './RadialScatterPlot';
 import { RadialScatterSeries, RadialScatterPoint } from './RadialScatterSeries';
+import { RadialAxis, RadialAxisTickSeries, RadialAxisArcSeries } from '../common/Axis/RadialAxis';
 
 storiesOf('Charts/Scatter Plot/Radial', module)
   .addDecorator(withKnobs)
@@ -11,13 +12,15 @@ storiesOf('Charts/Scatter Plot/Radial', module)
     const innerRadius = number('Inner Radius', 80);
     const size = number('Size', 5);
     const animated = boolean('Animated', true);
-    const data = object('Data', medDateData);
     const fill = color('Fill', 'rgba(174, 52, 255, .5)');
+    const tickCount = number('Axis Tick Count', 5);
+    const arcCount = number('Axis Arc Count', 10);
+    const data = object('Data', medDateData);
 
     return (
       <RadialScatterPlot
-        height={300}
-        width={300}
+        height={450}
+        width={450}
         data={data}
         innerRadius={innerRadius}
         series={
@@ -31,19 +34,35 @@ storiesOf('Charts/Scatter Plot/Radial', module)
             }
           />
         }
+        axis={
+          <RadialAxis
+            ticks={
+              <RadialAxisTickSeries
+                count={tickCount}
+              />
+            }
+            arcs={
+              <RadialAxisArcSeries
+                count={arcCount}
+              />
+            }
+          />
+        }
       />
     );
   }, { options: { showAddonPanel: true } })
   .add('Bubble', () => {
-    const innerRadius = number('Inner Radius', 80);
+    const innerRadius = number('Inner Radius', .1);
     const animated = boolean('Animated', true);
     const fill = color('Fill', 'rgba(174, 52, 255, .5)');
+    const tickCount = number('Axis Tick Count', 5);
+    const arcCount = number('Axis Arc Count', 10);
     const data = object('Data', largeSignalChartData);
 
     return (
       <RadialScatterPlot
-        height={300}
-        width={300}
+        height={450}
+        width={450}
         data={data}
         innerRadius={innerRadius}
         series={
@@ -57,6 +76,20 @@ storiesOf('Charts/Scatter Plot/Radial', module)
             }
           />
         }
+        axis={
+          <RadialAxis
+            ticks={
+              <RadialAxisTickSeries
+                count={tickCount}
+              />
+            }
+            arcs={
+              <RadialAxisArcSeries
+                count={arcCount}
+              />
+            }
+          />
+        }
       />
     );
   }, { options: { showAddonPanel: true } })
@@ -64,12 +97,14 @@ storiesOf('Charts/Scatter Plot/Radial', module)
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);
     const fill = color('Fill', 'rgba(174, 52, 255, .5)');
+    const tickCount = number('Axis Tick Count', 5);
+    const arcCount = number('Axis Arc Count', 10);
     const data = object('Data', medSignalChartData);
 
     return (
       <RadialScatterPlot
-        height={300}
-        width={300}
+        height={450}
+        width={450}
         data={data}
         innerRadius={innerRadius}
         series={
@@ -95,6 +130,20 @@ storiesOf('Charts/Scatter Plot/Radial', module)
                     </g>
                   );
                 }}
+              />
+            }
+          />
+        }
+        axis={
+          <RadialAxis
+            ticks={
+              <RadialAxisTickSeries
+                count={tickCount}
+              />
+            }
+            arcs={
+              <RadialAxisArcSeries
+                count={arcCount}
               />
             }
           />

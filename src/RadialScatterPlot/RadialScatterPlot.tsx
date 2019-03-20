@@ -6,16 +6,20 @@ import { memoize } from 'lodash-es';
 import { RadialScatterSeries, RadialScatterSeriesProps } from './RadialScatterSeries';
 import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/containers';
 import { CloneElement } from '../common/utils/children';
+import { RadialAxisProps, RadialAxis } from '../common/Axis/RadialAxis';
 
 export interface RadialScatterPlotProps extends ChartProps {
   data: ChartShallowDataShape[];
   series: JSX.Element;
+  axis: JSX.Element | null;
   innerRadius: number;
 }
 
 export class RadialScatterPlot extends Component<RadialScatterPlotProps> {
   static defaultProps: Partial<RadialScatterPlotProps> = {
     innerRadius: 80,
+    margins: 75,
+    axis: <RadialAxis />,
     series: <RadialScatterSeries />
   };
 
@@ -44,12 +48,21 @@ export class RadialScatterPlot extends Component<RadialScatterPlotProps> {
 
  renderChart(containerProps: ChartContainerChildProps) {
     const { chartWidth, chartHeight, id } = containerProps;
-    const { innerRadius, series } = this.props;
+    const { innerRadius, series, axis } = this.props;
     const outerRadius = Math.min(chartWidth, chartHeight) / 2;
     const { yScale, xScale, data } = this.getScales(this.props.data, outerRadius, innerRadius);
 
     return (
       <Fragment>
+        {axis && (
+          <CloneElement<RadialAxisProps>
+            element={axis}
+            xScale={xScale}
+            height={chartHeight}
+            width={chartWidth}
+            innerRadius={innerRadius}
+          />
+        )}
         <CloneElement<RadialScatterSeriesProps>
           element={series}
           id={id}

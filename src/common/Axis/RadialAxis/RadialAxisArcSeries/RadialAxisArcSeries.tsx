@@ -7,14 +7,14 @@ export interface RadialAxisArcSeriesProps {
   arc: JSX.Element;
   count: number;
   padding: number;
-  minRadius: number;
-  arcWidth: number;
+  innerRadius: number;
+  outerRadius: number;
 }
 
 export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
   static defaultProps: Partial<RadialAxisArcSeriesProps> = {
     padding: 50,
-    minRadius: 10,
+    innerRadius: 10,
     count: 13,
     arc: <RadialAxisArc />
   };
@@ -23,11 +23,12 @@ export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
     const {
       count,
       padding,
-      minRadius,
-      arc,
-      arcWidth
+      innerRadius,
+      outerRadius,
+      arc
     } = this.props;
     const arcs = range(count);
+    const arcWidth = (outerRadius - innerRadius - count * padding) / count;;
 
     return (
       <Fragment>
@@ -36,7 +37,7 @@ export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
             element={arc}
             key={i}
             index={i}
-            minRadius={minRadius}
+            innerRadius={innerRadius}
             count={count}
             width={arcWidth}
             padding={padding}

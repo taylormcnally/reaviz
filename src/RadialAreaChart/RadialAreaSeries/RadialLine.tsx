@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
-import { radialLine, curveCardinalClosed } from 'd3-shape';
+import { radialLine, curveCardinalClosed, curveLinear } from 'd3-shape';
 import { PosedRadialArea } from './PosedRadialArea';
+import { RadialInterpolationTypes } from '../../common/utils/interpolation';
 
 export interface RadialLineProps {
   data: ChartInternalShallowDataShape[];
@@ -9,6 +10,7 @@ export interface RadialLineProps {
   xScale: any;
   yScale: any;
   color: any;
+  interpolation: RadialInterpolationTypes;
   strokeWidth: number;
   className?: any;
 }
@@ -19,12 +21,13 @@ export class RadialLine extends Component<RadialLineProps> {
   };
 
   getPath(data: ChartInternalShallowDataShape[]) {
-    const { xScale, yScale } = this.props;
+    const { xScale, yScale, interpolation } = this.props;
+    const curve = interpolation === 'smooth' ? curveCardinalClosed : curveLinear;
 
     const radialFn = radialLine()
       .angle((d: any) => xScale(d.x))
       .radius((d: any) => yScale(d.y))
-      .curve(curveCardinalClosed);
+      .curve(curve);
 
     return radialFn(data as any);
   }
