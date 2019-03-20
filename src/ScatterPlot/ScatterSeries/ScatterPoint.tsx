@@ -3,7 +3,7 @@ import { ChartInternalShallowDataShape } from '../../common/data';
 import bind from 'memoize-bind';
 import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
 import { PosedCircle } from './PosedCircle';
-import { PosedSymbol } from './PosedSymbol';
+import { PosedGroupTransform } from '../../common/utils/animations';
 import classNames from 'classnames';
 import * as css from './ScatterPoint.module.scss';
 import { CloneElement } from '../../common/utils/children';
@@ -146,7 +146,7 @@ export class ScatterPoint extends Component<
     const renderedSymbol = symbol(data);
 
     return (
-      <PosedSymbol
+      <PosedGroupTransform
         pose="enter"
         poseKey={`${enterProps.y}-${enterProps.x}`}
         enterProps={enterProps}
@@ -155,7 +155,7 @@ export class ScatterPoint extends Component<
         index={index}
       >
         {renderedSymbol}
-      </PosedSymbol>
+      </PosedGroupTransform>
     );
   }
 

@@ -69,7 +69,7 @@ export class Bar extends Component<BarProps, BarState> {
     onMouseLeave: () => undefined
   };
 
-  rect = createRef<any>();
+  rect = createRef<SVGGElement>();
   state: BarState = {};
 
   getXAttribute(): 'x' | 'x0' {

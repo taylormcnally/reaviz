@@ -20,9 +20,13 @@
   - [Hive Plot](charts/hive-plot.md)
   - [Scatter Plot](charts/scatter-plot.md)
   - [Bubble Chart](charts/bubble-chart.md)
+  - Radial Area Chart
+  - Radial Bar Chart
+  - Radial Scatter Plot
 - Utilities
   - Brush
   - Pan Zoom
+  - Gestures
   - Axis
       - Linear
       - Radial

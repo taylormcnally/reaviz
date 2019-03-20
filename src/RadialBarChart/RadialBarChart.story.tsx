@@ -4,12 +4,13 @@ import { RadialBarChart } from './RadialBarChart';
 import { largeCategoryData } from '../common/demo';
 import { number, boolean, withKnobs, object, array } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
-import { RadialBarSeries } from './RadialBarSeries';
+import { RadialBarSeries, RadialBar } from './RadialBarSeries';
 
 storiesOf('Charts/Bar/Radial', module)
   .addDecorator(withKnobs)
   .add('Simple', () => {
     const innerRadius = number('Inner Radius', 80);
+    const curved = boolean('Curved', false);
     const animated = boolean('Animated', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
     const data = object('Data', largeCategoryData);
@@ -24,6 +25,11 @@ storiesOf('Charts/Bar/Radial', module)
           <RadialBarSeries
             animated={animated}
             colorScheme={colorScheme}
+            bar={
+              <RadialBar
+                curved={curved}
+              />
+            }
           />
         }
       />

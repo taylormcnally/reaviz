@@ -33,3 +33,16 @@ export const transition = {
 };
 
 export const PoseSVGGElement = posed.g({});
+
+export const PosedGroupTransform = posed.g({
+  enter: {
+    opacity: 1,
+    transform: ({ enterProps }) => enterProps.transform,
+    delay: ({ animated, index }) => (animated ? index * 10 : 0),
+    transition: ({ animated }) => (animated ? transition : { duration: 0 })
+  },
+  exit: {
+    opacity: 0,
+    transform: ({ exitProps }) => exitProps.transform
+  }
+});
