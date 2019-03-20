@@ -5,7 +5,7 @@ import { medDateData } from '../common/demo';
 import { RadialAreaSeries, RadialArea } from './RadialAreaSeries';
 import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
-import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel } from '../common/Axis';
+import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel, RadialAxisArcSeries } from '../common/Axis';
 
 storiesOf('Charts/Area/Radial', module)
   .addDecorator(withKnobs)
@@ -16,6 +16,8 @@ storiesOf('Charts/Area/Radial', module)
     const autoRotate = boolean('Auto Rotate Labels', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
     const gradient = hasGradient ? RadialArea.defaultProps.gradient : null;
+    const tickCount = number('Axis Tick Count', 5);
+    const arcCount = number('Axis Arc Count', 10);
     const interpolation = select('Interpolation', {
       linear: 'linear',
       smooth: 'smooth'
@@ -42,8 +44,14 @@ storiesOf('Charts/Area/Radial', module)
         }
         axis={
           <RadialAxis
+            arcs={
+              <RadialAxisArcSeries
+                count={arcCount}
+              />
+            }
             ticks={
               <RadialAxisTickSeries
+                count={tickCount}
                 tick={
                   <RadialAxisTick
                     label={
@@ -65,6 +73,8 @@ storiesOf('Charts/Area/Radial', module)
     const animated = boolean('Animated', true);
     const autoRotate = boolean('Auto Rotate Labels', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
+    const tickCount = number('Axis Tick Count', 5);
+    const arcCount = number('Axis Arc Count', 10);
     const interpolation = select('Interpolation', {
       linear: 'linear',
       smooth: 'smooth'
@@ -87,8 +97,14 @@ storiesOf('Charts/Area/Radial', module)
         }
         axis={
           <RadialAxis
+            arcs={
+              <RadialAxisArcSeries
+                count={arcCount}
+              />
+            }
             ticks={
               <RadialAxisTickSeries
+                count={tickCount}
                 tick={
                   <RadialAxisTick
                     label={

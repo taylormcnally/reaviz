@@ -54,13 +54,15 @@ export class RadialAreaChart extends Component<RadialAreaChartProps> {
 
     return (
       <Fragment>
-        <CloneElement<RadialAxisProps>
-          element={axis}
-          xScale={xScale}
-          height={chartHeight}
-          width={chartWidth}
-          innerRadius={innerRadius}
-        />
+        {axis && (
+          <CloneElement<RadialAxisProps>
+            element={axis}
+            xScale={xScale}
+            height={chartHeight}
+            width={chartWidth}
+            innerRadius={innerRadius}
+          />
+        )}
         <CloneElement<RadialAreaSeriesProps>
           element={series}
           id={id}
