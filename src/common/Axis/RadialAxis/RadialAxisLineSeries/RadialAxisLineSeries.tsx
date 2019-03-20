@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { scaleLinear, scalePoint } from 'd3-scale';
+import { scaleLinear, scaleBand } from 'd3-scale';
 import { range } from 'd3-array';
 import { RadialAxisLine, RadialAxisLineProps } from './RadialAxisLine';
 import { CloneElement } from '../../../utils/children';
@@ -20,22 +20,27 @@ export class RadialAxisLineSeries extends Component<RadialAxisLineSeriesProps> {
 
   render() {
     const { count, outerRadius, innerRadius, line } = this.props;
-    const lines = range(count);
+    // TODO: Revisit later w/ better approach
+    const lines = range(count * 2);
     const radius = scaleLinear().range([innerRadius, outerRadius]);
-    const angle = scalePoint()
-      .domain(range(count + 1) as any)
-      .range([0.75, 2.25 * Math.PI]);
+    const angle = scaleBand()
+      .domain(lines as any)
+      .range([0, 2 * Math.PI]);
 
     return (
       <Fragment>
         {lines.map((_, i) => (
-          <CloneElement<RadialAxisLineProps>
-            element={line}
-            key={i}
-            radius={radius}
-            index={i}
-            angle={angle}
-          />
+          <Fragment>
+            {i % 2 && (
+              <CloneElement<RadialAxisLineProps>
+                element={line}
+                key={i}
+                radius={radius}
+                index={i}
+                angle={angle}
+              />
+            )}
+          </Fragment>
         ))}
       </Fragment>
     );

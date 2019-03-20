@@ -14,8 +14,7 @@ export interface RadialAxisArcSeriesProps {
 export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
   static defaultProps: Partial<RadialAxisArcSeriesProps> = {
     padding: 50,
-    innerRadius: 10,
-    count: 13,
+    count: 12,
     arc: <RadialAxisArc />
   };
 
@@ -28,7 +27,7 @@ export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
       arc
     } = this.props;
     const arcs = range(count);
-    const arcWidth = (outerRadius - innerRadius - count * padding) / count;;
+    const arcWidth = (outerRadius - innerRadius - count * padding) / count;
 
     return (
       <Fragment>

@@ -23,8 +23,10 @@ export class RadialAxisTick extends Component<RadialAxisTickProps> {
 
   render() {
     const { line, label, scale, outerRadius, data, index, padding } = this.props;
-    const rotation = (scale(data) * 180) / Math.PI - 90;
+    const point = scale(data);
+    const rotation = (point * 180) / Math.PI - 90;
     const transform = `rotate(${rotation}) translate(${outerRadius + padding},0)`;
+    const lineSize = line ? line.props.size : 0;
 
     return (
       <g transform={transform}>
@@ -37,9 +39,9 @@ export class RadialAxisTick extends Component<RadialAxisTickProps> {
           <CloneElement<RadialAxisTickLabelProps>
             element={label}
             index={index}
-            scale={scale}
+            point={point}
             rotation={rotation}
-            lineSize={line.props.size}
+            lineSize={lineSize}
             data={data}
           />
         )}

@@ -7,6 +7,7 @@ import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/
 import { CloneElement } from '../common/utils/children';
 import { RadialAreaSeries, RadialAreaSeriesProps } from './RadialAreaSeries';
 import { RadialAxis, RadialAxisProps, RadialAxisArcSeries } from '../common/Axis/RadialAxis';
+import { getRadialYScale } from '../common/scales/radial';
 
 export interface RadialAreaChartProps extends ChartProps {
   data: ChartShallowDataShape[];
@@ -33,11 +34,7 @@ export class RadialAreaChart extends Component<RadialAreaChartProps> {
       .range([0, 2 * Math.PI])
       .domain(xDomain);
 
-    // https://github.com/d3/d3-scale/issues/90
-    const y = scaleLinear()
-      .range([innerRadius * innerRadius, outerRadius * outerRadius])
-      .domain(yDomain);
-    const yScale = Object.assign(d => Math.sqrt(y(d)), y);
+    const yScale = getRadialYScale(innerRadius, outerRadius, yDomain);
 
     return {
       yScale,
