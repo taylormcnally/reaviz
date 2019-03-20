@@ -35,6 +35,7 @@ export interface SankeyNodeProps extends Node {
   className?: string;
   disabled: boolean;
   label: JSX.Element;
+  opacity: (active: boolean, disabled: boolean) => number;
   showLabel: boolean;
   style?: object;
   tooltip: JSX.Element;
@@ -55,12 +56,18 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
     color: DEFAULT_COLOR,
     disabled: false,
     label: <SankeyLabel />,
+    opacity: (active, disabled) => (active ? 1 : disabled ? 0.2 : 0.9),
     showLabel: true,
-    tooltip: <Tooltip followCursor={true} modifiers={{
-      offset: {
-        offset: '0, 5px'
-      }
-    }} />,
+    tooltip: (
+      <Tooltip
+        followCursor={true}
+        modifiers={{
+          offset: {
+            offset: '0, 5px'
+          }
+        }}
+      />
+    ),
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
@@ -111,13 +118,15 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
 
   renderNode() {
     const {
+      active,
       animated,
-      disabled,
       className,
-      style,
       color,
-      width,
+      disabled,
       index,
+      opacity,
+      style,
+      width,
       x0,
       x1,
       y0,
@@ -135,6 +144,7 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
         className={classNames(css.node, className, {
           [css.disabled]: disabled
         })}
+        fillOpacity={opacity(active, disabled)}
         style={style}
         ref={this.rect}
         x={x0}

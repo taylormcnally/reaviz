@@ -29,7 +29,7 @@ export interface SankeyLinkProps extends Link {
   className?: string;
   disabled: boolean;
   gradient?: boolean;
-  opacity: (active: boolean) => number;
+  opacity: (active: boolean, disabled: boolean) => number;
   style?: object;
   tooltip: JSX.Element;
   width: number;
@@ -49,12 +49,17 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
     color: DEFAULT_COLOR,
     disabled: false,
     gradient: true,
-    opacity: active => active ? 0.5 : 0.35,
-    tooltip: <Tooltip followCursor={true} modifiers={{
-      offset: {
-        offset: '0, 5px'
-      }
-    }} />,
+    opacity: (active, disabled) => (active ? 0.5 : disabled ? 0.1 : 0.35),
+    tooltip: (
+      <Tooltip
+        followCursor={true}
+        modifiers={{
+          offset: {
+            offset: '0, 5px'
+          }
+        }}
+      />
+    ),
     width: 0,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
@@ -115,15 +120,13 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
         pose="enter"
         poseKey={`sankey-link-${enterProps.d}-${index}`}
         animated={animated}
-        className={classNames(css.link, className, {
-          [css.disabled]: disabled
-        })}
+        className={classNames(css.link, className)}
         style={style}
         ref={this.link}
         enterProps={enterProps}
         exitProps={this.getExit()}
         stroke={this.getStroke()}
-        strokeOpacity={opacity(active)}
+        strokeOpacity={opacity(active, disabled)}
         onClick={onClick}
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
