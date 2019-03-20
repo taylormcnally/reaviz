@@ -25,12 +25,14 @@ export const PosedLink = posed.path({
 export interface SankeyLinkProps extends Link {
   active: boolean;
   animated: boolean;
-  disabled: boolean;
-  className?: string;
-  gradient?: boolean;
-  style?: object;
   chartId: string;
+  className?: string;
+  disabled: boolean;
+  gradient?: boolean;
+  opacity: (active: boolean) => number;
+  style?: object;
   tooltip: JSX.Element;
+  width: number;
   onClick: (event: React.MouseEvent<SVGPathElement>) => void;
   onMouseEnter: (event: React.MouseEvent<SVGPathElement>) => void;
   onMouseLeave: (event: React.MouseEvent<SVGPathElement>) => void;
@@ -41,7 +43,7 @@ interface SankeyLinkState {
 }
 
 // Set padding modifier for the tooltips
-const modifiers = {
+export const modifiers = {
   offset: {
     offset: '0, 5px'
   }
@@ -52,9 +54,11 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
     active: false,
     animated: true,
     color: DEFAULT_COLOR,
-    gradient: true,
     disabled: false,
-    tooltip: <Tooltip followCursor={true} />,
+    gradient: true,
+    opacity: active => active ? 0.5 : 0.35,
+    tooltip: <Tooltip followCursor={true} modifiers={modifiers} />,
+    width: 0,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
@@ -63,23 +67,27 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
   link = createRef<SVGPathElement>();
   state: SankeyLinkState = {};
 
+  getEnter() {
+    const path = sankeyLinkHorizontal();
+    const d = path(this.getLink());
+    const strokeWidth = Math.max(1, this.props.width);
+    return { d, strokeWidth };
+  }
+
+  getExit() {
+    const path = sankeyLinkHorizontal();
+    const d = path({ ...this.getLink(), width: 0 });
+    return { d, strokeWidth: 0 };
+  }
+
   getLink() {
     const { index, value, y0, y1, source, target, width } = this.props;
     return { index, y0, y1, value, width, source, target };
   }
 
   getStroke() {
-    const { color, disabled, index, gradient, chartId } = this.props;
-
-    if (disabled) {
-      return DEFAULT_COLOR;
-    }
-
-    if (gradient) {
-      return `url(#${chartId}-gradient-${index})`;
-    }
-
-    return color;
+    const { color, index, gradient, chartId } = this.props;
+    return gradient ? `url(#${chartId}-gradient-${index})` : color;
   }
 
   onMouseEnter(event: React.MouseEvent<SVGPathElement>) {
@@ -92,36 +100,17 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
     this.props.onMouseLeave(event);
   }
 
-  getEnter() {
-    const path = sankeyLinkHorizontal();
-    const d = path(this.getLink());
-    const strokeWidth = Math.max(1, this.props.width || 0);
-    return { d, strokeWidth };
-  }
-
-  getExit() {
-    const path = sankeyLinkHorizontal();
-    const d = path({ ...this.getLink(), width: 0 });
-    return { d, strokeWidth: 0 };
-  }
-
   renderLink() {
     const {
       active,
       animated,
       className,
-      color,
-      gradient,
-      style,
+      disabled,
       index,
+      opacity,
+      style,
       onClick
     } = this.props;
-    const useNoGradientNoColorOpacity = !gradient && color === DEFAULT_COLOR;
-    const strokeOpacity = active
-      ? useNoGradientNoColorOpacity
-        ? 1
-        : 0.5
-      : 0.35;
     const enterProps = this.getEnter();
 
     return (
@@ -129,13 +118,15 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
         pose="enter"
         poseKey={`sankey-link-${enterProps.d}-${index}`}
         animated={animated}
-        className={classNames(css.link, className)}
+        className={classNames(css.link, {
+          [css.disabled]: disabled
+        }, className)}
         style={style}
         ref={this.link}
         enterProps={enterProps}
         exitProps={this.getExit()}
         stroke={this.getStroke()}
-        strokeOpacity={strokeOpacity}
+        strokeOpacity={opacity(active)}
         onClick={onClick}
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
@@ -158,7 +149,6 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
 
   render() {
     const { gradient, index, source, target, tooltip, chartId } = this.props;
-    const { hovered } = this.state;
     const linkSource = source as Node;
     const linkTarget = target as Node;
 
@@ -180,8 +170,7 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
           <CloneElement<TooltipProps>
             content={this.renderTooltipContent.bind(this)}
             element={tooltip}
-            modifiers={modifiers}
-            visible={hovered}
+            visible={this.state.hovered}
             reference={this.link}
           />
         )}

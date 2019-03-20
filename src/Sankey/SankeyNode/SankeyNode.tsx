@@ -19,7 +19,7 @@ export const PosedNode = posed.rect({
       opacity: {
         type: 'tween',
         ease: 'linear',
-        duration: 250
+        duration: 150
       }
     }
   },
@@ -31,14 +31,14 @@ export const PosedNode = posed.rect({
 export interface SankeyNodeProps extends Node {
   active: boolean;
   animated: boolean;
-  disabled: boolean;
-  className?: string;
-  style?: object;
   chartWidth?: number;
-  width?: number;
+  className?: string;
+  disabled: boolean;
   label: JSX.Element;
-  tooltip: JSX.Element;
   showLabel: boolean;
+  style?: object;
+  tooltip: JSX.Element;
+  width?: number;
   onClick: (event: React.MouseEvent<SVGRectElement>) => void;
   onMouseEnter: (event: React.MouseEvent<SVGRectElement>) => void;
   onMouseLeave: (event: React.MouseEvent<SVGRectElement>) => void;
@@ -49,7 +49,7 @@ interface SankeyNodeState {
 }
 
 // Set padding modifier for the tooltips
-const modifiers = {
+export const modifiers = {
   offset: {
     offset: '0, 5px'
   }
@@ -62,8 +62,8 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
     color: DEFAULT_COLOR,
     disabled: false,
     label: <SankeyLabel />,
-    tooltip: <Tooltip />,
     showLabel: true,
+    tooltip: <Tooltip followCursor={true} modifiers={modifiers} />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
@@ -135,14 +135,16 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
         pose="enter"
         poseKey={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
         animated={animated}
-        className={classNames(css.node, className)}
+        className={classNames(css.node, {
+          [css.disabled]: disabled
+        }, className)}
         style={style}
         ref={this.rect}
         x={x0}
         y={y0}
         width={nodeWidth}
         height={nodeHeight}
-        fill={disabled ? DEFAULT_COLOR : color}
+        fill={color}
         onClick={onClick}
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
@@ -165,7 +167,6 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
 
   render() {
     const { active, chartWidth, label, tooltip, showLabel } = this.props;
-    const { hovered } = this.state;
 
     return (
       <Fragment>
@@ -182,8 +183,7 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
           <CloneElement<TooltipProps>
             content={this.renderTooltipContent.bind(this)}
             element={tooltip}
-            modifiers={modifiers}
-            visible={hovered}
+            visible={this.state.hovered}
             reference={this.rect}
           />
         )}

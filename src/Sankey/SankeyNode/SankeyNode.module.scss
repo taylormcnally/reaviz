@@ -5,6 +5,10 @@
   &:hover {
     fill-opacity: 1;
   }
+
+  &.disabled {
+    opacity: 0.1;
+  }
 }
 
 .tooltip {
