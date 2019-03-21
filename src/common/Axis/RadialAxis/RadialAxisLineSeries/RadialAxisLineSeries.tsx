@@ -29,12 +29,12 @@ export class RadialAxisLineSeries extends Component<RadialAxisLineSeriesProps> {
 
     return (
       <Fragment>
-        {lines.map((_, i) => (
+        {lines.map(i => (
           <Fragment>
             {i % 2 && (
               <CloneElement<RadialAxisLineProps>
                 element={line}
-                key={i}
+                key={`line-${i}`}
                 radius={radius}
                 index={i}
                 angle={angle}

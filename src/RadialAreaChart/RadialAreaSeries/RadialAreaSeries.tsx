@@ -27,7 +27,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
     colorScheme: [...sequentialScheme],
     area: <RadialArea />,
     line: <RadialLine />,
-    interpolation: 'linear',
+    interpolation: 'smooth',
     animated: true
   };
 

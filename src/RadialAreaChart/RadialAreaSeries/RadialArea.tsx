@@ -17,7 +17,7 @@ export interface RadialAreaProps {
   innerRadius: number;
   outerRadius: number;
   className?: any;
-  gradient?: JSX.Element;
+  gradient: JSX.Element | null;
 }
 
 export class RadialArea extends Component<RadialAreaProps> {

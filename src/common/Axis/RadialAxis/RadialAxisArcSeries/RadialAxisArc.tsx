@@ -16,14 +16,11 @@ export class RadialAxisArc extends Component<RadialAxisArcProps> {
     strokeDasharray: '1,4'
   };
 
-  getInnerRadius(index: number) {
-    const { innerRadius, count, padding, width } = this.props;
-    return innerRadius + (count - (index + 1)) * (width + padding);
-  }
-
   getOuterRadius(index: number) {
-    const { width } = this.props;
-    return this.getInnerRadius(index) + width;
+    const { innerRadius, count, padding, width } = this.props;
+    const arcInnerRadius = innerRadius + (count - (index + 1)) * (width + padding);
+    const arcOuterRadius = arcInnerRadius + width;
+    return arcOuterRadius;
   }
 
   render() {
