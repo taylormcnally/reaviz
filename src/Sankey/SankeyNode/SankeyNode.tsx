@@ -19,7 +19,7 @@ export const PosedNode = posed.rect({
       opacity: {
         type: 'tween',
         ease: 'linear',
-        duration: 250
+        duration: 150
       }
     }
   },
@@ -31,14 +31,15 @@ export const PosedNode = posed.rect({
 export interface SankeyNodeProps extends Node {
   active: boolean;
   animated: boolean;
-  disabled: boolean;
-  className?: string;
-  style?: object;
   chartWidth?: number;
-  width?: number;
+  className?: string;
+  disabled: boolean;
   label: JSX.Element;
-  tooltip: JSX.Element;
+  opacity: (active: boolean, disabled: boolean) => number;
   showLabel: boolean;
+  style?: object;
+  tooltip: JSX.Element;
+  width?: number;
   onClick: (event: React.MouseEvent<SVGRectElement>) => void;
   onMouseEnter: (event: React.MouseEvent<SVGRectElement>) => void;
   onMouseLeave: (event: React.MouseEvent<SVGRectElement>) => void;
@@ -48,13 +49,6 @@ interface SankeyNodeState {
   hovered?: boolean;
 }
 
-// Set padding modifier for the tooltips
-const modifiers = {
-  offset: {
-    offset: '0, 5px'
-  }
-};
-
 export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
   static defaultProps: Partial<SankeyNodeProps> = {
     active: false,
@@ -62,8 +56,18 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
     color: DEFAULT_COLOR,
     disabled: false,
     label: <SankeyLabel />,
-    tooltip: <Tooltip />,
+    opacity: (active, disabled) => (active ? 1 : disabled ? 0.2 : 0.9),
     showLabel: true,
+    tooltip: (
+      <Tooltip
+        followCursor={true}
+        modifiers={{
+          offset: {
+            offset: '0, 5px'
+          }
+        }}
+      />
+    ),
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
@@ -114,13 +118,15 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
 
   renderNode() {
     const {
+      active,
       animated,
-      disabled,
       className,
-      style,
       color,
-      width,
+      disabled,
       index,
+      opacity,
+      style,
+      width,
       x0,
       x1,
       y0,
@@ -136,13 +142,14 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
         poseKey={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
         animated={animated}
         className={classNames(css.node, className)}
+        fillOpacity={opacity(active, disabled)}
         style={style}
         ref={this.rect}
         x={x0}
         y={y0}
         width={nodeWidth}
         height={nodeHeight}
-        fill={disabled ? DEFAULT_COLOR : color}
+        fill={color}
         onClick={onClick}
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
@@ -165,7 +172,6 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
 
   render() {
     const { active, chartWidth, label, tooltip, showLabel } = this.props;
-    const { hovered } = this.state;
 
     return (
       <Fragment>
@@ -182,8 +188,7 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
           <CloneElement<TooltipProps>
             content={this.renderTooltipContent.bind(this)}
             element={tooltip}
-            modifiers={modifiers}
-            visible={hovered}
+            visible={this.state.hovered}
             reference={this.rect}
           />
         )}

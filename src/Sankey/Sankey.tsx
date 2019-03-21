@@ -55,7 +55,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
 
   state: SankeyState = { activeNodes: [], activeLinks: [] };
 
-  getColor(node: JSX.Element, index: any) {
+  getNodeColor(node: JSX.Element, index: any) {
     const { colorScheme, nodes } = this.props;
 
     if (colorScheme) {
@@ -171,7 +171,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
     const nodesCopy: Node[] = this.props.nodes.map((node, index) => ({
       id: node.props.id,
       title: node.props.title,
-      color: this.getColor(node, index)
+      color: this.getNodeColor(node, index)
     }));
 
     const linksCopy: Link[] = this.props.links.map(link => ({

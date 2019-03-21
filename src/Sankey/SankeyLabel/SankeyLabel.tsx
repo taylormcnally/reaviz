@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { isString } from 'lodash-es';
 import { Node } from '../utils';
 import * as css from './SankeyLabel.module.scss';
 
@@ -7,11 +8,12 @@ export type Location = 'inside' | 'outside';
 
 export interface SankeyLabelProps {
   active: boolean;
-  className?: string;
   chartWidth?: number;
+  className?: string;
   fill: string;
   location: Location;
   node?: Node;
+  opacity: (active: boolean) => number;
   padding?: string | number;
   visible: boolean;
 }
@@ -21,19 +23,22 @@ export class SankeyLabel extends Component<SankeyLabelProps> {
     active: false,
     fill: '#fff',
     location: 'outside', // TODO: implement for inside
+    opacity: active => active ? 1 : 0.5,
     visible: true
   };
 
   render() {
     const {
       active,
+      chartWidth,
       className,
       fill,
       node,
+      opacity,
       padding,
-      chartWidth,
       visible
     } = this.props;
+
     const nodePositions = {
       x0: node && node.x0 ? node.x0 : 0,
       y0: node && node.y0 ? node.y0 : 0,
@@ -53,10 +58,10 @@ export class SankeyLabel extends Component<SankeyLabelProps> {
           dy="0.35em"
           textAnchor={textAnchor}
           fill={fill}
-          opacity={active ? 1 : 0.5}
+          opacity={opacity(active)}
           style={{ padding }}
         >
-          {node ? node.title : 0}
+          {node.title}
         </text>
       )
     );
