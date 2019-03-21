@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { ChartShallowDataShape, buildChartData, ChartInternalShallowDataShape } from '../common/data';
-import { scaleTime, scaleLinear } from 'd3-scale';
+import { scaleTime } from 'd3-scale';
 import { getYDomain, getXDomain } from '../common/utils/domains';
 import { memoize } from 'lodash-es';
 import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/containers';
 import { CloneElement } from '../common/utils/children';
 import { RadialAreaSeries, RadialAreaSeriesProps } from './RadialAreaSeries';
-import { RadialAxis, RadialAxisProps, RadialAxisArcSeries } from '../common/Axis/RadialAxis';
+import { RadialAxis, RadialAxisProps } from '../common/Axis/RadialAxis';
 import { getRadialYScale } from '../common/scales/radial';
 
 export interface RadialAreaChartProps extends ChartProps {

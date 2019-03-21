@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { ChartShallowDataShape, buildChartData, ChartInternalShallowDataShape } from '../common/data';
-import { scaleBand, scaleLinear } from 'd3-scale';
+import { scaleBand } from 'd3-scale';
 import { getYDomain, getGroupDomain } from '../common/utils/domains';
 import { RadialBarSeries, RadialBarSeriesProps } from './RadialBarSeries';
 import { memoize } from 'lodash-es';
