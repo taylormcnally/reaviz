@@ -19,7 +19,7 @@ export interface RadialAxisTickLabelProps {
 
 export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
   static defaultProps: Partial<RadialAxisTickLabelProps> = {
-    fill: '#3B5F6A',
+    fill: '#71808d',
     fontSize: 11,
     padding: 15,
     fontFamily: 'sans-serif',

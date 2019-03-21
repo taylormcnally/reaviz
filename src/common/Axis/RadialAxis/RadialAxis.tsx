@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { RadialAxisLineSeries, RadialAxisLineSeriesProps } from './RadialAxisLineSeries';
 import { RadialAxisTickSeries, RadialAxisTickSeriesProps } from './RadialAxisTickSeries';
 import { RadialAxisArcSeries, RadialAxisArcSeriesProps } from './RadialAxisArcSeries';
 import { CloneElement } from '../../utils/children';
@@ -11,19 +10,17 @@ export interface RadialAxisProps {
   innerRadius: number;
   arcs: JSX.Element | null;
   ticks: JSX.Element | null;
-  lines: JSX.Element | null;
 }
 
 export class RadialAxis extends Component<RadialAxisProps, {}> {
   static defaultProps: Partial<RadialAxisProps> = {
     innerRadius: 10,
     arcs: <RadialAxisArcSeries />,
-    ticks: <RadialAxisTickSeries />,
-    lines: <RadialAxisLineSeries />
+    ticks: <RadialAxisTickSeries />
   };
 
   render() {
-    const { arcs, ticks, xScale, height, width, lines, innerRadius } = this.props;
+    const { arcs, ticks, xScale, height, width, innerRadius } = this.props;
     const outerRadius = Math.min(height, width) / 2;
 
     return (
@@ -35,17 +32,11 @@ export class RadialAxis extends Component<RadialAxisProps, {}> {
             innerRadius={innerRadius}
           />
         )}
-        {lines && (
-          <CloneElement<RadialAxisLineSeriesProps>
-            element={lines}
-            outerRadius={outerRadius}
-            innerRadius={innerRadius}
-          />
-        )}
         {ticks && (
           <CloneElement<RadialAxisTickSeriesProps>
             element={ticks}
             scale={xScale}
+            innerRadius={innerRadius}
             outerRadius={outerRadius}
           />
         )}

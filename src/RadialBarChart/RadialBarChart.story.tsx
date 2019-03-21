@@ -2,10 +2,10 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialBarChart } from './RadialBarChart';
 import { largeCategoryData } from '../common/demo';
-import { number, boolean, withKnobs, object, array } from '@storybook/addon-knobs';
+import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
 import { RadialBarSeries, RadialBar } from './RadialBarSeries';
-import { RadialAxis, RadialAxisArcSeries } from '../common/Axis/RadialAxis';
+import { RadialAxis, RadialAxisArcSeries, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLine } from '../common/Axis/RadialAxis';
 
 storiesOf('Charts/Bar/Radial', module)
   .addDecorator(withKnobs)
@@ -15,9 +15,13 @@ storiesOf('Charts/Bar/Radial', module)
     const hasGradient = boolean('Gradient', true);
     const animated = boolean('Animated', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
-    const arcCount = number('Axis Arc Count', 10);
+    const arcCount = number('Arc Count', 10);
+    const tickPosition = select('Tick Position', {
+      inside: 'inside',
+      outside: 'outside'
+    }, 'inside');
     const data = object('Data', largeCategoryData);
-    const gradient = hasGradient ? RadialBar.defaultProps.gradient : null;
+    const gradient = hasGradient ? RadialBar.defaultProps.gradient : false;
 
     return (
       <RadialBarChart
@@ -39,6 +43,19 @@ storiesOf('Charts/Bar/Radial', module)
         }
         axis={
           <RadialAxis
+            ticks={
+              <RadialAxisTickSeries
+                tick={
+                  <RadialAxisTick
+                    line={
+                      <RadialAxisTickLine
+                        position={tickPosition}
+                      />
+                    }
+                  />
+                }
+              />
+            }
             arcs={
               <RadialAxisArcSeries
                 count={arcCount}

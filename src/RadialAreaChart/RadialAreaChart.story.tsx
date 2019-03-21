@@ -5,7 +5,7 @@ import { medDateData } from '../common/demo';
 import { RadialAreaSeries, RadialArea } from './RadialAreaSeries';
 import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
-import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel, RadialAxisArcSeries } from '../common/Axis';
+import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel, RadialAxisArcSeries, RadialAxisTickLine } from '../common/Axis';
 
 storiesOf('Charts/Area/Radial', module)
   .addDecorator(withKnobs)
@@ -16,8 +16,12 @@ storiesOf('Charts/Area/Radial', module)
     const autoRotate = boolean('Auto Rotate Labels', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
     const gradient = hasGradient ? RadialArea.defaultProps.gradient : null;
-    const tickCount = number('Axis Tick Count', 5);
-    const arcCount = number('Axis Arc Count', 10);
+    const tickCount = number('Tick Count', 5);
+    const arcCount = number('Arc Count', 10);
+    const tickPosition = select('Tick Position', {
+      inside: 'inside',
+      outside: 'outside'
+    }, 'inside');
     const interpolation = select('Interpolation', {
       linear: 'linear',
       smooth: 'smooth'
@@ -54,6 +58,11 @@ storiesOf('Charts/Area/Radial', module)
                 count={tickCount}
                 tick={
                   <RadialAxisTick
+                    line={
+                      <RadialAxisTickLine
+                        position={tickPosition}
+                      />
+                    }
                     label={
                       <RadialAxisTickLabel
                         autoRotate={autoRotate}
@@ -82,10 +91,14 @@ storiesOf('Charts/Line/Radial', module)
   .add('Simple', () => {
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);
-    const autoRotate = boolean('Auto Rotate Labels', true);
     const colorScheme = array('Color Scheme', sequentialScheme);
-    const tickCount = number('Axis Tick Count', 5);
-    const arcCount = number('Axis Arc Count', 10);
+    const autoRotate = boolean('Auto Rotate Labels', true);
+    const tickCount = number('Tick Count', 5);
+    const tickPosition = select('Tick Position', {
+      inside: 'inside',
+      outside: 'outside'
+    }, 'outside');
+    const arcCount = number('Arc Count', 10);
     const interpolation = select('Interpolation', {
       linear: 'linear',
       smooth: 'smooth'
@@ -118,6 +131,11 @@ storiesOf('Charts/Line/Radial', module)
                 count={tickCount}
                 tick={
                   <RadialAxisTick
+                    line={
+                      <RadialAxisTickLine
+                        position={tickPosition}
+                      />
+                    }
                     label={
                       <RadialAxisTickLabel
                         autoRotate={autoRotate}
