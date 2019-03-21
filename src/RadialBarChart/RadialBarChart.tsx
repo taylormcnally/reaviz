@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { ChartShallowDataShape, buildChartData, ChartInternalShallowDataShape } from '../common/data';
-import { scaleBand, scaleLinear } from 'd3-scale';
+import { scaleBand } from 'd3-scale';
 import { getYDomain, getGroupDomain } from '../common/utils/domains';
 import { RadialBarSeries, RadialBarSeriesProps } from './RadialBarSeries';
 import { memoize } from 'lodash-es';
 import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/containers';
 import { CloneElement } from '../common/utils/children';
 import { RadialAxis, RadialAxisProps } from '../common/Axis/RadialAxis';
+import { getRadialYScale } from '../common/scales';
 
 export interface RadialBarChartProps extends ChartProps {
   data: ChartShallowDataShape[];
@@ -30,14 +31,9 @@ export class RadialBarChart extends Component<RadialBarChartProps> {
 
     const xScale = scaleBand()
       .range([0, 2 * Math.PI])
-      .align(0)
       .domain(xDomain as any[]);
 
-    // https://github.com/d3/d3-scale/issues/90
-    const y = scaleLinear()
-      .range([innerRadius * innerRadius, outerRadius * outerRadius])
-      .domain(yDomain);
-    const yScale = Object.assign(d => Math.sqrt(y(d)), y);
+    const yScale = getRadialYScale(innerRadius, outerRadius, yDomain);
 
     return {
       xScale,

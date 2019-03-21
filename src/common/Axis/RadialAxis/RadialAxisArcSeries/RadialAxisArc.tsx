@@ -1,34 +1,21 @@
 import React, { Component } from 'react';
 
 export interface RadialAxisArcProps {
-  width: number;
-  padding: number;
-  innerRadius: number;
-  count: number;
   index: number;
+  scale: any;
   stroke: ((index: number) => string) | string;
   strokeDasharray: ((index: number) => string) | string;
 }
 
 export class RadialAxisArc extends Component<RadialAxisArcProps> {
   static defaultProps: Partial<RadialAxisArcProps> = {
-    stroke: '#054856',
+    stroke: '#71808d',
     strokeDasharray: '1,4'
   };
 
-  getInnerRadius(index: number) {
-    const { innerRadius, count, padding, width } = this.props;
-    return innerRadius + (count - (index + 1)) * (width + padding);
-  }
-
-  getOuterRadius(index: number) {
-    const { width } = this.props;
-    return this.getInnerRadius(index) + width;
-  }
-
   render() {
-    const { padding, index, stroke, strokeDasharray } = this.props;
-    const r = this.getOuterRadius(index) + padding;
+    const { index, stroke, strokeDasharray, scale } = this.props;
+    const r = scale(index);
     const strokeColor = typeof stroke === 'string' ? stroke : stroke(index);
     const strokeDash =
       typeof strokeDasharray === 'string'

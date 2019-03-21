@@ -29,7 +29,7 @@ const xScale = (() => {
 
 storiesOf('Charts/Axis/Radial', module)
   .add('Simple', () => (
-    <div style={{ background: '#07111D', padding: '10px' }}>
+    <div style={{ padding: '10px' }}>
       <svg width={600} height={600}>
         <g transform="translate(300, 300)">
           <RadialAxis

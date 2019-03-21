@@ -1,46 +1,43 @@
 import React, { Component, Fragment } from 'react';
 import { RadialAxisArc, RadialAxisArcProps } from './RadialAxisArc';
-import { range } from 'd3-array';
 import { CloneElement } from '../../../utils/children';
+import { scaleLinear } from 'd3-scale';
 
 export interface RadialAxisArcSeriesProps {
   arc: JSX.Element;
   count: number;
-  padding: number;
   innerRadius: number;
   outerRadius: number;
 }
 
 export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
   static defaultProps: Partial<RadialAxisArcSeriesProps> = {
-    padding: 50,
-    innerRadius: 10,
-    count: 13,
+    count: 12,
     arc: <RadialAxisArc />
   };
 
   render() {
     const {
       count,
-      padding,
       innerRadius,
       outerRadius,
       arc
     } = this.props;
-    const arcs = range(count);
-    const arcWidth = (outerRadius - innerRadius - count * padding) / count;;
+
+    const scale = scaleLinear()
+      .domain([0, count])
+      .range([innerRadius, outerRadius]);
+
+    const arcs = scale.ticks(count);
 
     return (
       <Fragment>
-        {arcs.map(i => (
+        {arcs.map((d) => (
           <CloneElement<RadialAxisArcProps>
             element={arc}
-            key={i}
-            index={i}
-            innerRadius={innerRadius}
-            count={count}
-            width={arcWidth}
-            padding={padding}
+            key={d}
+            index={d}
+            scale={scale}
           />
         ))}
       </Fragment>

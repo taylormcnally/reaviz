@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { ChartShallowDataShape, buildChartData, ChartInternalShallowDataShape } from '../common/data';
-import { scaleTime, scaleLinear } from 'd3-scale';
+import { scaleTime } from 'd3-scale';
 import { getYDomain, getXDomain } from '../common/utils/domains';
 import { memoize } from 'lodash-es';
 import { RadialScatterSeries, RadialScatterSeriesProps } from './RadialScatterSeries';
 import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/containers';
 import { CloneElement } from '../common/utils/children';
 import { RadialAxisProps, RadialAxis } from '../common/Axis/RadialAxis';
+import { getRadialYScale } from '../common/scales';
 
 export interface RadialScatterPlotProps extends ChartProps {
   data: ChartShallowDataShape[];
@@ -33,11 +34,7 @@ export class RadialScatterPlot extends Component<RadialScatterPlotProps> {
       .range([0, 2 * Math.PI])
       .domain(xDomain);
 
-    // https://github.com/d3/d3-scale/issues/90
-    const y = scaleLinear()
-      .range([innerRadius * innerRadius, outerRadius * outerRadius])
-      .domain(yDomain);
-    const yScale = Object.assign(d => Math.sqrt(y(d)), y);
+    const yScale = getRadialYScale(innerRadius, outerRadius, yDomain);
 
     return {
       yScale,

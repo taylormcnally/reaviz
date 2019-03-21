@@ -7,6 +7,7 @@ export interface RadialAxisTickSeriesProps {
   scale: any;
   count: number;
   outerRadius: number;
+  innerRadius: number;
   tick: JSX.Element;
 }
 
@@ -26,7 +27,7 @@ export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
   }
 
   render() {
-    const { scale, count, outerRadius, tick } = this.props;
+    const { scale, count, outerRadius, tick, innerRadius } = this.props;
     const ticks = this.getTicks(scale, count);
 
     return (
@@ -38,6 +39,7 @@ export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
             index={i}
             scale={scale}
             data={data}
+            innerRadius={innerRadius}
             outerRadius={outerRadius}
           />
         ))}

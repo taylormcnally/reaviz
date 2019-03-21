@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 
 export interface RadialAxisTickLineProps {
-  size: number;
+  size?: number;
   stroke: string;
+  innerRadius: number;
+  outerRadius: number;
+  position: 'inside' | 'outside';
 }
 
 export class RadialAxisTickLine extends Component<RadialAxisTickLineProps> {
   static defaultProps: Partial<RadialAxisTickLineProps> = {
-    stroke: '#054856',
-    size: 10
+    stroke: 'rgba(113, 128, 141, .5)',
+    size: 10,
+    position: 'inside'
   };
 
   render() {
-    const { stroke, size } = this.props;
-    return <line x2={0} x1={size} stroke={stroke} />;
+    const { stroke, size, position, innerRadius, outerRadius } = this.props;
+    const x1 = position === 'outside' ? size : -(outerRadius - innerRadius);
+
+    return <line x1={x1} x2={0} stroke={stroke} />;
   }
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { medDateData, largeSignalChartData, medSignalChartData } from '../common/demo';
-import { number, boolean, withKnobs, object, color } from '@storybook/addon-knobs';
+import { number, boolean, withKnobs, object, color, select } from '@storybook/addon-knobs';
 import { RadialScatterPlot } from './RadialScatterPlot';
 import { RadialScatterSeries, RadialScatterPoint } from './RadialScatterSeries';
-import { RadialAxis, RadialAxisTickSeries, RadialAxisArcSeries } from '../common/Axis/RadialAxis';
+import { RadialAxis, RadialAxisTickSeries, RadialAxisArcSeries, RadialAxisTick, RadialAxisTickLine } from '../common/Axis/RadialAxis';
 
 storiesOf('Charts/Scatter Plot/Radial', module)
   .addDecorator(withKnobs)
@@ -13,8 +13,12 @@ storiesOf('Charts/Scatter Plot/Radial', module)
     const size = number('Size', 5);
     const animated = boolean('Animated', true);
     const fill = color('Fill', 'rgba(174, 52, 255, .5)');
-    const tickCount = number('Axis Tick Count', 5);
-    const arcCount = number('Axis Arc Count', 10);
+    const tickCount = number('Tick Count', 5);
+    const arcCount = number('Arc Count', 10);
+    const tickPosition = select('Tick Position', {
+      inside: 'inside',
+      outside: 'outside'
+    }, 'inside');
     const data = object('Data', medDateData);
 
     return (
@@ -39,6 +43,15 @@ storiesOf('Charts/Scatter Plot/Radial', module)
             ticks={
               <RadialAxisTickSeries
                 count={tickCount}
+                tick={
+                  <RadialAxisTick
+                    line={
+                      <RadialAxisTickLine
+                        position={tickPosition}
+                      />
+                    }
+                  />
+                }
               />
             }
             arcs={
@@ -55,8 +68,12 @@ storiesOf('Charts/Scatter Plot/Radial', module)
     const innerRadius = number('Inner Radius', .1);
     const animated = boolean('Animated', true);
     const fill = color('Fill', 'rgba(174, 52, 255, .5)');
-    const tickCount = number('Axis Tick Count', 5);
-    const arcCount = number('Axis Arc Count', 10);
+    const tickCount = number('Tick Count', 5);
+    const arcCount = number('Arc Count', 10);
+    const tickPosition = select('Tick Position', {
+      inside: 'inside',
+      outside: 'outside'
+    }, 'inside');
     const data = object('Data', largeSignalChartData);
 
     return (
@@ -81,6 +98,15 @@ storiesOf('Charts/Scatter Plot/Radial', module)
             ticks={
               <RadialAxisTickSeries
                 count={tickCount}
+                tick={
+                  <RadialAxisTick
+                    line={
+                      <RadialAxisTickLine
+                        position={tickPosition}
+                      />
+                    }
+                  />
+                }
               />
             }
             arcs={
@@ -97,8 +123,12 @@ storiesOf('Charts/Scatter Plot/Radial', module)
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);
     const fill = color('Fill', 'rgba(174, 52, 255, .5)');
-    const tickCount = number('Axis Tick Count', 5);
-    const arcCount = number('Axis Arc Count', 10);
+    const tickCount = number('Tick Count', 5);
+    const arcCount = number('Arc Count', 10);
+    const tickPosition = select('Tick Position', {
+      inside: 'inside',
+      outside: 'outside'
+    }, 'inside');
     const data = object('Data', medSignalChartData);
 
     return (
@@ -139,6 +169,15 @@ storiesOf('Charts/Scatter Plot/Radial', module)
             ticks={
               <RadialAxisTickSeries
                 count={tickCount}
+                tick={
+                  <RadialAxisTick
+                    line={
+                      <RadialAxisTickLine
+                        position={tickPosition}
+                      />
+                    }
+                  />
+                }
               />
             }
             arcs={
