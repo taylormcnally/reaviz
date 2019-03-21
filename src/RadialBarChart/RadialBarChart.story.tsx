@@ -70,6 +70,7 @@ storiesOf('Charts/Bar/Radial', module)
     <div style={{ width: '50vw', height: '75vh', border: 'solid 1px red' }}>
       <RadialBarChart
         data={largeCategoryData}
+        innerRadius={10}
       />
     </div>
   ));
