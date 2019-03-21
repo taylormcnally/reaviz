@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 export interface RadialAxisTickLineProps {
-  size: number;
+  size?: number;
   stroke: string;
   innerRadius: number;
   outerRadius: number;
@@ -18,8 +18,6 @@ export class RadialAxisTickLine extends Component<RadialAxisTickLineProps> {
   render() {
     const { stroke, size, position, innerRadius, outerRadius } = this.props;
     const x1 = position === 'outside' ? size : -(outerRadius - innerRadius);
-
-    console.log('x1', x1, 'position', position, 'inner', innerRadius, 'size', size, 'outer', outerRadius)
 
     return <line x1={x1} x2={0} stroke={stroke} />;
   }

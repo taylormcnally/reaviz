@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 
 export interface RadialAxisArcProps {
-  width: number;
-  padding: number;
-  innerRadius: number;
-  count: number;
   index: number;
+  scale: any;
   stroke: ((index: number) => string) | string;
   strokeDasharray: ((index: number) => string) | string;
 }
@@ -16,16 +13,9 @@ export class RadialAxisArc extends Component<RadialAxisArcProps> {
     strokeDasharray: '1,4'
   };
 
-  getOuterRadius(index: number) {
-    const { innerRadius, count, padding, width } = this.props;
-    const arcInnerRadius = innerRadius + (count - (index + 1)) * (width + padding);
-    const arcOuterRadius = arcInnerRadius + width;
-    return arcOuterRadius;
-  }
-
   render() {
-    const { padding, index, stroke, strokeDasharray } = this.props;
-    const r = this.getOuterRadius(index) + padding;
+    const { index, stroke, strokeDasharray, scale } = this.props;
+    const r = scale(index);
     const strokeColor = typeof stroke === 'string' ? stroke : stroke(index);
     const strokeDash =
       typeof strokeDasharray === 'string'
