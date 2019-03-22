@@ -11,3 +11,4 @@ export * from './selection';
 export * from './stroke';
 export * from './ticks';
 export * from './width';
+export * from './math';

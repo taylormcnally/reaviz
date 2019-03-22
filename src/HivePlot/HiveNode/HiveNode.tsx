@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
-import { Node, degrees } from '../utils';
+import { Node } from '../types';
 import * as css from './HiveNode.module.scss';
+import { getDegrees } from '../../common/utils/math';
 
 interface HiveNodeProps {
   angle: (...args: any[]) => any;
@@ -15,7 +16,7 @@ interface HiveNodeProps {
   onMouseOut: (...args: any[]) => any;
 }
 
-export class HiveNode extends React.Component<HiveNodeProps, {}> {
+export class HiveNode extends Component<HiveNodeProps, {}> {
   render() {
     const {
       angle,
@@ -41,7 +42,7 @@ export class HiveNode extends React.Component<HiveNodeProps, {}> {
         className={classNames(css.node, {
           [css.inactive]: !active
         })}
-        transform={`rotate(${degrees(angle(node.x))})`}
+        transform={`rotate(${getDegrees(angle(node.x))})`}
         cx={radius(node.y)}
         r={size}
         style={{ cursor: disabled ? 'initial' : 'cursor' }}

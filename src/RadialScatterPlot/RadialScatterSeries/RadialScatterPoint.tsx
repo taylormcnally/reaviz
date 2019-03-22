@@ -84,8 +84,12 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps, Radia
     // Parse the generated path to get point coordinates
     // Ref: https://bit.ly/2CnZcPl
     const path = fn([data] as any);
-    const coords = path.slice(1).slice(0, -1);
-    const transform = `translate(${coords})`;
+
+    let transform;
+    if (path) {
+      const coords = path.slice(1).slice(0, -1);
+      transform = `translate(${coords})`;
+    }
 
     return transform;
   }

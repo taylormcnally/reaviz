@@ -1,5 +1,5 @@
-import React from 'react';
-import { degrees } from '../utils';
+import React, { Component, Fragment } from 'react';
+import { getDegrees } from '../../common/utils/math';
 import * as css from './HiveAxis.module.scss';
 
 interface HiveAxisProps {
@@ -9,24 +9,25 @@ interface HiveAxisProps {
   index: number;
 }
 
-export class HiveAxis extends React.Component<HiveAxisProps, {}> {
+export class HiveAxis extends Component<HiveAxisProps, {}> {
   render() {
     const { radius, index, angle, color } = this.props;
     const [axisStart, axisEnd] = radius.range();
     const axisLength = axisEnd - axisStart;
+
     return (
-      <React.Fragment>
+      <Fragment>
         <line
           className={css.axis}
           style={{ stroke: color(index) }}
-          transform={`rotate(${degrees(angle(index))})`}
+          transform={`rotate(${getDegrees(angle(index))})`}
           x1={axisStart}
           x2={axisEnd}
         />
         <line
           className={css.axis}
           style={{ stroke: color(index) }}
-          transform={`rotate(${degrees(angle(index)) + 90})`}
+          transform={`rotate(${getDegrees(angle(index)) + 90})`}
           x1={-axisLength / 20}
           x2={axisLength / 20}
           y1={-axisEnd}
@@ -35,7 +36,7 @@ export class HiveAxis extends React.Component<HiveAxisProps, {}> {
         <line
           className={css.axis}
           style={{ stroke: color(index) }}
-          transform={`rotate(${degrees(angle(index)) + 90})`}
+          transform={`rotate(${getDegrees(angle(index)) + 90})`}
           x1={-axisStart / 3}
           x2={0}
           y1={axisStart * -0.8}
@@ -44,13 +45,13 @@ export class HiveAxis extends React.Component<HiveAxisProps, {}> {
         <line
           className={css.axis}
           style={{ stroke: color(index) }}
-          transform={`rotate(${degrees(angle(index)) + 90})`}
+          transform={`rotate(${getDegrees(angle(index)) + 90})`}
           x1={0}
           x2={axisStart / 3}
           y1={-axisStart}
           y2={axisStart * -0.8}
         />
-      </React.Fragment>
+      </Fragment>
     );
   }
 }
