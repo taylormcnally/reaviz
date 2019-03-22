@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { sequentialScheme, getColor } from '../../common/utils/color';
 import { CloneElement } from '../../common/utils/children';
@@ -7,6 +7,7 @@ import { PoseGroup } from 'react-pose';
 import { RadialAreaProps, RadialArea } from './RadialArea';
 import { RadialLine, RadialLineProps } from './RadialLine';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';
+import { RadialCircleSeriesProps, RadialCircleSeries } from '../../common/CircleSeries';
 
 export interface RadialAreaSeriesProps {
   data: ChartInternalShallowDataShape[];
@@ -19,6 +20,7 @@ export interface RadialAreaSeriesProps {
   interpolation: RadialInterpolationTypes;
   area: JSX.Element | null;
   line: JSX.Element | null;
+  symbols: JSX.Element | null;
   animated: boolean;
 }
 
@@ -27,6 +29,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
     colorScheme: [...sequentialScheme],
     area: <RadialArea />,
     line: <RadialLine />,
+    symbols: <RadialCircleSeries />,
     interpolation: 'smooth',
     animated: true
   };
@@ -74,14 +77,36 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
     );
   }
 
+  renderSymbols() {
+    const { xScale, yScale, animated, area, symbols, data } = this.props;
+
+    // Animations are only valid for Area
+    const isAnimated = area !== undefined && animated;
+    const activeSymbols = [];
+      // (symbols && symbols.props.activeValues) || activeValues;
+
+    return (
+      <CloneElement<RadialCircleSeriesProps>
+        element={symbols}
+        activeValues={activeSymbols}
+        xScale={xScale}
+        yScale={yScale}
+        data={data}
+        show={true}
+        color={this.getColor.bind(this)}
+      />
+    );
+  }
+
   render() {
-    const { area, line, animated } = this.props;
+    const { area, line, animated, symbols } = this.props;
 
     return (
       <PoseGroup animateOnMount={animated}>
         <PoseSVGGElement key="1">
           {area && this.renderArea()}
           {line && this.renderLine()}
+          {symbols && this.renderSymbols()}
         </PoseSVGGElement>
       </PoseGroup>
     );
