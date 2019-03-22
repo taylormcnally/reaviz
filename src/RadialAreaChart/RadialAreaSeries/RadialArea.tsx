@@ -41,7 +41,7 @@ export class RadialArea extends Component<RadialAreaProps> {
 
     const radialFn = radialArea()
       .angle((d: any) => xScale(d.x))
-      .innerRadius(d => innerRadius)
+      .innerRadius(_ => innerRadius)
       .outerRadius((d: any) => yScale(d.y))
       .curve(curve);
 

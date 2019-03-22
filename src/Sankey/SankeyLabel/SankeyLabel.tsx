@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { isString } from 'lodash-es';
 import { Node } from '../utils';
 import * as css from './SankeyLabel.module.scss';
 
@@ -50,7 +49,7 @@ export class SankeyLabel extends Component<SankeyLabelProps> {
     const textAnchor = showRightSide ? 'start' : 'end';
 
     return (
-      visible && (
+      visible && node && (
         <text
           className={classNames(css.label, className)}
           x={showRightSide ? nodePositions.x1 + 6 : nodePositions.x0 - 6}

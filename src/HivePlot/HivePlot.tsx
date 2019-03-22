@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import bind from 'memoize-bind';
 import { scaleOrdinal, scaleLinear, scalePoint } from 'd3-scale';
 import { range } from 'd3-array';
@@ -10,7 +10,7 @@ import { HiveAxis } from './HiveAxis';
 import { HiveLink } from './HiveLink';
 import { HiveLabel } from './HiveLabel';
 import { HiveTooltip } from './HiveTooltip';
-import { Node, Link, Axis } from './utils';
+import { Node, Link, Axis } from './types';
 import classNames from 'classnames';
 
 interface NodeEventData {
@@ -68,7 +68,7 @@ interface HivePlotState {
   width?: number;
 }
 
-export class HivePlot extends React.Component<HivePlotProps, HivePlotState> {
+export class HivePlot extends Component<HivePlotProps, HivePlotState> {
   static defaultProps = {
     innerRadius: 20,
     disabled: false,

@@ -1,8 +1,3 @@
-/**
- * Convert radians into degrees.
- */
-export const degrees = (radians: number) => (radians / Math.PI) * 180 - 90;
-
 export interface Node {
   id?: string;
   x: number;

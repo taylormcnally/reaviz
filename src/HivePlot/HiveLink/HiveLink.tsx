@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import { hiveLayout } from './hiveLayout';
-import { Link } from '../utils';
+import { Link } from '../types';
 import { isString } from 'lodash-es';
 import * as css from './HiveLink.module.scss';
 
@@ -15,7 +15,7 @@ interface HiveLinkProps {
   onMouseOut: (...args: any[]) => any;
 }
 
-export class HiveLink extends React.Component<HiveLinkProps, {}> {
+export class HiveLink extends Component<HiveLinkProps, {}> {
   prepareData() {
     const { angle, radius } = this.props;
     const hive = hiveLayout();

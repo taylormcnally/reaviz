@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import * as css from './HiveLabel.module.scss';
 
-const degrees = radians => {
+const degrees = (radians: number) => {
   const res = (radians / Math.PI) * 180;
   return res > 90 ? res + 180 : res;
 };
 
-const translate = (d, outerRadius, padding) =>
+const translate = (d: number, outerRadius: number, padding: number) =>
   d > 90 ? outerRadius + 8 + padding : -(outerRadius + padding);
 
 interface HiveLabelProps {
@@ -17,7 +17,7 @@ interface HiveLabelProps {
   angle: (...args: any[]) => any;
 }
 
-export class HiveLabel extends React.Component<HiveLabelProps, {}> {
+export class HiveLabel extends Component<HiveLabelProps, {}> {
   render() {
     const { index, text, angle, outerRadius, label } = this.props;
     const transform = degrees(angle(index));
