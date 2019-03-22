@@ -36,24 +36,30 @@ Chart types include:
 - Bar Chart
 - Line Chart
 - Area Chart
-- Pie Chart
 - Bubble Chart
 - Scatter Plot
+- Pie Chart
 - Hive Plot
 - Sankey Chart
 - Map Chart
 - Sparklines
+- Radial Bar Chart
+- Radial Line Chart
+- Radial Area Chart
+- Radial Bubble Chart
+- Radial Scatter Plot
 
 Additional features:
 
 - Legend
 - Tooltips
 - Animations Enter/Update/Exit
-- Advanced Axis Configuration
+- Linear & Radial Axis
 - Brush
-- Panning / Zooming
+- Patterns & Gradients Styles
+- Panning/Zooming
 - Gestures
-- Grid/Mark Lines
+- Grid/Marklines
 - BigInt Support
 
 ## 📦 Install
