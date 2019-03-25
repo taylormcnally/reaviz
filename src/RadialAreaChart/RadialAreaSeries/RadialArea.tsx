@@ -63,6 +63,7 @@ export class RadialArea extends Component<RadialAreaProps> {
         pose="enter"
         poseKey={enterProps.d}
         animated={animated}
+        pointerEvents="none"
         enterProps={enterProps}
         exitProps={exitProps}
         className={className}

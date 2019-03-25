@@ -8,6 +8,8 @@ import { RadialAreaProps, RadialArea } from './RadialArea';
 import { RadialLine, RadialLineProps } from './RadialLine';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';
 import { RadialCircleSeriesProps, RadialCircleSeries } from '../../common/CircleSeries';
+import { TooltipAreaProps, TooltipArea, TooltipAreaEvent } from '../../common/TooltipArea';
+import bind from 'memoize-bind';
 
 export interface RadialAreaSeriesProps {
   data: ChartInternalShallowDataShape[];
@@ -18,21 +20,32 @@ export interface RadialAreaSeriesProps {
   yScale: any;
   id: string;
   interpolation: RadialInterpolationTypes;
+  animated: boolean;
+  height: number;
+  width: number;
   area: JSX.Element | null;
   line: JSX.Element | null;
   symbols: JSX.Element | null;
-  animated: boolean;
+  tooltip: JSX.Element;
 }
 
-export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
+interface RadialAreaSeriesState {
+  activeValues?: any;
+  activePoint?: number;
+}
+
+export class RadialAreaSeries extends Component<RadialAreaSeriesProps, RadialAreaSeriesState> {
   static defaultProps: Partial<RadialAreaSeriesProps> = {
     colorScheme: [...sequentialScheme],
+    interpolation: 'smooth',
+    animated: true,
     area: <RadialArea />,
     line: <RadialLine />,
     symbols: <RadialCircleSeries />,
-    interpolation: 'smooth',
-    animated: true
+    tooltip: <TooltipArea />
   };
+
+  state: RadialAreaSeriesState = {};
 
   getColor(point: ChartInternalShallowDataShape, index: number) {
     const { colorScheme, data } = this.props;
@@ -40,6 +53,20 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
     return Array.isArray(colorScheme)
       ? getColor(colorScheme, data)(index as any)
       : colorScheme(point, index);
+  }
+
+  onValueEnter(event: TooltipAreaEvent) {
+    this.setState({
+      activePoint: event.pointX,
+      activeValues: event.value
+    });
+  }
+
+  onValueLeave() {
+    this.setState({
+      activePoint: undefined,
+      activeValues: undefined
+    });
   }
 
   renderArea() {
@@ -79,34 +106,49 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps> {
 
   renderSymbols() {
     const { xScale, yScale, animated, area, symbols, data } = this.props;
+    const { activeValues } = this.state;
 
     // Animations are only valid for Area
     const isAnimated = area !== undefined && animated;
-    const activeSymbols = [];
-      // (symbols && symbols.props.activeValues) || activeValues;
 
     return (
       <CloneElement<RadialCircleSeriesProps>
         element={symbols}
-        activeValues={activeSymbols}
+        activeValues={activeValues}
         xScale={xScale}
         yScale={yScale}
         data={data}
-        show={true}
+        animated={isAnimated}
         color={this.getColor.bind(this)}
       />
     );
   }
 
   render() {
-    const { area, line, animated, symbols } = this.props;
+    const { area, line, animated, symbols, tooltip, xScale, yScale, data, id, width, height, innerRadius } = this.props;
 
     return (
       <PoseGroup animateOnMount={animated}>
         <PoseSVGGElement key="1">
-          {area && this.renderArea()}
-          {line && this.renderLine()}
-          {symbols && this.renderSymbols()}
+          <CloneElement<TooltipAreaProps>
+            element={tooltip}
+            xScale={xScale}
+            yScale={yScale}
+            data={data}
+            height={height}
+            width={width}
+            isRadial={true}
+            innerRadius={innerRadius}
+            color={this.getColor.bind(this)}
+            onValueEnter={bind(this.onValueEnter, this)}
+            onValueLeave={bind(this.onValueLeave, this)}
+          >
+          <g clipPath={`url(#${id}-path)`}>
+            {area && this.renderArea()}
+            {line && this.renderLine()}
+            {symbols && this.renderSymbols()}
+          </g>
+        </CloneElement>
         </PoseSVGGElement>
       </PoseGroup>
     );

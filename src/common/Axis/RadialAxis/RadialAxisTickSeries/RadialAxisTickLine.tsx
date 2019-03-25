@@ -19,6 +19,6 @@ export class RadialAxisTickLine extends Component<RadialAxisTickLineProps> {
     const { stroke, size, position, innerRadius, outerRadius } = this.props;
     const x1 = position === 'outside' ? size : -(outerRadius - innerRadius);
 
-    return <line x1={x1} x2={0} stroke={stroke} />;
+    return <line x1={x1} x2={0} stroke={stroke} style={{ pointerEvents: 'none' }} />;
   }
 }

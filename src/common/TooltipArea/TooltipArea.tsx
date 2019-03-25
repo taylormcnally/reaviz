@@ -12,6 +12,7 @@ import bind from 'memoize-bind';
 import { isEqual } from 'lodash-es';
 import { CloneElement } from '../utils/children';
 import { ChartTooltip, ChartTooltipProps } from './ChartTooltip';
+import { arc } from 'd3-shape';
 
 export interface TooltipAreaProps {
   placement: Placement;
@@ -23,10 +24,12 @@ export interface TooltipAreaProps {
   disabled: boolean;
   color: any;
   data: ChartInternalDataShape[];
+  children?: any;
+  isRadial?: boolean;
+  innerRadius?: number;
   tooltip: JSX.Element;
   onValueEnter: (event: TooltipAreaEvent) => void;
   onValueLeave: () => void;
-  children?: any;
 }
 
 interface TooltipAreaState {
@@ -50,6 +53,7 @@ export class TooltipArea extends React.Component<
 > {
   static defaultProps: Partial<TooltipAreaProps> = {
     placement: 'top',
+    isRadial: false,
     tooltip: <ChartTooltip />,
     onValueEnter: () => undefined,
     onValueLeave: () => undefined
@@ -75,12 +79,31 @@ export class TooltipArea extends React.Component<
     }
   }
 
+  getXCoord(x: number, y: number) {
+    const { isRadial, width, height } = this.props;
+
+    if (isRadial) {
+      const outerRadius = Math.min(width, height) / 2;
+      let rad = Math.atan2(y - outerRadius, x - outerRadius) + Math.PI / 2;
+
+      if (rad < 0) {
+        rad += Math.PI * 2;
+      }
+
+      return rad;
+    }
+
+    return x;
+  }
+
   onMouseMove(event: React.MouseEvent) {
+    const { xScale, yScale, onValueEnter, height, width, isRadial } = this.props;
+    let placement = this.props.placement;
     const { value, data } = this.state;
-    const { xScale, yScale, onValueEnter, height } = this.props;
-    let { placement } = this.props;
-    const { x } = getPositionForTarget(event);
-    const newValue = getClosestPoint(x, xScale, data);
+
+    const { x, y } = getPositionForTarget(event);
+    const xCoord = this.getXCoord(x, y);
+    const newValue = getClosestPoint(xCoord, xScale, data);
 
     if (!isEqual(newValue, value)) {
       const pointX = xScale(newValue.x);
@@ -106,8 +129,18 @@ export class TooltipArea extends React.Component<
 
       const target = event.target as SVGRectElement;
       const { top, left } = target.getBoundingClientRect();
-      const offsetX = pointX + left + marginX;
-      const offsetY = pointY + top + marginY;
+
+      let offsetX = 0;
+      let offsetY = 0;
+
+      if (isRadial) {
+       const outerRadius = Math.min(width, height) / 2;
+       offsetX = pointY * Math.cos(pointX - Math.PI / 2) + left + outerRadius + marginX;
+       offsetY = pointY * Math.sin(pointX - Math.PI / 2) + top + outerRadius + marginY;
+      } else {
+        offsetX = pointX + left + marginX;
+        offsetY = pointY + top + marginY;
+      }
 
       this.setState({
         placement,
@@ -190,8 +223,44 @@ export class TooltipArea extends React.Component<
     return result;
   }
 
+  renderRadial() {
+    const { height, width, data, innerRadius } = this.props;
+
+    const outerRadius = Math.min(width, height);
+    const arcFn = arc()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius)
+      .startAngle(0)
+      .endAngle(Math.PI / 2);
+    const d = arcFn(data as any);
+
+    return (
+      <path
+        d={d}
+        opacity={0}
+        cursor="auto"
+        transform={`translate(-${width / 2}, ${height / 2})`}
+        onMouseMove={bind(this.onMouseMove, this)}
+      />
+    );
+  }
+
+  renderLinear() {
+    const { height, width } = this.props;
+
+    return (
+      <rect
+        height={height}
+        width={width}
+        opacity={0}
+        cursor="auto"
+        onMouseMove={bind(this.onMouseMove, this)}
+      />
+    )
+  }
+
   render() {
-    const { height, width, children, tooltip, disabled, color } = this.props;
+    const { isRadial, children, tooltip, disabled, color } = this.props;
     const { visible, placement, value } = this.state;
 
     return (
@@ -199,13 +268,8 @@ export class TooltipArea extends React.Component<
         {disabled && children}
         {!disabled && (
           <g onMouseLeave={bind(this.onMouseLeave, this)}>
-            <rect
-              height={height}
-              width={width}
-              opacity={0}
-              cursor="auto"
-              onMouseMove={bind(this.onMouseMove, this)}
-            />
+            {isRadial && this.renderRadial()}
+            {!isRadial && this.renderLinear()}
             <CloneElement<ChartTooltipProps>
               element={tooltip}
               visible={visible}

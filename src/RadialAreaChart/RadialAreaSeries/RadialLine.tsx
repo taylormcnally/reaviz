@@ -52,6 +52,7 @@ export class RadialLine extends Component<RadialLineProps> {
         enterProps={enterProps}
         exitProps={exitProps}
         className={className}
+        pointerEvents="none"
         stroke={fill}
         fill="none"
         strokeWidth={strokeWidth}

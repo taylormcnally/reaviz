@@ -66,6 +66,8 @@ export class RadialAreaChart extends Component<RadialAreaChartProps> {
           data={data}
           xScale={xScale}
           yScale={yScale}
+          height={chartHeight}
+          width={chartWidth}
           outerRadius={outerRadius}
           innerRadius={innerRadius}
         />
