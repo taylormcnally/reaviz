@@ -82,10 +82,12 @@ export class TooltipArea extends React.Component<
   getXCoord(x: number, y: number) {
     const { isRadial, width, height } = this.props;
 
+    // If the shape is radial, we need to convert the X coords to a radial format.
     if (isRadial) {
       const outerRadius = Math.min(width, height) / 2;
       let rad = Math.atan2(y - outerRadius, x - outerRadius) + Math.PI / 2;
 
+      // TODO: Figure out what the 'correct' way to do this is...
       if (rad < 0) {
         rad += Math.PI * 2;
       }
@@ -134,13 +136,17 @@ export class TooltipArea extends React.Component<
       let offsetY = 0;
 
       if (isRadial) {
-       const outerRadius = Math.min(width, height) / 2;
-       offsetX = pointY * Math.cos(pointX - Math.PI / 2) + left + outerRadius + marginX;
-       offsetY = pointY * Math.sin(pointX - Math.PI / 2) + top + outerRadius + marginY;
+      // If its radial, we need to convert the coords to radial format
+      const outerRadius = Math.min(width, height) / 2;
+       offsetX = pointY * Math.cos(pointX - Math.PI / 2) + outerRadius;
+       offsetY = pointY * Math.sin(pointX - Math.PI / 2) + outerRadius;
       } else {
-        offsetX = pointX + left + marginX;
-        offsetY = pointY + top + marginY;
+        offsetX = pointX;
+        offsetY = pointY;
       }
+
+      offsetX += left + marginX;
+      offsetY += top + marginY;
 
       this.setState({
         placement,
@@ -226,20 +232,19 @@ export class TooltipArea extends React.Component<
   renderRadial() {
     const { height, width, data, innerRadius } = this.props;
 
-    const outerRadius = Math.min(width, height);
-    const arcFn = arc()
-      .innerRadius(innerRadius)
-      .outerRadius(outerRadius)
-      .startAngle(0)
-      .endAngle(Math.PI / 2);
-    const d = arcFn(data as any);
+    const outerRadius = Math.min(width, height) / 2;
+    const d = arc()({
+      innerRadius,
+      outerRadius,
+      startAngle: 180,
+      endAngle: Math.PI / 2
+    });
 
     return (
       <path
         d={d}
-        opacity={0}
+        opacity="0"
         cursor="auto"
-        transform={`translate(-${width / 2}, ${height / 2})`}
         onMouseMove={bind(this.onMouseMove, this)}
       />
     );
