@@ -82,11 +82,11 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
     "@babel/runtime": "^7.3.1",
-    "@storybook/addon-centered": "^5.0.1",
-    "@storybook/addon-info": "^5.0.1",
-    "@storybook/addon-knobs": "^5.0.1",
-    "@storybook/addons": "^5.0.1",
-    "@storybook/react": "^5.0.1",
+    "@storybook/addon-centered": "^5.0.3",
+    "@storybook/addon-info": "^5.0.3",
+    "@storybook/addon-knobs": "^5.0.3",
+    "@storybook/addons": "^5.0.3",
+    "@storybook/react": "^5.0.3",
     "@types/classnames": "^2.2.6",
     "@types/d3-array": "^1.2.6",
     "@types/d3-geo": "^1.11.1",
@@ -145,7 +145,8 @@
     "reporters": [
       "default",
       [
-        "jest-junit", {
+        "jest-junit",
+        {
           "outputDirectory": "./coverage"
         }
       ]
