@@ -230,11 +230,13 @@ export class TooltipArea extends React.Component<
   }
 
   renderRadial() {
-    const { height, width, innerRadius } = this.props;
+    const { height, width } = this.props;
 
+    const innerRadius = this.props.innerRadius || 0;
     const outerRadius = Math.min(width, height) / 2;
+
     const d = arc()({
-      innerRadius: innerRadius!,
+      innerRadius,
       outerRadius,
       startAngle: 180,
       endAngle: Math.PI / 2
