@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { RadialScatterPoint, RadialScatterPointProps } from './RadialScatterPoint';
 import { CloneElement } from '../../common/utils/children';
@@ -64,6 +64,11 @@ export class RadialScatterSeries extends Component<RadialScatterSeriesProps, Rad
     const activeIds = this.props.activeIds || this.state.activeIds;
     const active =
       !(activeIds && activeIds.length) || activeIds.includes(dataId);
+
+    const visible = point.props.visible;
+    if (visible && !visible(data, index)) {
+      return <Fragment key={key} />;
+    }
 
     return (
       <PoseSVGGElement key={key}>
