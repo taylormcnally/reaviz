@@ -5,7 +5,7 @@ const autoprefixer = require('autoprefixer');
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = async ({ config }) => ({
+module.exports = async ({ config, mode }) => ({
   ...config,
   module: {
     ...config.module,
@@ -16,8 +16,18 @@ module.exports = async ({ config }) => ({
         include: resolve(__dirname, '../src'),
         use: [
           require.resolve('babel-loader'),
-          require.resolve("react-docgen-typescript-loader")
+          ...(mode === 'PRODUCTION' ? [require.resolve("react-docgen-typescript-loader")] : [])
         ]
+      },
+      {
+        test: /\.story\.tsx?$/,
+        loaders: [
+          {
+            loader: require.resolve('@storybook/addon-storysource/loader'),
+            options: { parser: 'typescript' }
+          }
+        ],
+        enforce: 'pre'
       },
       {
         test: sassRegex,
