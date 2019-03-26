@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
 import { CloneElement } from '../../common/utils/children';
 import * as css from './RadialScatterPoint.module.scss';
+import { isFunction } from 'lodash-es';
 
 export interface RadialScatterPointProps {
   data: ChartInternalShallowDataShape;
@@ -16,8 +17,10 @@ export interface RadialScatterPointProps {
   yScale: any;
   fill: string;
   id: string;
+  color: any;
   className?: any;
   active?: boolean;
+  visible?: ((value, index) => boolean);
   symbol: ((value) => ReactNode);
   size?: ((d) => number) | number;
   tooltip: JSX.Element | null;
@@ -33,7 +36,7 @@ interface RadialScatterPointState {
 export class RadialScatterPoint extends Component<RadialScatterPointProps, RadialScatterPointState> {
   static defaultProps: Partial<RadialScatterPointProps> = {
     size: 3,
-    fill: 'rgba(174, 52, 255, .5)',
+    color: 'rgba(174, 52, 255, .5)',
     tooltip: <ChartTooltip />,
     active: true,
     onClick: () => undefined,
@@ -95,9 +98,10 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps, Radia
   }
 
   render() {
-    const { size, data, fill, index, animated, symbol, active, tooltip } = this.props;
+    const { size, data, color, index, animated, symbol, active, tooltip } = this.props;
     const { hovered } = this.state;
 
+    const fill = isFunction(color) ? color(data, index) : color;
     const transform = this.getTranslate(data);
     const exitTransform = this.getTranslate({ ...data, y: 0 });
     const sizeVal = typeof size === 'function' ? size(data) : size;

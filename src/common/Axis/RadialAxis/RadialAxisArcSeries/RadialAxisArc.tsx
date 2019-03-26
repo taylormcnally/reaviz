@@ -27,6 +27,7 @@ export class RadialAxisArc extends Component<RadialAxisArcProps> {
         fill="none"
         strokeDasharray={strokeDash}
         stroke={strokeColor}
+        style={{ pointerEvents: 'none' }}
         cx="0"
         cy="0"
         r={r}

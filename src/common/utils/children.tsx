@@ -21,7 +21,7 @@ export class CloneElement<T = any> extends PureComponent<
       const prop = props[key];
       const childProp = childProps[key];
 
-      if (isFunction(prop) && childProp) {
+      if (isFunction(prop) && isFunction(childProp)) {
         acc[key] = args => {
           prop(args);
           childProp(args);
