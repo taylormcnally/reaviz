@@ -13,7 +13,13 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "typeRoots": ["./types", "./node_modules/@types"],
-    "declaration": true
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false
   },
   "types": ["node"],
   "exclude": ["node_modules", "src/**/*.test.tsx", "src/**/*.story.tsx"]
