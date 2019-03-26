@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { sequentialScheme, getColor } from '../../common/utils/color';
 import { CloneElement } from '../../common/utils/children';
