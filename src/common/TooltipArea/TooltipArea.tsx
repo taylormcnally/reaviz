@@ -244,7 +244,7 @@ export class TooltipArea extends React.Component<
 
     return (
       <path
-        d={d}
+        d={d!}
         opacity="0"
         cursor="auto"
         onMouseMove={bind(this.onMouseMove, this)}
