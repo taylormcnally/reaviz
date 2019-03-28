@@ -160,7 +160,7 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
             index={index}
             data={data}
             animated={isAnimated}
-            color={this.getColor.bind(this)}
+            color={data => this.getColor(data, index)}
           />
         )}
       </Fragment>

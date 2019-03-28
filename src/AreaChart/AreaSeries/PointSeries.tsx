@@ -67,7 +67,6 @@ export class PointSeries extends Component<PointSeriesProps> {
             color={color}
             className={css.point}
             size={4}
-            index={0}
             visible={this.isVisible.bind(this)}
           />
         }

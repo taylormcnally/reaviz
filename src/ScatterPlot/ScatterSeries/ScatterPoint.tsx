@@ -9,9 +9,9 @@ import * as css from './ScatterPoint.module.scss';
 import { CloneElement } from '../../common/utils/children';
 
 export interface ScatterPointProps {
-  symbol: ((value) => ReactNode);
+  symbol: ((data: ChartInternalShallowDataShape) => ReactNode);
   active?: boolean;
-  size?: ((d) => number) | number;
+  size?: ((data: ChartInternalShallowDataShape) => number) | number;
   color: any;
   cursor?: string;
   xScale: any;
@@ -22,10 +22,10 @@ export interface ScatterPointProps {
   tooltip: JSX.Element;
   className?: any;
   data: ChartInternalShallowDataShape;
-  visible?: ((value, index) => boolean);
-  onClick: (e: ChartInternalShallowDataShape) => void;
-  onMouseEnter: (e: ChartInternalShallowDataShape) => void;
-  onMouseLeave: (e: ChartInternalShallowDataShape) => void;
+  visible?: ((data: ChartInternalShallowDataShape, index: number) => boolean);
+  onClick: (data: ChartInternalShallowDataShape) => void;
+  onMouseEnter: (data: ChartInternalShallowDataShape) => void;
+  onMouseLeave: (data: ChartInternalShallowDataShape) => void;
 }
 
 interface ScatterPointState {
