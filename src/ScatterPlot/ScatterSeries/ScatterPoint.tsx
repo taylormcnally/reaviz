@@ -19,7 +19,7 @@ export interface ScatterPointProps {
   height: number;
   animated: boolean;
   index: number;
-  tooltip: JSX.Element;
+  tooltip: JSX.Element | null;
   className?: any;
   data: ChartInternalShallowDataShape;
   visible?: ((data: ChartInternalShallowDataShape, index: number) => boolean);
@@ -183,7 +183,7 @@ export class ScatterPoint extends Component<
           {symbol && this.renderSymbol()}
           {!symbol && this.renderCircle()}
         </g>
-        {!tooltip.props.disabled && (
+        {tooltip && !tooltip.props.disabled && (
           <CloneElement<ChartTooltipProps>
             element={tooltip}
             visible={active}
