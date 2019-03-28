@@ -10,7 +10,7 @@ import {
   simpleSankeyNodes,
   simpleSankeyLinks
 } from '../common/demo';
-import { withKnobs, select } from '@storybook/addon-knobs';
+import { select } from '@storybook/addon-knobs';
 
 const colorScheme = chroma
   .scale([
@@ -30,7 +30,6 @@ const colorScheme = chroma
   .colors(sankeyNodes.length);
 
 storiesOf('Charts/Sankey', module)
-  .addDecorator(withKnobs)
   .add('Simple', () => (
     <Sankey
       colorScheme={colorScheme}

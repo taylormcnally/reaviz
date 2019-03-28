@@ -1,6 +1,6 @@
 {
   "name": "reaviz",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook",
@@ -58,7 +58,7 @@
     "lodash-es": "^4.17.11",
     "memoize-bind": "^1.0.3",
     "popper.js": "^1.14.7",
-    "rdk": "^1.0.1",
+    "rdk": "^1.0.2",
     "react-pose": "^4.0.8",
     "react-scrolllock": "^4.0.1",
     "react-sizeme": "^2.5.2",

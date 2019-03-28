@@ -6,12 +6,15 @@ import {
   TooltipArea,
   ChartTooltip
 } from '../../common/TooltipArea';
+import { CloneElement } from '../../common/utils/children';
+import { PointSeriesProps } from './PointSeries';
+import { ScatterPointProps } from '../../ScatterPlot';
 
 export class StackedNormalizedAreaSeries extends Component<
-  AreaSeriesProps,
-  {}
+  AreaSeriesProps
 > {
   static defaultProps: Partial<AreaSeriesProps> = {
+    ...AreaSeries.defaultProps,
     type: 'stackedNormalized',
     tooltip: (
       <TooltipArea
@@ -41,7 +44,26 @@ export class StackedNormalizedAreaSeries extends Component<
   };
 
   render() {
-    const { type, ...rest } = this.props;
-    return <AreaSeries type="stackedNormalized" {...rest} />;
+    const { type, symbols, ...rest } = this.props;
+
+    return (
+      <AreaSeries
+        {...rest}
+        type="stackedNormalized"
+        symbols={symbols && (
+          <CloneElement<PointSeriesProps>
+            element={symbols}
+            {...symbols.props}
+            point={
+              <CloneElement<ScatterPointProps>
+                element={symbols.props.point}
+                {...symbols.props.point.props}
+                tooltip={null}
+              />
+            }
+          />
+        )}
+      />
+    );
   }
 }

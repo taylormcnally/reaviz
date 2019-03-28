@@ -35,15 +35,16 @@ export class ScatterSeries extends Component<ScatterSeriesProps, {}> {
     let pointId;
     if (pointData.id) {
       pointId = pointData.id;
-    } else {
-      console.warn(
-        `No 'id' property provided for scatter point; provide one via 'id'.`
-      );
     }
 
     const key = pointId || index;
     const active =
       !(activeIds && activeIds.length) || activeIds.includes(pointId);
+
+    const visible = point.props.visible;
+    if (visible && !visible(pointData, index)) {
+      return <Fragment key={key} />;
+    }
 
     return (
       <PoseSVGGElement key={key}>
@@ -59,7 +60,7 @@ export class ScatterSeries extends Component<ScatterSeriesProps, {}> {
   }
 
   render() {
-    const { data, height, width, id, isZoomed } = this.props;
+    const { data, height, width, id, isZoomed, animated } = this.props;
 
     return (
       <Fragment>
@@ -74,7 +75,7 @@ export class ScatterSeries extends Component<ScatterSeriesProps, {}> {
           </clipPath>
         </defs>
         <g clipPath={`url(#${id}-path)`}>
-          <PoseGroup animateOnMount={this.props.animated}>
+          <PoseGroup animateOnMount={animated}>
             {data.map((data, index) => this.renderPoint(data, index))}
           </PoseGroup>
         </g>

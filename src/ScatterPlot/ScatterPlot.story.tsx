@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
+import { object, color, number } from '@storybook/addon-knobs';
+
 import { ScatterPlot } from './ScatterPlot';
 import {
   signalChartData,
@@ -17,11 +19,34 @@ import {
   LinearYAxisTickSeries,
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
+import { symbolStar, symbol } from 'd3-shape';
 
 storiesOf('Charts/Scatter Plot', module)
-  .add('Simple', () => (
-    <ScatterPlot height={400} width={750} data={medSignalChartData} />
-  ))
+  .add('Simple', () => {
+    const height = number('Height', 400);
+    const width = number('Width', 750);
+    const size = number('Size', 4);
+    const fill = color('Color', '#418AD7');
+    const data = object('Data', medSignalChartData);
+
+    return (
+      <ScatterPlot
+        height={height}
+        width={width}
+        data={data}
+        series={
+          <ScatterSeries
+            point={
+              <ScatterPoint
+                color={fill}
+                size={size}
+              />
+            }
+          />
+        }
+      />
+    );
+  }, { options: { showAddonPanel: true } })
   .add('Categorical Axis', () => (
     <ScatterPlot
       height={400}
@@ -84,20 +109,22 @@ storiesOf('Charts/Scatter Plot', module)
         <ScatterSeries
           point={
             <ScatterPoint
-              symbol={() => (
-                <g transform="translate(-10, -10)">
-                  <polygon
-                    transform="scale(0.1)"
-                    points="100,10 40,198 190,78 10,78 160,198"
+              symbol={() => {
+                const d = symbol()
+                  .type(symbolStar)
+                  .size(175)();
+
+                return (
+                  <path
+                    d={d!}
                     style={{
                       fill: 'lime',
                       stroke: 'purple',
-                      strokeWidth: 5,
-                      fillRule: 'nonzero'
+                      strokeWidth: 1.5
                     }}
                   />
-                </g>
-              )}
+                );
+              }}
             />
           }
         />
@@ -114,10 +141,8 @@ storiesOf('Charts/Scatter Plot', module)
         <ScatterSeries
           point={
             <ScatterPoint
-              fill="rgba(174, 52, 255, .5)"
-              size={v => {
-                return v.meta.severity + 5;
-              }}
+              color="rgba(174, 52, 255, .5)"
+              size={v => v.meta.severity + 5}
             />
           }
         />
@@ -155,7 +180,7 @@ class BubbleChartLiveUpdate extends React.Component<any, any> {
             <ScatterSeries
               point={
                 <ScatterPoint
-                  fill="rgba(174, 52, 255, .5)"
+                  color="rgba(174, 52, 255, .5)"
                   size={v => {
                     return v.meta.severity + 5;
                   }}

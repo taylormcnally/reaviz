@@ -3,14 +3,13 @@ import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
 import React from 'react';
 import moment from 'moment';
-import { withKnobs, select } from '@storybook/addon-knobs';
+import { object, color, number, select } from '@storybook/addon-knobs';
 
 import {
   multiDateData,
   singleDateData,
   largeDateData,
-  randomNumber,
-  medDateData
+  randomNumber
 } from '../common/demo';
 import { LineChart, LineSeries } from './LineChart';
 import {
@@ -21,14 +20,39 @@ import {
   StackedNormalizedAreaSeries
 } from '../AreaChart';
 import { GridlineSeries, Gridline } from '../common/Gridline';
-import { CircleSeries } from '../common/CircleSeries';
+import { PointSeries } from '../AreaChart';
 import { LinearXAxisTickSeries, LinearXAxis } from '../common/Axis/LinearAxis';
+import { ScatterPoint } from '../ScatterPlot';
+import { symbol, symbolStar } from 'd3-shape';
 
 storiesOf('Charts/Line/Single Series', module)
-  .addDecorator(withKnobs)
-  .add('Simple', () => (
-    <LineChart width={350} height={250} data={singleDateData} />
-  ))
+  .add('Simple', () => {
+    const height = number('Height', 250);
+    const width = number('Width', 350);
+    const lineStroke = number('Stroke Width', 4);
+    const fill = color('Color', '#418AD7');
+    const interpolation = select('Interpolation', {
+      linear: 'linear',
+      step: 'step',
+      smooth: 'smooth'
+    }, 'linear');
+    const data = object('Data', singleDateData);
+
+    return (
+      <LineChart
+        width={width}
+        height={height}
+        data={data}
+        series={
+          <LineSeries
+            interpolation={interpolation}
+            colorScheme={[fill]}
+            line={<Line strokeWidth={lineStroke} />}
+          />
+        }
+      />
+    );
+  }, { options: { showAddonPanel: true } })
   .add('No Animation', () => (
     <LineChart
       width={350}
@@ -55,29 +79,6 @@ storiesOf('Charts/Line/Single Series', module)
       }
     />
   ))
-  .add(
-    'Interpolation',
-    () => {
-      const options = {
-        linear: 'linear',
-        step: 'step',
-        smooth: 'smooth'
-      };
-
-      const value = select('Type', options, 'linear');
-
-      return (
-        <LineChart
-          width={350}
-          height={250}
-          data={medDateData}
-          series={<LineSeries interpolation={value} />}
-          xAxis={<LinearXAxis type="time" />}
-        />
-      );
-    },
-    { options: { showAddonPanel: true } }
-  )
   .add('Large Dataset', () => (
     <LineChart
       width={350}
@@ -180,7 +181,7 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show={true} />} />}
+      series={<LineSeries symbols={<PointSeries show={true} />} />}
     />
   ))
   .add('Off', () => (
@@ -196,7 +197,7 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show="hover" />} />}
+      series={<LineSeries symbols={<PointSeries show="hover" />} />}
     />
   ))
   .add('Only First', () => (
@@ -204,7 +205,7 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show="first" />} />}
+      series={<LineSeries symbols={<PointSeries show="first" />} />}
     />
   ))
   .add('Only Last', () => (
@@ -212,7 +213,43 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show="last" />} />}
+      series={<LineSeries symbols={<PointSeries show="last" />} />}
+    />
+  ))
+  .add('Shapes', () => (
+    <LineChart
+      width={350}
+      height={250}
+      data={singleDateData}
+      series={
+        <LineSeries
+          symbols={
+            <PointSeries
+              show={true}
+              point={
+                <ScatterPoint
+                  symbol={() => {
+                    const d = symbol()
+                      .type(symbolStar)
+                      .size(175)();
+
+                    return (
+                      <path
+                        d={d!}
+                        style={{
+                          fill: 'lime',
+                          stroke: 'purple',
+                          strokeWidth: 1.5
+                        }}
+                      />
+                    );
+                  }}
+                />
+              }
+            />
+          }
+        />
+      }
     />
   ));
 

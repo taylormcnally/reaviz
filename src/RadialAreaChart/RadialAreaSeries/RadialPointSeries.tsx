@@ -4,7 +4,7 @@ import { RadialScatterSeries, RadialScatterPoint, RadialScatterPointProps } from
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils';
 
-export interface RadialCircleSeriesProps {
+export interface RadialPointSeriesProps {
   animated: boolean;
   color: any;
   activeValues?: any;
@@ -15,8 +15,8 @@ export interface RadialCircleSeriesProps {
   point: JSX.Element;
 }
 
-export class RadialCircleSeries extends React.Component<RadialCircleSeriesProps, {}> {
-  static defaultProps: Partial<RadialCircleSeriesProps> = {
+export class RadialPointSeries extends React.Component<RadialPointSeriesProps, {}> {
+  static defaultProps: Partial<RadialPointSeriesProps> = {
     show: 'hover',
     point: <RadialScatterPoint />
   };

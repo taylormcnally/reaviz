@@ -3,12 +3,11 @@ import { storiesOf } from '@storybook/react';
 import { RadialAreaChart } from './RadialAreaChart';
 import { medDateData } from '../common/demo';
 import { RadialAreaSeries, RadialArea } from './RadialAreaSeries';
-import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
+import { number, boolean, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
 import { RadialAxis, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLabel, RadialAxisArcSeries, RadialAxisTickLine } from '../common/Axis';
 
 storiesOf('Charts/Area/Radial', module)
-  .addDecorator(withKnobs)
   .add('Simple', () => {
     const innerRadius = number('Inner Radius', .1);
     const animated = boolean('Animated', true);
@@ -87,7 +86,6 @@ storiesOf('Charts/Area/Radial', module)
 
 
 storiesOf('Charts/Line/Radial', module)
-  .addDecorator(withKnobs)
   .add('Simple', () => {
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);

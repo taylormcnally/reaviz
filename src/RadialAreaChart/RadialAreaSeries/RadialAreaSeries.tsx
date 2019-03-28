@@ -7,7 +7,7 @@ import { PoseGroup } from 'react-pose';
 import { RadialAreaProps, RadialArea } from './RadialArea';
 import { RadialLine, RadialLineProps } from './RadialLine';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';
-import { RadialCircleSeriesProps, RadialCircleSeries } from '../../common/CircleSeries';
+import { RadialPointSeries, RadialPointSeriesProps } from './RadialPointSeries';
 import { TooltipAreaProps, TooltipArea, TooltipAreaEvent } from '../../common/TooltipArea';
 import bind from 'memoize-bind';
 
@@ -41,7 +41,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps, RadialAre
     animated: true,
     area: <RadialArea />,
     line: <RadialLine />,
-    symbols: <RadialCircleSeries />,
+    symbols: <RadialPointSeries />,
     tooltip: <TooltipArea />
   };
 
@@ -112,7 +112,7 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps, RadialAre
     const isAnimated = area !== undefined && animated;
 
     return (
-      <CloneElement<RadialCircleSeriesProps>
+      <CloneElement<RadialPointSeriesProps>
         element={symbols}
         activeValues={activeValues}
         xScale={xScale}

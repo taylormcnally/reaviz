@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
+import { object, boolean, color, number } from '@storybook/addon-knobs';
 import { BarChart } from './BarChart';
 import { MarimekkoChart } from './MarimekkoChart';
 import { StackedBarChart } from './StackedBarChart';
@@ -26,9 +27,35 @@ import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Bar/Single Series', module)
-  .add('Simple', () => (
-    <BarChart width={350} height={250} data={categoryData} />
-  ))
+  .add('Simple', () => {
+    const gradient = boolean('Gradient', true);
+    const rounded = boolean('Rounded', true)
+    const padding = number('Padding', 0.1);
+    const height = number('Height', 250);
+    const width = number('Width', 350);
+    const fill = color('Color', '#418AD7');
+    const data = object('Data', categoryData);
+
+    return (
+      <BarChart
+        width={height}
+        height={width}
+        data={data}
+        series={
+          <BarSeries
+            colorScheme={[fill]}
+            padding={padding}
+            bar={
+              <Bar
+                rounded={rounded}
+                gradient={gradient}
+              />
+            }
+          />
+        }
+      />
+    );
+  }, { options: { showAddonPanel: true } })
   .add('Large Dataset', () => (
     <BarChart
       width={350}
