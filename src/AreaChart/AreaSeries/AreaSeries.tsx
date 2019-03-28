@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { CircleSeries, CircleSeriesProps } from '../../common/CircleSeries';
+import { PointSeries, PointSeriesProps } from './PointSeries';
 import { Area, AreaProps } from './Area';
 import { MarkLine, MarkLineProps } from '../../common/MarkLine';
 import {
@@ -62,7 +62,7 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
     area: <Area />,
     markLine: <MarkLine />,
     tooltip: <TooltipArea />,
-    symbols: <CircleSeries />
+    symbols: <PointSeries />
   };
 
   state: AreaSeriesState = {};
@@ -137,7 +137,7 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
   }
 
   renderSymbols(data: ChartInternalShallowDataShape[], index = 0) {
-    const { xScale, yScale, animated, area, symbols } = this.props;
+    const { xScale, yScale, animated, area, symbols, id, height, width } = this.props;
     const { activeValues } = this.state;
 
     // Animations are only valid for Area
@@ -149,8 +149,11 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
     return (
       <Fragment>
         {visible && (
-          <CloneElement<CircleSeriesProps>
+          <CloneElement<PointSeriesProps>
             element={symbols}
+            id={id}
+            height={height}
+            width={width}
             activeValues={activeSymbols}
             xScale={xScale}
             yScale={yScale}

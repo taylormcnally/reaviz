@@ -21,7 +21,7 @@ import {
   StackedNormalizedAreaSeries
 } from '../AreaChart';
 import { GridlineSeries, Gridline } from '../common/Gridline';
-import { CircleSeries } from '../common/CircleSeries';
+import { PointSeries } from '../AreaChart';
 import { LinearXAxisTickSeries, LinearXAxis } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Line/Single Series', module)
@@ -180,7 +180,7 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show={true} />} />}
+      series={<LineSeries symbols={<PointSeries show={true} />} />}
     />
   ))
   .add('Off', () => (
@@ -196,7 +196,7 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show="hover" />} />}
+      series={<LineSeries symbols={<PointSeries show="hover" />} />}
     />
   ))
   .add('Only First', () => (
@@ -204,7 +204,7 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show="first" />} />}
+      series={<LineSeries symbols={<PointSeries show="first" />} />}
     />
   ))
   .add('Only Last', () => (
@@ -212,7 +212,7 @@ storiesOf('Charts/Line/Circle Series', module)
       width={350}
       height={250}
       data={singleDateData}
-      series={<LineSeries symbols={<CircleSeries show="last" />} />}
+      series={<LineSeries symbols={<PointSeries show="last" />} />}
     />
   ));
 

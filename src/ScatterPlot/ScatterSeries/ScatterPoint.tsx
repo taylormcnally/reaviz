@@ -1,4 +1,4 @@
-import React, { Component, Fragment, ReactNode } from 'react';
+import React, { Component, Fragment, ReactNode, createRef } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import bind from 'memoize-bind';
 import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
@@ -12,7 +12,7 @@ export interface ScatterPointProps {
   symbol: ((value) => ReactNode);
   active?: boolean;
   size?: ((d) => number) | number;
-  fill?: string;
+  color: any;
   cursor?: string;
   xScale: any;
   yScale: any;
@@ -20,7 +20,9 @@ export interface ScatterPointProps {
   animated: boolean;
   index: number;
   tooltip: JSX.Element;
+  className?: any;
   data: ChartInternalShallowDataShape;
+  visible?: ((value, index) => boolean);
   onClick: (e: ChartInternalShallowDataShape) => void;
   onMouseEnter: (e: ChartInternalShallowDataShape) => void;
   onMouseLeave: (e: ChartInternalShallowDataShape) => void;
@@ -39,13 +41,13 @@ export class ScatterPoint extends Component<
     tooltip: <ChartTooltip />,
     cursor: 'pointer',
     size: 4,
-    fill: '#AE34FF',
+    color: '#AE34FF',
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
   };
 
-  rect = React.createRef<SVGGElement>();
+  rect = createRef<SVGGElement>();
 
   state: ScatterPointState = {
     active: false
@@ -68,7 +70,7 @@ export class ScatterPoint extends Component<
   getYPosition() {
     const { yScale, data } = this.props;
 
-    let cy = yScale(data.y);
+    let cy = yScale(data.y1);
     if (yScale.bandwidth) {
       const width = yScale.bandwidth();
       cy = cy + width / 2;
@@ -88,6 +90,7 @@ export class ScatterPoint extends Component<
 
   getCircleExit() {
     const { xScale, data, height } = this.props;
+
     return {
       cy: height,
       cx: xScale(data.x)
@@ -119,7 +122,8 @@ export class ScatterPoint extends Component<
   }
 
   renderCircle() {
-    const { data, animated, index, size, fill, cursor } = this.props;
+    const { data, animated, index, size, color, cursor, className } = this.props;
+    const fill = typeof color === 'function' ? color(data, index) : color;
     const sizeVal = typeof size === 'function' ? size(data) : size;
     const enterProps = this.getCircleEnter();
     const exitProps = this.getCircleExit();
@@ -135,12 +139,13 @@ export class ScatterPoint extends Component<
         animated={animated}
         cursor={cursor}
         fill={fill}
+        className={className}
       />
     );
   }
 
   renderSymbol() {
-    const { data, animated, index, symbol } = this.props;
+    const { data, animated, index, symbol, className } = this.props;
     const enterProps = this.getSymbolEnter();
     const exitProps = this.getSymbolExit();
     const renderedSymbol = symbol(data);
@@ -153,6 +158,7 @@ export class ScatterPoint extends Component<
         exitProps={exitProps}
         animated={animated}
         index={index}
+        className={className}
       >
         {renderedSymbol}
       </PosedGroupTransform>

@@ -1,6 +1,5 @@
 export * from './Axis';
 export * from './Brush';
-export * from './CircleSeries';
 export * from './containers';
 export *  from './data';
 export * from './Gestures';
