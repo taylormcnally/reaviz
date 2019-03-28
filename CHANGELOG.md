@@ -1,3 +1,9 @@
+# 1.2.0
+- [Feature] Refactored Circle Series on Line/Area to use Scatter
+- [Fix] Fixed stacked area circles not having correct colors
+- [Chore] Improved Docs
+- [Chore] Bumped RDK version
+
 # 1.1.0
 - [Feature] Radial Bar Chart
 - [Feature] Radial Line Chart

@@ -23,6 +23,8 @@ import {
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import { PointSeries } from '../AreaChart';
 import { LinearXAxisTickSeries, LinearXAxis } from '../common/Axis/LinearAxis';
+import { ScatterPoint } from '../ScatterPlot';
+import { symbol, symbolStar } from 'd3-shape';
 
 storiesOf('Charts/Line/Single Series', module)
   .add('Simple', () => {
@@ -213,6 +215,42 @@ storiesOf('Charts/Line/Circle Series', module)
       height={250}
       data={singleDateData}
       series={<LineSeries symbols={<PointSeries show="last" />} />}
+    />
+  ))
+  .add('Shapes', () => (
+    <LineChart
+      width={350}
+      height={250}
+      data={singleDateData}
+      series={
+        <LineSeries
+          symbols={
+            <PointSeries
+              show={true}
+              point={
+                <ScatterPoint
+                  symbol={() => {
+                    const d = symbol()
+                      .type(symbolStar)
+                      .size(175)();
+
+                    return (
+                      <path
+                        d={d!}
+                        style={{
+                          fill: 'lime',
+                          stroke: 'purple',
+                          strokeWidth: 1.5
+                        }}
+                      />
+                    );
+                  }}
+                />
+              }
+            />
+          }
+        />
+      }
     />
   ));
 

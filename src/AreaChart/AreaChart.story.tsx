@@ -8,8 +8,7 @@ import {
   multiDateData,
   singleDateData,
   singleDateBigIntData,
-  randomNumber,
-  medDateData
+  randomNumber
 } from '../common/demo';
 import { AreaChart } from './AreaChart';
 import { StackedNormalizedAreaChart } from './StackedNormalizedAreaChart';
@@ -25,6 +24,8 @@ import {
 } from './AreaSeries';
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
+import { ScatterPoint } from '../ScatterPlot';
+import { symbol, symbolStar } from 'd3-shape';
 
 storiesOf('Charts/Area/Single Series', module)
   .add('Simple', () => {
@@ -243,6 +244,42 @@ storiesOf('Charts/Area/Circle Series', module)
       height={250}
       data={singleDateData}
       series={<AreaSeries symbols={<PointSeries show="last" />} />}
+    />
+  ))
+  .add('Shapes', () => (
+    <AreaChart
+      width={350}
+      height={250}
+      data={singleDateData}
+      series={
+        <AreaSeries
+          symbols={
+            <PointSeries
+              show={true}
+              point={
+                <ScatterPoint
+                  symbol={() => {
+                    const d = symbol()
+                      .type(symbolStar)
+                      .size(175)();
+
+                    return (
+                      <path
+                        d={d!}
+                        style={{
+                          fill: 'lime',
+                          stroke: 'purple',
+                          strokeWidth: 1.5
+                        }}
+                      />
+                    );
+                  }}
+                />
+              }
+            />
+          }
+        />
+      }
     />
   ));
 

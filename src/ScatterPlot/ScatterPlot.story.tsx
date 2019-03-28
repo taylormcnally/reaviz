@@ -19,6 +19,7 @@ import {
   LinearYAxisTickSeries,
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
+import { symbolStar, symbol } from 'd3-shape';
 
 storiesOf('Charts/Scatter Plot', module)
   .add('Simple', () => {
@@ -108,20 +109,22 @@ storiesOf('Charts/Scatter Plot', module)
         <ScatterSeries
           point={
             <ScatterPoint
-              symbol={() => (
-                <g transform="translate(-10, -10)">
-                  <polygon
-                    transform="scale(0.1)"
-                    points="100,10 40,198 190,78 10,78 160,198"
+              symbol={() => {
+                const d = symbol()
+                  .type(symbolStar)
+                  .size(175)();
+
+                return (
+                  <path
+                    d={d!}
                     style={{
                       fill: 'lime',
                       stroke: 'purple',
-                      strokeWidth: 5,
-                      fillRule: 'nonzero'
+                      strokeWidth: 1.5
                     }}
                   />
-                </g>
-              )}
+                );
+              }}
             />
           }
         />
@@ -139,9 +142,7 @@ storiesOf('Charts/Scatter Plot', module)
           point={
             <ScatterPoint
               color="rgba(174, 52, 255, .5)"
-              size={v => {
-                return v.meta.severity + 5;
-              }}
+              size={v => v.meta.severity + 5}
             />
           }
         />
@@ -179,7 +180,7 @@ class BubbleChartLiveUpdate extends React.Component<any, any> {
             <ScatterSeries
               point={
                 <ScatterPoint
-                  fill="rgba(174, 52, 255, .5)"
+                  color="rgba(174, 52, 255, .5)"
                   size={v => {
                     return v.meta.severity + 5;
                   }}
