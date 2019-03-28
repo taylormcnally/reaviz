@@ -9,8 +9,7 @@ import {
   multiDateData,
   singleDateData,
   largeDateData,
-  randomNumber,
-  medDateData
+  randomNumber
 } from '../common/demo';
 import { LineChart, LineSeries } from './LineChart';
 import {

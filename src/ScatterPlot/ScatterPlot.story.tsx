@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
-import { object, boolean, color, number } from '@storybook/addon-knobs';
+import { object, color, number } from '@storybook/addon-knobs';
 
 import { ScatterPlot } from './ScatterPlot';
 import {

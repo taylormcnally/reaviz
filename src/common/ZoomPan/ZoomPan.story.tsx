@@ -66,7 +66,7 @@ storiesOf('Charts/Zoom Pan', module)
         <ScatterSeries
           point={
             <ScatterPoint
-              fill="rgba(174, 52, 255, .5)"
+              color="rgba(174, 52, 255, .5)"
               size={v => {
                 return v.meta.severity + 5;
               }}
