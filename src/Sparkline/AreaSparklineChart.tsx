@@ -7,7 +7,7 @@ import {
   Line
 } from '../AreaChart';
 import { ChartShallowDataShape } from '../common/data';
-import { CircleSeries } from '../common/CircleSeries';
+import { PointSeries } from '../AreaChart';
 import {
   LinearYAxisTickSeries,
   LinearYAxis,
@@ -24,7 +24,7 @@ export class AreaSparklineChart extends Component<AreaSparklineChartProps, {}> {
     gridlines: null,
     series: (
       <AreaSeries
-        symbols={<CircleSeries show="hover" />}
+        symbols={<PointSeries show="hover" />}
         interpolation="smooth"
         markLine={null}
         area={

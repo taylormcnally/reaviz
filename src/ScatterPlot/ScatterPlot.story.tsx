@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
+import { object, boolean, color, number } from '@storybook/addon-knobs';
+
 import { ScatterPlot } from './ScatterPlot';
 import {
   signalChartData,
@@ -19,9 +21,31 @@ import {
 } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Scatter Plot', module)
-  .add('Simple', () => (
-    <ScatterPlot height={400} width={750} data={medSignalChartData} />
-  ))
+  .add('Simple', () => {
+    const height = number('Height', 400);
+    const width = number('Width', 750);
+    const size = number('Size', 4);
+    const fill = color('Color', '#418AD7');
+    const data = object('Data', medSignalChartData);
+
+    return (
+      <ScatterPlot
+        height={height}
+        width={width}
+        data={data}
+        series={
+          <ScatterSeries
+            point={
+              <ScatterPoint
+                color={fill}
+                size={size}
+              />
+            }
+          />
+        }
+      />
+    );
+  }, { options: { showAddonPanel: true } })
   .add('Categorical Axis', () => (
     <ScatterPlot
       height={400}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { LineChart, LineChartProps } from '../LineChart';
 import { ChartShallowDataShape } from '../common/data';
 import { AreaSeries, Line } from '../AreaChart';
-import { CircleSeries } from '../common/CircleSeries';
+import { PointSeries } from '../AreaChart';
 import {
   LinearXAxis,
   LinearYAxis,
@@ -19,7 +19,7 @@ export class SparklineChart extends Component<SparklineChartProps, {}> {
     gridlines: null,
     series: (
       <AreaSeries
-        symbols={<CircleSeries show="hover" />}
+        symbols={<PointSeries show="hover" />}
         interpolation="smooth"
         markLine={null}
         area={null}

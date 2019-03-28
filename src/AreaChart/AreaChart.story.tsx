@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
-import { select } from '@storybook/addon-knobs';
+import { object, color, number, select } from '@storybook/addon-knobs';
 
 import {
   multiDateData,
@@ -27,17 +27,33 @@ import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Area/Single Series', module)
-  .add('Simple', () => (
-    <AreaChart width={350} height={250} data={singleDateData} />
-  ))
-  .add('Stroke', () => (
-    <AreaChart
-      width={350}
-      height={250}
-      data={singleDateData}
-      series={<AreaSeries line={<Line strokeWidth={4} />} />}
-    />
-  ))
+  .add('Simple', () => {
+    const height = number('Height', 250);
+    const width = number('Width', 350);
+    const lineStroke = number('Stroke Width', 4);
+    const fill = color('Color', '#418AD7');
+    const interpolation = select('Interpolation', {
+      linear: 'linear',
+      step: 'step',
+      smooth: 'smooth'
+    }, 'linear');
+    const data = object('Data', singleDateData);
+
+    return (
+      <AreaChart
+        width={width}
+        height={height}
+        data={data}
+        series={
+          <AreaSeries
+            interpolation={interpolation}
+            colorScheme={[fill]}
+            line={<Line strokeWidth={lineStroke} />}
+          />
+        }
+      />
+    );
+  }, { options: { showAddonPanel: true } })
   .add('Pattern', () => (
     <AreaChart
       width={350}
@@ -59,29 +75,6 @@ storiesOf('Charts/Area/Single Series', module)
       }
     />
   ))
-  .add(
-    'Interpolation',
-    () => {
-      const options = {
-        linear: 'linear',
-        step: 'step',
-        smooth: 'smooth'
-      };
-
-      const value = select('Type', options, 'linear');
-
-      return (
-        <AreaChart
-          width={350}
-          height={250}
-          data={medDateData}
-          series={<AreaSeries interpolation={value} />}
-          xAxis={<LinearXAxis type="time" />}
-        />
-      );
-    },
-    { options: { showAddonPanel: true } }
-  )
   .add('No Animation', () => (
     <AreaChart
       width={350}

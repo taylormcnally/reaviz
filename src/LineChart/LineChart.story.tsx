@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
 import React from 'react';
 import moment from 'moment';
-import { select } from '@storybook/addon-knobs';
+import { object, color, number, select } from '@storybook/addon-knobs';
 
 import {
   multiDateData,
@@ -25,9 +25,33 @@ import { PointSeries } from '../AreaChart';
 import { LinearXAxisTickSeries, LinearXAxis } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Line/Single Series', module)
-  .add('Simple', () => (
-    <LineChart width={350} height={250} data={singleDateData} />
-  ))
+  .add('Simple', () => {
+    const height = number('Height', 250);
+    const width = number('Width', 350);
+    const lineStroke = number('Stroke Width', 4);
+    const fill = color('Color', '#418AD7');
+    const interpolation = select('Interpolation', {
+      linear: 'linear',
+      step: 'step',
+      smooth: 'smooth'
+    }, 'linear');
+    const data = object('Data', singleDateData);
+
+    return (
+      <LineChart
+        width={width}
+        height={height}
+        data={data}
+        series={
+          <LineSeries
+            interpolation={interpolation}
+            colorScheme={[fill]}
+            line={<Line strokeWidth={lineStroke} />}
+          />
+        }
+      />
+    );
+  }, { options: { showAddonPanel: true } })
   .add('No Animation', () => (
     <LineChart
       width={350}
@@ -54,29 +78,6 @@ storiesOf('Charts/Line/Single Series', module)
       }
     />
   ))
-  .add(
-    'Interpolation',
-    () => {
-      const options = {
-        linear: 'linear',
-        step: 'step',
-        smooth: 'smooth'
-      };
-
-      const value = select('Type', options, 'linear');
-
-      return (
-        <LineChart
-          width={350}
-          height={250}
-          data={medDateData}
-          series={<LineSeries interpolation={value} />}
-          xAxis={<LinearXAxis type="time" />}
-        />
-      );
-    },
-    { options: { showAddonPanel: true } }
-  )
   .add('Large Dataset', () => (
     <LineChart
       width={350}
