@@ -1,5 +1,6 @@
 import { cloneElement, PureComponent } from 'react';
 import { isFunction, memoize } from 'lodash-es';
+import classNames from 'classnames';
 
 interface CloneElementProps {
   element: any | null;
@@ -11,8 +12,7 @@ interface CloneElementProps {
  * which is a more natural API for React.
  */
 export class CloneElement<T = any> extends PureComponent<
-  CloneElementProps & Partial<T>,
-  {}
+  CloneElementProps & Partial<T>
 > {
   getProjectedProps = memoize(props => {
     const childProps = this.props.element.props;
@@ -26,6 +26,8 @@ export class CloneElement<T = any> extends PureComponent<
           prop(args);
           childProp(args);
         };
+      } else if (key === 'className') {
+        acc[key] = classNames(prop, childProp);
       } else {
         acc[key] = prop;
       }
