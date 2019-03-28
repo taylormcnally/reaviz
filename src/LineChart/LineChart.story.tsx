@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
 import React from 'react';
 import moment from 'moment';
-import { withKnobs, select } from '@storybook/addon-knobs';
+import { select } from '@storybook/addon-knobs';
 
 import {
   multiDateData,
@@ -25,7 +25,6 @@ import { PointSeries } from '../AreaChart';
 import { LinearXAxisTickSeries, LinearXAxis } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Line/Single Series', module)
-  .addDecorator(withKnobs)
   .add('Simple', () => (
     <LineChart width={350} height={250} data={singleDateData} />
   ))

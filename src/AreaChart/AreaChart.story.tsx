@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
-import { withKnobs, select } from '@storybook/addon-knobs';
+import { select } from '@storybook/addon-knobs';
 
 import {
   multiDateData,
@@ -27,7 +27,6 @@ import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Area/Single Series', module)
-  .addDecorator(withKnobs)
   .add('Simple', () => (
     <AreaChart width={350} height={250} data={singleDateData} />
   ))

@@ -1,13 +1,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { medDateData, largeSignalChartData, medSignalChartData } from '../common/demo';
-import { number, boolean, withKnobs, object, color, select } from '@storybook/addon-knobs';
+import { number, boolean, object, color, select } from '@storybook/addon-knobs';
 import { RadialScatterPlot } from './RadialScatterPlot';
 import { RadialScatterSeries, RadialScatterPoint } from './RadialScatterSeries';
 import { RadialAxis, RadialAxisTickSeries, RadialAxisArcSeries, RadialAxisTick, RadialAxisTickLine } from '../common/Axis/RadialAxis';
 
 storiesOf('Charts/Scatter Plot/Radial', module)
-  .addDecorator(withKnobs)
   .add('Simple', () => {
     const innerRadius = number('Inner Radius', 80);
     const size = number('Size', 5);

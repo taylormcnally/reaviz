@@ -2,13 +2,12 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialBarChart } from './RadialBarChart';
 import { largeCategoryData } from '../common/demo';
-import { number, boolean, withKnobs, object, array, select } from '@storybook/addon-knobs';
+import { number, boolean, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';
 import { RadialBarSeries, RadialBar } from './RadialBarSeries';
 import { RadialAxis, RadialAxisArcSeries, RadialAxisTickSeries, RadialAxisTick, RadialAxisTickLine } from '../common/Axis/RadialAxis';
 
 storiesOf('Charts/Bar/Radial', module)
-  .addDecorator(withKnobs)
   .add('Simple', () => {
     const innerRadius = number('Inner Radius', 50);
     const curved = boolean('Curved', false);
