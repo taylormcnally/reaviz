@@ -9,7 +9,7 @@ export interface PieArcProps {
   data: any;
   animated: boolean;
   color: any;
-  tooltip: JSX.Element;
+  tooltip: JSX.Element | null;
   cursor: string;
   innerArc: any;
   onClick: (e) => void;
@@ -39,7 +39,7 @@ export class PieArc extends Component<PieArcProps, PieArcState> {
   getExitProps() {
     const { data } = this.props;
     const startAngle = data.startAngle;
-    const endAngle = data.startAngle;
+    const endAngle = startAngle;
 
     return {
       ...data,
@@ -109,7 +109,7 @@ export class PieArc extends Component<PieArcProps, PieArcState> {
           exitProps={exitProps}
           fill={fill}
         />
-        {!tooltip.props.disabled && (
+        {tooltip && !tooltip.props.disabled && (
           <CloneElement<ChartTooltipProps>
             element={tooltip}
             visible={!!active}
