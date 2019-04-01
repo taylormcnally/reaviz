@@ -12,6 +12,7 @@ export interface PieArcProps {
   tooltip: JSX.Element | null;
   cursor: string;
   innerArc: any;
+  disabled: boolean;
   onClick: (e) => void;
   onMouseEnter: (e) => void;
   onMouseLeave: (e) => void;
@@ -24,6 +25,7 @@ interface PieArcState {
 export class PieArc extends Component<PieArcProps, PieArcState> {
   static defaultProps: Partial<PieArcProps> = {
     cursor: 'initial',
+    disabled: false,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined,
@@ -37,9 +39,9 @@ export class PieArc extends Component<PieArcProps, PieArcState> {
   };
 
   getExitProps() {
-    const { data } = this.props;
+    const { data, animated } = this.props;
     const startAngle = data.startAngle;
-    const endAngle = startAngle;
+    const endAngle = animated ? startAngle : data.endAngle;
 
     return {
       ...data,
@@ -49,34 +51,40 @@ export class PieArc extends Component<PieArcProps, PieArcState> {
   }
 
   onMouseEnter(event: MouseEvent) {
-    const { onMouseEnter, data } = this.props;
+    const { onMouseEnter, data, disabled } = this.props;
 
-    this.setState({ active: true });
+    if (!disabled) {
+      this.setState({ active: true });
 
-    onMouseEnter({
-      value: data.data,
-      nativeEvent: event
-    });
+      onMouseEnter({
+        value: data.data,
+        nativeEvent: event
+      });
+    }
   }
 
   onMouseLeave(event: MouseEvent) {
-    const { onMouseLeave, data } = this.props;
+    const { onMouseLeave, data, disabled } = this.props;
 
-    this.setState({ active: false });
+    if (!disabled) {
+      this.setState({ active: false });
 
-    onMouseLeave({
-      value: data.data,
-      nativeEvent: event
-    });
+      onMouseLeave({
+        value: data.data,
+        nativeEvent: event
+      });
+    }
   }
 
   onMouseClick(event: MouseEvent) {
-    const { onClick, data } = this.props;
+    const { onClick, data, disabled } = this.props;
 
-    onClick({
-      value: data.data,
-      nativeEvent: event
-    });
+    if (!disabled) {
+      onClick({
+        value: data.data,
+        nativeEvent: event
+      });
+    }
   }
 
   render() {

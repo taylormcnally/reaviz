@@ -24,7 +24,7 @@ export class RadialGauge extends Component<RadialGaugeProps> {
     maxValue: 100,
     startAngle: 0,
     endAngle: Math.PI * 2,
-    outerArc: <RadialGaugeArc />,
+    outerArc: <RadialGaugeArc disabled={true} />,
     innerArc: <RadialGaugeArc width={20} fill="#00ECB1" animated={true} />
   };
 
@@ -53,6 +53,7 @@ export class RadialGauge extends Component<RadialGaugeProps> {
             outerRadius={outerRadius}
             startAngle={startAngle}
             endAngle={dataEndAngle}
+            data={data}
           />
         </PoseSVGGElement>
       </PoseGroup>

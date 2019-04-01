@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
 import { arc } from 'd3-shape';
-import { PosedArc } from '../PieChart';
+import { PieArc } from '../PieChart';
+import { ChartShallowDataShape } from '../common/data';
 
 export interface RadialGaugeArcProps {
+  data?: ChartShallowDataShape;
   startAngle: number;
   endAngle: number;
   outerRadius: number;
   fill: string;
   width: number;
   animated: boolean;
+  disabled: boolean;
 }
 
 export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
   static defaultProps: Partial<RadialGaugeArcProps> = {
     width: 10,
     fill: '#353d44',
-    animated: false
+    animated: false,
+    disabled: false
   };
 
   getPaths() {
-    const { outerRadius, startAngle, endAngle, width, animated } = this.props;
+    const { outerRadius, startAngle, endAngle, width, data } = this.props;
 
     // Calculate the inner rad based on the width
     // and the outer rad which is height/width / 2
@@ -30,35 +34,32 @@ export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
     const newInnerRad = innerRadius + delta;
     const newOuterRad = outerRadius + delta;
 
-    const arcFn = arc()
+    // Create the arc fn to pass to the pie arc
+    const innerArc = arc()
       .innerRadius(newInnerRad)
       .outerRadius(newOuterRad);
 
     return {
-      enterProps: {
+      data: {
         startAngle,
-        endAngle
+        endAngle,
+        // Data must be passed
+        data: data || {}
       },
-      exitProps: {
-        startAngle,
-        endAngle: animated ? 0 : endAngle
-      },
-      arc: arcFn
+      innerArc
     }
   }
 
   render() {
-    const { fill, animated } = this.props;
-    const { enterProps, exitProps, arc } = this.getPaths();
+    const { fill, animated, disabled } = this.props;
+    const data = this.getPaths();
 
     return (
-      <PosedArc
-        pose="enter"
-        arc={arc}
+      <PieArc
+        {...data}
         animated={animated}
-        enterProps={enterProps}
-        exitProps={exitProps}
-        fill={fill}
+        color={fill}
+        disabled={disabled}
       />
     );
   }
