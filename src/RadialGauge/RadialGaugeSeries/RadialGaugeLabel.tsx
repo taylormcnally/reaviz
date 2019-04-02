@@ -21,7 +21,7 @@ export class RadialGaugeLabel extends Component<RadialGaugeLabelProps> {
         <text
           dy="1.23em"
           x="0"
-          y="50"
+          y="60"
           textAnchor="middle"
           className={classNames(className, css.valueLabel)}
         >

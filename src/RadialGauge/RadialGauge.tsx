@@ -6,7 +6,7 @@ import { CloneElement } from '../common/utils/children';
 import { RadialGaugeSeriesProps, RadialGaugeSeries } from './RadialGaugeSeries';
 
 export interface RadialGaugeProps extends ChartProps {
-  data: ChartShallowDataShape;
+  data: ChartShallowDataShape[];
   minValue: number;
   maxValue: number;
   startAngle: number;
@@ -24,9 +24,8 @@ export class RadialGauge extends Component<RadialGaugeProps> {
   };
 
   renderChart(containerProps: ChartContainerChildProps) {
-    const { chartWidth, chartHeight } = containerProps;
+    const { chartWidth } = containerProps;
     const { startAngle, endAngle, minValue, maxValue, data, series } = this.props;
-    const outerRadius = Math.min(chartWidth, chartHeight) / 2;
 
     const scale = scaleLinear()
       .domain([minValue, maxValue])
@@ -35,11 +34,11 @@ export class RadialGauge extends Component<RadialGaugeProps> {
     return (
       <CloneElement<RadialGaugeSeriesProps>
         element={series}
-        outerRadius={outerRadius}
         scale={scale}
         data={data}
         startAngle={startAngle}
         endAngle={endAngle}
+        width={chartWidth}
       />
     );
   }
@@ -55,7 +54,8 @@ export class RadialGauge extends Component<RadialGaugeProps> {
         margins={margins}
         xAxisVisible={false}
         yAxisVisible={false}
-        center={true}
+        centerX={false}
+        centerY={true}
         className={className}
       >
         {this.renderChart.bind(this)}
