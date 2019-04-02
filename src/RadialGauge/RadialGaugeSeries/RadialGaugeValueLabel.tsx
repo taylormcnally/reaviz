@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { ChartShallowDataShape, ChartInternalDataTypes } from '../../common/data';
 import { formatValue } from '../../common/utils/formatting';
-import * as css from './RadialGaugeLabel.module.scss';
+import * as css from './RadialGaugeValueLabel.module.scss';
 import classNames from 'classnames';
 
 export interface RadialGaugeValueLabelProps {
@@ -17,19 +17,18 @@ export class RadialGaugeValueLabel extends Component<RadialGaugeValueLabelProps>
 
   render() {
     const { data, className } = this.props;
+    const label = formatValue(data.data as ChartInternalDataTypes);
 
     return (
-      <Fragment>
-        <text
-          dy="-0.5em"
-          x="0"
-          y="15"
-          textAnchor="middle"
-          className={classNames(className, css.valueLabel)}
-        >
-          {formatValue(data.data as ChartInternalDataTypes)}
-        </text>
-      </Fragment>
+      <text
+        dy="-0.5em"
+        x="0"
+        y="15"
+        textAnchor="middle"
+        className={classNames(className, css.valueLabel)}
+      >
+        {label}
+      </text>
     );
   }
 }
