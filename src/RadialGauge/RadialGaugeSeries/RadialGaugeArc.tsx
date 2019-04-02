@@ -8,7 +8,7 @@ export interface RadialGaugeArcProps {
   startAngle: number;
   endAngle: number;
   outerRadius: number;
-  fill: string;
+  color: any;
   width: number;
   animated: boolean;
   disabled: boolean;
@@ -16,8 +16,8 @@ export interface RadialGaugeArcProps {
 
 export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
   static defaultProps: Partial<RadialGaugeArcProps> = {
-    width: 10,
-    fill: '#353d44',
+    width: 5,
+    color: '#353d44',
     animated: false,
     disabled: false
   };
@@ -47,18 +47,18 @@ export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
         data: data || {}
       },
       innerArc
-    }
+    };
   }
 
   render() {
-    const { fill, animated, disabled } = this.props;
+    const { color, animated, disabled } = this.props;
     const data = this.getPaths();
 
     return (
       <PieArc
         {...data}
         animated={animated}
-        color={fill}
+        color={color}
         disabled={disabled}
       />
     );

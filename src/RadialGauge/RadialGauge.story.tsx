@@ -1,8 +1,9 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialGauge } from './RadialGauge';
-import { number, object } from '@storybook/addon-knobs';
+import { number, object, color, array } from '@storybook/addon-knobs';
 import { categoryData } from '../common/demo';
+import { RadialGaugeSeries } from './RadialGaugeSeries';
 
 storiesOf('Charts/Radial Gauge', module)
   .add('Simple', () => {
@@ -12,7 +13,11 @@ storiesOf('Charts/Radial Gauge', module)
     const maxValue = number('Max Value', 100);
     const height = number('Height', 300);
     const width = number('Width', 300);
-    const data = object('Data', [categoryData[0]]);
+    const colorScheme = color('Color', '#418AD7');
+    const data = object('Data', [{
+      key: 'Austin, TX',
+      data: 24
+    }]);
 
     return (
       <RadialGauge
@@ -23,17 +28,29 @@ storiesOf('Charts/Radial Gauge', module)
         width={width}
         minValue={minValue}
         maxValue={maxValue}
+        series={
+          <RadialGaugeSeries
+            colorScheme={[colorScheme]}
+          />
+        }
       />
     );
   }, { options: { showAddonPanel: true } })
   .add('Group', () => {
     const startAngle = number('Start Angle', 0);
     const endAngle = number('End Angle', Math.PI * 2);
-    const minValue = number('Min Value', 0);
-    const maxValue = number('Max Value', 100);
     const height = number('Height', 300);
     const width = number('Width', 500);
+    const colorScheme = array('Color Scheme', [
+      '#CE003E',
+      '#DF8D03',
+      '#00ECB1',
+      '#9FA9B1'
+    ]);
     const data = object('Data', categoryData);
+    const maxValue = data
+      .map(d => d.data)
+      .reduce((sum, d) => sum + d, 0);
 
     return (
       <RadialGauge
@@ -42,8 +59,13 @@ storiesOf('Charts/Radial Gauge', module)
         endAngle={endAngle}
         height={height}
         width={width}
-        minValue={minValue}
+        minValue={0}
         maxValue={maxValue}
+        series={
+          <RadialGaugeSeries
+            colorScheme={colorScheme}
+          />
+        }
       />
     );
   }, { options: { showAddonPanel: true } });
