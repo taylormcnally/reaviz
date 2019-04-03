@@ -23,6 +23,7 @@
   - Radial Area Chart
   - Radial Bar Chart
   - Radial Scatter Plot
+  - Radial Gauge Chart
 - Utilities
   - Brush
   - Pan Zoom

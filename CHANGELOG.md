@@ -1,3 +1,6 @@
+# Master
+- [Feature] Radial Gauge Chart
+
 # 1.2.0
 - [Feature] Refactored Circle Series on Line/Area to use Scatter
 - [Fix] Fixed stacked area circles not having correct colors

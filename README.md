@@ -33,21 +33,17 @@ creating charts without sacrificing customization ability.
 
 Chart types include:
 
-- Bar Chart
-- Line Chart
-- Area Chart
-- Bubble Chart
-- Scatter Plot
+- Linear & Radial Bar Chart
+- Linear & Radial Line Chart
+- Linear & Radial Area Chart
+- Linear & Radial Bubble Chart
+- Linear & Radial Scatter Plot
 - Pie Chart
 - Hive Plot
 - Sankey Chart
 - Map Chart
 - Sparklines
-- Radial Bar Chart
-- Radial Line Chart
-- Radial Area Chart
-- Radial Bubble Chart
-- Radial Scatter Plot
+- Radial Gauge Chart
 
 Additional features:
 
