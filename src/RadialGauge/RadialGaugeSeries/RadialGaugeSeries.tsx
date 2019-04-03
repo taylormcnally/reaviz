@@ -81,7 +81,7 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     const dataEndAngle = scale(data.data as number);
 
     const baselineLabelHeight = 20;
-    const outerRadius = (min([width - padding, height - baselineLabelHeight]) / 2) - 10;
+    const outerRadius = ((min([width - padding, height - baselineLabelHeight]) as number) / 2) - 10;
     const labelOffset = (width / 2) - padding;
 
     const x = xScale(index % columns);
