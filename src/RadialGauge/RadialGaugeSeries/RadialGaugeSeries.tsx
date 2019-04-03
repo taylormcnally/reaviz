@@ -25,6 +25,8 @@ export interface RadialGaugeSeriesProps {
   valueLabel: JSX.Element | null;
 }
 
+const MIN_GAUGE_WIDTH = 150;
+
 export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   static defaultProps: Partial<RadialGaugeSeriesProps> = {
     outerArc: <RadialGaugeArc disabled={true} />,
@@ -46,12 +48,11 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   getWidths() {
     const { data, width, height } = this.props;
 
-    const minWidth = 150;
     let rows = 1;
     let columns = data.length;
 
-    if ((width / data.length) < minWidth) {
-      while (width / columns < minWidth) {
+    if ((width / data.length) < MIN_GAUGE_WIDTH) {
+      while (width / columns < MIN_GAUGE_WIDTH) {
         rows += 1;
         columns = Math.ceil(data.length / rows);
       }
