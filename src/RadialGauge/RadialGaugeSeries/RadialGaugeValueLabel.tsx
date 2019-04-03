@@ -6,14 +6,11 @@ import * as css from './RadialGaugeValueLabel.module.scss';
 
 export interface RadialGaugeValueLabelProps {
   data: ChartShallowDataShape;
-  animated: boolean;
   className?: any;
 }
 
 export class RadialGaugeValueLabel extends Component<RadialGaugeValueLabelProps> {
-  static defaultProps: Partial<RadialGaugeValueLabelProps> = {
-    animated: true
-  };
+  static defaultProps: Partial<RadialGaugeValueLabelProps> = {};
 
   render() {
     const { data, className } = this.props;
