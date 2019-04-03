@@ -4,6 +4,7 @@ import { RadialGauge } from './RadialGauge';
 import { number, object, color, array } from '@storybook/addon-knobs';
 import { categoryData } from '../common/demo';
 import { RadialGaugeSeries } from './RadialGaugeSeries';
+import { max } from 'd3-array';
 
 storiesOf('Charts/Radial Gauge', module)
   .add('Single', () => {
@@ -40,7 +41,7 @@ storiesOf('Charts/Radial Gauge', module)
     const startAngle = number('Start Angle', 0);
     const endAngle = number('End Angle', Math.PI * 2);
     const height = number('Height', 300);
-    const width = number('Width', 500);
+    const width = number('Width', 700);
     const colorScheme = array('Color Scheme', [
       '#CE003E',
       '#DF8D03',
@@ -48,9 +49,7 @@ storiesOf('Charts/Radial Gauge', module)
       '#9FA9B1'
     ]);
     const data = object('Data', categoryData);
-    const maxValue = data
-      .map(d => d.data)
-      .reduce((sum, d) => sum + d, 0);
+    const maxValue = max(data, () => data.data as number);
 
     return (
       <RadialGauge
@@ -69,8 +68,11 @@ storiesOf('Charts/Radial Gauge', module)
       />
     );
   }, { options: { showAddonPanel: true } })
+  .add('Multi-line', () => (
+    <RadialGauge data={categoryData} width={350} height={450} />
+  ))
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
       <RadialGauge data={categoryData} />
     </div>
-  ))
+  ));

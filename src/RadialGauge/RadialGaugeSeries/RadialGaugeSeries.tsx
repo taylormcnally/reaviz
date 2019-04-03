@@ -7,6 +7,8 @@ import { PoseSVGGElement } from '../../common/utils/animations';
 import { RadialGaugeLabel, RadialGaugeLabelProps } from './RadialGaugeLabel';
 import { RadialGaugeValueLabel } from './RadialGaugeValueLabel';
 import { getColor } from '../../common/utils/color';
+import { range, min } from 'd3-array';
+import { scaleBand } from 'd3-scale';
 
 export interface RadialGaugeSeriesProps {
   data: ChartShallowDataShape[];
@@ -14,6 +16,7 @@ export interface RadialGaugeSeriesProps {
   startAngle: number;
   endAngle: number;
   width: number;
+  height: number;
   padding: number;
   colorScheme: ((data, index: number) => string) | string[];
   innerArc: JSX.Element;
@@ -40,17 +43,56 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
       : colorScheme(point, index);
   }
 
-  renderGauge(data: ChartShallowDataShape, index: number, width: number) {
+  getWidths() {
+    const { data, width, height } = this.props;
+
+    const minWidth = 150;
+    let rows = 1;
+    let columns = data.length;
+
+    if ((width / data.length) < minWidth) {
+      while (width / columns < minWidth) {
+        rows += 1;
+        columns = Math.ceil(data.length / rows);
+      }
+    }
+
+    const xScale: any = scaleBand();
+    xScale.domain(range(columns));
+    xScale.rangeRound([0, width], 0.1);
+
+    const yScale: any = scaleBand();
+    yScale.domain(range(rows));
+    yScale.rangeRound([0, height], 0.1);
+
+    return {
+      columns,
+      xScale,
+      yScale,
+      width: xScale.bandwidth(),
+      height: yScale.bandwidth()
+    };
+  }
+
+  renderGauge(data: ChartShallowDataShape, index: number, columns: number, height: number, width: number, xScale, yScale) {
     const { scale, innerArc, outerArc, startAngle, endAngle, label, valueLabel, padding } = this.props;
+
     const dataEndAngle = scale(data.data as number);
-    const outerRadius = (width / 2) - padding * 2;
-    const offset = (width * index) + outerRadius + padding * 2;
+
+    const baselineLabelHeight = 20;
+    const outerRadius = (min([width - padding, height - baselineLabelHeight]) / 2) - 10;
     const labelOffset = (width / 2) - padding;
+
+    const x = xScale(index % columns);
+    const y = yScale(Math.floor(index / columns));
+
+    const xOffset = x + (width - padding) / 2;
+    const yOffset = y + (width - baselineLabelHeight) / 2;
 
     return (
       <PoseSVGGElement
         key={data.key.toString()}
-        transform={`translate(${offset}, 0)`}
+        transform={`translate(${xOffset}, ${yOffset})`}
       >
         {outerArc && (
           <CloneElement<RadialGaugeArcProps>
@@ -86,12 +128,12 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   }
 
   render() {
-    const { data, innerArc, width } = this.props;
-    const widthDist = width / data.length;
+    const { data, innerArc } = this.props;
+    const { columns, width, height, xScale, yScale } = this.getWidths();
 
     return (
       <PoseGroup animateOnMount={innerArc.props.animated}>
-        {data.map((d, i) => this.renderGauge(d, i, widthDist))}
+        {data.map((d, i) => this.renderGauge(d, i, columns, height, width, xScale, yScale))}
       </PoseGroup>
     );
   }

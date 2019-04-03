@@ -24,7 +24,7 @@ export class RadialGauge extends Component<RadialGaugeProps> {
   };
 
   renderChart(containerProps: ChartContainerChildProps) {
-    const { chartWidth } = containerProps;
+    const { chartWidth, chartHeight } = containerProps;
     const { startAngle, endAngle, minValue, maxValue, data, series } = this.props;
 
     const scale = scaleLinear()
@@ -39,6 +39,7 @@ export class RadialGauge extends Component<RadialGaugeProps> {
         startAngle={startAngle}
         endAngle={endAngle}
         width={chartWidth}
+        height={chartHeight}
       />
     );
   }
@@ -54,8 +55,6 @@ export class RadialGauge extends Component<RadialGaugeProps> {
         margins={margins}
         xAxisVisible={false}
         yAxisVisible={false}
-        centerX={false}
-        centerY={true}
         className={className}
       >
         {this.renderChart.bind(this)}
