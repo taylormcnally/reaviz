@@ -13,6 +13,8 @@ export interface ChartProps {
   margins?: Margins;
   className?: any;
   center?: boolean;
+  centerX?: boolean;
+  centerY?: boolean;
 }
 
 export interface ChartContainerProps extends ChartProps {
@@ -134,7 +136,7 @@ export class ChartContainer extends React.Component<
   }
 
   render() {
-    const { className, children, center } = this.props;
+    const { className, children, center, centerX, centerY } = this.props;
     const { xMargin, yMargin, width, height } = this.state;
     const id = this.props.id || this.state.id;
     const chartSized = this.getChartSized();
@@ -145,9 +147,8 @@ export class ChartContainer extends React.Component<
       updateAxes: bind(this.updateAxes, this)
     };
 
-    const transform = center
-      ? `translate(${width / 2}, ${height / 2})`
-      : `translate(${xMargin}, ${yMargin})`;
+    const translateX = center || centerX ? width / 2 : xMargin;
+    const translateY = center || centerY ? height / 2 : yMargin;
 
     return (
       <ResizeContainer
@@ -157,7 +158,9 @@ export class ChartContainer extends React.Component<
       >
         {height && width && (
           <svg width={width} height={height} className={className}>
-            <g transform={transform}>{children(childProps)}</g>
+            <g transform={`translate(${translateX}, ${translateY})`}>
+              {children(childProps)}
+            </g>
           </svg>
         )}
       </ResizeContainer>
