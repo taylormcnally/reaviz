@@ -14,6 +14,7 @@ export interface RadialGaugeSeriesProps {
   startAngle: number;
   endAngle: number;
   width: number;
+  padding: number;
   colorScheme: ((data, index: number) => string) | string[];
   innerArc: JSX.Element;
   outerArc: JSX.Element | null;
@@ -27,7 +28,8 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     innerArc: <RadialGaugeArc width={10} animated={true} />,
     label: <RadialGaugeLabel />,
     valueLabel: <RadialGaugeValueLabel />,
-    colorScheme: ['#00ECB1']
+    colorScheme: ['#00ECB1'],
+    padding: 10
   };
 
   getColor(point, index) {
@@ -39,10 +41,11 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   }
 
   renderGauge(data: ChartShallowDataShape, index: number, width: number) {
-    const { scale, innerArc, outerArc, startAngle, endAngle, label, valueLabel } = this.props;
+    const { scale, innerArc, outerArc, startAngle, endAngle, label, valueLabel, padding } = this.props;
     const dataEndAngle = scale(data.data as number);
-    const outerRadius = (width / 2) - 10;
-    const offset = (width * index) + outerRadius + 10;
+    const outerRadius = (width / 2) - padding * 2;
+    const offset = (width * index) + outerRadius + padding * 2;
+    const labelOffset = (width / 2) - padding;
 
     return (
       <PoseSVGGElement
@@ -65,16 +68,17 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
           data={data}
           color={this.getColor(data, index)}
         />
-        {label && (
-          <CloneElement<RadialGaugeLabelProps>
-            element={label}
-            data={data}
-          />
-        )}
         {valueLabel && (
           <CloneElement<RadialGaugeLabelProps>
             element={valueLabel}
             data={data}
+          />
+        )}
+        {label && (
+          <CloneElement<RadialGaugeLabelProps>
+            element={label}
+            data={data}
+            offset={labelOffset}
           />
         )}
       </PoseSVGGElement>

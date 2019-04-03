@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 export interface RadialGaugeLabelProps {
   data: ChartShallowDataShape;
+  offset: number;
   className?: any;
 }
 
@@ -13,14 +14,14 @@ export class RadialGaugeLabel extends Component<RadialGaugeLabelProps> {
   static defaultProps: Partial<RadialGaugeLabelProps> = {};
 
   render() {
-    const { data, className } = this.props;
+    const { data, className, offset } = this.props;
     const label = formatValue(data.key as ChartInternalDataTypes);
 
     return (
       <text
         dy="1.23em"
         x="0"
-        y="60"
+        y={offset}
         textAnchor="middle"
         className={classNames(className, css.valueLabel)}
       >

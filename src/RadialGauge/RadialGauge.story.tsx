@@ -6,7 +6,7 @@ import { categoryData } from '../common/demo';
 import { RadialGaugeSeries } from './RadialGaugeSeries';
 
 storiesOf('Charts/Radial Gauge', module)
-  .add('Simple', () => {
+  .add('Single', () => {
     const startAngle = number('Start Angle', 0);
     const endAngle = number('End Angle', Math.PI * 2);
     const minValue = number('Min Value', 0);
@@ -36,7 +36,7 @@ storiesOf('Charts/Radial Gauge', module)
       />
     );
   }, { options: { showAddonPanel: true } })
-  .add('Group', () => {
+  .add('Multi', () => {
     const startAngle = number('Start Angle', 0);
     const endAngle = number('End Angle', Math.PI * 2);
     const height = number('Height', 300);
@@ -68,4 +68,9 @@ storiesOf('Charts/Radial Gauge', module)
         }
       />
     );
-  }, { options: { showAddonPanel: true } });
+  }, { options: { showAddonPanel: true } })
+  .add('Autosize', () => (
+    <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
+      <RadialGauge data={categoryData} />
+    </div>
+  ))
