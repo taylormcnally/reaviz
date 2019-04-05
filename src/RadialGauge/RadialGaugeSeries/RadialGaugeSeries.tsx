@@ -25,7 +25,7 @@ export interface RadialGaugeSeriesProps {
   valueLabel: JSX.Element | null;
 }
 
-const MIN_GAUGE_WIDTH = 150;
+const MIN_GAUGE_WIDTH = 50;
 
 export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   static defaultProps: Partial<RadialGaugeSeriesProps> = {
