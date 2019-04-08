@@ -1,16 +1,13 @@
 import React, { Fragment, Component } from 'react';
-import { Gradient } from '../../Styles';
+import { GradientProps } from '../../Styles';
+import { CloneElement } from '../../utils';
 
 export interface LinearAxisLineProps {
   height: number;
   width: number;
   strokeColor?: string;
   strokeWidth: number;
-  strokeGradient?: Array<{
-    offset: number | string;
-    stopOpacity: number;
-    color?: string;
-  }>;
+  strokeGradient: JSX.Element | null;
   scale: any;
   orientation: 'horizontal' | 'vertical';
 }
@@ -51,7 +48,10 @@ export class LinearAxisLine extends Component<
           stroke={strokeGradient ? `url(#axis-gradient-${id})` : strokeColor}
         />
         {strokeGradient && (
-          <Gradient id={`axis-gradient-${id}`} offsets={strokeGradient} />
+          <CloneElement<GradientProps>
+            element={strokeGradient}
+            id={`axis-gradient-${id}`}
+          />
         )}
       </Fragment>
     );

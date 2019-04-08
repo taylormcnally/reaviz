@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BarSeriesProps, BarSeries } from './BarSeries';
 import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
+import { Gradient, GradientStop } from '../../common/Styles';
 
 export class StackedBarSeries extends Component<BarSeriesProps, {}> {
   static defaultProps: Partial<BarSeriesProps> = {
@@ -10,10 +11,14 @@ export class StackedBarSeries extends Component<BarSeriesProps, {}> {
     bar: (
       <Bar
         rounded={false}
-        gradient={[
-          { offset: '5%', stopOpacity: 0.1 },
-          { offset: '90%', stopOpacity: 0.7 }
-        ]}
+        gradient={
+          <Gradient
+            stops={[
+              <GradientStop offset="5%" stopOpacity={0.1} />,
+              <GradientStop offset="90%" stopOpacity={0.7} />
+            ]}
+          />
+        }
         rangeLines={<RangeLines type="top" strokeWidth={3} />}
       />
     )

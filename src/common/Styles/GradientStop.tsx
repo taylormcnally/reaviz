@@ -7,6 +7,10 @@ export interface GradientStopProps {
 }
 
 export class GradientStop extends Component<GradientStopProps> {
+  static defaultProps: Partial<GradientStopProps> = {
+    stopOpacity: 1
+  };
+
   render() {
     const { offset, stopOpacity, color } = this.props;
 

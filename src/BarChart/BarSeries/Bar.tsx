@@ -1,7 +1,7 @@
 import React, { Fragment, Component, createRef } from 'react';
 import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
-import { Gradient } from '../../common/Styles';
+import { Gradient, GradientProps } from '../../common/Styles';
 import classNames from 'classnames';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { RangeLinesProps } from './RangeLines';
@@ -15,12 +15,7 @@ export interface BarProps {
   xScale1: any;
   data: ChartInternalShallowDataShape;
   id: string;
-  gradient?:
-    | boolean
-    | Array<{
-        offset: number | string;
-        stopOpacity: number;
-      }>;
+  gradient: JSX.Element | null;
   yScale: any;
   width: number;
   padding: number;
@@ -36,7 +31,7 @@ export interface BarProps {
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
   rangeLines: JSX.Element | null;
-  tooltip: JSX.Element;
+  tooltip: JSX.Element | null;
 }
 
 interface BarState {
@@ -60,10 +55,10 @@ const modifiers = {
 export class Bar extends Component<BarProps, BarState> {
   static defaultProps: Partial<BarProps> = {
     rounded: true,
-    gradient: true,
     cursor: 'auto',
     tooltip: <ChartTooltip />,
     rangeLines: null,
+    gradient: <Gradient />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
@@ -248,7 +243,6 @@ export class Bar extends Component<BarProps, BarState> {
     const stroke = color(data, barIndex);
     const coords = this.getCoords();
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
-    const gradientOffsets = Array.isArray(gradient) ? gradient : undefined;
     const index = groupIndex !== undefined ? groupIndex : barIndex;
 
     return (
@@ -266,7 +260,7 @@ export class Bar extends Component<BarProps, BarState> {
             animated={animated}
           />
         )}
-        {!tooltip.props.disabled && (
+        {tooltip && !tooltip.props.disabled && (
           <CloneElement<ChartTooltipProps>
             element={tooltip}
             visible={!!active}
@@ -278,10 +272,10 @@ export class Bar extends Component<BarProps, BarState> {
           />
         )}
         {gradient && (
-          <Gradient
+          <CloneElement<GradientProps>
+            element={gradient}
             id={`${id}-gradient`}
             color={currentColorShade}
-            offsets={gradientOffsets}
           />
         )}
       </Fragment>
