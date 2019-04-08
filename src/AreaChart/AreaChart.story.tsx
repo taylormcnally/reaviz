@@ -26,6 +26,7 @@ import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
+import { Gradient, GradientStop } from '../common/Styles';
 
 storiesOf('Charts/Area/Single Series', module)
   .add('Simple', () => {
@@ -65,10 +66,14 @@ storiesOf('Charts/Area/Single Series', module)
           area={
             <Area
               pattern={true}
-              gradient={[
-                { offset: '10%', stopOpacity: 0 },
-                { offset: '80%', stopOpacity: 1 }
-              ]}
+              gradient={
+                <Gradient
+                  stops={[
+                    <GradientStop offset="10%" stopOpacity={0} />,
+                    <GradientStop offset="80%" stopOpacity={1} />
+                  ]}
+                />
+              }
             />
           }
           line={<Line strokeWidth={3} />}

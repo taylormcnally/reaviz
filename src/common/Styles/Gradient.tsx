@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
+import { GradientStop, GradientStopProps } from './GradientStop';
+import { CloneElement } from '../utils';
 
 export interface GradientProps {
-  id?: string;
+  id: string;
+  stops: JSX.Element[];
   color?: string;
-  offsets: Array<{
-    offset: number | string;
-    stopOpacity: number;
-    color?: string;
-  }>;
 }
 
 export class Gradient extends Component<GradientProps> {
-  static defaultProps: GradientProps = {
-    offsets: [
-      { offset: '0%', stopOpacity: 0.3 },
-      { offset: '80%', stopOpacity: 1 }
+  static defaultProps: Partial<GradientProps> = {
+    stops: [
+      <GradientStop offset="0%" stopOpacity={0.3} />,
+      <GradientStop offset="80%" stopOpacity={1} />
     ]
   };
 
   render() {
-    const { id, color, offsets } = this.props;
+    const { id, stops, color } = this.props;
 
     return (
       <linearGradient
@@ -30,15 +28,15 @@ export class Gradient extends Component<GradientProps> {
         y1="100%"
         y2="0%"
       >
-        {offsets.map((offset, index) => (
-          <stop
+        {stops.map((stop, index) => (
+          <CloneElement<GradientStopProps>
+            element={stop}
             key={`gradient-${index}`}
-            offset={offset.offset}
-            stopColor={offset.color || color}
-            stopOpacity={offset.stopOpacity}
+            color={stop.props.color || color}
           />
         ))}
       </linearGradient>
     );
   }
 }
+

@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import { area } from 'd3-shape';
-import { Gradient, Stripes, Mask } from '../../common/Styles';
+import { Gradient, Stripes, Mask, GradientProps } from '../../common/Styles';
 import {
   interpolate,
   InterpolationTypes
@@ -10,6 +10,7 @@ import {
   ChartInternalShallowDataShape
 } from '../../common/data';
 import { PosedArea } from './PosedArea';
+import { CloneElement } from '../../common/utils/children';
 
 export interface AreaProps {
   id: string;
@@ -22,17 +23,12 @@ export interface AreaProps {
   index: number;
   pattern?: boolean;
   animated: boolean;
-  gradient?:
-    | boolean
-    | Array<{
-        offset: number | string;
-        stopOpacity: number;
-      }>;
+  gradient: JSX.Element | null;
 }
 
 export class Area extends Component<AreaProps, {}> {
   static defaultProps: Partial<AreaProps> = {
-    gradient: true,
+    gradient: <Gradient />,
     pattern: false,
     interpolation: 'linear'
   };
@@ -87,12 +83,6 @@ export class Area extends Component<AreaProps, {}> {
     };
   }
 
-  getGradientOffsets() {
-    const { gradient } = this.props;
-
-    return Array.isArray(gradient) ? gradient : undefined;
-  }
-
   getFill() {
     const { pattern, id, gradient } = this.props;
 
@@ -131,30 +121,24 @@ export class Area extends Component<AreaProps, {}> {
 
   render() {
     const { id, gradient, pattern, data, color, index } = this.props;
-    const gradientOffsets = this.getGradientOffsets();
     const coords = this.getCoords();
     const stroke = color(data, index);
 
     return (
       <Fragment>
         {this.renderArea(coords)}
-        {gradient && !pattern && (
-          <Gradient
-            id={`gradient-${id}`}
-            color={stroke}
-            offsets={gradientOffsets}
-          />
-        )}
         {pattern && (
           <Fragment>
             <Mask id={`mask-${id}`} fill={`url(#gradient-${id})`} />
-            <Gradient
-              id={`gradient-${id}`}
-              color={stroke}
-              offsets={gradientOffsets}
-            />
             <Stripes id={`stripes-${id}`} fill={stroke} />
           </Fragment>
+        )}
+        {gradient && (
+          <CloneElement<GradientProps>
+            element={gradient}
+            id={`gradient-${id}`}
+            color={stroke}
+          />
         )}
       </Fragment>
     );

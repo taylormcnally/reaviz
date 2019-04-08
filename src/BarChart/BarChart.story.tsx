@@ -28,13 +28,14 @@ import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Bar/Single Series', module)
   .add('Simple', () => {
-    const gradient = boolean('Gradient', true);
+    const hasGradient = boolean('Gradient', true);
     const rounded = boolean('Rounded', true)
     const padding = number('Padding', 0.1);
     const height = number('Height', 250);
     const width = number('Width', 350);
     const fill = color('Color', '#418AD7');
     const data = object('Data', categoryData);
+    const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
     return (
       <BarChart

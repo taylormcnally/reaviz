@@ -14,6 +14,7 @@ import {
   LinearXAxis,
   LinearXAxisTickSeries
 } from '../common/Axis/LinearAxis';
+import { GradientStop, Gradient } from '../common/Styles';
 
 export interface AreaSparklineChartProps extends AreaChartProps {
   data: ChartShallowDataShape[];
@@ -30,10 +31,14 @@ export class AreaSparklineChart extends Component<AreaSparklineChartProps, {}> {
         area={
           <Area
             pattern={true}
-            gradient={[
-              { offset: '10%', stopOpacity: 0 },
-              { offset: '80%', stopOpacity: 1 }
-            ]}
+            gradient={
+              <Gradient
+                stops={[
+                  <GradientStop offset="10%" stopOpacity={0} />,
+                  <GradientStop offset="80%" stopOpacity={1} />
+                ]}
+              />
+            }
           />
         }
         line={<Line strokeWidth={3} />}
