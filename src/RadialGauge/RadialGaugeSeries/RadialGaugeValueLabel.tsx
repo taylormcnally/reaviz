@@ -15,8 +15,9 @@ export class RadialGaugeValueLabel extends Component<RadialGaugeValueLabelProps>
   render() {
     const { data, className } = this.props;
 
+    // TODO: Get seperator based on locale
     return (
-      <CountUp start={0} end={data.data} delay={0} duration={1}>
+      <CountUp start={0} end={data.data} delay={0} duration={1} separator=",">
         {({ countUpRef }) =>
           <text
             dy="-0.5em"
