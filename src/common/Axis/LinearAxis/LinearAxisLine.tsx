@@ -40,10 +40,10 @@ export class LinearAxisLine extends Component<
       <Fragment>
         <line
           x1={orientation === 'vertical' ? 0 : range0}
-          // Workaround for a Chrome bug where it won't render gradients for straight lines
-          x2={orientation === 'vertical' ? 0.000001 : range1}
+          // Workaround for a Chrome/Firefox bug where it won't render gradients for straight lines
+          x2={orientation === 'vertical' ? 0.00001 : range1}
           y1={orientation === 'vertical' ? range0 : 0}
-          y2={orientation === 'vertical' ? range1 : 0.000001}
+          y2={orientation === 'vertical' ? range1 : 0.00001}
           strokeWidth={1}
           stroke={strokeGradient ? `url(#axis-gradient-${id})` : strokeColor}
         />
