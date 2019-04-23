@@ -1,5 +1,7 @@
 # Master
 - [Feature] Radial Gauge Chart
+- [BREAKING] Refactor Gradient API
+- [Fix] Fix a bug with gradient LinearAxisLines not working in Firefox #40
 
 # 1.2.0
 - [Feature] Refactored Circle Series on Line/Area to use Scatter
