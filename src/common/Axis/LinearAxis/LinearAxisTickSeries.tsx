@@ -9,7 +9,7 @@ import {
 } from './LinearAxisTickLine';
 import { formatValue } from '../../utils/formatting';
 import { getTextWidth } from '../../utils/width';
-import { getTicks } from '../../utils/ticks';
+import { getTicks, getMaxTicks } from '../../utils/ticks';
 import { TimeInterval } from 'd3-time';
 import { CloneElement } from '../../utils/children';
 
@@ -33,8 +33,7 @@ interface ProcessedTick {
 }
 
 export class LinearAxisTickSeries extends Component<
-  LinearAxisTickSeriesProps,
-  {}
+  LinearAxisTickSeriesProps
 > {
   static defaultProps: Partial<LinearAxisTickSeriesProps> = {
     line: <LinearAxisTickLine />,
@@ -157,7 +156,8 @@ export class LinearAxisTickSeries extends Component<
   getTicks(): ProcessedTick[] {
     const { scale, tickSize, tickValues, interval } = this.props;
     const dimension = this.getDimension();
-    const ticks = getTicks(scale, tickSize, tickValues, dimension, interval);
+    const maxTicks = getMaxTicks(tickSize, dimension);
+    const ticks = getTicks(scale, tickValues, maxTicks, interval);
     const adjustedScale = this.getAdjustedScale();
     const format = this.getLabelFormat();
     const result: ProcessedTick[] = [];

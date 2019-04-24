@@ -49,13 +49,14 @@ export class RadialArea extends Component<RadialAreaProps> {
   }
 
   renderArea(fill: string) {
-    const { data, className, animated } = this.props;
+    const { data, className, animated, yScale } = this.props;
     const enterProps = {
       d: this.getPath(data)
     };
 
+    const [yStart] = yScale.domain();
     const exitProps = {
-      d: this.getPath(data.map(d => ({ ...d, y: 0 })))
+      d: this.getPath(data.map(d => ({ ...d, y: yStart })))
     };
 
     return (
