@@ -98,13 +98,15 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps, Radia
   }
 
   render() {
-    const { size, data, color, index, animated, symbol, active, tooltip } = this.props;
+    const { size, data, color, index, animated, symbol, active, tooltip, yScale } = this.props;
     const { hovered } = this.state;
 
     const fill = isFunction(color) ? color(data, index) : color;
     const transform = this.getTranslate(data);
-    const exitTransform = this.getTranslate({ ...data, y: 0 });
     const sizeVal = typeof size === 'function' ? size(data) : size;
+
+    const [yStart] = yScale.domain();
+    const exitTransform = this.getTranslate({ ...data, y: yStart });
 
     return (
       <Fragment>
