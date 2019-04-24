@@ -89,10 +89,12 @@ export class ScatterPoint extends Component<
   }
 
   getCircleExit() {
-    const { xScale, data, height } = this.props;
+    const { xScale, data, yScale } = this.props;
+    const [yStartDomain] = yScale.domain();
+    const yPos = yScale(yStartDomain);
 
     return {
-      cy: height,
+      cy: yPos,
       cx: xScale(data.x)
     };
   }
@@ -112,9 +114,13 @@ export class ScatterPoint extends Component<
   }
 
   getSymbolExit() {
-    const { data, height, xScale } = this.props;
+    const { data, xScale, yScale } = this.props;
+
     const x = xScale(data.x);
-    const transform = `translate(${x}, ${height})`;
+    const [yStartDomain] = yScale.domain();
+    const yPos = yScale(yStartDomain);
+
+    const transform = `translate(${x}, ${yPos})`;
 
     return {
       transform
