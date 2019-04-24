@@ -32,9 +32,8 @@ export function getMaxTicks(size: number, dimension: number) {
  */
 export function getTicks(
   scale: any,
-  tickSize: number,
   tickValues: any[],
-  dimension: number,
+  maxTicks = 100,
   interval?: number | TimeInterval
 ) {
   let result;
@@ -42,7 +41,6 @@ export function getTicks(
   if (tickValues) {
     result = tickValues;
   } else {
-    const maxTicks = getMaxTicks(tickSize, dimension);
 
     if (scale.ticks) {
       if (interval) {

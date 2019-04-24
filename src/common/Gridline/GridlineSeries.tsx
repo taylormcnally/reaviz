@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import { Gridline, GridlineProps } from './Gridline';
-import { getTicks } from '../utils/ticks';
+import { getTicks, getMaxTicks } from '../utils/ticks';
 import { CloneElement } from '../utils/children';
 import { LinearAxisProps } from '../Axis';
 import { GridStripeProps } from './GridStripe';
@@ -28,16 +28,14 @@ export class GridlineSeries extends Component<GridlineSeriesProps, {}> {
     return {
       yAxisGrid: getTicks(
         yScale,
-        yAxis.tickSeries.props.tickSize,
         yAxis.tickSeries.props.tickValues,
-        height,
+        getMaxTicks(yAxis.tickSeries.props.tickSize, height),
         yAxis.tickSeries.props.interval
       ),
       xAxisGrid: getTicks(
         xScale,
-        xAxis.tickSeries.props.tickSize,
         xAxis.tickSeries.props.tickValues,
-        width,
+        getMaxTicks(xAxis.tickSeries.props.tickSize, width),
         xAxis.tickSeries.props.interval
       )
     };
