@@ -33,15 +33,16 @@ export class RadialLine extends Component<RadialLineProps> {
   }
 
   render() {
-    const { data, color, strokeWidth, animated, className } = this.props;
+    const { data, color, strokeWidth, animated, className, yScale } = this.props;
     const fill = color(data, 0);
 
     const enterProps = {
       d: this.getPath(data)
     };
 
+    const [yStart] = yScale.domain();
     const exitProps = {
-      d: this.getPath(data.map(d => ({ ...d, y: 0 })))
+      d: this.getPath(data.map(d => ({ ...d, y: yStart })))
     };
 
     return (
