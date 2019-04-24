@@ -44,6 +44,7 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
 
   state: RadialBarState = {};
   ref = createRef<SVGPathElement>();
+  previousEnter: any;
 
   getFill(color: string) {
     const { id, gradient } = this.props;
@@ -95,9 +96,9 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
 
       const arcFn = arc()
         .innerRadius(innerRadius)
-        .outerRadius(() => outerRadius)
-        .startAngle(() => startAngle)
-        .endAngle(() => endAngle)
+        .outerRadius(outerRadius)
+        .startAngle(startAngle)
+        .endAngle(endAngle)
         .padAngle(0.01)
         .padRadius(innerRadius);
 
@@ -120,15 +121,20 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
   }
 
   renderBar(color: string) {
-    const { className, data, animated, barCount, index } = this.props;
+    const { className, data, animated, barCount, index, yScale } = this.props;
 
     const fill = this.getFill(color);
-    const enterProps = {
-      d: this.getArc(data)
-    };
+
+    // Track previous props
+    const previousEnter = this.previousEnter
+        ? { ...this.previousEnter }
+        : undefined;
+    this.previousEnter = { ...data };
+
+    const [yStart] = yScale.domain();
     const exitProps = {
-      // Setting y to 0 causes it to freak...
-      d: this.getArc({ ...data, y: .1 })
+      ...data,
+      y: yStart
     };
 
     return (
@@ -137,8 +143,10 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
         poseKey={`${data.x}-${data.y}`}
         ref={this.ref}
         animated={animated}
-        enterProps={enterProps}
+        enterProps={data}
+        previousEnter={previousEnter}
         exitProps={exitProps}
+        getArc={this.getArc.bind(this)}
         barCount={barCount}
         index={index}
         fill={fill}
