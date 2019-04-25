@@ -124,6 +124,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
 
     const yScale = getYScale({
       roundDomains: yAxis.props.roundDomains,
+      padding: series.props.padding,
       type: yAxis.props.type,
       height: chartHeight,
       data,

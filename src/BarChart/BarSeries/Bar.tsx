@@ -249,7 +249,7 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const { rounded, cursor, barCount, animated } = this.props;
+    const { rounded, cursor, barCount, animated, layout } = this.props;
     const fill = this.getFill(currentColorShade);
     const enterProps = coords;
     const exitProps = this.getExit(coords);
@@ -264,7 +264,11 @@ export class Bar extends Component<BarProps, BarState> {
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
         onClick={bind(this.onMouseClick, this)}
-        className={classNames({ [css.rounded]: rounded })}
+        className={classNames({
+          [css.rounded]: rounded,
+          [css.vertical]: layout === 'vertical',
+          [css.horizontal]: layout === 'horizontal'
+        })}
         enterProps={enterProps}
         exitProps={exitProps}
         index={index}
@@ -328,6 +332,7 @@ export class Bar extends Component<BarProps, BarState> {
             element={gradient}
             id={`${id}-gradient`}
             color={currentColorShade}
+            direction={layout}
           />
         )}
       </Fragment>

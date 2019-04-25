@@ -34,7 +34,8 @@ export function getXScale({
   data,
   width,
   domain,
-  padding
+  padding,
+  scaled
 }: ScaleConfig): ScalePoint<any> | ScaleBand<any> | ScaleTime<any, any> {
   let scale;
 
@@ -45,7 +46,7 @@ export function getXScale({
       scale = scaleLinear().rangeRound([0, width!]);
     }
 
-    domain = domain || getXDomain({ data });
+    domain = domain || getXDomain({ data, scaled });
     scale = scale.domain(domain);
   } else if (type === 'category') {
     scale = scaleBand()
@@ -76,7 +77,8 @@ export function getYScale({
   height,
   data,
   domain,
-  scaled
+  scaled,
+  padding
 }: ScaleConfig): ScaleLinear<any, any> {
   let scale;
   if (type === 'time' || type === 'value') {
@@ -88,6 +90,7 @@ export function getYScale({
       domain || getGroupDomain(data as ChartInternalShallowDataShape[], 'y');
     scale = scaleBand()
       .rangeRound([height!, 0])
+      .padding(padding || 0)
       .domain(domain);
   }
 

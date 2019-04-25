@@ -21,7 +21,7 @@ export class LinearYAxisTickLabel extends Component<
     ...LinearAxisTickLabel.defaultProps,
     rotation: true,
     position: 'start',
-    align: 'center'
+    align: 'bottom'
   };
 
   render() {

@@ -28,8 +28,9 @@ export function getYDomain({ scaled, data }): number[] {
 /**
  * Get the domain for the X Axis.
  */
-export function getXDomain({ data }): number[] {
-  return extent(data, 'x');
+export function getXDomain({ data, scaled = false }): number[] {
+  const minMax = extent(data, 'x');
+  return scaled ? minMax : [0, minMax[1]];
 }
 
 /**
