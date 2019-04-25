@@ -41,7 +41,6 @@ export function getTicks(
   if (tickValues) {
     result = tickValues;
   } else {
-
     if (scale.ticks) {
       if (interval) {
         result = scale.ticks(interval);

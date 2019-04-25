@@ -37,7 +37,8 @@ export class RadialArea extends Component<RadialAreaProps> {
 
   getPath(data: ChartInternalShallowDataShape[]) {
     const { xScale, yScale, innerRadius, interpolation } = this.props;
-    const curve = interpolation === 'smooth' ? curveCardinalClosed : curveLinear;
+    const curve =
+      interpolation === 'smooth' ? curveCardinalClosed : curveLinear;
 
     const radialFn = radialArea()
       .angle((d: any) => xScale(d.x))

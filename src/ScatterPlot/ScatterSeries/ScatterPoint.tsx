@@ -9,7 +9,7 @@ import * as css from './ScatterPoint.module.scss';
 import { CloneElement } from '../../common/utils/children';
 
 export interface ScatterPointProps {
-  symbol: ((data: ChartInternalShallowDataShape) => ReactNode);
+  symbol: (data: ChartInternalShallowDataShape) => ReactNode;
   active?: boolean;
   size?: ((data: ChartInternalShallowDataShape) => number) | number;
   color: any;
@@ -22,7 +22,7 @@ export interface ScatterPointProps {
   tooltip: JSX.Element | null;
   className?: any;
   data: ChartInternalShallowDataShape;
-  visible?: ((data: ChartInternalShallowDataShape, index: number) => boolean);
+  visible?: (data: ChartInternalShallowDataShape, index: number) => boolean;
   onClick: (data: ChartInternalShallowDataShape) => void;
   onMouseEnter: (data: ChartInternalShallowDataShape) => void;
   onMouseLeave: (data: ChartInternalShallowDataShape) => void;
@@ -128,7 +128,15 @@ export class ScatterPoint extends Component<
   }
 
   renderCircle() {
-    const { data, animated, index, size, color, cursor, className } = this.props;
+    const {
+      data,
+      animated,
+      index,
+      size,
+      color,
+      cursor,
+      className
+    } = this.props;
     const fill = typeof color === 'function' ? color(data, index) : color;
     const sizeVal = typeof size === 'function' ? size(data) : size;
     const enterProps = this.getCircleEnter();

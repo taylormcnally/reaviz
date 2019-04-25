@@ -9,7 +9,9 @@ export interface RadialGaugeValueLabelProps {
   className?: any;
 }
 
-export class RadialGaugeValueLabel extends Component<RadialGaugeValueLabelProps> {
+export class RadialGaugeValueLabel extends Component<
+  RadialGaugeValueLabelProps
+> {
   static defaultProps: Partial<RadialGaugeValueLabelProps> = {};
 
   render() {
@@ -18,7 +20,7 @@ export class RadialGaugeValueLabel extends Component<RadialGaugeValueLabelProps>
     // TODO: Get seperator based on locale
     return (
       <CountUp start={0} end={data.data} delay={0} duration={1} separator=",">
-        {({ countUpRef }) =>
+        {({ countUpRef }) => (
           <text
             dy="-0.5em"
             x="0"
@@ -27,7 +29,7 @@ export class RadialGaugeValueLabel extends Component<RadialGaugeValueLabelProps>
             className={classNames(className, css.valueLabel)}
             ref={countUpRef}
           />
-        }
+        )}
       </CountUp>
     );
   }

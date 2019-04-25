@@ -1,4 +1,4 @@
-import { median } from "d3-array";
+import { median } from 'd3-array';
 import {
   ChartInternalDataShape,
   ChartInternalNestedDataShape,
@@ -6,15 +6,15 @@ import {
   ChartShallowDataShape,
   ChartNestedDataShape,
   ChartInternalShallowDataShape
-} from "./types";
+} from './types';
 import {
   getMaxBigInteger,
   normalizeValue,
   normalizeValueForFormatting
-} from "./bigInteger";
-import { isMultiSeries } from "./multiSeries";
+} from './bigInteger';
+import { isMultiSeries } from './multiSeries';
 
-export type Direction = "vertical" | "horizontal";
+export type Direction = 'vertical' | 'horizontal';
 
 /**
  * Discriminator for ChartInternalDataShape
@@ -30,7 +30,7 @@ export const isNested = (
 export function buildChartData(
   series: ChartDataShape[],
   sort = false,
-  direction = "horizontal"
+  direction = 'horizontal'
 ): ChartInternalDataShape[] {
   if (isMultiSeries(series)) {
     return buildNestedChartData(
@@ -67,7 +67,7 @@ export function buildChartData(
 export function buildNestedChartData(
   series: ChartNestedDataShape[],
   sort = false,
-  direction = "horizontal"
+  direction = 'horizontal'
 ): ChartInternalNestedDataShape[] {
   let result: ChartInternalNestedDataShape[] = [];
   const maxBigInteger = getMaxBigInteger(series);
@@ -93,12 +93,12 @@ export function buildNestedChartData(
       }
 
       const x = normalizeValue(
-        direction === "horizontal" ? nestedPoint.key : nestedPoint.data,
+        direction === 'horizontal' ? nestedPoint.key : nestedPoint.data,
         maxBigInteger
       );
 
       const y = normalizeValue(
-        direction === "horizontal" ? nestedPoint.data : nestedPoint.key,
+        direction === 'horizontal' ? nestedPoint.data : nestedPoint.key,
         maxBigInteger
       );
 
@@ -134,19 +134,19 @@ export function buildNestedChartData(
  */
 export function buildShallowChartData(
   series: ChartShallowDataShape[],
-  direction = "horizontal"
+  direction = 'horizontal'
 ): ChartInternalShallowDataShape[] {
   const result: ChartInternalShallowDataShape[] = [];
   const maxBigInteger = getMaxBigInteger(series);
 
   for (const point of series) {
     const x = normalizeValue(
-      direction === "horizontal" ? point.key : point.data,
+      direction === 'horizontal' ? point.key : point.data,
       maxBigInteger
     );
 
     const y = normalizeValue(
-      direction === "horizontal" ? point.data : point.key,
+      direction === 'horizontal' ? point.data : point.key,
       maxBigInteger
     );
 
@@ -156,10 +156,10 @@ export function buildShallowChartData(
       meta: point.meta,
       id: point.id,
       x,
-      x0: direction === "horizontal" ? x : 0,
+      x0: direction === 'horizontal' ? x : 0,
       x1: x,
       y,
-      y0: direction === "horizontal" ? 0 : y,
+      y0: direction === 'horizontal' ? 0 : y,
       y1: y
     });
   }

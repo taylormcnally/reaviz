@@ -22,7 +22,8 @@ export class RadialLine extends Component<RadialLineProps> {
 
   getPath(data: ChartInternalShallowDataShape[]) {
     const { xScale, yScale, interpolation } = this.props;
-    const curve = interpolation === 'smooth' ? curveCardinalClosed : curveLinear;
+    const curve =
+      interpolation === 'smooth' ? curveCardinalClosed : curveLinear;
 
     const radialFn = radialLine()
       .angle((d: any) => xScale(d.x))
@@ -33,7 +34,14 @@ export class RadialLine extends Component<RadialLineProps> {
   }
 
   render() {
-    const { data, color, strokeWidth, animated, className, yScale } = this.props;
+    const {
+      data,
+      color,
+      strokeWidth,
+      animated,
+      className,
+      yScale
+    } = this.props;
     const fill = color(data, 0);
 
     const enterProps = {

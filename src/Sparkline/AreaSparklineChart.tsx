@@ -34,8 +34,8 @@ export class AreaSparklineChart extends Component<AreaSparklineChartProps, {}> {
             gradient={
               <Gradient
                 stops={[
-                  <GradientStop offset="10%" stopOpacity={0} />,
-                  <GradientStop offset="80%" stopOpacity={1} />
+                  <GradientStop offset="10%" stopOpacity={0} key="start" />,
+                  <GradientStop offset="80%" stopOpacity={1} key="stop" />
                 ]}
               />
             }

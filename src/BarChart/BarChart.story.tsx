@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
-import { storiesOf } from "@storybook/react";
-import { object, boolean, color, number } from "@storybook/addon-knobs";
-import { BarChart } from "./BarChart";
-import { MarimekkoChart } from "./MarimekkoChart";
-import { StackedBarChart } from "./StackedBarChart";
-import { StackedNormalizedBarChart } from "./StackedNormalizedBarChart";
+import React, { Fragment } from 'react';
+import { storiesOf } from '@storybook/react';
+import { object, boolean, color, number } from '@storybook/addon-knobs';
+import { BarChart } from './BarChart';
+import { MarimekkoChart } from './MarimekkoChart';
+import { StackedBarChart } from './StackedBarChart';
+import { StackedNormalizedBarChart } from './StackedNormalizedBarChart';
 import {
   categoryData,
   largeCategoryData,
@@ -12,36 +12,36 @@ import {
   randomNumber,
   medDateData,
   numberData
-} from "../common/demo";
-import chroma from "chroma-js";
-import { timeWeek, timeMonth } from "d3-time";
-import { range } from "d3-array";
+} from '../common/demo';
+import chroma from 'chroma-js';
+import { timeWeek, timeMonth } from 'd3-time';
+import { range } from 'd3-array';
 import {
   BarSeries,
   Bar,
   StackedBarSeries,
   StackedNormalizedBarSeries,
   MarimekkoBarSeries
-} from "./BarSeries";
-import { GridlineSeries, Gridline } from "../common/Gridline";
+} from './BarSeries';
+import { GridlineSeries, Gridline } from '../common/Gridline';
 import {
   LinearXAxis,
   LinearXAxisTickSeries,
   LinearYAxis,
   LinearYAxisTickSeries
-} from "../common/Axis/LinearAxis";
+} from '../common/Axis/LinearAxis';
 
-storiesOf("Charts/Bar/Single Series", module)
+storiesOf('Charts/Bar/Vertical/Single Series', module)
   .add(
-    "Simple",
+    'Simple',
     () => {
-      const hasGradient = boolean("Gradient", true);
-      const rounded = boolean("Rounded", true);
-      const padding = number("Padding", 0.1);
-      const height = number("Height", 250);
-      const width = number("Width", 350);
-      const fill = color("Color", "#418AD7");
-      const data = object("Data", categoryData);
+      const hasGradient = boolean('Gradient', true);
+      const rounded = boolean('Rounded', true);
+      const padding = number('Padding', 0.1);
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const fill = color('Color', '#418AD7');
+      const data = object('Data', categoryData);
       const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
       return (
@@ -61,44 +61,7 @@ storiesOf("Charts/Bar/Single Series", module)
     },
     { options: { showAddonPanel: true } }
   )
-  .add(
-    "Simple (Horizontal)",
-    () => {
-      const hasGradient = boolean("Gradient", true);
-      const rounded = boolean("Rounded", true);
-      const padding = number("Padding", 0.1);
-      const height = number("Height", 350);
-      const width = number("Width", 500);
-      const fill = color("Color", "#418AD7");
-      const data = object("Data", categoryData);
-      const gradient = hasGradient ? Bar.defaultProps.gradient : null;
-
-      return (
-        <BarChart
-          width={width}
-          height={height}
-          data={data}
-          layout="horizontal"
-          xAxis={<LinearXAxis type="value" />}
-          yAxis={
-            <LinearYAxis
-              type="category"
-              tickSeries={<LinearYAxisTickSeries tickSize={20} />}
-            />
-          }
-          series={
-            <BarSeries
-              colorScheme={[fill]}
-              padding={padding}
-              bar={<Bar rounded={rounded} gradient={gradient} />}
-            />
-          }
-        />
-      );
-    },
-    { options: { showAddonPanel: true } }
-  )
-  .add("Large Dataset", () => (
+  .add('Large Dataset', () => (
     <BarChart
       width={350}
       height={350}
@@ -106,25 +69,25 @@ storiesOf("Charts/Bar/Single Series", module)
       series={
         <BarSeries
           colorScheme={chroma
-            .scale(["ACB7C9", "418AD7"])
+            .scale(['ACB7C9', '418AD7'])
             .colors(largeCategoryData.length)}
         />
       }
     />
   ))
-  .add("Custom Colors", () => (
+  .add('Custom Colors', () => (
     <BarChart
       width={350}
       height={250}
       data={categoryData}
       series={
         <BarSeries
-          colorScheme={(_data, index) => (index % 2 ? "#418AD7" : "#ACB7C9")}
+          colorScheme={(_data, index) => (index % 2 ? '#418AD7' : '#ACB7C9')}
         />
       }
     />
   ))
-  .add("Custom Bar Width", () => (
+  .add('Custom Bar Width', () => (
     <BarChart
       width={350}
       height={250}
@@ -132,29 +95,29 @@ storiesOf("Charts/Bar/Single Series", module)
       data={categoryData}
     />
   ))
-  .add("Live Updating", () => <LiveDataDemo />)
-  .add("Autosize", () => (
-    <div style={{ width: "50vw", height: "50vh", border: "solid 1px red" }}>
+  .add('Live Updating', () => <LiveDataDemo />)
+  .add('Autosize', () => (
+    <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
       <BarChart data={categoryData} />
     </div>
   ))
-  .add("Performance", () =>
+  .add('Performance', () =>
     range(15).map(i => (
       <div
         key={i}
         style={{
-          width: "250px",
-          height: "250px",
-          border: "solid 1px green",
-          margin: "25px",
-          display: "inline-block"
+          width: '250px',
+          height: '250px',
+          border: 'solid 1px green',
+          margin: '25px',
+          display: 'inline-block'
         }}
       >
         <BarChart data={categoryData} />
       </div>
     ))
   )
-  .add("No Animation", () => (
+  .add('No Animation', () => (
     <BarChart
       width={350}
       height={250}
@@ -163,8 +126,8 @@ storiesOf("Charts/Bar/Single Series", module)
     />
   ));
 
-storiesOf("Charts/Bar/Histogram", module)
-  .add("Dates", () => (
+storiesOf('Charts/Bar/Histogram', module)
+  .add('Dates', () => (
     <BarChart
       width={350}
       height={250}
@@ -178,7 +141,7 @@ storiesOf("Charts/Bar/Histogram", module)
       data={medDateData}
     />
   ))
-  .add("Numbers", () => (
+  .add('Numbers', () => (
     <BarChart
       width={350}
       height={250}
@@ -186,7 +149,7 @@ storiesOf("Charts/Bar/Histogram", module)
       data={numberData}
     />
   ))
-  .add("Custom Bin Thresholds", () => (
+  .add('Custom Bin Thresholds', () => (
     <BarChart
       width={350}
       height={250}
@@ -202,8 +165,8 @@ storiesOf("Charts/Bar/Histogram", module)
     />
   ));
 
-storiesOf("Charts/Bar/Multi Series", module)
-  .add("Simple", () => (
+storiesOf('Charts/Bar/Multi Series', module)
+  .add('Simple', () => (
     <BarChart
       width={350}
       height={350}
@@ -211,14 +174,14 @@ storiesOf("Charts/Bar/Multi Series", module)
       series={
         <BarSeries
           colorScheme={chroma
-            .scale(["ACB7C9", "418AD7"])
+            .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
           padding={0.8}
         />
       }
     />
   ))
-  .add("Stacked", () => (
+  .add('Stacked', () => (
     <StackedBarChart
       width={350}
       height={350}
@@ -226,13 +189,13 @@ storiesOf("Charts/Bar/Multi Series", module)
       series={
         <StackedBarSeries
           colorScheme={chroma
-            .scale(["ACB7C9", "418AD7"])
+            .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
         />
       }
     />
   ))
-  .add("Stacked Normalized", () => (
+  .add('Stacked Normalized', () => (
     <StackedNormalizedBarChart
       width={350}
       height={350}
@@ -240,13 +203,13 @@ storiesOf("Charts/Bar/Multi Series", module)
       series={
         <StackedNormalizedBarSeries
           colorScheme={chroma
-            .scale(["ACB7C9", "418AD7"])
+            .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
         />
       }
     />
   ))
-  .add("Marimekko", () => (
+  .add('Marimekko', () => (
     <MarimekkoChart
       width={350}
       height={350}
@@ -254,15 +217,53 @@ storiesOf("Charts/Bar/Multi Series", module)
       series={
         <MarimekkoBarSeries
           colorScheme={chroma
-            .scale(["ACB7C9", "418AD7"])
+            .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
         />
       }
     />
   ));
 
-storiesOf("Charts/Bar/Gridlines", module)
-  .add("All Axes", () => (
+storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
+  'Simple',
+  () => {
+    const hasGradient = boolean('Gradient', true);
+    const rounded = boolean('Rounded', true);
+    const padding = number('Padding', 0.1);
+    const height = number('Height', 350);
+    const width = number('Width', 500);
+    const fill = color('Color', '#418AD7');
+    const data = object('Data', categoryData);
+    const gradient = hasGradient ? Bar.defaultProps.gradient : null;
+
+    return (
+      <BarChart
+        width={width}
+        height={height}
+        data={data}
+        layout="horizontal"
+        xAxis={<LinearXAxis type="value" />}
+        yAxis={
+          <LinearYAxis
+            type="category"
+            tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+          />
+        }
+        series={
+          <BarSeries
+            colorScheme={[fill]}
+            padding={padding}
+            bar={<Bar rounded={rounded} gradient={gradient} />}
+          />
+        }
+      />
+    );
+  },
+  { options: { showAddonPanel: true } }
+);
+
+storiesOf('Charts/Bar/Gridlines', module)
+  .add('All Axes', () => (
     <BarChart
       width={350}
       height={250}
@@ -270,7 +271,7 @@ storiesOf("Charts/Bar/Gridlines", module)
       gridlines={<GridlineSeries line={<Gridline direction="all" />} />}
     />
   ))
-  .add("X-Axis", () => (
+  .add('X-Axis', () => (
     <BarChart
       width={350}
       height={250}
@@ -278,7 +279,7 @@ storiesOf("Charts/Bar/Gridlines", module)
       gridlines={<GridlineSeries line={<Gridline direction="x" />} />}
     />
   ))
-  .add("Y-Axis", () => (
+  .add('Y-Axis', () => (
     <BarChart
       width={350}
       height={250}
@@ -328,7 +329,7 @@ class LiveDataDemo extends React.Component<any, any> {
           series={
             <BarSeries
               colorScheme={chroma
-                .scale(["ACB7C9", "418AD7"])
+                .scale(['ACB7C9', '418AD7'])
                 .colors(data.length)}
             />
           }

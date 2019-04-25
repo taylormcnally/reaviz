@@ -20,8 +20,8 @@ export interface RadialScatterPointProps {
   color: any;
   className?: any;
   active?: boolean;
-  visible?: ((value, index) => boolean);
-  symbol: ((value) => ReactNode);
+  visible?: (value, index) => boolean;
+  symbol: (value) => ReactNode;
   size?: ((d) => number) | number;
   tooltip: JSX.Element | null;
   onClick: (event) => void;
@@ -33,7 +33,10 @@ interface RadialScatterPointState {
   hovered: boolean;
 }
 
-export class RadialScatterPoint extends Component<RadialScatterPointProps, RadialScatterPointState> {
+export class RadialScatterPoint extends Component<
+  RadialScatterPointProps,
+  RadialScatterPointState
+> {
   static defaultProps: Partial<RadialScatterPointProps> = {
     size: 3,
     color: 'rgba(174, 52, 255, .5)',
@@ -98,7 +101,17 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps, Radia
   }
 
   render() {
-    const { size, data, color, index, animated, symbol, active, tooltip, yScale } = this.props;
+    const {
+      size,
+      data,
+      color,
+      index,
+      animated,
+      symbol,
+      active,
+      tooltip,
+      yScale
+    } = this.props;
     const { hovered } = this.state;
 
     const fill = isFunction(color) ? color(data, index) : color;
@@ -126,12 +139,7 @@ export class RadialScatterPoint extends Component<RadialScatterPointProps, Radia
           })}
         >
           {symbol && symbol(data)}
-          {!symbol && (
-            <circle
-              r={sizeVal}
-              fill={fill}
-            />
-          )}
+          {!symbol && <circle r={sizeVal} fill={fill} />}
         </PosedGroupTransform>
         {tooltip && (
           <CloneElement<ChartTooltipProps>

@@ -1,17 +1,17 @@
-import React, { Fragment, Component } from "react";
-import { Bar, BarProps } from "./Bar";
+import React, { Fragment, Component } from 'react';
+import { Bar, BarProps } from './Bar';
 import {
   ChartInternalDataShape,
   isMultiSeries,
   ChartInternalNestedDataShape,
   ChartInternalShallowDataShape
-} from "../../common/data";
-import { PoseGroup } from "react-pose";
-import { PoseSVGGElement } from "../../common/utils/animations";
-import { sequentialScheme, getColor } from "../../common/utils/color";
-import { CloneElement } from "../../common/utils/children";
-import { ThresholdCountGenerator, ThresholdArrayGenerator } from "d3-array";
-import { CountableTimeInterval } from "d3-time";
+} from '../../common/data';
+import { PoseGroup } from 'react-pose';
+import { PoseSVGGElement } from '../../common/utils/animations';
+import { sequentialScheme, getColor } from '../../common/utils/color';
+import { CloneElement } from '../../common/utils/children';
+import { ThresholdCountGenerator, ThresholdArrayGenerator } from 'd3-array';
+import { CountableTimeInterval } from 'd3-time';
 
 export interface BarSeriesProps {
   data: ChartInternalDataShape[];
@@ -20,13 +20,13 @@ export interface BarSeriesProps {
   xScale1: any;
   yScale: any;
   bar: JSX.Element;
-  type: "standard" | "stacked" | "stackedNormalized" | "marimekko";
+  type: 'standard' | 'stacked' | 'stackedNormalized' | 'marimekko';
   colorScheme: ((data, index: number) => string) | string[];
   animated: boolean;
   padding: number;
   groupPadding: number;
   isCategorical: boolean;
-  layout: "horizontal" | "vertical";
+  layout: 'horizontal' | 'vertical';
   /**
    * Threshold for the binning of histogram charts.
    */
@@ -40,13 +40,13 @@ export interface BarSeriesProps {
 
 export class BarSeries extends Component<BarSeriesProps, {}> {
   static defaultProps: Partial<BarSeriesProps> = {
-    type: "standard",
+    type: 'standard',
     padding: 0.1,
     groupPadding: 16,
     animated: true,
     colorScheme: [...sequentialScheme],
     bar: <Bar />,
-    layout: "vertical"
+    layout: 'vertical'
   };
 
   /**
@@ -56,7 +56,7 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
     const { xScale, type } = this.props;
 
     let pos = 0;
-    if (type !== "marimekko") {
+    if (type !== 'marimekko') {
       pos = xScale(data.key);
     }
 

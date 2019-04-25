@@ -1,6 +1,10 @@
 import React from 'react';
 import { isEqual } from 'lodash-es';
-import { RadialScatterSeries, RadialScatterPoint, RadialScatterPointProps } from '../../RadialScatterPlot';
+import {
+  RadialScatterSeries,
+  RadialScatterPoint,
+  RadialScatterPointProps
+} from '../../RadialScatterPlot';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils';
 
@@ -15,7 +19,10 @@ export interface RadialPointSeriesProps {
   point: JSX.Element;
 }
 
-export class RadialPointSeries extends React.Component<RadialPointSeriesProps, {}> {
+export class RadialPointSeries extends React.Component<
+  RadialPointSeriesProps,
+  {}
+> {
   static defaultProps: Partial<RadialPointSeriesProps> = {
     show: 'hover',
     point: <RadialScatterPoint />

@@ -1,14 +1,14 @@
-import React, { Fragment, Component, createRef } from "react";
-import chroma from "chroma-js";
-import { ChartTooltip, ChartTooltipProps } from "../../common/TooltipArea";
-import { Gradient, GradientProps } from "../../common/Styles";
-import classNames from "classnames";
-import { ChartInternalShallowDataShape } from "../../common/data";
-import { RangeLinesProps } from "./RangeLines";
-import bind from "memoize-bind";
-import * as css from "./Bar.module.scss";
-import { PosedBar } from "./PosedBar";
-import { CloneElement } from "../../common/utils/children";
+import React, { Fragment, Component, createRef } from 'react';
+import chroma from 'chroma-js';
+import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { Gradient, GradientProps } from '../../common/Styles';
+import classNames from 'classnames';
+import { ChartInternalShallowDataShape } from '../../common/data';
+import { RangeLinesProps } from './RangeLines';
+import bind from 'memoize-bind';
+import * as css from './Bar.module.scss';
+import { PosedBar } from './PosedBar';
+import { CloneElement } from '../../common/utils/children';
 
 export interface BarProps {
   xScale: any;
@@ -32,7 +32,7 @@ export interface BarProps {
   onMouseLeave: (event) => void;
   rangeLines: JSX.Element | null;
   tooltip: JSX.Element | null;
-  layout: "vertical" | "horizontal";
+  layout: 'vertical' | 'horizontal';
 }
 
 interface BarState {
@@ -49,28 +49,28 @@ interface BarCoordinates {
 // Set padding modifier for the tooltips
 const modifiers = {
   offset: {
-    offset: "0, 5px"
+    offset: '0, 5px'
   }
 };
 
 export class Bar extends Component<BarProps, BarState> {
   static defaultProps: Partial<BarProps> = {
     rounded: true,
-    cursor: "auto",
+    cursor: 'auto',
     tooltip: <ChartTooltip />,
     rangeLines: null,
     gradient: <Gradient />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined,
-    layout: "vertical"
+    layout: 'vertical'
   };
 
   rect = createRef<SVGGElement>();
   state: BarState = {};
 
-  getXAttribute(): "x" | "x0" {
-    return this.props.isCategorical ? "x" : "x0";
+  getXAttribute(): 'x' | 'x0' {
+    return this.props.isCategorical ? 'x' : 'x0';
   }
 
   getExit({ x, width }: BarCoordinates) {
@@ -97,7 +97,7 @@ export class Bar extends Component<BarProps, BarState> {
         }
       } else {
         if (sizeOverride) {
-          throw new Error("Not a valid option for this scale type");
+          throw new Error('Not a valid option for this scale type');
         }
 
         offset = scale(v0);
@@ -111,7 +111,7 @@ export class Bar extends Component<BarProps, BarState> {
       }
     } else {
       if (sizeOverride) {
-        throw new Error("Not a valid option for this scale type");
+        throw new Error('Not a valid option for this scale type');
       }
 
       const c0 = scale(v0);
@@ -134,7 +134,7 @@ export class Bar extends Component<BarProps, BarState> {
     const { yScale, isCategorical, data, width, padding, layout } = this.props;
     const xScale = this.props.xScale1 || this.props.xScale;
 
-    if (layout === "vertical") {
+    if (layout === 'vertical') {
       const xCoords = this.getKeyCoords(
         data.x,
         data.x0,

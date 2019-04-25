@@ -1,10 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import bind from 'memoize-bind';
-import {
-  ConnectedOverlay,
-  TriggerTypes
-} from 'rdk';
+import { ConnectedOverlay, TriggerTypes } from 'rdk';
 import { Placement, ReferenceObject } from 'rdk';
 import * as css from './Tooltip.module.scss';
 import { isFunction } from 'lodash-es';

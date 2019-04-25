@@ -55,12 +55,7 @@ export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
     const data = this.getPaths();
 
     return (
-      <PieArc
-        {...data}
-        animated={animated}
-        color={color}
-        disabled={disabled}
-      />
+      <PieArc {...data} animated={animated} color={color} disabled={disabled} />
     );
   }
 }

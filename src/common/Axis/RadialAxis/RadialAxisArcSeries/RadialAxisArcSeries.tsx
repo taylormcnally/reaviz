@@ -17,12 +17,7 @@ export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
   };
 
   render() {
-    const {
-      count,
-      innerRadius,
-      outerRadius,
-      arc
-    } = this.props;
+    const { count, innerRadius, outerRadius, arc } = this.props;
 
     const scale = scaleLinear()
       .domain([0, count])
@@ -32,7 +27,7 @@ export class RadialAxisArcSeries extends Component<RadialAxisArcSeriesProps> {
 
     return (
       <Fragment>
-        {arcs.map((d) => (
+        {arcs.map(d => (
           <CloneElement<RadialAxisArcProps>
             element={arc}
             key={d}

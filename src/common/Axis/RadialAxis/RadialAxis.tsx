@@ -1,6 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import { RadialAxisTickSeries, RadialAxisTickSeriesProps } from './RadialAxisTickSeries';
-import { RadialAxisArcSeries, RadialAxisArcSeriesProps } from './RadialAxisArcSeries';
+import {
+  RadialAxisTickSeries,
+  RadialAxisTickSeriesProps
+} from './RadialAxisTickSeries';
+import {
+  RadialAxisArcSeries,
+  RadialAxisArcSeriesProps
+} from './RadialAxisArcSeries';
 import { CloneElement } from '../../utils/children';
 
 export interface RadialAxisProps {

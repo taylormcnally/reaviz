@@ -21,7 +21,15 @@ export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
   };
 
   render() {
-    const { scale, count, outerRadius, tick, tickValues, innerRadius, interval } = this.props;
+    const {
+      scale,
+      count,
+      outerRadius,
+      tick,
+      tickValues,
+      innerRadius,
+      interval
+    } = this.props;
     const ticks = getTicks(scale, tickValues, count, interval);
 
     return (

@@ -1,10 +1,18 @@
 import React, { Component, Fragment } from 'react';
-import { ChartShallowDataShape, buildChartData, ChartInternalShallowDataShape } from '../common/data';
+import {
+  ChartShallowDataShape,
+  buildChartData,
+  ChartInternalShallowDataShape
+} from '../common/data';
 import { scaleBand } from 'd3-scale';
 import { getYDomain, getGroupDomain } from '../common/utils/domains';
 import { RadialBarSeries, RadialBarSeriesProps } from './RadialBarSeries';
 import { memoize } from 'lodash-es';
-import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/containers';
+import {
+  ChartProps,
+  ChartContainer,
+  ChartContainerChildProps
+} from '../common/containers';
 import { CloneElement } from '../common/utils/children';
 import { RadialAxis, RadialAxisProps } from '../common/Axis/RadialAxis';
 import { getRadialYScale } from '../common/scales';
@@ -18,35 +26,48 @@ export interface RadialBarChartProps extends ChartProps {
 
 export class RadialBarChart extends Component<RadialBarChartProps> {
   static defaultProps: Partial<RadialBarChartProps> = {
-    innerRadius: .1,
+    innerRadius: 0.1,
     margins: 75,
     axis: <RadialAxis />,
     series: <RadialBarSeries />
   };
 
-  getScales = memoize((preData: ChartShallowDataShape[], innerRadius: number, outerRadius: number) => {
-    const data = buildChartData(preData) as ChartInternalShallowDataShape[];
-    const xDomain = getGroupDomain(data as ChartInternalShallowDataShape[], 'x');
-    const yDomain = getYDomain({ data, scaled: false });
+  getScales = memoize(
+    (
+      preData: ChartShallowDataShape[],
+      innerRadius: number,
+      outerRadius: number
+    ) => {
+      const data = buildChartData(preData) as ChartInternalShallowDataShape[];
+      const xDomain = getGroupDomain(
+        data as ChartInternalShallowDataShape[],
+        'x'
+      );
+      const yDomain = getYDomain({ data, scaled: false });
 
-    const xScale = scaleBand()
-      .range([0, 2 * Math.PI])
-      .domain(xDomain as any[]);
+      const xScale = scaleBand()
+        .range([0, 2 * Math.PI])
+        .domain(xDomain as any[]);
 
-    const yScale = getRadialYScale(innerRadius, outerRadius, yDomain);
+      const yScale = getRadialYScale(innerRadius, outerRadius, yDomain);
 
-    return {
-      xScale,
-      yScale,
-      data
-    };
-  });
+      return {
+        xScale,
+        yScale,
+        data
+      };
+    }
+  );
 
- renderChart(containerProps: ChartContainerChildProps) {
+  renderChart(containerProps: ChartContainerChildProps) {
     const { chartWidth, chartHeight, id } = containerProps;
     const { innerRadius, series, axis } = this.props;
     const outerRadius = Math.min(chartWidth, chartHeight) / 2;
-    const { yScale, xScale, data } = this.getScales(this.props.data, innerRadius, outerRadius);
+    const { yScale, xScale, data } = this.getScales(
+      this.props.data,
+      innerRadius,
+      outerRadius
+    );
 
     return (
       <Fragment>
@@ -69,7 +90,7 @@ export class RadialBarChart extends Component<RadialBarChartProps> {
         />
       </Fragment>
     );
- }
+  }
 
   render() {
     const { id, width, height, margins, className } = this.props;

@@ -11,8 +11,8 @@ export interface GradientProps {
 export class Gradient extends Component<GradientProps> {
   static defaultProps: Partial<GradientProps> = {
     stops: [
-      <GradientStop offset="0%" stopOpacity={0.3} />,
-      <GradientStop offset="80%" stopOpacity={1} />
+      <GradientStop offset="0%" stopOpacity={0.3} key="start" />,
+      <GradientStop offset="80%" stopOpacity={1} key="stop" />
     ]
   };
 
@@ -39,4 +39,3 @@ export class Gradient extends Component<GradientProps> {
     );
   }
 }
-

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { ChartProps, ChartContainer, ChartContainerChildProps } from '../common/containers';
+import {
+  ChartProps,
+  ChartContainer,
+  ChartContainerChildProps
+} from '../common/containers';
 import { ChartShallowDataShape } from '../common/data';
 import { scaleLinear } from 'd3-scale';
 import { CloneElement } from '../common/utils/children';
@@ -25,7 +29,14 @@ export class RadialGauge extends Component<RadialGaugeProps> {
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartWidth, chartHeight } = containerProps;
-    const { startAngle, endAngle, minValue, maxValue, data, series } = this.props;
+    const {
+      startAngle,
+      endAngle,
+      minValue,
+      maxValue,
+      data,
+      series
+    } = this.props;
 
     const scale = scaleLinear()
       .domain([minValue, maxValue])

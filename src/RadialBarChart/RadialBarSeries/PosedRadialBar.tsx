@@ -1,9 +1,5 @@
 import posed from 'react-pose';
-import {
-  transition,
-  VELOCITY,
-  DAMPING
-} from '../../common/utils/animations';
+import { transition, VELOCITY, DAMPING } from '../../common/utils/animations';
 import { spring } from 'popmotion';
 import { interpolate } from 'd3-interpolate';
 
@@ -27,7 +23,8 @@ const newTransition = {
 export const PosedRadialBar = posed.path({
   enter: {
     d: ({ enterProps }) => enterProps,
-    delay: ({ animated, index, barCount }) => animated ? (index / barCount) * 500 : 0,
+    delay: ({ animated, index, barCount }) =>
+      animated ? (index / barCount) * 500 : 0,
     transition: ({ animated }) => (animated ? newTransition : { duration: 0 })
   },
   exit: {

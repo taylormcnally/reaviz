@@ -99,7 +99,14 @@ export class TooltipArea extends React.Component<
   }
 
   onMouseMove(event: React.MouseEvent) {
-    const { xScale, yScale, onValueEnter, height, width, isRadial } = this.props;
+    const {
+      xScale,
+      yScale,
+      onValueEnter,
+      height,
+      width,
+      isRadial
+    } = this.props;
     let placement = this.props.placement;
     const { value, data } = this.state;
 
@@ -136,10 +143,10 @@ export class TooltipArea extends React.Component<
       let offsetY = 0;
 
       if (isRadial) {
-      // If its radial, we need to convert the coords to radial format
-      const outerRadius = Math.min(width, height) / 2;
-       offsetX = pointY * Math.cos(pointX - Math.PI / 2) + outerRadius;
-       offsetY = pointY * Math.sin(pointX - Math.PI / 2) + outerRadius;
+        // If its radial, we need to convert the coords to radial format
+        const outerRadius = Math.min(width, height) / 2;
+        offsetX = pointY * Math.cos(pointX - Math.PI / 2) + outerRadius;
+        offsetY = pointY * Math.sin(pointX - Math.PI / 2) + outerRadius;
       } else {
         offsetX = pointX;
         offsetY = pointY;
@@ -263,7 +270,7 @@ export class TooltipArea extends React.Component<
         cursor="auto"
         onMouseMove={bind(this.onMouseMove, this)}
       />
-    )
+    );
   }
 
   render() {
