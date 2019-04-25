@@ -28,7 +28,8 @@ import {
   LinearXAxis,
   LinearXAxisTickSeries,
   LinearYAxis,
-  LinearYAxisTickSeries
+  LinearYAxisTickSeries,
+  LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
@@ -260,7 +261,44 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
     );
   },
   { options: { showAddonPanel: true } }
-);
+)
+.add('Large Dataset', () => (
+  <BarChart
+    width={350}
+    height={350}
+    layout="horizontal"
+    data={largeCategoryData}
+    xAxis={<LinearXAxis type="value" />}
+    yAxis={
+      <LinearYAxis
+        type="category"
+        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+      />
+    }
+    series={
+      <BarSeries
+        colorScheme={chroma
+          .scale(['ACB7C9', '418AD7'])
+          .colors(largeCategoryData.length)}
+      />
+    }
+  />
+))
+.add('Autosize', () => (
+  <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
+    <BarChart
+      data={categoryData}
+      layout="horizontal"
+      xAxis={<LinearXAxis type="value" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+    />
+  </div>
+))
 
 storiesOf('Charts/Bar/Gridlines', module)
   .add('All Axes', () => (

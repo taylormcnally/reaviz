@@ -264,6 +264,7 @@ export class Bar extends Component<BarProps, BarState> {
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
         onClick={bind(this.onMouseClick, this)}
+        layout={layout}
         className={classNames({
           [css.rounded]: rounded,
           [css.vertical]: layout === 'vertical',

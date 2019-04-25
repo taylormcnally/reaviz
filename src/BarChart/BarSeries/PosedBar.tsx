@@ -3,8 +3,17 @@ import { transition } from '../../common/utils/animations';
 
 export const PosedBar = posed.rect({
   enter: {
-    delay: ({ animated, index, barCount }) =>
-      animated ? (index / barCount) * 500 : 0,
+    delay: ({ animated, index, barCount, layout }) => {
+      if (animated) {
+        if (layout === 'vertical') {
+          return (index / barCount) * 500;
+        } else {
+          return ((barCount - index) / barCount) * 500;
+        }
+      }
+
+      return 0;
+    },
     transition: ({ animated }) => (animated ? transition : { duration: 0 }),
     x: ({ enterProps }) => enterProps.x,
     y: ({ enterProps }) => enterProps.y,
