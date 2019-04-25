@@ -1,14 +1,14 @@
-import React, { Fragment, Component, createRef } from 'react';
-import chroma from 'chroma-js';
-import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
-import { Gradient, GradientProps } from '../../common/Styles';
-import classNames from 'classnames';
-import { ChartInternalShallowDataShape } from '../../common/data';
-import { RangeLinesProps } from './RangeLines';
-import bind from 'memoize-bind';
-import * as css from './Bar.module.scss';
-import { PosedBar } from './PosedBar';
-import { CloneElement } from '../../common/utils/children';
+import React, { Fragment, Component, createRef } from "react";
+import chroma from "chroma-js";
+import { ChartTooltip, ChartTooltipProps } from "../../common/TooltipArea";
+import { Gradient, GradientProps } from "../../common/Styles";
+import classNames from "classnames";
+import { ChartInternalShallowDataShape } from "../../common/data";
+import { RangeLinesProps } from "./RangeLines";
+import bind from "memoize-bind";
+import * as css from "./Bar.module.scss";
+import { PosedBar } from "./PosedBar";
+import { CloneElement } from "../../common/utils/children";
 
 export interface BarProps {
   xScale: any;
@@ -32,6 +32,7 @@ export interface BarProps {
   onMouseLeave: (event) => void;
   rangeLines: JSX.Element | null;
   tooltip: JSX.Element | null;
+  layout: "vertical" | "horizontal";
 }
 
 interface BarState {
@@ -48,27 +49,28 @@ interface BarCoordinates {
 // Set padding modifier for the tooltips
 const modifiers = {
   offset: {
-    offset: '0, 5px'
+    offset: "0, 5px"
   }
 };
 
 export class Bar extends Component<BarProps, BarState> {
   static defaultProps: Partial<BarProps> = {
     rounded: true,
-    cursor: 'auto',
+    cursor: "auto",
     tooltip: <ChartTooltip />,
     rangeLines: null,
     gradient: <Gradient />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
-    onMouseLeave: () => undefined
+    onMouseLeave: () => undefined,
+    layout: "vertical"
   };
 
   rect = createRef<SVGGElement>();
   state: BarState = {};
 
-  getXAttribute(): 'x' | 'x0' {
-    return this.props.isCategorical ? 'x' : 'x0';
+  getXAttribute(): "x" | "x0" {
+    return this.props.isCategorical ? "x" : "x0";
   }
 
   getExit({ x, width }: BarCoordinates) {
@@ -82,71 +84,106 @@ export class Bar extends Component<BarProps, BarState> {
     };
   }
 
-  getCoords(): BarCoordinates {
-    const { yScale, isCategorical, data, width, padding } = this.props;
-    const xScale = this.props.xScale1 || this.props.xScale;
-
-    let x: number;
-    let barWidth: number;
-    const y0 = yScale(data.y0);
-    const y1 = yScale(data.y1);
-    const barHeight = y0 - y1;
-
+  getKeyCoords(v, v0, v1, scale, sizeOverride, isCategorical, padding) {
+    let offset;
+    let size;
     if (isCategorical) {
-      if (xScale.bandwidth) {
-        x = xScale(data.x);
-        barWidth = xScale.bandwidth();
-        if (width) {
-          x = x + barWidth / 2 - width / 2;
-          barWidth = width;
+      if (scale.bandwidth) {
+        offset = scale(v);
+        size = scale.bandwidth();
+        if (sizeOverride) {
+          offset = offset + size / 2 - sizeOverride / 2;
+          size = sizeOverride;
         }
       } else {
-        if (width) {
-          throw new Error('Not a valid option for this scale type');
+        if (sizeOverride) {
+          throw new Error("Not a valid option for this scale type");
         }
 
-        x = xScale(data.x0);
-        barWidth = xScale((data.x1 as any) - (data.x0 as any));
+        offset = scale(v0);
+        size = scale((v1 as any) - (v0 as any));
 
         if (padding) {
-          const calc = this.calculateLinearScalePadding(x, barWidth);
-          x = calc.x;
-          barWidth = calc.width;
+          const calc = this.calculateLinearScalePadding(scale, offset, size);
+          offset = calc.offset;
+          size = calc.size;
         }
       }
     } else {
-      if (width) {
-        throw new Error('Not a valid option for this scale type');
+      if (sizeOverride) {
+        throw new Error("Not a valid option for this scale type");
       }
 
-      const x0 = xScale(data.x0);
-      const x1 = xScale(data.x1);
-      const delta = x1 - x0;
-      x = x0;
-      barWidth = Math.max(delta - 1, 0);
+      const c0 = scale(v0);
+      const c1 = scale(v1);
+      const delta = c1 - c0;
+      offset = c0;
+      size = Math.max(delta - 1, 0);
     }
+    return { offset, size };
+  }
 
-    return {
-      height: barHeight,
-      width: barWidth,
-      x,
-      y: y1
-    };
+  getValueCoords(v0, v1, scale) {
+    const c0 = scale(v0);
+    const c1 = scale(v1);
+    const size = Math.abs(c0 - c1);
+    return { offset: Math.min(c0, c1), size };
+  }
+
+  getCoords(): BarCoordinates {
+    const { yScale, isCategorical, data, width, padding, layout } = this.props;
+    const xScale = this.props.xScale1 || this.props.xScale;
+
+    if (layout === "vertical") {
+      const xCoords = this.getKeyCoords(
+        data.x,
+        data.x0,
+        data.x1,
+        xScale,
+        width,
+        isCategorical,
+        padding
+      );
+      const yCoords = this.getValueCoords(data.y0, data.y1, yScale);
+      return {
+        x: xCoords.offset,
+        width: xCoords.size,
+        y: yCoords.offset,
+        height: yCoords.size
+      };
+    } else {
+      const yCoords = this.getKeyCoords(
+        data.y,
+        data.y0,
+        data.y1,
+        yScale,
+        width,
+        isCategorical,
+        padding
+      );
+      const xCoords = this.getValueCoords(data.x0, data.x1, xScale);
+      return {
+        x: xCoords.offset,
+        width: xCoords.size,
+        y: yCoords.offset,
+        height: yCoords.size
+      };
+    }
   }
 
   /**
    * This function calculates the padding on a linear scale used by the marimekko chart.
    */
-  calculateLinearScalePadding(x: number, width: number) {
-    const { xScale, barCount, groupIndex, padding } = this.props;
+  calculateLinearScalePadding(scale, offset: number, size: number) {
+    const { barCount, groupIndex, padding } = this.props;
 
-    const totalWidth = xScale.range()[1];
-    const widthMinusPadding = totalWidth - padding * (barCount - 1);
-    const xMultiplier = widthMinusPadding / totalWidth;
-    x = x * xMultiplier + groupIndex! * padding;
-    width = width * xMultiplier;
+    const totalSize = scale.range()[1];
+    const sizeMinusPadding = totalSize - padding * (barCount - 1);
+    const multiplier = sizeMinusPadding / totalSize;
+    offset = offset * multiplier + groupIndex! * padding;
+    size = size * multiplier;
 
-    return { width, x };
+    return { size, offset };
   }
 
   onMouseEnter(event: MouseEvent) {
