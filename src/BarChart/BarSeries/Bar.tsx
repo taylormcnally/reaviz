@@ -87,10 +87,12 @@ export class Bar extends Component<BarProps, BarState> {
   getKeyCoords(v, v0, v1, scale, sizeOverride, isCategorical, padding) {
     let offset;
     let size;
+
     if (isCategorical) {
       if (scale.bandwidth) {
         offset = scale(v);
         size = scale.bandwidth();
+
         if (sizeOverride) {
           offset = offset + size / 2 - sizeOverride / 2;
           size = sizeOverride;
@@ -120,6 +122,7 @@ export class Bar extends Component<BarProps, BarState> {
       offset = c0;
       size = Math.max(delta - 1, 0);
     }
+
     return { offset, size };
   }
 
@@ -145,6 +148,7 @@ export class Bar extends Component<BarProps, BarState> {
         padding
       );
       const yCoords = this.getValueCoords(data.y0, data.y1, yScale);
+
       return {
         x: xCoords.offset,
         width: xCoords.size,
@@ -162,6 +166,7 @@ export class Bar extends Component<BarProps, BarState> {
         padding
       );
       const xCoords = this.getValueCoords(data.x0, data.x1, xScale);
+
       return {
         x: xCoords.offset,
         width: xCoords.size,

@@ -66,6 +66,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   getScalesAndData(chartHeight: number, chartWidth: number) {
     const { yAxis, xAxis, series, layout } = this.props;
     const seriesType = series.props.type;
+    const isVertical = layout === 'vertical';
 
     let data;
     if (seriesType === 'stacked' || seriesType === 'stackedNormalized') {
@@ -79,7 +80,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       data = buildChartData(
         this.props.data,
         false,
-        layout === 'vertical' ? 'horizontal' : 'vertical'
+        isVertical ? 'vertical' : 'horizontal'
       );
     }
 
@@ -119,14 +120,6 @@ export class BarChart extends React.Component<BarChartProps, {}> {
         padding: series.props.padding,
         domain: xAxis.props.domain
       });
-
-      // if (xAxisType === "time" || xAxisType === "value") {
-      //   data = buildBins(
-      //     xScale,
-      //     series.props.binThreshold || xAxis.props.interval,
-      //     data
-      //   );
-      // }
     }
 
     const yScale = getYScale({
@@ -136,6 +129,17 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       data,
       domain: yAxis.props.domain
     });
+
+    /*
+    const keyAxis = layout === 'vertical' ? xAxis : yAxis;
+    if (xAxisType === "time" || xAxisType === "value") {
+      data = buildBins(
+        xScale,
+        series.props.binThreshold || keyAxis.props.interval,
+        data
+      );
+    }
+    */
 
     return { xScale, xScale1, yScale, data };
   }
@@ -148,7 +152,8 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       chartWidth
     );
 
-    const keyAxis = layout === 'vertical' ? xAxis : yAxis;
+    const isVertical = layout === 'vertical';
+    const keyAxis = isVertical ? xAxis : yAxis;
     const isCategorical = keyAxis.props.type === 'category';
 
     return (
@@ -169,14 +174,14 @@ export class BarChart extends React.Component<BarChartProps, {}> {
           height={chartHeight}
           width={chartWidth}
           scale={xScale}
-          onDimensionsChange={bind(updateAxes, this, 'horizontal')}
+          onDimensionsChange={bind(updateAxes, this, isVertical ? 'horizontal' : 'vertical')}
         />
         <CloneElement<LinearAxisProps>
           element={yAxis}
           height={chartHeight}
           width={chartWidth}
           scale={yScale}
-          onDimensionsChange={bind(updateAxes, this, 'vertical')}
+          onDimensionsChange={bind(updateAxes, this, isVertical ? 'vertical' : 'horizontal')}
         />
         {containerProps.chartSized && (
           <CloneElement<ChartBrushProps>
