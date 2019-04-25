@@ -132,11 +132,12 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     });
 
     // If the key axis is a time/number we should bin it...
-    const keyAxis = layout === 'vertical' ? xAxis : yAxis;
+    const keyAxis = isVertical ? xAxis : yAxis;
+    const keyScale = isVertical ? xScale : yScale;
     const keyAxisType = keyAxis.props.type;
     if (keyAxisType === 'time' || keyAxisType === 'value') {
       data = buildBins(
-        xScale,
+        keyScale,
         series.props.binThreshold || keyAxis.props.interval,
         data
       );

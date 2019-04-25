@@ -53,14 +53,21 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
    * Get the translation for the bar group.
    */
   getTransform(data: ChartInternalNestedDataShape) {
-    const { xScale, type } = this.props;
+    const { xScale, type, layout } = this.props;
 
-    let pos = 0;
+    let xPos = 0;
+    let yPos = 0;
     if (type !== 'marimekko') {
-      pos = xScale(data.key);
+      const val = xScale(data.key);
+
+      if (layout === 'vertical') {
+        xPos = val;
+      } else {
+        yPos = val;
+      }
     }
 
-    return `translate(${pos}, 0)`;
+    return `translate(${xPos}, ${yPos})`;
   }
 
   getColor(point, index) {

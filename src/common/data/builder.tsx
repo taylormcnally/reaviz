@@ -109,10 +109,10 @@ export function buildNestedChartData(
         meta: point.meta,
         id: point.id,
         x,
-        x0: x,
+        x0: isVertical ? x : 0,
         x1: x,
         y,
-        y0: 0,
+        y0: isVertical ? 0 : y,
         y1: y
       });
     }
