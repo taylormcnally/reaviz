@@ -73,18 +73,24 @@ export class Bar extends Component<BarProps, BarState> {
     return this.props.isCategorical ? 'x' : 'x0';
   }
 
-  getExit({ x, width }: BarCoordinates) {
-    const { yScale } = this.props;
+  getExit({ x, y, width, height }: BarCoordinates) {
+    const { yScale, layout, xScale } = this.props;
+
+    const isVertical = layout === 'vertical';
+    const newX = isVertical ? x : Math.min(...xScale.range());
+    const newY = isVertical ? Math.max(...yScale.range()) : y;
+    const newHeight = isVertical ? 0 : height;
+    const newWidth = isVertical ? width : 0;
 
     return {
-      x,
-      y: Math.max(...yScale.range()),
-      height: 0,
-      width
+      x: newX,
+      y: newY,
+      height: newHeight,
+      width: newWidth
     };
   }
 
-  getKeyCoords(v, v0, v1, scale, sizeOverride, isCategorical, padding) {
+  getKeyCoords(v, v0, v1, scale, sizeOverride: number, isCategorical: boolean, padding: number) {
     let offset;
     let size;
 
@@ -130,6 +136,7 @@ export class Bar extends Component<BarProps, BarState> {
     const c0 = scale(v0);
     const c1 = scale(v1);
     const size = Math.abs(c0 - c1);
+
     return { offset: Math.min(c0, c1), size };
   }
 
@@ -279,13 +286,15 @@ export class Bar extends Component<BarProps, BarState> {
       tooltip,
       groupIndex,
       rangeLines,
-      animated
+      animated,
+      layout
     } = this.props;
     const { active } = this.state;
     const stroke = color(data, barIndex);
     const coords = this.getCoords();
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
     const index = groupIndex !== undefined ? groupIndex : barIndex;
+    const placement = layout === 'vertical' ? 'top' : 'right';
 
     return (
       <Fragment>
@@ -310,6 +319,7 @@ export class Bar extends Component<BarProps, BarState> {
             reference={this.rect}
             color={color}
             value={this.getTooltipData()}
+            placement={placement}
             metadata={data}
           />
         )}
