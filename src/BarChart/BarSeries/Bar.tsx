@@ -140,11 +140,14 @@ export class Bar extends Component<BarProps, BarState> {
     return { offset: Math.min(c0, c1), size };
   }
 
-  getCoords(): BarCoordinates {
-    const { isCategorical, data, width, padding, layout, xScale1 } = this.props;
-    const isVertical = layout === 'vertical';
-    // const xScale = this.props.xScale1 || this.props.xScale;
+  getIsVertical() {
+    return this.props.layout === 'vertical';
+  }
 
+  getCoords(): BarCoordinates {
+    const { isCategorical, data, width, padding, xScale1 } = this.props;
+
+    const isVertical = this.getIsVertical();
     let yScale = this.props.yScale;
     let xScale = this.props.xScale;
 
@@ -265,6 +268,7 @@ export class Bar extends Component<BarProps, BarState> {
     const fill = this.getFill(currentColorShade);
     const enterProps = coords;
     const exitProps = this.getExit(coords);
+    const isVertical = this.getIsVertical();
 
     return (
       <PosedBar
@@ -279,8 +283,8 @@ export class Bar extends Component<BarProps, BarState> {
         layout={layout}
         className={classNames({
           [css.rounded]: rounded,
-          [css.vertical]: layout === 'vertical',
-          [css.horizontal]: layout === 'horizontal'
+          [css.vertical]: isVertical,
+          [css.horizontal]: !isVertical
         })}
         enterProps={enterProps}
         exitProps={exitProps}
@@ -301,6 +305,7 @@ export class Bar extends Component<BarProps, BarState> {
       yScale,
       barCount,
       tooltip,
+      xScale,
       groupIndex,
       rangeLines,
       animated,
@@ -312,6 +317,8 @@ export class Bar extends Component<BarProps, BarState> {
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
     const index = groupIndex !== undefined ? groupIndex : barIndex;
     const placement = layout === 'vertical' ? 'top' : 'right';
+    const isVertical = this.getIsVertical();
+    const scale = isVertical ? yScale : xScale;
 
     return (
       <Fragment>
@@ -322,10 +329,11 @@ export class Bar extends Component<BarProps, BarState> {
             {...coords}
             index={index}
             data={data}
-            yScale={yScale}
+            scale={scale}
             color={currentColorShade}
             barCount={barCount}
             animated={animated}
+            layout={layout}
           />
         )}
         {tooltip && !tooltip.props.disabled && (
