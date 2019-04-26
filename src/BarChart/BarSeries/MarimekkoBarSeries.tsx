@@ -18,8 +18,8 @@ export class MarimekkoBarSeries extends Component<BarSeriesProps, {}> {
         gradient={
           <Gradient
             stops={[
-              <GradientStop offset="5%" stopOpacity={0.1} />,
-              <GradientStop offset="90%" stopOpacity={0.7} />
+              <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
+              <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
             ]}
           />
         }

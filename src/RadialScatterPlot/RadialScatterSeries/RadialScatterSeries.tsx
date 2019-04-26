@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
-import { RadialScatterPoint, RadialScatterPointProps } from './RadialScatterPoint';
+import {
+  RadialScatterPoint,
+  RadialScatterPointProps
+} from './RadialScatterPoint';
 import { CloneElement } from '../../common/utils/children';
 import { PoseSVGGElement } from '../../common/utils/animations';
 import { PoseGroup } from 'react-pose';
@@ -20,7 +23,10 @@ interface RadialScatterSeriesState {
   activeIds: string[];
 }
 
-export class RadialScatterSeries extends Component<RadialScatterSeriesProps, RadialScatterSeriesState> {
+export class RadialScatterSeries extends Component<
+  RadialScatterSeriesProps,
+  RadialScatterSeriesState
+> {
   static defaultProps: Partial<RadialScatterSeriesProps> = {
     point: <RadialScatterPoint />,
     animated: true

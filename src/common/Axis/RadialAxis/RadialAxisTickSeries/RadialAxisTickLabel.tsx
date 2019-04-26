@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { formatValue } from '../../../utils/formatting';
 
-const rad2deg = (angle: number) => angle * 180 / Math.PI;
+const rad2deg = (angle: number) => (angle * 180) / Math.PI;
 
 export interface RadialAxisTickLabelProps {
   data: any;
@@ -27,12 +27,7 @@ export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
   };
 
   getPosition() {
-    const {
-      point,
-      autoRotate,
-      rotation,
-      padding
-    } = this.props;
+    const { point, autoRotate, rotation, padding } = this.props;
 
     let textAnchor;
     let transform;
@@ -42,7 +37,10 @@ export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
       const r = point < 2 * Math.PI;
 
       // TODO: This centers the text, determine better way later
-      if ((rotation >= 85 && rotation <= 95) || (rotation <= -85 && rotation >= -95)) {
+      if (
+        (rotation >= 85 && rotation <= 95) ||
+        (rotation <= -85 && rotation >= -95)
+      ) {
         textAnchor = 'middle';
       } else if (l && r) {
         textAnchor = 'end';
@@ -50,7 +48,7 @@ export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
         textAnchor = 'start';
       }
 
-      transform = `rotate(${(90 - rad2deg(point))}, ${padding}, 0)`;
+      transform = `rotate(${90 - rad2deg(point)}, ${padding}, 0)`;
     } else {
       const shouldRotate = rotation > 100 && rotation;
       const rotate = shouldRotate ? 180 : 0;

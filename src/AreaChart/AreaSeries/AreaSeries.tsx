@@ -137,7 +137,16 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
   }
 
   renderSymbols(data: ChartInternalShallowDataShape[], index = 0) {
-    const { xScale, yScale, animated, area, symbols, id, height, width } = this.props;
+    const {
+      xScale,
+      yScale,
+      animated,
+      area,
+      symbols,
+      id,
+      height,
+      width
+    } = this.props;
     const { activeValues } = this.state;
 
     // Animations are only valid for Area

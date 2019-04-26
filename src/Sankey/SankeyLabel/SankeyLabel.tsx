@@ -22,7 +22,7 @@ export class SankeyLabel extends Component<SankeyLabelProps> {
     active: false,
     fill: '#fff',
     location: 'outside', // TODO: implement for inside
-    opacity: active => active ? 1 : 0.5,
+    opacity: active => (active ? 1 : 0.5),
     visible: true
   };
 
@@ -49,7 +49,8 @@ export class SankeyLabel extends Component<SankeyLabelProps> {
     const textAnchor = showRightSide ? 'start' : 'end';
 
     return (
-      visible && node && (
+      visible &&
+      node && (
         <text
           className={classNames(css.label, className)}
           x={showRightSide ? nodePositions.x1 + 6 : nodePositions.x0 - 6}

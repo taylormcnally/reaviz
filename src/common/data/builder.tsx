@@ -67,10 +67,11 @@ export function buildChartData(
 export function buildNestedChartData(
   series: ChartNestedDataShape[],
   sort = false,
-  direction = 'horizontal'
+  direction = 'vertical'
 ): ChartInternalNestedDataShape[] {
   let result: ChartInternalNestedDataShape[] = [];
   const maxBigInteger = getMaxBigInteger(series);
+  const isVertical = direction === 'vertical';
 
   for (const point of series) {
     for (const nestedPoint of point.data) {
@@ -93,12 +94,12 @@ export function buildNestedChartData(
       }
 
       const x = normalizeValue(
-        direction === 'horizontal' ? nestedPoint.key : nestedPoint.data,
+        isVertical ? nestedPoint.key : nestedPoint.data,
         maxBigInteger
       );
 
       const y = normalizeValue(
-        direction === 'horizontal' ? nestedPoint.data : nestedPoint.key,
+        isVertical ? nestedPoint.data : nestedPoint.key,
         maxBigInteger
       );
 
@@ -108,10 +109,10 @@ export function buildNestedChartData(
         meta: point.meta,
         id: point.id,
         x,
-        x0: x,
+        x0: isVertical ? x : 0,
         x1: x,
         y,
-        y0: 0,
+        y0: isVertical ? 0 : y,
         y1: y
       });
     }
@@ -134,19 +135,20 @@ export function buildNestedChartData(
  */
 export function buildShallowChartData(
   series: ChartShallowDataShape[],
-  direction = 'horizontal'
+  direction = 'vertical'
 ): ChartInternalShallowDataShape[] {
   const result: ChartInternalShallowDataShape[] = [];
   const maxBigInteger = getMaxBigInteger(series);
+  const isVertical = direction === 'vertical';
 
   for (const point of series) {
     const x = normalizeValue(
-      direction === 'horizontal' ? point.key : point.data,
+      isVertical ? point.key : point.data,
       maxBigInteger
     );
 
     const y = normalizeValue(
-      direction === 'horizontal' ? point.data : point.key,
+      isVertical ? point.data : point.key,
       maxBigInteger
     );
 
@@ -156,10 +158,10 @@ export function buildShallowChartData(
       meta: point.meta,
       id: point.id,
       x,
-      x0: x,
+      x0: isVertical ? x : 0,
       x1: x,
       y,
-      y0: 0,
+      y0: isVertical ? 0 : y,
       y1: y
     });
   }

@@ -17,19 +17,21 @@ export class StackedAreaSeries extends Component<AreaSeriesProps, {}> {
       <AreaSeries
         {...rest}
         type="stacked"
-        symbols={symbols && (
-          <CloneElement<PointSeriesProps>
-            element={symbols}
-            {...symbols.props}
-            point={
-              <CloneElement<ScatterPointProps>
-                element={symbols.props.point}
-                {...symbols.props.point.props}
-                tooltip={null}
-              />
-            }
-          />
-        )}
+        symbols={
+          symbols && (
+            <CloneElement<PointSeriesProps>
+              element={symbols}
+              {...symbols.props}
+              point={
+                <CloneElement<ScatterPointProps>
+                  element={symbols.props.point}
+                  {...symbols.props.point.props}
+                  tooltip={null}
+                />
+              }
+            />
+          )
+        }
       />
     );
   }

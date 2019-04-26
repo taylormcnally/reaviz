@@ -22,31 +22,28 @@ import {
 import { symbolStar, symbol } from 'd3-shape';
 
 storiesOf('Charts/Scatter Plot', module)
-  .add('Simple', () => {
-    const height = number('Height', 400);
-    const width = number('Width', 750);
-    const size = number('Size', 4);
-    const fill = color('Color', '#418AD7');
-    const data = object('Data', medSignalChartData);
+  .add(
+    'Simple',
+    () => {
+      const height = number('Height', 400);
+      const width = number('Width', 750);
+      const size = number('Size', 4);
+      const fill = color('Color', '#418AD7');
+      const data = object('Data', medSignalChartData);
 
-    return (
-      <ScatterPlot
-        height={height}
-        width={width}
-        data={data}
-        series={
-          <ScatterSeries
-            point={
-              <ScatterPoint
-                color={fill}
-                size={size}
-              />
-            }
-          />
-        }
-      />
-    );
-  }, { options: { showAddonPanel: true } })
+      return (
+        <ScatterPlot
+          height={height}
+          width={width}
+          data={data}
+          series={
+            <ScatterSeries point={<ScatterPoint color={fill} size={size} />} />
+          }
+        />
+      );
+    },
+    { options: { showAddonPanel: true } }
+  )
   .add('Categorical Axis', () => (
     <ScatterPlot
       height={400}

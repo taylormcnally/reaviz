@@ -19,7 +19,7 @@ export class LinearYAxisTickLabel extends Component<
 > {
   static defaultProps: Partial<LinearAxisTickLabelProps> = {
     ...LinearAxisTickLabel.defaultProps,
-    rotation: true,
+    rotation: false,
     position: 'start',
     align: 'center'
   };

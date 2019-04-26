@@ -32,6 +32,7 @@ export interface BarProps {
   onMouseLeave: (event) => void;
   rangeLines: JSX.Element | null;
   tooltip: JSX.Element | null;
+  layout: 'vertical' | 'horizontal';
 }
 
 interface BarState {
@@ -61,7 +62,8 @@ export class Bar extends Component<BarProps, BarState> {
     gradient: <Gradient />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
-    onMouseLeave: () => undefined
+    onMouseLeave: () => undefined,
+    layout: 'vertical'
   };
 
   rect = createRef<SVGGElement>();
@@ -71,82 +73,144 @@ export class Bar extends Component<BarProps, BarState> {
     return this.props.isCategorical ? 'x' : 'x0';
   }
 
-  getExit({ x, width }: BarCoordinates) {
-    const { yScale } = this.props;
+  getExit({ x, y, width, height }: BarCoordinates) {
+    const { yScale, layout, xScale } = this.props;
+
+    const isVertical = layout === 'vertical';
+    const newX = isVertical ? x : Math.min(...xScale.range());
+    const newY = isVertical ? Math.max(...yScale.range()) : y;
+    const newHeight = isVertical ? 0 : height;
+    const newWidth = isVertical ? width : 0;
 
     return {
-      x,
-      y: Math.max(...yScale.range()),
-      height: 0,
-      width
+      x: newX,
+      y: newY,
+      height: newHeight,
+      width: newWidth
     };
   }
 
-  getCoords(): BarCoordinates {
-    const { yScale, isCategorical, data, width, padding } = this.props;
-    const xScale = this.props.xScale1 || this.props.xScale;
-
-    let x: number;
-    let barWidth: number;
-    const y0 = yScale(data.y0);
-    const y1 = yScale(data.y1);
-    const barHeight = y0 - y1;
+  getKeyCoords(v, v0, v1, scale, sizeOverride: number, isCategorical: boolean, padding: number) {
+    let offset;
+    let size;
 
     if (isCategorical) {
-      if (xScale.bandwidth) {
-        x = xScale(data.x);
-        barWidth = xScale.bandwidth();
-        if (width) {
-          x = x + barWidth / 2 - width / 2;
-          barWidth = width;
+      if (scale.bandwidth) {
+        offset = scale(v);
+        size = scale.bandwidth();
+
+        if (sizeOverride) {
+          offset = offset + size / 2 - sizeOverride / 2;
+          size = sizeOverride;
         }
       } else {
-        if (width) {
+        if (sizeOverride) {
           throw new Error('Not a valid option for this scale type');
         }
 
-        x = xScale(data.x0);
-        barWidth = xScale((data.x1 as any) - (data.x0 as any));
+        offset = scale(v0);
+        size = scale((v1 as any) - (v0 as any));
 
         if (padding) {
-          const calc = this.calculateLinearScalePadding(x, barWidth);
-          x = calc.x;
-          barWidth = calc.width;
+          const calc = this.calculateLinearScalePadding(scale, offset, size);
+          offset = calc.offset;
+          size = calc.size;
         }
       }
     } else {
-      if (width) {
+      if (sizeOverride) {
         throw new Error('Not a valid option for this scale type');
       }
 
-      const x0 = xScale(data.x0);
-      const x1 = xScale(data.x1);
-      const delta = x1 - x0;
-      x = x0;
-      barWidth = Math.max(delta - 1, 0);
+      const c0 = scale(v0);
+      const c1 = scale(v1);
+      const delta = c1 - c0;
+      offset = c0;
+      size = Math.max(delta - 1, 0);
     }
 
-    return {
-      height: barHeight,
-      width: barWidth,
-      x,
-      y: y1
-    };
+    return { offset, size };
+  }
+
+  getValueCoords(v0, v1, scale) {
+    const c0 = scale(v0);
+    const c1 = scale(v1);
+    const size = Math.abs(c0 - c1);
+
+    return { offset: Math.min(c0, c1), size };
+  }
+
+  getIsVertical() {
+    return this.props.layout === 'vertical';
+  }
+
+  getCoords(): BarCoordinates {
+    const { isCategorical, data, width, padding, xScale1 } = this.props;
+
+    const isVertical = this.getIsVertical();
+    let yScale = this.props.yScale;
+    let xScale = this.props.xScale;
+
+    if (xScale1) {
+      if (isVertical) {
+        xScale = xScale1;
+      } else {
+        yScale = xScale1;
+      }
+    }
+
+    if (isVertical) {
+      const xCoords = this.getKeyCoords(
+        data.x,
+        data.x0,
+        data.x1,
+        xScale,
+        width,
+        isCategorical,
+        padding
+      );
+      const yCoords = this.getValueCoords(data.y0, data.y1, yScale);
+
+      return {
+        x: xCoords.offset,
+        width: xCoords.size,
+        y: yCoords.offset,
+        height: yCoords.size
+      };
+    } else {
+      const yCoords = this.getKeyCoords(
+        data.y,
+        data.y0,
+        data.y1,
+        yScale,
+        width,
+        isCategorical,
+        padding
+      );
+      const xCoords = this.getValueCoords(data.x0, data.x1, xScale);
+
+      return {
+        x: xCoords.offset,
+        width: xCoords.size,
+        y: yCoords.offset,
+        height: yCoords.size
+      };
+    }
   }
 
   /**
    * This function calculates the padding on a linear scale used by the marimekko chart.
    */
-  calculateLinearScalePadding(x: number, width: number) {
-    const { xScale, barCount, groupIndex, padding } = this.props;
+  calculateLinearScalePadding(scale, offset: number, size: number) {
+    const { barCount, groupIndex, padding } = this.props;
 
-    const totalWidth = xScale.range()[1];
-    const widthMinusPadding = totalWidth - padding * (barCount - 1);
-    const xMultiplier = widthMinusPadding / totalWidth;
-    x = x * xMultiplier + groupIndex! * padding;
-    width = width * xMultiplier;
+    const totalSize = scale.range()[1];
+    const sizeMinusPadding = totalSize - padding * (barCount - 1);
+    const multiplier = sizeMinusPadding / totalSize;
+    offset = offset * multiplier + groupIndex! * padding;
+    size = size * multiplier;
 
-    return { width, x };
+    return { size, offset };
   }
 
   onMouseEnter(event: MouseEvent) {
@@ -200,10 +264,11 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const { rounded, cursor, barCount, animated } = this.props;
+    const { rounded, cursor, barCount, animated, layout } = this.props;
     const fill = this.getFill(currentColorShade);
     const enterProps = coords;
     const exitProps = this.getExit(coords);
+    const isVertical = this.getIsVertical();
 
     return (
       <PosedBar
@@ -215,7 +280,12 @@ export class Bar extends Component<BarProps, BarState> {
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
         onClick={bind(this.onMouseClick, this)}
-        className={classNames({ [css.rounded]: rounded })}
+        layout={layout}
+        className={classNames({
+          [css.rounded]: rounded,
+          [css.vertical]: isVertical,
+          [css.horizontal]: !isVertical
+        })}
         enterProps={enterProps}
         exitProps={exitProps}
         index={index}
@@ -235,15 +305,20 @@ export class Bar extends Component<BarProps, BarState> {
       yScale,
       barCount,
       tooltip,
+      xScale,
       groupIndex,
       rangeLines,
-      animated
+      animated,
+      layout
     } = this.props;
     const { active } = this.state;
     const stroke = color(data, barIndex);
     const coords = this.getCoords();
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
     const index = groupIndex !== undefined ? groupIndex : barIndex;
+    const placement = layout === 'vertical' ? 'top' : 'right';
+    const isVertical = this.getIsVertical();
+    const scale = isVertical ? yScale : xScale;
 
     return (
       <Fragment>
@@ -254,10 +329,11 @@ export class Bar extends Component<BarProps, BarState> {
             {...coords}
             index={index}
             data={data}
-            yScale={yScale}
+            scale={scale}
             color={currentColorShade}
             barCount={barCount}
             animated={animated}
+            layout={layout}
           />
         )}
         {tooltip && !tooltip.props.disabled && (
@@ -268,6 +344,7 @@ export class Bar extends Component<BarProps, BarState> {
             reference={this.rect}
             color={color}
             value={this.getTooltipData()}
+            placement={placement}
             metadata={data}
           />
         )}
@@ -276,6 +353,7 @@ export class Bar extends Component<BarProps, BarState> {
             element={gradient}
             id={`${id}-gradient`}
             color={currentColorShade}
+            direction={layout}
           />
         )}
       </Fragment>

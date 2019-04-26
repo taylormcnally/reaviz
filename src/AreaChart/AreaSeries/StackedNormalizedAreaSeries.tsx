@@ -10,9 +10,7 @@ import { CloneElement } from '../../common/utils/children';
 import { PointSeriesProps } from './PointSeries';
 import { ScatterPointProps } from '../../ScatterPlot';
 
-export class StackedNormalizedAreaSeries extends Component<
-  AreaSeriesProps
-> {
+export class StackedNormalizedAreaSeries extends Component<AreaSeriesProps> {
   static defaultProps: Partial<AreaSeriesProps> = {
     ...AreaSeries.defaultProps,
     type: 'stackedNormalized',
@@ -50,19 +48,21 @@ export class StackedNormalizedAreaSeries extends Component<
       <AreaSeries
         {...rest}
         type="stackedNormalized"
-        symbols={symbols && (
-          <CloneElement<PointSeriesProps>
-            element={symbols}
-            {...symbols.props}
-            point={
-              <CloneElement<ScatterPointProps>
-                element={symbols.props.point}
-                {...symbols.props.point.props}
-                tooltip={null}
-              />
-            }
-          />
-        )}
+        symbols={
+          symbols && (
+            <CloneElement<PointSeriesProps>
+              element={symbols}
+              {...symbols.props}
+              point={
+                <CloneElement<ScatterPointProps>
+                  element={symbols.props.point}
+                  {...symbols.props.point.props}
+                  tooltip={null}
+                />
+              }
+            />
+          )
+        }
       />
     );
   }

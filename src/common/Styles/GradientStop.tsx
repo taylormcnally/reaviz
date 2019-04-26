@@ -14,12 +14,6 @@ export class GradientStop extends Component<GradientStopProps> {
   render() {
     const { offset, stopOpacity, color } = this.props;
 
-    return (
-      <stop
-        offset={offset}
-        stopOpacity={stopOpacity}
-        stopColor={color}
-      />
-    );
+    return <stop offset={offset} stopOpacity={stopOpacity} stopColor={color} />;
   }
 }

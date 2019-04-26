@@ -26,33 +26,41 @@ import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
 
 storiesOf('Charts/Line/Single Series', module)
-  .add('Simple', () => {
-    const height = number('Height', 250);
-    const width = number('Width', 350);
-    const lineStroke = number('Stroke Width', 4);
-    const fill = color('Color', '#418AD7');
-    const interpolation = select('Interpolation', {
-      linear: 'linear',
-      step: 'step',
-      smooth: 'smooth'
-    }, 'linear');
-    const data = object('Data', singleDateData);
+  .add(
+    'Simple',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const lineStroke = number('Stroke Width', 4);
+      const fill = color('Color', '#418AD7');
+      const interpolation = select(
+        'Interpolation',
+        {
+          linear: 'linear',
+          step: 'step',
+          smooth: 'smooth'
+        },
+        'linear'
+      );
+      const data = object('Data', singleDateData);
 
-    return (
-      <LineChart
-        width={width}
-        height={height}
-        data={data}
-        series={
-          <LineSeries
-            interpolation={interpolation}
-            colorScheme={[fill]}
-            line={<Line strokeWidth={lineStroke} />}
-          />
-        }
-      />
-    );
-  }, { options: { showAddonPanel: true } })
+      return (
+        <LineChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <LineSeries
+              interpolation={interpolation}
+              colorScheme={[fill]}
+              line={<Line strokeWidth={lineStroke} />}
+            />
+          }
+        />
+      );
+    },
+    { options: { showAddonPanel: true } }
+  )
   .add('No Animation', () => (
     <LineChart
       width={350}

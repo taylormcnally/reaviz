@@ -26,7 +26,7 @@ export interface BarSeriesProps {
   padding: number;
   groupPadding: number;
   isCategorical: boolean;
-
+  layout: 'horizontal' | 'vertical';
   /**
    * Threshold for the binning of histogram charts.
    */
@@ -45,21 +45,29 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
     groupPadding: 16,
     animated: true,
     colorScheme: [...sequentialScheme],
-    bar: <Bar />
+    bar: <Bar />,
+    layout: 'vertical'
   };
 
   /**
    * Get the translation for the bar group.
    */
   getTransform(data: ChartInternalNestedDataShape) {
-    const { xScale, type } = this.props;
+    const { xScale, yScale, type, layout } = this.props;
 
-    let pos = 0;
+    let xPos = 0;
+    let yPos = 0;
     if (type !== 'marimekko') {
-      pos = xScale(data.key);
+      if (layout === 'vertical') {
+        const val = xScale(data.key);
+        xPos = val;
+      } else {
+        const val = yScale(data.key);
+        yPos = val;
+      }
     }
 
-    return `translate(${pos}, 0)`;
+    return `translate(${xPos}, ${yPos})`;
   }
 
   getColor(point, index) {
@@ -78,13 +86,24 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
   ) {
     const {
       xScale1,
-      yScale,
       bar,
       padding,
       animated,
-      isCategorical
+      isCategorical,
+      layout
     } = this.props;
-    const xScale = xScale1 || this.props.xScale;
+
+    const isVertical = layout === 'vertical';
+    let yScale = this.props.yScale;
+    let xScale = this.props.xScale;
+
+    if (xScale1) {
+      if (isVertical) {
+        xScale = xScale1;
+      } else {
+        yScale = xScale1;
+      }
+    }
 
     // Histograms dont have keys
     let key = barIndex.toString();
@@ -108,6 +127,7 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
           data={data}
           isCategorical={isCategorical}
           color={this.getColor.bind(this)}
+          layout={layout}
         />
       </PoseSVGGElement>
     );

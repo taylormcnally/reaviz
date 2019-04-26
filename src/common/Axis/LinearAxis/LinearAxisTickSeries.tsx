@@ -32,9 +32,7 @@ interface ProcessedTick {
   half: 'start' | 'end' | 'center';
 }
 
-export class LinearAxisTickSeries extends Component<
-  LinearAxisTickSeriesProps
-> {
+export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
   static defaultProps: Partial<LinearAxisTickSeriesProps> = {
     line: <LinearAxisTickLine />,
     label: <LinearAxisTickLabel />,

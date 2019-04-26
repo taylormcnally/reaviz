@@ -51,7 +51,7 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     let rows = 1;
     let columns = data.length;
 
-    if ((width / data.length) < MIN_GAUGE_WIDTH) {
+    if (width / data.length < MIN_GAUGE_WIDTH) {
       while (width / columns < MIN_GAUGE_WIDTH) {
         rows += 1;
         columns = Math.ceil(data.length / rows);
@@ -75,14 +75,32 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     };
   }
 
-  renderGauge(data: ChartShallowDataShape, index: number, columns: number, height: number, width: number, xScale, yScale) {
-    const { scale, innerArc, outerArc, startAngle, endAngle, label, valueLabel, padding } = this.props;
+  renderGauge(
+    data: ChartShallowDataShape,
+    index: number,
+    columns: number,
+    height: number,
+    width: number,
+    xScale,
+    yScale
+  ) {
+    const {
+      scale,
+      innerArc,
+      outerArc,
+      startAngle,
+      endAngle,
+      label,
+      valueLabel,
+      padding
+    } = this.props;
 
     const dataEndAngle = scale(data.data as number);
 
     const baselineLabelHeight = 20;
-    const outerRadius = ((min([width - padding, height - baselineLabelHeight]) as number) / 2) - 10;
-    const labelOffset = (width / 2) - padding;
+    const outerRadius =
+      (min([width - padding, height - baselineLabelHeight]) as number) / 2 - 10;
+    const labelOffset = width / 2 - padding;
 
     const x = xScale(index % columns);
     const y = yScale(Math.floor(index / columns));
@@ -134,7 +152,9 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
 
     return (
       <PoseGroup animateOnMount={innerArc.props.animated}>
-        {data.map((d, i) => this.renderGauge(d, i, columns, height, width, xScale, yScale))}
+        {data.map((d, i) =>
+          this.renderGauge(d, i, columns, height, width, xScale, yScale)
+        )}
       </PoseGroup>
     );
   }

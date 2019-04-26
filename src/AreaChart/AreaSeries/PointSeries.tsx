@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { isEqual } from 'lodash-es';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils';
-import { ScatterPoint, ScatterSeries, ScatterPointProps } from '../../ScatterPlot';
+import {
+  ScatterPoint,
+  ScatterSeries,
+  ScatterPointProps
+} from '../../ScatterPlot';
 import * as css from './PointSeries.module.scss';
 
 export interface PointSeriesProps {
@@ -50,7 +54,17 @@ export class PointSeries extends Component<PointSeriesProps> {
   }
 
   render() {
-    const { data, xScale, yScale, animated, point, color, height, width, id } = this.props;
+    const {
+      data,
+      xScale,
+      yScale,
+      animated,
+      point,
+      color,
+      height,
+      width,
+      id
+    } = this.props;
 
     return (
       <ScatterSeries

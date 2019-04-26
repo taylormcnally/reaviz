@@ -24,39 +24,44 @@ import {
   MarimekkoBarSeries
 } from './BarSeries';
 import { GridlineSeries, Gridline } from '../common/Gridline';
-import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
+import {
+  LinearXAxis,
+  LinearXAxisTickSeries,
+  LinearYAxis,
+  LinearYAxisTickSeries,
+  LinearXAxisTickLabel
+} from '../common/Axis/LinearAxis';
 
-storiesOf('Charts/Bar/Single Series', module)
-  .add('Simple', () => {
-    const hasGradient = boolean('Gradient', true);
-    const rounded = boolean('Rounded', true)
-    const padding = number('Padding', 0.1);
-    const height = number('Height', 250);
-    const width = number('Width', 350);
-    const fill = color('Color', '#418AD7');
-    const data = object('Data', categoryData);
-    const gradient = hasGradient ? Bar.defaultProps.gradient : null;
+storiesOf('Charts/Bar/Vertical/Single Series', module)
+  .add(
+    'Simple',
+    () => {
+      const hasGradient = boolean('Gradient', true);
+      const rounded = boolean('Rounded', true);
+      const padding = number('Padding', 0.1);
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const fill = color('Color', '#418AD7');
+      const data = object('Data', categoryData);
+      const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
-    return (
-      <BarChart
-        width={height}
-        height={width}
-        data={data}
-        series={
-          <BarSeries
-            colorScheme={[fill]}
-            padding={padding}
-            bar={
-              <Bar
-                rounded={rounded}
-                gradient={gradient}
-              />
-            }
-          />
-        }
-      />
-    );
-  }, { options: { showAddonPanel: true } })
+      return (
+        <BarChart
+          width={height}
+          height={width}
+          data={data}
+          series={
+            <BarSeries
+              colorScheme={[fill]}
+              padding={padding}
+              bar={<Bar rounded={rounded} gradient={gradient} />}
+            />
+          }
+        />
+      );
+    },
+    { options: { showAddonPanel: true } }
+  )
   .add('Large Dataset', () => (
     <BarChart
       width={350}
@@ -122,7 +127,7 @@ storiesOf('Charts/Bar/Single Series', module)
     />
   ));
 
-storiesOf('Charts/Bar/Histogram', module)
+storiesOf('Charts/Bar/Vertical/Histogram', module)
   .add('Dates', () => (
     <BarChart
       width={350}
@@ -161,7 +166,7 @@ storiesOf('Charts/Bar/Histogram', module)
     />
   ));
 
-storiesOf('Charts/Bar/Multi Series', module)
+storiesOf('Charts/Bar/Vertical/Multi Series', module)
   .add('Simple', () => (
     <BarChart
       width={350}
@@ -212,6 +217,160 @@ storiesOf('Charts/Bar/Multi Series', module)
       data={multiCategory}
       series={
         <MarimekkoBarSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+        />
+      }
+    />
+  ));
+
+storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
+  'Simple',
+  () => {
+    const hasGradient = boolean('Gradient', true);
+    const rounded = boolean('Rounded', true);
+    const padding = number('Padding', 0.1);
+    const height = number('Height', 350);
+    const width = number('Width', 500);
+    const fill = color('Color', '#418AD7');
+    const data = object('Data', categoryData);
+    const gradient = hasGradient ? Bar.defaultProps.gradient : null;
+
+    return (
+      <BarChart
+        width={width}
+        height={height}
+        data={data}
+        layout="horizontal"
+        xAxis={<LinearXAxis type="value" />}
+        yAxis={
+          <LinearYAxis
+            type="category"
+            tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+          />
+        }
+        series={
+          <BarSeries
+            colorScheme={[fill]}
+            padding={padding}
+            bar={<Bar rounded={rounded} gradient={gradient} />}
+          />
+        }
+      />
+    );
+  },
+  { options: { showAddonPanel: true } }
+)
+.add('Large Dataset', () => (
+  <BarChart
+    height={350}
+    width={500}
+    layout="horizontal"
+    data={largeCategoryData}
+    xAxis={<LinearXAxis type="value" />}
+    yAxis={
+      <LinearYAxis
+        type="category"
+        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+      />
+    }
+    series={
+      <BarSeries
+        colorScheme={chroma
+          .scale(['ACB7C9', '418AD7'])
+          .colors(largeCategoryData.length)}
+      />
+    }
+  />
+))
+.add('Autosize', () => (
+  <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
+    <BarChart
+      data={categoryData}
+      layout="horizontal"
+      xAxis={<LinearXAxis type="value" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+    />
+  </div>
+));
+
+storiesOf('Charts/Bar/Horizontal/Multi Series', module)
+  .add('Simple', () => (
+    <BarChart
+      width={500}
+      height={350}
+      data={multiCategory}
+      layout="horizontal"
+      xAxis={<LinearXAxis type="value" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+      series={
+        <BarSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+          padding={0.8}
+        />
+      }
+    />
+  ))
+  .add('Stacked', () => (
+    <StackedBarChart
+      width={500}
+      height={350}
+      data={multiCategory}
+      layout="horizontal"
+      xAxis={<LinearXAxis type="value" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+      series={
+        <StackedBarSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+        />
+      }
+    />
+  ))
+  .add('Stacked Normalized', () => (
+    <StackedNormalizedBarChart
+      width={500}
+      height={350}
+      data={multiCategory}
+      layout="horizontal"
+      yAxis={<LinearYAxis type="category" />}
+      xAxis={
+        <LinearXAxis
+          type="value"
+          tickSeries={
+            <LinearXAxisTickSeries
+              tickSize={20}
+              label={
+                <LinearXAxisTickLabel
+                  rotation={false}
+                  format={data => `${data * 100}%`}
+                />
+              }
+            />
+          }
+        />
+      }
+      series={
+        <StackedNormalizedBarSeries
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}

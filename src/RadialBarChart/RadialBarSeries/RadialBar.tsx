@@ -110,11 +110,19 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
       const innerAngleDistance = endAngle - startAngle;
       const arcLength = innerRadius * innerAngleDistance;
       const outerAngleDistance = arcLength / outerRadius;
-      const halfAngleDistanceDelta = (innerAngleDistance - outerAngleDistance) / 2;
+      const halfAngleDistanceDelta =
+        (innerAngleDistance - outerAngleDistance) / 2;
 
       const pathFn = path();
       pathFn.arc(0, 0, innerRadius, startAngle, endAngle);
-      pathFn.arc(0, 0, outerRadius, endAngle - halfAngleDistanceDelta, startAngle + halfAngleDistanceDelta, true);
+      pathFn.arc(
+        0,
+        0,
+        outerRadius,
+        endAngle - halfAngleDistanceDelta,
+        startAngle + halfAngleDistanceDelta,
+        true
+      );
 
       return pathFn.toString();
     }
@@ -127,8 +135,8 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
 
     // Track previous props
     const previousEnter = this.previousEnter
-        ? { ...this.previousEnter }
-        : undefined;
+      ? { ...this.previousEnter }
+      : undefined;
     this.previousEnter = { ...data };
 
     const [yStart] = yScale.domain();
@@ -179,10 +187,7 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
           />
         )}
         {gradient && (
-          <Gradient
-            id={`${id}-gradient`}
-            color={currentColorShade}
-          />
+          <Gradient id={`${id}-gradient`} color={currentColorShade} />
         )}
       </Fragment>
     );

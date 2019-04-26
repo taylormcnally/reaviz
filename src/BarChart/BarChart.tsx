@@ -44,6 +44,7 @@ export interface BarChartProps extends ChartProps {
   gridlines: JSX.Element | null;
   brush: JSX.Element;
   zoomPan: JSX.Element;
+  layout: 'horizontal' | 'vertical';
 }
 
 export class BarChart extends React.Component<BarChartProps, {}> {
@@ -58,89 +59,183 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     yAxis: <LinearYAxis type="value" />,
     series: <BarSeries />,
     gridlines: <GridlineSeries />,
-    brush: <ChartBrush disabled={true} />
+    brush: <ChartBrush disabled={true} />,
+    layout: 'vertical'
   };
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
-    const { yAxis, xAxis, series } = this.props;
+    const { yAxis, xAxis, series, layout } = this.props;
+
     const seriesType = series.props.type;
+    const isVertical = this.getIsVertical();
+    const isMarimekko = seriesType === 'marimekko';
 
     let data;
     if (seriesType === 'stacked' || seriesType === 'stackedNormalized') {
       data = buildBarStackData(
         this.props.data as ChartNestedDataShape[],
-        seriesType === 'stackedNormalized'
+        seriesType === 'stackedNormalized',
+        layout
       );
-    } else if (seriesType === 'marimekko') {
+    } else if (isMarimekko) {
       data = buildMarimekkoData(this.props.data as ChartNestedDataShape[]);
     } else {
-      data = buildChartData(this.props.data);
+      data = buildChartData(
+        this.props.data,
+        false,
+        layout
+      );
     }
 
     const isMulti = isMultiSeries(data);
-    const xAxisType = xAxis.props.type;
+    const isGrouped = seriesType === 'standard' && isMulti;
 
+    let yScale;
     let xScale;
     let xScale1;
-    if (seriesType === 'standard' && isMulti) {
-      xScale = getGroupScale({
-        height: chartHeight,
-        width: chartWidth,
-        padding: series.props.groupPadding,
-        data
-      });
 
-      xScale1 = getInnerScale({
-        groupScale: xScale,
-        padding: series.props.padding,
-        data
-      });
-    } else if (seriesType === 'marimekko') {
-      xScale1 = getMarimekkoScale(chartWidth, xAxis.props.roundDomains);
+    if (isVertical) {
+      if (isGrouped) {
+        const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
+        xScale = groupScale;
+        xScale1 = keyScale;
+      } else if (isMarimekko) {
+        const { keyScale, groupScale } = this.getMarimekkoGroupScales(data, xAxis, chartWidth);
+        xScale = groupScale;
+        xScale1 = keyScale;
+      } else {
+        xScale = this.getKeyScale(data, xAxis, chartWidth);
+      }
 
-      xScale = getMarimekkoGroupScale({
-        width: chartWidth,
-        padding: series.props.padding,
-        data,
-        valueScale: xScale1
-      });
+      yScale = this.getValueScale(data, yAxis, chartHeight);
     } else {
-      xScale = getXScale({
-        width: chartWidth,
-        type: xAxisType,
-        roundDomains: xAxis.props.roundDomains,
-        data,
-        padding: series.props.padding,
-        domain: xAxis.props.domain
-      });
-
-      if (xAxisType === 'time' || xAxisType === 'value') {
-        data = buildBins(
-          xScale,
-          series.props.binThreshold || xAxis.props.interval,
-          data
-        );
+      if (isGrouped) {
+        const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
+        yScale = groupScale;
+        xScale1 = keyScale;
+        xScale = this.getKeyScale(data, xAxis, chartWidth);
+      } else if (isMarimekko) {
+        throw new Error('Marimekko is currently not supported for horizontal layouts');
+      } else {
+        xScale = this.getKeyScale(data, xAxis, chartWidth);
+        yScale = this.getValueScale(data, yAxis, chartHeight);
       }
     }
 
-    const yScale = getYScale({
-      roundDomains: yAxis.props.roundDomains,
-      type: yAxis.props.type,
-      height: chartHeight,
-      data,
-      domain: yAxis.props.domain
-    });
+    // If the key axis is a time/number we should bin it...
+    data = this.getBinnedData(data, xScale, yScale);
 
     return { xScale, xScale1, yScale, data };
   }
 
+  getKeyAxis() {
+    const { yAxis, xAxis } = this.props;
+    const isVertical = this.getIsVertical();
+    return isVertical ? xAxis : yAxis;
+  }
+
+  getIsVertical() {
+    return this.props.layout === 'vertical';
+  }
+
+  getBinnedData(data, xScale, yScale) {
+    const { series } = this.props;
+
+    const keyAxis = this.getKeyAxis();
+    const isVertical = this.getIsVertical();
+    const keyScale = isVertical ? xScale : yScale;
+    const keyAxisType = keyAxis.props.type;
+
+    if (keyAxisType === 'time' || keyAxisType === 'value') {
+      data = buildBins(
+        keyScale,
+        series.props.binThreshold || keyAxis.props.interval,
+        data
+      );
+    }
+
+    return data;
+  }
+
+  getMarimekkoGroupScales(data, axis, width: number) {
+    const { series } = this.props;
+
+    const keyScale = getMarimekkoScale(width, axis.props.roundDomains);
+
+    const groupScale = getMarimekkoGroupScale({
+      width,
+      padding: series.props.padding,
+      data,
+      valueScale: keyScale
+    });
+
+    return {
+      keyScale,
+      groupScale
+    };
+  }
+
+  getMultiGroupScales(data, height: number, width: number) {
+    const { series, layout } = this.props;
+    const isVertical = this.getIsVertical();
+
+    const groupScale = getGroupScale({
+      dimension: isVertical ? width : height,
+      direction: layout,
+      padding: series.props.groupPadding,
+      data
+    });
+
+    const keyScale = getInnerScale({
+      groupScale: groupScale,
+      padding: series.props.padding,
+      data,
+      prop: isVertical ? 'x' : 'y'
+    });
+
+    return {
+      groupScale,
+      keyScale
+    };
+  }
+
+  getKeyScale(data, axis, width: number) {
+    const { series } = this.props;
+
+    return getXScale({
+      width,
+      type: axis.props.type,
+      roundDomains: axis.props.roundDomains,
+      data,
+      padding: series.props.padding,
+      domain: axis.props.domain
+    });
+  }
+
+  getValueScale(data, axis, height: number) {
+    const { series } = this.props;
+
+    return getYScale({
+      roundDomains: axis.props.roundDomains,
+      padding: series.props.padding,
+      type: axis.props.type,
+      height,
+      data,
+      domain: axis.props.domain
+    });
+  }
+
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartHeight, chartWidth, id, updateAxes } = containerProps;
-    const { series, xAxis, yAxis, brush, gridlines } = this.props;
+    const { series, xAxis, yAxis, brush, gridlines, layout } = this.props;
     const { xScale, xScale1, yScale, data } = this.getScalesAndData(
       chartHeight,
       chartWidth
     );
+
+    const isVertical = this.getIsVertical();
+    const keyAxis = this.getKeyAxis();
+    const isCategorical = keyAxis.props.type === 'category';
 
     return (
       <Fragment>
@@ -160,14 +255,14 @@ export class BarChart extends React.Component<BarChartProps, {}> {
           height={chartHeight}
           width={chartWidth}
           scale={xScale}
-          onDimensionsChange={bind(updateAxes, this, 'horizontal')}
+          onDimensionsChange={bind(updateAxes, this, isVertical ? 'horizontal' : 'vertical')}
         />
         <CloneElement<LinearAxisProps>
           element={yAxis}
           height={chartHeight}
           width={chartWidth}
           scale={yScale}
-          onDimensionsChange={bind(updateAxes, this, 'vertical')}
+          onDimensionsChange={bind(updateAxes, this, isVertical ? 'vertical' : 'horizontal')}
         />
         {containerProps.chartSized && (
           <CloneElement<ChartBrushProps>
@@ -180,10 +275,11 @@ export class BarChart extends React.Component<BarChartProps, {}> {
               element={series}
               id={`bar-series-${id}`}
               data={data}
-              isCategorical={xAxis.props.type === 'category'}
+              isCategorical={isCategorical}
               xScale={xScale}
               xScale1={xScale1}
               yScale={yScale}
+              layout={layout}
             />
           </CloneElement>
         )}

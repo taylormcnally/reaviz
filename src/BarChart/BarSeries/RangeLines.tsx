@@ -9,71 +9,115 @@ export interface RangeLinesProps {
   y: number;
   index: number;
   strokeWidth: number;
-  yScale: any;
+  scale: any;
   type: 'top' | 'bottom';
   data: ChartInternalShallowDataShape;
   color: string;
   barCount: number;
+  layout: 'vertical' | 'horizontal';
   animated: boolean;
 }
 
 export class RangeLines extends Component<RangeLinesProps> {
   static defaultProps: Partial<RangeLinesProps> = {
     type: 'top',
-    strokeWidth: 1
+    strokeWidth: 1,
+    layout: 'vertical'
   };
 
-  getEnter(rangeLineHeight: number) {
-    const { x, y, height, type } = this.props;
+  getIsVertical() {
+    return this.props.layout === 'vertical';
+  }
 
-    let newY;
-    if (type !== 'bottom') {
-      newY = y;
+  getEnter(rangeLineHeight: number) {
+    const { x, y, height, type, width } = this.props;
+
+    const isVertical = this.getIsVertical();
+    let newY = y;
+    let newX = x;
+
+    if (isVertical) {
+      if (type !== 'bottom') {
+        newY = y;
+      } else {
+        newY = y + height - rangeLineHeight;
+      }
     } else {
-      newY = y + height - rangeLineHeight;
+      if (type !== 'bottom') {
+        newX = x + width - rangeLineHeight;
+      } else {
+        newX = x;
+      }
     }
 
     return {
-      x,
+      x: newX,
       y: newY
     };
   }
 
   getExit(rangeLineHeight: number) {
-    const { x, yScale, height, type } = this.props;
+    const { x, scale, height, width, y, type } = this.props;
 
-    let y;
-    const maxY = Math.max(...yScale.range());
-    if (type !== 'bottom') {
-      y = maxY;
+    const isVertical = this.getIsVertical();
+    let newY = y;
+    let newX = x;
+
+    if (isVertical) {
+      const maxY = Math.max(...scale.range());
+      if (type !== 'bottom') {
+        newY = maxY;
+      } else {
+        newY = maxY + height - rangeLineHeight;
+      }
     } else {
-      y = maxY + height - rangeLineHeight;
+      const minX = Math.min(...scale.range());
+      if (type !== 'bottom') {
+        newX = minX;
+      } else {
+        newX = minX + width - rangeLineHeight;
+      }
     }
 
     return {
-      y,
-      x
+      y: newY,
+      x: newX
     };
   }
 
   getLineHeight() {
-    return Math.min(this.props.strokeWidth, this.props.height);
+    const { height, width, strokeWidth } = this.props;
+    const isVertical = this.getIsVertical();
+
+    return Math.min(strokeWidth, isVertical ? height : width);
+  }
+
+  getHeightWidth(rangeLineHeight: number) {
+    const { height, width } = this.props;
+    const isVertical = this.getIsVertical();
+
+    return {
+      width: isVertical ? width : rangeLineHeight,
+      height: isVertical ? rangeLineHeight : height
+    };
   }
 
   render() {
-    const { color, data, width, animated, index, barCount } = this.props;
+    const { color, data, animated, index, barCount, layout } = this.props;
     const rangeLineHeight = this.getLineHeight();
     const enterProps = this.getEnter(rangeLineHeight);
     const exitProps = this.getExit(rangeLineHeight);
+    const { height, width } = this.getHeightWidth(rangeLineHeight);
 
     return (
       <PosedRangeLine
         pose="enter"
         poseKey={data}
         fill={color}
+        layout={layout}
         enterProps={enterProps}
         exitProps={exitProps}
-        height={rangeLineHeight}
+        height={height}
         barCount={barCount}
         width={width}
         index={index}

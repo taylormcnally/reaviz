@@ -8,7 +8,11 @@ import { RadialAreaProps, RadialArea } from './RadialArea';
 import { RadialLine, RadialLineProps } from './RadialLine';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';
 import { RadialPointSeries, RadialPointSeriesProps } from './RadialPointSeries';
-import { TooltipAreaProps, TooltipArea, TooltipAreaEvent } from '../../common/TooltipArea';
+import {
+  TooltipAreaProps,
+  TooltipArea,
+  TooltipAreaEvent
+} from '../../common/TooltipArea';
 import bind from 'memoize-bind';
 
 export interface RadialAreaSeriesProps {
@@ -34,7 +38,10 @@ interface RadialAreaSeriesState {
   activePoint?: number;
 }
 
-export class RadialAreaSeries extends Component<RadialAreaSeriesProps, RadialAreaSeriesState> {
+export class RadialAreaSeries extends Component<
+  RadialAreaSeriesProps,
+  RadialAreaSeriesState
+> {
   static defaultProps: Partial<RadialAreaSeriesProps> = {
     colorScheme: [...sequentialScheme],
     interpolation: 'smooth',
@@ -70,7 +77,17 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps, RadialAre
   }
 
   renderArea() {
-    const { area, id, xScale, yScale, data, interpolation, animated, innerRadius, outerRadius } = this.props;
+    const {
+      area,
+      id,
+      xScale,
+      yScale,
+      data,
+      interpolation,
+      animated,
+      innerRadius,
+      outerRadius
+    } = this.props;
 
     return (
       <CloneElement<RadialAreaProps>
@@ -125,7 +142,20 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps, RadialAre
   }
 
   render() {
-    const { area, line, animated, symbols, tooltip, xScale, yScale, data, id, width, height, innerRadius } = this.props;
+    const {
+      area,
+      line,
+      animated,
+      symbols,
+      tooltip,
+      xScale,
+      yScale,
+      data,
+      id,
+      width,
+      height,
+      innerRadius
+    } = this.props;
 
     return (
       <PoseGroup animateOnMount={animated}>
@@ -143,12 +173,12 @@ export class RadialAreaSeries extends Component<RadialAreaSeriesProps, RadialAre
             onValueEnter={bind(this.onValueEnter, this)}
             onValueLeave={bind(this.onValueLeave, this)}
           >
-          <g clipPath={`url(#${id}-path)`}>
-            {area && this.renderArea()}
-            {line && this.renderLine()}
-            {symbols && this.renderSymbols()}
-          </g>
-        </CloneElement>
+            <g clipPath={`url(#${id}-path)`}>
+              {area && this.renderArea()}
+              {line && this.renderLine()}
+              {symbols && this.renderSymbols()}
+            </g>
+          </CloneElement>
         </PoseSVGGElement>
       </PoseGroup>
     );

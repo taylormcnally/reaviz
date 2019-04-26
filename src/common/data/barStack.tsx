@@ -47,6 +47,7 @@ function transformDataToStack(data: ChartNestedDataShape[]) {
         value.data,
         maxBigInteger
       );
+
       result[idx].formattedValues[
         value.key as string
       ] = normalizeValueForFormatting(value.data);
@@ -59,8 +60,9 @@ function transformDataToStack(data: ChartNestedDataShape[]) {
 /**
  * Translates the stack data to a chart standard dataset.
  */
-function transformStackToData(stackData): ChartInternalNestedDataShape[] {
+function transformStackToData(stackData, direction = 'vertical'): ChartInternalNestedDataShape[] {
   const result: ChartInternalNestedDataShape[] = [];
+  const isVertical = direction === 'vertical';
 
   // Transform the data from the d3 stack format to our internal format
   for (const category of stackData) {
@@ -83,16 +85,19 @@ function transformStackToData(stackData): ChartInternalNestedDataShape[] {
         idx = result.length - 1;
       }
 
+      const categoryKey = category.key;
+      const y = point.data[categoryKey];
       const [y0, y1] = point;
+
       result[idx].data.push({
         key,
-        x: category.key,
-        x0: category.key,
-        x1: category.key,
-        y: point.data[category.key],
-        y0,
-        y1,
-        value: point.data.formattedValues[category.key]
+        x: isVertical ? categoryKey : y1,
+        x0: isVertical ? categoryKey : y0,
+        x1: isVertical ? categoryKey : y1,
+        y: isVertical ? y : categoryKey,
+        y0: isVertical ? y0 : categoryKey,
+        y1: isVertical ? y1 : categoryKey,
+        value: point.data.formattedValues[categoryKey]
       });
     }
   }
@@ -105,12 +110,13 @@ function transformStackToData(stackData): ChartInternalNestedDataShape[] {
  */
 export function buildBarStackData(
   data: ChartNestedDataShape[],
-  normalized = false
+  normalized = false,
+  direction = 'vertical'
 ) {
   const keys = getDeepGroupDomain(data, 'key');
   const stackData = transformDataToStack(data);
   const stackFn = !normalized ? stack() : stack().offset(stackOffsetExpand);
   const result = stackFn.keys(keys)(stackData);
 
-  return transformStackToData(result);
+  return transformStackToData(result, direction);
 }
