@@ -1,4 +1,5 @@
 import { min, max } from 'd3-array';
+import { isNumber } from 'lodash-es';
 
 /**
  * Gets the min/max values handling nested arrays.
@@ -29,8 +30,14 @@ export function getYDomain({ scaled, data }): number[] {
  * Get the domain for the X Axis.
  */
 export function getXDomain({ data, scaled = false }): number[] {
-  const minMax = extent(data, 'x');
-  return scaled ? minMax : [0, minMax[1]];
+  const [min, max] = extent(data, 'x');
+
+  // For linear X based scales, we should set min to 0
+  if (isNumber(min) && isNumber(max) && !scaled) {
+    return [0, max];
+  }
+
+  return [min, max];
 }
 
 /**
