@@ -263,8 +263,8 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
 )
 .add('Large Dataset', () => (
   <BarChart
-    width={350}
     height={350}
+    width={500}
     layout="horizontal"
     data={largeCategoryData}
     xAxis={<LinearXAxis type="value" />}
@@ -302,7 +302,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
 storiesOf('Charts/Bar/Horizontal/Multi Series', module)
   .add('Simple', () => (
     <BarChart
-      width={350}
+      width={500}
       height={350}
       data={multiCategory}
       layout="horizontal"
@@ -325,7 +325,7 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
   ))
   .add('Stacked', () => (
     <StackedBarChart
-      width={350}
+      width={500}
       height={350}
       data={multiCategory}
       series={
@@ -339,25 +339,11 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
   ))
   .add('Stacked Normalized', () => (
     <StackedNormalizedBarChart
-      width={350}
+      width={500}
       height={350}
       data={multiCategory}
       series={
         <StackedNormalizedBarSeries
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
-        />
-      }
-    />
-  ))
-  .add('Marimekko', () => (
-    <MarimekkoChart
-      width={350}
-      height={350}
-      data={multiCategory}
-      series={
-        <MarimekkoBarSeries
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}

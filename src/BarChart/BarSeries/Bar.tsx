@@ -141,10 +141,22 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   getCoords(): BarCoordinates {
-    const { yScale, isCategorical, data, width, padding, layout } = this.props;
-    const xScale = this.props.xScale1 || this.props.xScale;
+    const { isCategorical, data, width, padding, layout, xScale1 } = this.props;
+    const isVertical = layout === 'vertical';
+    // const xScale = this.props.xScale1 || this.props.xScale;
 
-    if (layout === 'vertical') {
+    let yScale = this.props.yScale;
+    let xScale = this.props.xScale;
+
+    if (xScale1) {
+      if (isVertical) {
+        xScale = xScale1;
+      } else {
+        yScale = xScale1;
+      }
+    }
+
+    if (isVertical) {
       const xCoords = this.getKeyCoords(
         data.x,
         data.x0,

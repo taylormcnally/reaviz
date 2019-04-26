@@ -53,16 +53,16 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
    * Get the translation for the bar group.
    */
   getTransform(data: ChartInternalNestedDataShape) {
-    const { xScale, type, layout } = this.props;
+    const { xScale, yScale, type, layout } = this.props;
 
     let xPos = 0;
     let yPos = 0;
     if (type !== 'marimekko') {
-      const val = xScale(data.key);
-
       if (layout === 'vertical') {
+        const val = xScale(data.key);
         xPos = val;
       } else {
+        const val = yScale(data.key);
         yPos = val;
       }
     }
@@ -86,14 +86,26 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
   ) {
     const {
       xScale1,
-      yScale,
       bar,
       padding,
       animated,
       isCategorical,
       layout
     } = this.props;
-    const xScale = xScale1 || this.props.xScale;
+    const isVertical = layout === 'vertical';
+
+    // const xScale = xScale1 || this.props.xScale;
+
+    let yScale = this.props.yScale;
+    let xScale = this.props.xScale;
+
+    if (xScale1) {
+      if (isVertical) {
+        xScale = xScale1;
+      } else {
+        yScale = xScale1;
+      }
+    }
 
     // Histograms dont have keys
     let key = barIndex.toString();

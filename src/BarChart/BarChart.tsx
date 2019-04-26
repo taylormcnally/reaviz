@@ -64,10 +64,10 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   };
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
-    const { yAxis, xAxis, series, layout } = this.props;
+    const { yAxis, xAxis, series } = this.props;
 
     const seriesType = series.props.type;
-    const isVertical = layout === 'vertical';
+    const isVertical = this.getIsVertical();
     const isMarimekko = seriesType === 'marimekko';
 
     let data;
@@ -110,9 +110,9 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     } else {
       if (isGrouped) {
         const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
-        xScale = groupScale;
+        yScale = groupScale;
         xScale1 = keyScale;
-        yScale = this.getValueScale(data, yAxis, chartHeight);
+        xScale = this.getKeyScale(data, xAxis, chartWidth);
       } else {
         xScale = this.getKeyScale(data, xAxis, chartWidth);
         yScale = this.getValueScale(data, yAxis, chartHeight);
@@ -125,11 +125,21 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     return { xScale, xScale1, yScale, data };
   }
 
-  getBinnedData(data, xScale, yScale) {
-    const { yAxis, xAxis, series, layout } = this.props;
+  getKeyAxis() {
+    const { yAxis, xAxis } = this.props;
+    const isVertical = this.getIsVertical();
+    return isVertical ? xAxis : yAxis;
+  }
 
-    const isVertical = layout === 'vertical';
-    const keyAxis = isVertical ? xAxis : yAxis;
+  getIsVertical() {
+    return this.props.layout === 'vertical';
+  }
+
+  getBinnedData(data, xScale, yScale) {
+    const { series } = this.props;
+
+    const keyAxis = this.getKeyAxis();
+    const isVertical = this.getIsVertical();
     const keyScale = isVertical ? xScale : yScale;
     const keyAxisType = keyAxis.props.type;
 
@@ -150,7 +160,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     const keyScale = getMarimekkoScale(width, axis.props.roundDomains);
 
     const groupScale = getMarimekkoGroupScale({
-      width: width,
+      width,
       padding: series.props.padding,
       data,
       valueScale: keyScale
@@ -163,11 +173,12 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   }
 
   getMultiGroupScales(data, height: number, width: number) {
-    const { series } = this.props;
+    const { series, layout } = this.props;
+    const isVertical = this.getIsVertical();
 
     const groupScale = getGroupScale({
-      height,
-      width,
+      dimension: isVertical ? width : height,
+      direction: layout,
       padding: series.props.groupPadding,
       data
     });
@@ -175,7 +186,8 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     const keyScale = getInnerScale({
       groupScale: groupScale,
       padding: series.props.padding,
-      data
+      data,
+      prop: isVertical ? 'x' : 'y'
     });
 
     return {
@@ -218,8 +230,8 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       chartWidth
     );
 
-    const isVertical = layout === 'vertical';
-    const keyAxis = isVertical ? xAxis : yAxis;
+    const isVertical = this.getIsVertical();
+    const keyAxis = this.getKeyAxis();
     const isCategorical = keyAxis.props.type === 'category';
 
     return (
