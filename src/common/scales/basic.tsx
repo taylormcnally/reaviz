@@ -49,10 +49,6 @@ export function getXScale({
     domain = domain || getXDomain({ data, scaled });
     scale = scale.domain(domain);
   } else if (type === 'category') {
-    scale = scaleBand()
-      .rangeRound([0, width!])
-      .padding(padding || 0);
-
     if (!domain) {
       const isMulti = isMultiSeries(data);
       if (isMulti) {
@@ -62,7 +58,10 @@ export function getXScale({
       }
     }
 
-    scale = scale.domain(domain);
+    scale = scaleBand()
+      .rangeRound([0, width!])
+      .padding(padding || 0)
+      .domain(domain);
   }
 
   return roundDomains ? scale.nice() : scale;
@@ -86,8 +85,15 @@ export function getYScale({
       .range([height!, 0])
       .domain(domain || getYDomain({ scaled, data }));
   } else {
-    domain =
-      domain || getGroupDomain(data as ChartInternalShallowDataShape[], 'y');
+    if (!domain) {
+      const isMulti = isMultiSeries(data);
+      if (isMulti) {
+        domain = getGroupDomain(data as ChartInternalNestedDataShape[], 'key');
+      } else {
+        domain = getGroupDomain(data as ChartInternalShallowDataShape[], 'y');
+      }
+    }
+
     scale = scaleBand()
       .rangeRound([height!, 0])
       .padding(padding || 0)

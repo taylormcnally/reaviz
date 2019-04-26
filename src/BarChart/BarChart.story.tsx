@@ -328,6 +328,14 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       width={500}
       height={350}
       data={multiCategory}
+      layout="horizontal"
+      xAxis={<LinearXAxis type="value" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
       series={
         <StackedBarSeries
           colorScheme={chroma
@@ -342,6 +350,14 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       width={500}
       height={350}
       data={multiCategory}
+      layout="horizontal"
+      xAxis={<LinearXAxis type="value" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
       series={
         <StackedNormalizedBarSeries
           colorScheme={chroma

@@ -92,10 +92,8 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
       isCategorical,
       layout
     } = this.props;
+
     const isVertical = layout === 'vertical';
-
-    // const xScale = xScale1 || this.props.xScale;
-
     let yScale = this.props.yScale;
     let xScale = this.props.xScale;
 

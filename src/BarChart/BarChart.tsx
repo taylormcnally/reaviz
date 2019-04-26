@@ -64,7 +64,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   };
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
-    const { yAxis, xAxis, series } = this.props;
+    const { yAxis, xAxis, series, layout } = this.props;
 
     const seriesType = series.props.type;
     const isVertical = this.getIsVertical();
@@ -74,7 +74,8 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     if (seriesType === 'stacked' || seriesType === 'stackedNormalized') {
       data = buildBarStackData(
         this.props.data as ChartNestedDataShape[],
-        seriesType === 'stackedNormalized'
+        seriesType === 'stackedNormalized',
+        layout
       );
     } else if (isMarimekko) {
       data = buildMarimekkoData(this.props.data as ChartNestedDataShape[]);
@@ -82,7 +83,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       data = buildChartData(
         this.props.data,
         false,
-        isVertical ? 'vertical' : 'horizontal'
+        layout
       );
     }
 
@@ -113,6 +114,8 @@ export class BarChart extends React.Component<BarChartProps, {}> {
         yScale = groupScale;
         xScale1 = keyScale;
         xScale = this.getKeyScale(data, xAxis, chartWidth);
+      } else if (isMarimekko) {
+        throw new Error('Marimekko is currently not supported for horizontal layouts');
       } else {
         xScale = this.getKeyScale(data, xAxis, chartWidth);
         yScale = this.getValueScale(data, yAxis, chartHeight);
