@@ -28,8 +28,7 @@ import {
   LinearXAxis,
   LinearXAxisTickSeries,
   LinearYAxis,
-  LinearYAxisTickSeries,
-  LinearYAxisTickLabel
+  LinearYAxisTickSeries
 } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
@@ -127,7 +126,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
     />
   ));
 
-storiesOf('Charts/Bar/Histogram', module)
+storiesOf('Charts/Bar/Vertical/Histogram', module)
   .add('Dates', () => (
     <BarChart
       width={350}
@@ -166,7 +165,7 @@ storiesOf('Charts/Bar/Histogram', module)
     />
   ));
 
-storiesOf('Charts/Bar/Multi Series', module)
+storiesOf('Charts/Bar/Vertical/Multi Series', module)
   .add('Simple', () => (
     <BarChart
       width={350}
@@ -298,7 +297,74 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
       }
     />
   </div>
-))
+));
+
+storiesOf('Charts/Bar/Horizontal/Multi Series', module)
+  .add('Simple', () => (
+    <BarChart
+      width={350}
+      height={350}
+      data={multiCategory}
+      layout="horizontal"
+      xAxis={<LinearXAxis type="value" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+      series={
+        <BarSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+          padding={0.8}
+        />
+      }
+    />
+  ))
+  .add('Stacked', () => (
+    <StackedBarChart
+      width={350}
+      height={350}
+      data={multiCategory}
+      series={
+        <StackedBarSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+        />
+      }
+    />
+  ))
+  .add('Stacked Normalized', () => (
+    <StackedNormalizedBarChart
+      width={350}
+      height={350}
+      data={multiCategory}
+      series={
+        <StackedNormalizedBarSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+        />
+      }
+    />
+  ))
+  .add('Marimekko', () => (
+    <MarimekkoChart
+      width={350}
+      height={350}
+      data={multiCategory}
+      series={
+        <MarimekkoBarSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+        />
+      }
+    />
+  ));
 
 storiesOf('Charts/Bar/Gridlines', module)
   .add('All Axes', () => (

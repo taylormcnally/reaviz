@@ -85,56 +85,53 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     }
 
     const isMulti = isMultiSeries(data);
-    const xAxisType = xAxis.props.type;
+    const isGrouped = seriesType === 'standard' && isMulti;
+    const isMarimekko = seriesType === 'marimekko';
 
+    let yScale;
     let xScale;
     let xScale1;
-    if (seriesType === 'standard' && isMulti) {
-      xScale = getGroupScale({
-        height: chartHeight,
-        width: chartWidth,
-        padding: series.props.groupPadding,
-        data
-      });
 
-      xScale1 = getInnerScale({
-        groupScale: xScale,
-        padding: series.props.padding,
-        data
-      });
-    } else if (seriesType === 'marimekko') {
-      xScale1 = getMarimekkoScale(chartWidth, xAxis.props.roundDomains);
+    if (isVertical) {
+      if (isGrouped) {
+        const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
+        xScale = groupScale;
+        xScale1 = keyScale;
+      } else if (isMarimekko) {
+        const { keyScale, groupScale } = this.getMarimekkoGroupScales(data, xAxis, chartWidth);
+        xScale = groupScale;
+        xScale1 = keyScale;
+      } else {
+        xScale = this.getKeyScale(data, xAxis, chartWidth);
+      }
 
-      xScale = getMarimekkoGroupScale({
-        width: chartWidth,
-        padding: series.props.padding,
-        data,
-        valueScale: xScale1
-      });
+      yScale = this.getValueScale(data, yAxis, chartHeight);
     } else {
-      xScale = getXScale({
-        width: chartWidth,
-        type: xAxisType,
-        roundDomains: xAxis.props.roundDomains,
-        data,
-        padding: series.props.padding,
-        domain: xAxis.props.domain
-      });
+      if (isGrouped) {
+        const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
+        xScale = groupScale;
+        xScale1 = keyScale;
+        yScale = this.getValueScale(data, yAxis, chartHeight);
+      } else {
+        xScale = this.getKeyScale(data, xAxis, chartWidth);
+        yScale = this.getValueScale(data, yAxis, chartHeight);
+      }
     }
 
-    const yScale = getYScale({
-      roundDomains: yAxis.props.roundDomains,
-      padding: series.props.padding,
-      type: yAxis.props.type,
-      height: chartHeight,
-      data,
-      domain: yAxis.props.domain
-    });
-
     // If the key axis is a time/number we should bin it...
+    data = this.getBinnedData(data, xScale, yScale);
+
+    return { xScale, xScale1, yScale, data };
+  }
+
+  getBinnedData(data, xScale, yScale) {
+    const { yAxis, xAxis, series, layout } = this.props;
+
+    const isVertical = layout === 'vertical';
     const keyAxis = isVertical ? xAxis : yAxis;
     const keyScale = isVertical ? xScale : yScale;
     const keyAxisType = keyAxis.props.type;
+
     if (keyAxisType === 'time' || keyAxisType === 'value') {
       data = buildBins(
         keyScale,
@@ -143,7 +140,73 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       );
     }
 
-    return { xScale, xScale1, yScale, data };
+    return data;
+  }
+
+  getMarimekkoGroupScales(data, axis, width: number) {
+    const { series } = this.props;
+
+    const keyScale = getMarimekkoScale(width, axis.props.roundDomains);
+
+    const groupScale = getMarimekkoGroupScale({
+      width: width,
+      padding: series.props.padding,
+      data,
+      valueScale: keyScale
+    });
+
+    return {
+      keyScale,
+      groupScale
+    };
+  }
+
+  getMultiGroupScales(data, height: number, width: number) {
+    const { series } = this.props;
+
+    const groupScale = getGroupScale({
+      height,
+      width,
+      padding: series.props.groupPadding,
+      data
+    });
+
+    const keyScale = getInnerScale({
+      groupScale: groupScale,
+      padding: series.props.padding,
+      data
+    });
+
+    return {
+      groupScale,
+      keyScale
+    };
+  }
+
+  getKeyScale(data, axis, width: number) {
+    const { series } = this.props;
+
+    return getXScale({
+      width,
+      type: axis.props.type,
+      roundDomains: axis.props.roundDomains,
+      data,
+      padding: series.props.padding,
+      domain: axis.props.domain
+    });
+  }
+
+  getValueScale(data, axis, height: number) {
+    const { series } = this.props;
+
+    return getYScale({
+      roundDomains: axis.props.roundDomains,
+      padding: series.props.padding,
+      type: axis.props.type,
+      height,
+      data,
+      domain: axis.props.domain
+    });
   }
 
   renderChart(containerProps: ChartContainerChildProps) {
