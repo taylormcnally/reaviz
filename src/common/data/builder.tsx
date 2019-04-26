@@ -30,7 +30,7 @@ export const isNested = (
 export function buildChartData(
   series: ChartDataShape[],
   sort = false,
-  direction = 'horizontal'
+  direction: Direction = 'vertical'
 ): ChartInternalDataShape[] {
   if (isMultiSeries(series)) {
     return buildNestedChartData(
@@ -67,7 +67,7 @@ export function buildChartData(
 export function buildNestedChartData(
   series: ChartNestedDataShape[],
   sort = false,
-  direction = 'vertical'
+  direction: Direction = 'vertical'
 ): ChartInternalNestedDataShape[] {
   let result: ChartInternalNestedDataShape[] = [];
   const maxBigInteger = getMaxBigInteger(series);
@@ -135,7 +135,7 @@ export function buildNestedChartData(
  */
 export function buildShallowChartData(
   series: ChartShallowDataShape[],
-  direction = 'vertical'
+  direction: Direction = 'vertical'
 ): ChartInternalShallowDataShape[] {
   const result: ChartInternalShallowDataShape[] = [];
   const maxBigInteger = getMaxBigInteger(series);
