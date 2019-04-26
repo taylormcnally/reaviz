@@ -28,7 +28,8 @@ import {
   LinearXAxis,
   LinearXAxisTickSeries,
   LinearYAxis,
-  LinearYAxisTickSeries
+  LinearYAxisTickSeries,
+  LinearXAxisTickLabel
 } from '../common/Axis/LinearAxis';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
@@ -351,11 +352,21 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       height={350}
       data={multiCategory}
       layout="horizontal"
-      xAxis={<LinearXAxis type="value" />}
-      yAxis={
-        <LinearYAxis
-          type="category"
-          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+      yAxis={<LinearYAxis type="category" />}
+      xAxis={
+        <LinearXAxis
+          type="value"
+          tickSeries={
+            <LinearXAxisTickSeries
+              tickSize={20}
+              label={
+                <LinearXAxisTickLabel
+                  rotation={false}
+                  format={data => `${data * 100}%`}
+                />
+              }
+            />
+          }
         />
       }
       series={
