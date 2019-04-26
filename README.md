@@ -33,7 +33,7 @@ creating charts without sacrificing customization ability.
 
 Chart types include:
 
-- Linear & Radial Bar Chart
+- Linear (Vertical & Horizontal) & Radial Bar Chart
 - Linear & Radial Line Chart
 - Linear & Radial Area Chart
 - Linear & Radial Bubble Chart

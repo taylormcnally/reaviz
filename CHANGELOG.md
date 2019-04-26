@@ -1,7 +1,15 @@
 # Master
 - [Feature] Radial Gauge Chart
+- [Feature] Horizontal Bar Charts
+- [Feature] Adds ability to specify tick values and intervals in radial axis
 - [BREAKING] Refactor Gradient API
 - [Fix] Fix a bug with gradient LinearAxisLines not working in Firefox #40
+- [Fix] Implements custom tweening for radial bar chart because of errors
+- [Fix] Abstracts tick methods and uses in radial axis
+- [Fix] Updates radial bar to use start domain vs 0
+- [Fix] Updates radial line/area to use start domain vs 0
+- [Fix] Updates radial scatter to use start domain vs 0
+- [Fix] Updates linear to use start domain vs 0
 
 # 1.2.0
 - [Feature] Refactored Circle Series on Line/Area to use Scatter

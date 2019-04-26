@@ -11,7 +11,9 @@
   - [CSS Variables](getting-started/css-vars.md)
 - Chart Types
   - [Area Chart](charts/area-chart.md)
-  - [Bar Chart](charts/bar-chart.md)
+  - Bar Chart
+    - [Vertical](charts/bar-chart.md)
+    - Horizontal
   - [Line Chart](charts/line-chart.md)
   - [Map](charts/map.md)
   - [Pie Chart](charts/pie-chart.md)
