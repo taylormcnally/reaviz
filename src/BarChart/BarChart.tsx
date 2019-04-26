@@ -65,8 +65,10 @@ export class BarChart extends React.Component<BarChartProps, {}> {
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
     const { yAxis, xAxis, series, layout } = this.props;
+
     const seriesType = series.props.type;
     const isVertical = layout === 'vertical';
+    const isMarimekko = seriesType === 'marimekko';
 
     let data;
     if (seriesType === 'stacked' || seriesType === 'stackedNormalized') {
@@ -74,7 +76,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
         this.props.data as ChartNestedDataShape[],
         seriesType === 'stackedNormalized'
       );
-    } else if (seriesType === 'marimekko') {
+    } else if (isMarimekko) {
       data = buildMarimekkoData(this.props.data as ChartNestedDataShape[]);
     } else {
       data = buildChartData(
@@ -86,7 +88,6 @@ export class BarChart extends React.Component<BarChartProps, {}> {
 
     const isMulti = isMultiSeries(data);
     const isGrouped = seriesType === 'standard' && isMulti;
-    const isMarimekko = seriesType === 'marimekko';
 
     let yScale;
     let xScale;
