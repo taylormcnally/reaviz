@@ -15,7 +15,9 @@ import {
   isMultiSeries,
   buildBins,
   buildBarStackData,
-  buildMarimekkoData
+  buildMarimekkoData,
+  buildWaterfall,
+  ChartShallowDataShape
 } from '../common/data';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
 import {
@@ -75,6 +77,11 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       data = buildBarStackData(
         this.props.data as ChartNestedDataShape[],
         seriesType === 'stackedNormalized',
+        layout
+      );
+    } else if (seriesType === 'waterfall') {
+      data = buildWaterfall(
+        this.props.data as ChartShallowDataShape[],
         layout
       );
     } else if (isMarimekko) {
