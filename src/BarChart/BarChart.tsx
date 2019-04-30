@@ -16,7 +16,9 @@ import {
   buildBarStackData,
   buildMarimekkoData,
   buildWaterfall,
-  ChartShallowDataShape
+  ChartShallowDataShape,
+  buildNestedChartData,
+  buildShallowChartData
 } from '../common/data';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
 import {
@@ -84,10 +86,15 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       );
     } else if (isMarimekko) {
       data = buildMarimekkoData(this.props.data as ChartNestedDataShape[]);
-    } else {
-      data = buildChartData(
-        this.props.data,
+    } else if (isGrouped) {
+      data = buildNestedChartData(
+        this.props.data as ChartNestedDataShape[],
         false,
+        layout
+      );
+    } else {
+      data = buildShallowChartData(
+        this.props.data as ChartShallowDataShape[],
         layout
       );
     }
