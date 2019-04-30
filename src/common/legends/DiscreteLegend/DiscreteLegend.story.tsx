@@ -25,4 +25,15 @@ storiesOf('Charts/Legend/Discrete', module)
         <DiscreteLegendEntry label="AD" color="purple" />
       ]}
     />
+  ))
+  .add('Labels Verticals', () => (
+    <DiscreteLegend
+      orientation="horizontal"
+      entries={[
+        <DiscreteLegendEntry label="DLP" color="green" orientation="vertical" />,
+        <DiscreteLegendEntry label="SIEM" color="blue" orientation="vertical" />,
+        <DiscreteLegendEntry label="AWS" color="yellow" orientation="vertical" />,
+        <DiscreteLegendEntry label="AD" color="purple" orientation="vertical" />
+      ]}
+    />
   ));

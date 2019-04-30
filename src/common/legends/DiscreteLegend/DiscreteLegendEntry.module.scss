@@ -2,10 +2,18 @@
   display: flex;
   color: var(--color-on-primary);
   padding: 9px 10px;
-  flex-direction: row;
-  align-items: center;
   will-change: transparency;
   transition: opacity 150ms ease-in;
+
+  &.vertical {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  &.horizontal {
+    align-items: center;
+    flex-direction: row;
+  }
 
   &.inactive {
     opacity: 0.5;
