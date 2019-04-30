@@ -10,7 +10,6 @@ import {
 import { getXDomain, getYDomain, getGroupDomain } from '../utils/domains';
 import {
   ChartInternalShallowDataShape,
-  isMultiSeries,
   ChartInternalNestedDataShape
 } from '../data';
 
@@ -23,6 +22,7 @@ interface ScaleConfig {
   scaled?: boolean;
   width?: number;
   height?: number;
+  isMultiSeries?: boolean;
 }
 
 /**
@@ -35,7 +35,8 @@ export function getXScale({
   width,
   domain,
   padding,
-  scaled
+  scaled,
+  isMultiSeries = false
 }: ScaleConfig): ScalePoint<any> | ScaleBand<any> | ScaleTime<any, any> {
   let scale;
 
@@ -50,8 +51,7 @@ export function getXScale({
     scale = scale.domain(domain);
   } else if (type === 'category') {
     if (!domain) {
-      const isMulti = isMultiSeries(data);
-      if (isMulti) {
+      if (isMultiSeries) {
         domain = getGroupDomain(data as ChartInternalNestedDataShape[], 'key');
       } else {
         domain = getGroupDomain(data as ChartInternalShallowDataShape[], 'x');
@@ -77,7 +77,8 @@ export function getYScale({
   data,
   domain,
   scaled,
-  padding
+  padding,
+  isMultiSeries = false
 }: ScaleConfig): ScaleLinear<any, any> {
   let scale;
   if (type === 'time' || type === 'value') {
@@ -86,8 +87,7 @@ export function getYScale({
       .domain(domain || getYDomain({ scaled, data }));
   } else {
     if (!domain) {
-      const isMulti = isMultiSeries(data);
-      if (isMulti) {
+      if (isMultiSeries) {
         domain = getGroupDomain(data as ChartInternalNestedDataShape[], 'key');
       } else {
         domain = getGroupDomain(data as ChartInternalShallowDataShape[], 'y');

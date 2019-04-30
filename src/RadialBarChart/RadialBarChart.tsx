@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import {
   ChartShallowDataShape,
-  buildChartData,
-  ChartInternalShallowDataShape
+  ChartInternalShallowDataShape,
+  buildShallowChartData
 } from '../common/data';
 import { scaleBand } from 'd3-scale';
 import { getYDomain, getGroupDomain } from '../common/utils/domains';
@@ -38,7 +38,7 @@ export class RadialBarChart extends Component<RadialBarChartProps> {
       innerRadius: number,
       outerRadius: number
     ) => {
-      const data = buildChartData(preData) as ChartInternalShallowDataShape[];
+      const data = buildShallowChartData(preData) as ChartInternalShallowDataShape[];
       const xDomain = getGroupDomain(
         data as ChartInternalShallowDataShape[],
         'x'

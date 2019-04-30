@@ -144,6 +144,7 @@ storiesOf('Charts/Area/Multi Series', module)
       data={multiDateData}
       series={
         <AreaSeries
+          type="grouped"
           colorScheme={chroma
             .scale(['27efb5', '00bfff'])
             .colors(multiDateData.length)}
@@ -158,6 +159,7 @@ storiesOf('Charts/Area/Multi Series', module)
       height={350}
       series={
         <AreaSeries
+          type="grouped"
           colorScheme={(_data, index) => (index % 2 ? 'blue' : 'green')}
         />
       }
@@ -322,6 +324,7 @@ class LiveUpdatingStory extends Component<any, any> {
           height={350}
           series={
             <AreaSeries
+              type="grouped"
               colorScheme={chroma
                 .scale(['27efb5', '00bfff'])
                 .colors(multiDateData.length)}

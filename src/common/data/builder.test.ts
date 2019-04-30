@@ -1,12 +1,9 @@
-import { isNested } from './builder';
+import { buildShallowChartData } from './builder';
+import { categoryData } from '../demo/category';
 
-describe('Builder', () => {
-  it('it should infer nested object', () => {
-    const is = isNested({
-      key: 1,
-      data: []
-    });
-
-    expect(is).toBe(true);
+ describe('Builder', () => {
+  it('it should build zero based chart', () => {
+    const result = buildShallowChartData(categoryData);
+    expect(result[0].x0).toBe(0);
   });
 });

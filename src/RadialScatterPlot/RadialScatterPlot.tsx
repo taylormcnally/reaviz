@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import {
   ChartShallowDataShape,
-  buildChartData,
+  buildShallowChartData,
   ChartInternalShallowDataShape
 } from '../common/data';
 import { scaleTime } from 'd3-scale';
@@ -41,7 +41,7 @@ export class RadialScatterPlot extends Component<RadialScatterPlotProps> {
       outerRadius: number,
       innerRadius: number
     ) => {
-      const data = buildChartData(preData) as ChartInternalShallowDataShape[];
+      const data = buildShallowChartData(preData) as ChartInternalShallowDataShape[];
 
       const yDomain = getYDomain({ data, scaled: false });
       const xDomain = getXDomain({ data });

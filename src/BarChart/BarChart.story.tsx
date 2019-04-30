@@ -11,7 +11,8 @@ import {
   multiCategory,
   randomNumber,
   medDateData,
-  numberData
+  numberData,
+  nonZeroCategoryData
 } from '../common/demo';
 import chroma from 'chroma-js';
 import { timeWeek, timeMonth } from 'd3-time';
@@ -154,6 +155,13 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
         />
       }
     />
+  ))
+  .add('Non-Zero', () => (
+    <BarChart
+      width={350}
+      height={250}
+      data={nonZeroCategoryData as any}
+    />
   ));
 
 storiesOf('Charts/Bar/Vertical/Histogram', module)
@@ -203,6 +211,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       data={multiCategory}
       series={
         <BarSeries
+          type="grouped"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
@@ -271,7 +280,6 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
         width={width}
         height={height}
         data={data}
-        layout="horizontal"
         xAxis={<LinearXAxis type="value" />}
         yAxis={
           <LinearYAxis
@@ -282,6 +290,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
         series={
           <BarSeries
             colorScheme={[fill]}
+            layout="horizontal"
             padding={padding}
             bar={<Bar rounded={rounded} gradient={gradient} />}
           />
@@ -295,7 +304,6 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
   <BarChart
     height={350}
     width={500}
-    layout="horizontal"
     data={largeCategoryData}
     xAxis={<LinearXAxis type="value" />}
     yAxis={
@@ -306,6 +314,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
     }
     series={
       <BarSeries
+        layout="horizontal"
         colorScheme={chroma
           .scale(['ACB7C9', '418AD7'])
           .colors(largeCategoryData.length)}
@@ -317,7 +326,11 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
   <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
     <BarChart
       data={categoryData}
-      layout="horizontal"
+      series={
+        <BarSeries
+          layout="horizontal"
+        />
+      }
       xAxis={<LinearXAxis type="value" />}
       yAxis={
         <LinearYAxis
@@ -333,10 +346,10 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
     height={350}
     width={500}
     data={categoryData}
-    layout="horizontal"
     xAxis={<LinearXAxis type="value" />}
     series={
       <BarSeries
+        layout="horizontal"
         type="waterfall"
       />
     }
@@ -347,7 +360,26 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
       />
     }
   />
-));
+))
+.add('Non-Zero', () => (
+  <BarChart
+    height={350}
+    width={500}
+    data={nonZeroCategoryData as any}
+    xAxis={<LinearXAxis type="value" />}
+    series={
+      <BarSeries
+        layout="horizontal"
+      />
+    }
+    yAxis={
+      <LinearYAxis
+        type="category"
+        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+      />
+    }
+  />
+))
 
 storiesOf('Charts/Bar/Horizontal/Multi Series', module)
   .add('Simple', () => (
@@ -355,7 +387,6 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       width={500}
       height={350}
       data={multiCategory}
-      layout="horizontal"
       xAxis={<LinearXAxis type="value" />}
       yAxis={
         <LinearYAxis
@@ -365,6 +396,8 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       }
       series={
         <BarSeries
+          layout="horizontal"
+          type="grouped"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
@@ -378,7 +411,6 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       width={500}
       height={350}
       data={multiCategory}
-      layout="horizontal"
       xAxis={<LinearXAxis type="value" />}
       yAxis={
         <LinearYAxis
@@ -388,6 +420,7 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       }
       series={
         <StackedBarSeries
+          layout="horizontal"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
@@ -400,7 +433,6 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       width={500}
       height={350}
       data={multiCategory}
-      layout="horizontal"
       yAxis={<LinearYAxis type="category" />}
       xAxis={
         <LinearXAxis
@@ -420,6 +452,7 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       }
       series={
         <StackedNormalizedBarSeries
+          layout="horizontal"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}

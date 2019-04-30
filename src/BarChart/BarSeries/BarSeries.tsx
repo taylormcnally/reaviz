@@ -2,9 +2,9 @@ import React, { Fragment, Component } from 'react';
 import { Bar, BarProps } from './Bar';
 import {
   ChartInternalDataShape,
-  isMultiSeries,
   ChartInternalNestedDataShape,
-  ChartInternalShallowDataShape
+  ChartInternalShallowDataShape,
+  Direction
 } from '../../common/data';
 import { PoseGroup } from 'react-pose';
 import { PoseSVGGElement } from '../../common/utils/animations';
@@ -20,13 +20,13 @@ export interface BarSeriesProps {
   xScale1: any;
   yScale: any;
   bar: JSX.Element;
-  type: 'standard' | 'stacked' | 'stackedNormalized' | 'marimekko' | 'waterfall';
+  type: 'standard' | 'grouped' | 'stacked' | 'stackedNormalized' | 'marimekko' | 'waterfall';
   colorScheme: ((data, index: number) => string) | string[];
   animated: boolean;
   padding: number;
   groupPadding: number;
   isCategorical: boolean;
-  layout: 'horizontal' | 'vertical';
+  layout: Direction;
   /**
    * Threshold for the binning of histogram charts.
    */
@@ -38,7 +38,7 @@ export interface BarSeriesProps {
     | CountableTimeInterval;
 }
 
-export class BarSeries extends Component<BarSeriesProps, {}> {
+export class BarSeries extends Component<BarSeriesProps> {
   static defaultProps: Partial<BarSeriesProps> = {
     type: 'standard',
     padding: 0.1,
@@ -151,8 +151,12 @@ export class BarSeries extends Component<BarSeriesProps, {}> {
   }
 
   render() {
-    const { data } = this.props;
-    const isMulti = isMultiSeries(data);
+    const { data, type } = this.props;
+    const isMulti =
+      type === 'grouped' ||
+      type === 'stacked' ||
+      type === 'marimekko' ||
+      type === 'stackedNormalized';
 
     return (
       <Fragment>

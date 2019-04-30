@@ -20,6 +20,25 @@ export const categoryData = [
   }
 ];
 
+export const nonZeroCategoryData = [
+  {
+    key: 'Phishing Attack',
+    data: [5, 10]
+  },
+  {
+    key: 'IDS',
+    data: [8, 14]
+  },
+  {
+    key: 'Malware',
+    data: [5, 6]
+  },
+  {
+    key: 'DLP',
+    data: [10, 18]
+  }
+];
+
 const generateData = count =>
   range(count).map(i => ({
     key: categoryData[randomNumber(0, categoryData.length - 1)].key + '' + i,

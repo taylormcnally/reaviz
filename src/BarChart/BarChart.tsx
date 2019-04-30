@@ -11,13 +11,13 @@ import { BarSeries, BarSeriesProps } from './BarSeries';
 import {
   ChartDataShape,
   ChartNestedDataShape,
-  buildChartData,
-  isMultiSeries,
   buildBins,
   buildBarStackData,
   buildMarimekkoData,
   buildWaterfall,
-  ChartShallowDataShape
+  ChartShallowDataShape,
+  buildNestedChartData,
+  buildShallowChartData
 } from '../common/data';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
 import {
@@ -46,7 +46,6 @@ export interface BarChartProps extends ChartProps {
   gridlines: JSX.Element | null;
   brush: JSX.Element;
   zoomPan: JSX.Element;
-  layout: 'horizontal' | 'vertical';
 }
 
 export class BarChart extends React.Component<BarChartProps, {}> {
@@ -62,40 +61,44 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     series: <BarSeries />,
     gridlines: <GridlineSeries />,
     brush: <ChartBrush disabled={true} />,
-    layout: 'vertical'
   };
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
-    const { yAxis, xAxis, series, layout } = this.props;
+    const { yAxis, xAxis, series } = this.props;
 
-    const seriesType = series.props.type;
+    const { type, layout } = series.props;
     const isVertical = this.getIsVertical();
-    const isMarimekko = seriesType === 'marimekko';
+    const isMarimekko = type === 'marimekko';
+    const isGrouped = type === 'grouped';
+    const isStacked = type === 'stacked' || type === 'stackedNormalized';
+    const isMultiSeries = isGrouped || isStacked;
 
     let data;
-    if (seriesType === 'stacked' || seriesType === 'stackedNormalized') {
+    if (isStacked) {
       data = buildBarStackData(
         this.props.data as ChartNestedDataShape[],
-        seriesType === 'stackedNormalized',
+        type === 'stackedNormalized',
         layout
       );
-    } else if (seriesType === 'waterfall') {
+    } else if (type === 'waterfall') {
       data = buildWaterfall(
         this.props.data as ChartShallowDataShape[],
         layout
       );
     } else if (isMarimekko) {
       data = buildMarimekkoData(this.props.data as ChartNestedDataShape[]);
-    } else {
-      data = buildChartData(
-        this.props.data,
+    } else if (isGrouped) {
+      data = buildNestedChartData(
+        this.props.data as ChartNestedDataShape[],
         false,
         layout
       );
+    } else {
+      data = buildShallowChartData(
+        this.props.data as ChartShallowDataShape[],
+        layout
+      );
     }
-
-    const isMulti = isMultiSeries(data);
-    const isGrouped = seriesType === 'standard' && isMulti;
 
     let yScale;
     let xScale;
@@ -111,21 +114,21 @@ export class BarChart extends React.Component<BarChartProps, {}> {
         xScale = groupScale;
         xScale1 = keyScale;
       } else {
-        xScale = this.getKeyScale(data, xAxis, chartWidth);
+        xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
       }
 
-      yScale = this.getValueScale(data, yAxis, chartHeight);
+      yScale = this.getValueScale(data, yAxis, isMultiSeries, chartHeight);
     } else {
       if (isGrouped) {
         const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
         yScale = groupScale;
         xScale1 = keyScale;
-        xScale = this.getKeyScale(data, xAxis, chartWidth);
+        xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
       } else if (isMarimekko) {
         throw new Error('Marimekko is currently not supported for horizontal layouts');
       } else {
-        xScale = this.getKeyScale(data, xAxis, chartWidth);
-        yScale = this.getValueScale(data, yAxis, chartHeight);
+        xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
+        yScale = this.getValueScale(data, yAxis, isMultiSeries, chartHeight);
       }
     }
 
@@ -142,7 +145,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   }
 
   getIsVertical() {
-    return this.props.layout === 'vertical';
+    return this.props.series.props.layout === 'vertical';
   }
 
   getBinnedData(data, xScale, yScale) {
@@ -183,13 +186,14 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   }
 
   getMultiGroupScales(data, height: number, width: number) {
-    const { series, layout } = this.props;
+    const { series } = this.props;
     const isVertical = this.getIsVertical();
+    const { groupPadding, layout } = series.props;
 
     const groupScale = getGroupScale({
       dimension: isVertical ? width : height,
       direction: layout,
-      padding: series.props.groupPadding,
+      padding: groupPadding,
       data
     });
 
@@ -206,7 +210,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     };
   }
 
-  getKeyScale(data, axis, width: number) {
+  getKeyScale(data, axis, isMultiSeries: boolean, width: number) {
     const { series } = this.props;
 
     return getXScale({
@@ -215,11 +219,12 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       roundDomains: axis.props.roundDomains,
       data,
       padding: series.props.padding,
-      domain: axis.props.domain
+      domain: axis.props.domain,
+      isMultiSeries
     });
   }
 
-  getValueScale(data, axis, height: number) {
+  getValueScale(data, axis, isMultiSeries: boolean, height: number) {
     const { series } = this.props;
 
     return getYScale({
@@ -228,13 +233,14 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       type: axis.props.type,
       height,
       data,
-      domain: axis.props.domain
+      domain: axis.props.domain,
+      isMultiSeries
     });
   }
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartHeight, chartWidth, id, updateAxes } = containerProps;
-    const { series, xAxis, yAxis, brush, gridlines, layout } = this.props;
+    const { series, xAxis, yAxis, brush, gridlines } = this.props;
     const { xScale, xScale1, yScale, data } = this.getScalesAndData(
       chartHeight,
       chartWidth
@@ -286,7 +292,6 @@ export class BarChart extends React.Component<BarChartProps, {}> {
               xScale={xScale}
               xScale1={xScale1}
               yScale={yScale}
-              layout={layout}
             />
           </CloneElement>
         )}
