@@ -94,15 +94,16 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
   }
 
   renderContent = (animationState: string) => {
-    const { content } = this.props;
-    const className = classNames(css.tooltip, {
+    const { content, className } = this.props;
+
+    const cls = classNames(css.tooltip, className, {
       [css.active]: animationState === 'entered',
       [css.inactive]:
         animationState === 'entering' || animationState === 'exiting'
     });
 
     return (
-      <div className={className}>
+      <div className={cls}>
         {isFunction(content) ? content() : content}
       </div>
     );
