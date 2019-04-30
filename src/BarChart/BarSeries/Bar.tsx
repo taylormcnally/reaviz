@@ -340,7 +340,7 @@ export class Bar extends Component<BarProps, BarState> {
           <CloneElement<ChartTooltipProps>
             element={tooltip}
             visible={!!active}
-            modifiers={modifiers}
+            modifiers={tooltip.props.modifiers || modifiers}
             reference={this.rect}
             color={color}
             value={this.getTooltipData()}

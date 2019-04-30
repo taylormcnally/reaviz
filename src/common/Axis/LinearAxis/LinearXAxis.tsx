@@ -13,10 +13,7 @@ import {
 } from './LinearAxisTickSeries';
 import { LinearAxisProps, LinearAxis } from './LinearAxis';
 
-export class LinearXAxisTickLabel extends Component<
-  LinearAxisTickLabelProps,
-  {}
-> {
+export class LinearXAxisTickLabel extends Component<LinearAxisTickLabelProps> {
   static defaultProps: Partial<LinearAxisTickLabelProps> = {
     ...LinearAxisTickLabel.defaultProps,
     rotation: true,
@@ -29,10 +26,7 @@ export class LinearXAxisTickLabel extends Component<
   }
 }
 
-export class LinearXAxisTickLine extends Component<
-  LinearAxisTickLineProps,
-  {}
-> {
+export class LinearXAxisTickLine extends Component<LinearAxisTickLineProps> {
   static defaultProps: Partial<LinearAxisTickLineProps> = {
     ...LinearAxisTickLine.defaultProps,
     position: 'end'
@@ -43,10 +37,7 @@ export class LinearXAxisTickLine extends Component<
   }
 }
 
-export class LinearXAxisTickSeries extends Component<
-  LinearAxisTickSeriesProps,
-  {}
-> {
+export class LinearXAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
   static defaultProps: Partial<LinearAxisTickSeriesProps> = {
     ...LinearAxisTickSeries.defaultProps,
     tickSize: 75,
@@ -59,7 +50,7 @@ export class LinearXAxisTickSeries extends Component<
   }
 }
 
-export class LinearXAxis extends Component<LinearAxisProps, {}> {
+export class LinearXAxis extends Component<LinearAxisProps> {
   static defaultProps: Partial<LinearAxisProps> = {
     ...LinearAxis.defaultProps,
     position: 'end',

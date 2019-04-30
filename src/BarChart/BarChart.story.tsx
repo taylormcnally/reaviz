@@ -125,6 +125,18 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
       data={categoryData}
       series={<BarSeries animated={false} />}
     />
+  ))
+  .add('Waterfall', () => (
+    <BarChart
+    width={350}
+    height={250}
+      data={categoryData}
+      series={
+        <BarSeries
+          type="waterfall"
+        />
+      }
+    />
   ));
 
 storiesOf('Charts/Bar/Vertical/Histogram', module)
@@ -298,6 +310,26 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
       }
     />
   </div>
+))
+.add('Waterfall', () => (
+  <BarChart
+    height={350}
+    width={500}
+    data={categoryData}
+    layout="horizontal"
+    xAxis={<LinearXAxis type="value" />}
+    series={
+      <BarSeries
+        type="waterfall"
+      />
+    }
+    yAxis={
+      <LinearYAxis
+        type="category"
+        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+      />
+    }
+  />
 ));
 
 storiesOf('Charts/Bar/Horizontal/Multi Series', module)

@@ -17,11 +17,11 @@ export interface LinearAxisTickLabelProps {
   textAnchor?: 'start' | 'end' | 'middle';
   position: 'start' | 'end' | 'center';
   align: 'start' | 'end' | 'center' | 'inside' | 'outside';
+  className?: any;
 }
 
 export class LinearAxisTickLabel extends Component<
-  LinearAxisTickLabelProps,
-  {}
+  LinearAxisTickLabelProps
 > {
   static defaultProps: Partial<LinearAxisTickLabelProps> = {
     fill: '#8F979F',
@@ -146,7 +146,7 @@ export class LinearAxisTickLabel extends Component<
   }
 
   render() {
-    const { fill, text, fullText, fontSize, fontFamily } = this.props;
+    const { fill, text, fullText, fontSize, fontFamily, className } = this.props;
     const { x, y } = this.getOffset();
     const textPosition = this.getTextPosition();
 
@@ -157,7 +157,7 @@ export class LinearAxisTickLabel extends Component<
         fontFamily={fontFamily}
       >
         <title>{fullText}</title>
-        <text {...textPosition} fill={fill}>
+        <text {...textPosition} fill={fill} className={className}>
           {text}
         </text>
       </g>

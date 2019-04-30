@@ -8,9 +8,10 @@ export interface LinearAxisTickLineProps {
   strokeColor?: string;
   strokeWidth: number;
   position: 'start' | 'end' | 'center';
+  className?: any;
 }
 
-export class LinearAxisTickLine extends Component<LinearAxisTickLineProps, {}> {
+export class LinearAxisTickLine extends Component<LinearAxisTickLineProps> {
   static defaultProps: Partial<LinearAxisTickLineProps> = {
     strokeColor: '#8F979F',
     strokeWidth: 1,
@@ -38,9 +39,9 @@ export class LinearAxisTickLine extends Component<LinearAxisTickLineProps, {}> {
   }
 
   render() {
-    const { strokeColor, strokeWidth } = this.props;
+    const { strokeColor, strokeWidth, className } = this.props;
     const path = this.positionTick();
 
-    return <line strokeWidth={strokeWidth} stroke={strokeColor} {...path} />;
+    return <line className={className} strokeWidth={strokeWidth} stroke={strokeColor} {...path} />;
   }
 }

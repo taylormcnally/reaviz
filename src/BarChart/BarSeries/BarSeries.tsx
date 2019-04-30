@@ -20,7 +20,7 @@ export interface BarSeriesProps {
   xScale1: any;
   yScale: any;
   bar: JSX.Element;
-  type: 'standard' | 'stacked' | 'stackedNormalized' | 'marimekko';
+  type: 'standard' | 'stacked' | 'stackedNormalized' | 'marimekko' | 'waterfall';
   colorScheme: ((data, index: number) => string) | string[];
   animated: boolean;
   padding: number;
