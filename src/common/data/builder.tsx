@@ -149,19 +149,6 @@ export function buildShallowChartData(
       y0: props[`${yProp}0`],
       y1: props[`${yProp}1`]
     });
-
-    console.log('hre', {
-      key: normalizeValueForFormatting(props.k1),
-      value: normalizeValueForFormatting(props.v1),
-      meta: point.meta,
-      id: point.id,
-      x: props[`${xProp}1`],
-      x0: props[`${xProp}0`],
-      x1: props[`${xProp}1`],
-      y: props[`${yProp}1`],
-      y0: props[`${yProp}0`],
-      y1: props[`${yProp}1`]
-    })
   }
 
   return result;
