@@ -11,7 +11,6 @@ import { BarSeries, BarSeriesProps } from './BarSeries';
 import {
   ChartDataShape,
   ChartNestedDataShape,
-  buildChartData,
   buildBins,
   buildBarStackData,
   buildMarimekkoData,
