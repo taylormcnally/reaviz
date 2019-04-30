@@ -1,7 +1,7 @@
 import React, { Component, Fragment, createRef } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { arc } from 'd3-shape';
-import { Gradient } from '../../common/Styles';
+import { Gradient } from '../../common/gradients';
 import * as bind from 'memoize-bind';
 import { PosedRadialBar } from './PosedRadialBar';
 import chroma from 'chroma-js';

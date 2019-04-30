@@ -1,7 +1,7 @@
 import React, { Fragment, Component, createRef } from 'react';
 import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
-import { Gradient, GradientProps } from '../../common/Styles';
+import { Gradient, GradientProps } from '../../common/gradients';
 import classNames from 'classnames';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { RangeLinesProps } from './RangeLines';
@@ -9,6 +9,7 @@ import bind from 'memoize-bind';
 import * as css from './Bar.module.scss';
 import { PosedBar } from './PosedBar';
 import { CloneElement } from '../../common/utils/children';
+import { Mask, MaskProps } from '../../common/masks';
 
 export interface BarProps {
   xScale: any;
@@ -31,6 +32,7 @@ export interface BarProps {
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
   rangeLines: JSX.Element | null;
+  mask: JSX.Element | null;
   tooltip: JSX.Element | null;
   layout: 'vertical' | 'horizontal';
 }
@@ -242,13 +244,17 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   getFill(color: string) {
-    const { id, gradient } = this.props;
+    const { mask, id, gradient } = this.props;
 
-    if (!gradient) {
+    if (mask) {
+      return `url(#mask-pattern-${id})`;
+    } else {
+      if (gradient) {
+        return `url(#gradient-${id})`;
+      }
+
       return color;
     }
-
-    return `url(#${id}-gradient)`;
   }
 
   getTooltipData() {
@@ -264,7 +270,8 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const { rounded, cursor, barCount, animated, layout } = this.props;
+    const { rounded, cursor, barCount, animated, layout, mask, id } = this.props;
+    const maskPath = mask ? `url(#mask-${id})` : '';
     const fill = this.getFill(currentColorShade);
     const enterProps = coords;
     const exitProps = this.getExit(coords);
@@ -277,6 +284,7 @@ export class Bar extends Component<BarProps, BarState> {
         ref={this.rect}
         style={{ cursor }}
         fill={fill}
+        mask={maskPath}
         onMouseEnter={bind(this.onMouseEnter, this)}
         onMouseLeave={bind(this.onMouseLeave, this)}
         onClick={bind(this.onMouseClick, this)}
@@ -309,7 +317,8 @@ export class Bar extends Component<BarProps, BarState> {
       groupIndex,
       rangeLines,
       animated,
-      layout
+      layout,
+      mask
     } = this.props;
     const { active } = this.state;
     const stroke = color(data, barIndex);
@@ -348,12 +357,23 @@ export class Bar extends Component<BarProps, BarState> {
             metadata={data}
           />
         )}
+        {mask && (
+          <Fragment>
+            <Mask id={`mask-${id}`} fill={`url(#gradient-${id})`} />
+            <CloneElement<MaskProps>
+              element={mask}
+              id={`mask-pattern-${id}`}
+              fill={stroke}
+            />
+
+          </Fragment>
+        )}
         {gradient && (
           <CloneElement<GradientProps>
             element={gradient}
-            id={`${id}-gradient`}
-            color={currentColorShade}
+            id={`gradient-${id}`}
             direction={layout}
+            color={currentColorShade}
           />
         )}
       </Fragment>

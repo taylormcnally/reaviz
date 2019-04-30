@@ -45,13 +45,7 @@ import { AreaChart } from 'reaviz';
       colorScheme={['27efb5', '00bfff']}
       line={<Line strokeWidth={3} />}
       area={
-        <Area
-          pattern={true}
-          gradient={[
-            { offset: '10%', stopOpacity: 0 },
-            { offset: '80%', stopOpacity: 1 }
-          ]}
-        />
+        <Area />
       }
     />
   }

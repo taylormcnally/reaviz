@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BarSeriesProps, BarSeries } from './BarSeries';
 import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
-import { Gradient, GradientStop } from '../../common/Styles';
+import { Gradient, GradientStop } from '../../common/gradients';
 
 export class StackedBarSeries extends Component<BarSeriesProps, {}> {
   static defaultProps: Partial<BarSeriesProps> = {

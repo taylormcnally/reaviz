@@ -1,8 +1,12 @@
 # Master
 - [Feature] Radial Gauge Chart
 - [Feature] Horizontal Bar Charts
+- [Feature] Add waterfall bar charts
 - [Feature] Adds ability to specify tick values and intervals in radial axis
+- [Feature] Add ability to pass masks to bar charts
+- [Feature] Add ability to change legend label orientation
 - [BREAKING] Refactor Gradient API
+- [BREAKING] Refactor Pattern API to Masks
 - [Fix] Fix a bug with gradient LinearAxisLines not working in Firefox #40
 - [Fix] Implements custom tweening for radial bar chart because of errors
 - [Fix] Abstracts tick methods and uses in radial axis
@@ -10,6 +14,11 @@
 - [Fix] Updates radial line/area to use start domain vs 0
 - [Fix] Updates radial scatter to use start domain vs 0
 - [Fix] Updates linear to use start domain vs 0
+- [Fix] Remove legend font/svg formatting
+- [Fix] Fix Tooltip not passing `className` downwards
+- [Fix] Remove unused `formatter` prop from `TooltipArea`
+- [Fix] Fix scatter point not passing `className` downward
+- [Fix] Fix modifiers getting overidden in bar props
 
 # 1.2.0
 - [Feature] Refactored Circle Series on Line/Area to use Scatter

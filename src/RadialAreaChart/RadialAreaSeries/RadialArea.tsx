@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialArea, curveCardinalClosed, curveLinear } from 'd3-shape';
-import { RadialGradient, RadialGradientProps } from '../../common/Styles';
+import { RadialGradient, RadialGradientProps } from '../../common/gradients';
 import { CloneElement } from '../../common/utils';
 import { PosedRadialArea } from './PosedRadialArea';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';

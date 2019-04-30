@@ -26,7 +26,8 @@ import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
-import { Gradient, GradientStop } from '../common/Styles';
+import { Gradient, GradientStop } from '../common/gradients';
+import { Stripes } from '../common/masks';
 
 storiesOf('Charts/Area/Single Series', module)
   .add(
@@ -64,7 +65,7 @@ storiesOf('Charts/Area/Single Series', module)
     },
     { options: { showAddonPanel: true } }
   )
-  .add('Pattern', () => (
+  .add('Masks', () => (
     <AreaChart
       width={350}
       height={250}
@@ -73,7 +74,7 @@ storiesOf('Charts/Area/Single Series', module)
         <AreaSeries
           area={
             <Area
-              pattern={true}
+              mask={<Stripes />}
               gradient={
                 <Gradient
                   stops={[

@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { area } from 'd3-shape';
-import { Gradient, Stripes, Mask, GradientProps } from '../../common/Styles';
+import { Gradient, GradientProps } from '../../common/gradients';
+import { Mask, MaskProps } from '../../common/masks';
 import {
   interpolate,
   InterpolationTypes
@@ -21,15 +22,14 @@ export interface AreaProps {
   yScale: any;
   xScale: any;
   index: number;
-  pattern?: boolean;
   animated: boolean;
+  mask: JSX.Element | null;
   gradient: JSX.Element | null;
 }
 
 export class Area extends Component<AreaProps, {}> {
   static defaultProps: Partial<AreaProps> = {
     gradient: <Gradient />,
-    pattern: false,
     interpolation: 'linear'
   };
 
@@ -84,10 +84,10 @@ export class Area extends Component<AreaProps, {}> {
   }
 
   getFill() {
-    const { pattern, id, gradient } = this.props;
+    const { mask, id, gradient } = this.props;
 
-    if (pattern) {
-      return `url(#stripes-${id})`;
+    if (mask) {
+      return `url(#mask-pattern-${id})`;
     } else {
       if (gradient) {
         return `url(#gradient-${id})`;
@@ -98,9 +98,9 @@ export class Area extends Component<AreaProps, {}> {
   }
 
   renderArea(coords: ChartInternalShallowDataShape[]) {
-    const { pattern, index, id, animated } = this.props;
+    const { mask, index, id, animated } = this.props;
     const fill = this.getFill();
-    const mask = pattern ? `url(#mask-${id})` : '';
+    const maskPath = mask ? `url(#mask-${id})` : '';
     const enterProps = this.getAreaEnter(coords);
     const exitProps = this.getAreaExit();
 
@@ -110,7 +110,7 @@ export class Area extends Component<AreaProps, {}> {
         poseKey={enterProps.d}
         animated={animated}
         pointerEvents="none"
-        mask={mask}
+        mask={maskPath}
         index={index}
         fill={fill}
         enterProps={enterProps}
@@ -120,17 +120,22 @@ export class Area extends Component<AreaProps, {}> {
   }
 
   render() {
-    const { id, gradient, pattern, data, color, index } = this.props;
+    const { id, gradient, mask, data, color, index } = this.props;
     const coords = this.getCoords();
     const stroke = color(data, index);
 
     return (
       <Fragment>
         {this.renderArea(coords)}
-        {pattern && (
+        {mask && (
           <Fragment>
             <Mask id={`mask-${id}`} fill={`url(#gradient-${id})`} />
-            <Stripes id={`stripes-${id}`} fill={stroke} />
+            <CloneElement<MaskProps>
+              element={mask}
+              id={`mask-pattern-${id}`}
+              fill={stroke}
+            />
+
           </Fragment>
         )}
         {gradient && (
