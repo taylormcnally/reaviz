@@ -11,7 +11,8 @@ import {
   multiCategory,
   randomNumber,
   medDateData,
-  numberData
+  numberData,
+  nonZeroCategoryData
 } from '../common/demo';
 import chroma from 'chroma-js';
 import { timeWeek, timeMonth } from 'd3-time';
@@ -153,6 +154,13 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
           type="waterfall"
         />
       }
+    />
+  ))
+  .add('Non-Zero', () => (
+    <BarChart
+      width={350}
+      height={250}
+      data={nonZeroCategoryData as any}
     />
   ));
 
@@ -352,7 +360,26 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
       />
     }
   />
-));
+))
+.add('Non-Zero', () => (
+  <BarChart
+    height={350}
+    width={500}
+    data={nonZeroCategoryData as any}
+    xAxis={<LinearXAxis type="value" />}
+    series={
+      <BarSeries
+        layout="horizontal"
+      />
+    }
+    yAxis={
+      <LinearYAxis
+        type="category"
+        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+      />
+    }
+  />
+))
 
 storiesOf('Charts/Bar/Horizontal/Multi Series', module)
   .add('Simple', () => (

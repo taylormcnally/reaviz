@@ -5,6 +5,8 @@
 - [Feature] Adds ability to specify tick values and intervals in radial axis
 - [Feature] Add ability to pass masks to bar charts
 - [Feature] Add ability to change legend label orientation
+- [Feature] Add non-zero offset data for bar charts
+- [BREAKING] Add `grouped` type to Bar/Area chart types for multi-series data points
 - [BREAKING] Refactor Gradient API
 - [BREAKING] Refactor Pattern API to Masks
 - [Fix] Fix a bug with gradient LinearAxisLines not working in Firefox #40

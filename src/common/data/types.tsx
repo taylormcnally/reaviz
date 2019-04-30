@@ -2,19 +2,17 @@ export type ChartDataTypes = ChartInternalDataTypes | bigInt.BigInteger;
 
 export type ChartInternalDataTypes = number | string | Date;
 
-export interface ChartNestedDataShape {
+interface BaseChartDataShape<T> {
   key: ChartDataTypes;
-  data: ChartShallowDataShape[];
+  data: T;
   meta?: any;
   id?: string;
 }
 
-export interface ChartShallowDataShape {
-  key: ChartDataTypes;
-  data: ChartDataTypes;
-  meta?: any;
-  id?: string;
-}
+export type ChartNestedDataShape = BaseChartDataShape<ChartShallowDataShape<ChartDataTypes>[]>;
+
+export type ChartShallowDataShape<T = ChartDataTypes | [ChartInternalDataTypes, ChartInternalDataTypes]> =
+  BaseChartDataShape<T>;
 
 export type ChartDataShape = ChartNestedDataShape | ChartShallowDataShape;
 
