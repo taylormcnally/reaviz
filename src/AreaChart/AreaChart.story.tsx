@@ -27,7 +27,7 @@ import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
 import { Gradient, GradientStop } from '../common/gradients';
-import { Stripes } from 'reaviz/common/masks';
+import { Stripes } from '../common/masks';
 
 storiesOf('Charts/Area/Single Series', module)
   .add(
