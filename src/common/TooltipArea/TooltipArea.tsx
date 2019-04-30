@@ -16,7 +16,7 @@ import { arc } from 'd3-shape';
 
 export interface TooltipAreaProps {
   placement: Placement;
-  formatter?: (value: any, color?: any) => any;
+  content?: (value: any, color?: any) => any;
   height: number;
   width: number;
   xScale: any;
@@ -274,7 +274,7 @@ export class TooltipArea extends React.Component<
   }
 
   render() {
-    const { isRadial, children, tooltip, disabled, color } = this.props;
+    const { isRadial, children, tooltip, disabled, color, content } = this.props;
     const { visible, placement, value } = this.state;
 
     return (
@@ -286,6 +286,7 @@ export class TooltipArea extends React.Component<
             {!isRadial && this.renderLinear()}
             <CloneElement<ChartTooltipProps>
               element={tooltip}
+              content={content}
               visible={visible}
               placement={placement}
               reference={this.getTooltipReference()}
