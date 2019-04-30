@@ -1,47 +1,18 @@
 import { median } from 'd3-array';
 import {
-  ChartInternalDataShape,
   ChartInternalNestedDataShape,
-  ChartDataShape,
   ChartShallowDataShape,
   ChartNestedDataShape,
   ChartInternalShallowDataShape
 } from './types';
 import {
-  getMaxBigInteger,
+  getMaxBigIntegerForNested,
+  getMaxBigIntegerForShallow,
   normalizeValue,
   normalizeValueForFormatting
 } from './bigInteger';
-import { isMultiSeries } from './multiSeries';
 
 export type Direction = 'vertical' | 'horizontal';
-
-/**
- * Discriminator for ChartInternalDataShape
- */
-export const isNested = (
-  t: ChartInternalDataShape
-): t is ChartInternalNestedDataShape =>
-  (t as ChartInternalNestedDataShape).data !== undefined;
-
-/**
- * Transforms the data from a chart shape to internally readable format.
- */
-export function buildChartData(
-  series: ChartDataShape[],
-  sort = false,
-  direction: Direction = 'vertical'
-): ChartInternalDataShape[] {
-  if (isMultiSeries(series)) {
-    return buildNestedChartData(
-      series as ChartNestedDataShape[],
-      sort,
-      direction
-    );
-  } else {
-    return buildShallowChartData(series as ChartShallowDataShape[], direction);
-  }
-}
 
 /**
  * Accepts a `ChartDataShape` and transforms it to a chart readable data shape.
@@ -70,7 +41,7 @@ export function buildNestedChartData(
   direction: Direction = 'vertical'
 ): ChartInternalNestedDataShape[] {
   let result: ChartInternalNestedDataShape[] = [];
-  const maxBigInteger = getMaxBigInteger(series);
+  const maxBigInteger = getMaxBigIntegerForNested(series);
   const isVertical = direction === 'vertical';
 
   for (const point of series) {
@@ -138,7 +109,7 @@ export function buildShallowChartData(
   direction: Direction = 'vertical'
 ): ChartInternalShallowDataShape[] {
   const result: ChartInternalShallowDataShape[] = [];
-  const maxBigInteger = getMaxBigInteger(series);
+  const maxBigInteger = getMaxBigIntegerForShallow(series);
   const isVertical = direction === 'vertical';
 
   for (const point of series) {
@@ -154,7 +125,7 @@ export function buildShallowChartData(
         maxBigInteger
       ),
       v0: normalizeValue(
-        isTuple ? point.data[0] : isVertical ? 0 : point.data,
+        isTuple ? point.data[0] : 0,
         maxBigInteger
       ),
       v1: normalizeValue(
@@ -178,6 +149,19 @@ export function buildShallowChartData(
       y0: props[`${yProp}0`],
       y1: props[`${yProp}1`]
     });
+
+    console.log('hre', {
+      key: normalizeValueForFormatting(props.k1),
+      value: normalizeValueForFormatting(props.v1),
+      meta: point.meta,
+      id: point.id,
+      x: props[`${xProp}1`],
+      x0: props[`${xProp}0`],
+      x1: props[`${xProp}1`],
+      y: props[`${yProp}1`],
+      y0: props[`${yProp}0`],
+      y1: props[`${yProp}1`]
+    })
   }
 
   return result;

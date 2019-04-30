@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import {
   ChartShallowDataShape,
   ChartInternalShallowDataShape,
-  buildChartData,
+  buildShallowChartData,
   ChartDataTypes
 } from '../common/data';
 import {
@@ -88,7 +88,7 @@ export class ScatterPlot extends Component<ScatterPlotProps, ScatterPlotState> {
   }
 
   getData = memoize(data => {
-    return buildChartData(data) as ChartInternalShallowDataShape[];
+    return buildShallowChartData(data) as ChartInternalShallowDataShape[];
   });
 
   getScales(

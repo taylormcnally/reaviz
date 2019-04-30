@@ -3,7 +3,8 @@ import { Bar, BarProps } from './Bar';
 import {
   ChartInternalDataShape,
   ChartInternalNestedDataShape,
-  ChartInternalShallowDataShape
+  ChartInternalShallowDataShape,
+  Direction
 } from '../../common/data';
 import { PoseGroup } from 'react-pose';
 import { PoseSVGGElement } from '../../common/utils/animations';
@@ -25,7 +26,7 @@ export interface BarSeriesProps {
   padding: number;
   groupPadding: number;
   isCategorical: boolean;
-  layout: 'horizontal' | 'vertical';
+  layout: Direction;
   /**
    * Threshold for the binning of histogram charts.
    */

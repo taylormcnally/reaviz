@@ -3,11 +3,9 @@ import { bigIntegerToLocaleString } from '../../common/utils/bigint';
 import {
   ChartDataTypes,
   ChartInternalDataTypes,
-  ChartDataShape,
   ChartNestedDataShape,
   ChartShallowDataShape
 } from './types';
-import { isMultiSeries } from './multiSeries';
 
 export function normalizeValue(
   value: ChartDataTypes,
@@ -34,15 +32,7 @@ export function normalizeValueForFormatting(
   return value as ChartInternalDataTypes;
 }
 
-export function getMaxBigInteger(series: ChartDataShape[]) {
-  if (isMultiSeries(series)) {
-    return getMaxBigIntegerForNested(series as ChartNestedDataShape[]);
-  } else {
-    return getMaxBigIntegerForShallow(series as ChartShallowDataShape[]);
-  }
-}
-
-function getMaxBigIntegerForNested(series: ChartNestedDataShape[]) {
+export function getMaxBigIntegerForNested(series: ChartNestedDataShape[]) {
   let maxBigInteger = bigInt.one;
   for (const group of series) {
     const maxBigIntegerForGroup = getMaxBigIntegerForShallow(group.data);
@@ -53,7 +43,7 @@ function getMaxBigIntegerForNested(series: ChartNestedDataShape[]) {
   return maxBigInteger;
 }
 
-function getMaxBigIntegerForShallow(series: ChartShallowDataShape[]) {
+export function getMaxBigIntegerForShallow(series: ChartShallowDataShape[]) {
   let maxBigInteger = bigInt.one;
   for (const point of series) {
     if (bigInt.isInstance(point.data)) {

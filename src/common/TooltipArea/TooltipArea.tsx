@@ -5,7 +5,7 @@ import {
   ChartDataTypes,
   ChartInternalDataShape,
   ChartInternalShallowDataShape,
-  isNested
+  ChartInternalNestedDataShape
 } from '../data';
 import { getPositionForTarget, getClosestPoint } from '../utils/position';
 import bind from 'memoize-bind';
@@ -201,8 +201,9 @@ export class TooltipArea extends React.Component<
     const result: TooltipDataShape[] = [];
 
     for (const point of series) {
-      if (isNested(point)) {
-        for (const nestedPoint of point.data) {
+      const seriesPoint = point as ChartInternalNestedDataShape;
+      if (Array.isArray(seriesPoint.data)) {
+        for (const nestedPoint of seriesPoint.data) {
           const right = nestedPoint.x;
           let idx = result.findIndex(r => {
             const left = r.x;

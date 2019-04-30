@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ChartInternalShallowDataShape } from '../../common/data';
+import { ChartInternalShallowDataShape, Direction } from '../../common/data';
 import { PosedRangeLine } from './PosedRangeLines';
 
 export interface RangeLinesProps {
@@ -14,7 +14,7 @@ export interface RangeLinesProps {
   data: ChartInternalShallowDataShape;
   color: string;
   barCount: number;
-  layout: 'vertical' | 'horizontal';
+  layout: Direction;
   animated: boolean;
 }
 

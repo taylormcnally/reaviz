@@ -70,9 +70,11 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     const isVertical = this.getIsVertical();
     const isMarimekko = type === 'marimekko';
     const isGrouped = type === 'grouped';
+    const isStacked = type === 'stacked' || type === 'stackedNormalized';
+    const isMultiSeries = isGrouped || isStacked;
 
     let data;
-    if (type === 'stacked' || type === 'stackedNormalized') {
+    if (isStacked) {
       data = buildBarStackData(
         this.props.data as ChartNestedDataShape[],
         type === 'stackedNormalized',
@@ -112,21 +114,21 @@ export class BarChart extends React.Component<BarChartProps, {}> {
         xScale = groupScale;
         xScale1 = keyScale;
       } else {
-        xScale = this.getKeyScale(data, xAxis, chartWidth);
+        xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
       }
 
-      yScale = this.getValueScale(data, yAxis, chartHeight);
+      yScale = this.getValueScale(data, yAxis, isMultiSeries, chartHeight);
     } else {
       if (isGrouped) {
         const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
         yScale = groupScale;
         xScale1 = keyScale;
-        xScale = this.getKeyScale(data, xAxis, chartWidth);
+        xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
       } else if (isMarimekko) {
         throw new Error('Marimekko is currently not supported for horizontal layouts');
       } else {
-        xScale = this.getKeyScale(data, xAxis, chartWidth);
-        yScale = this.getValueScale(data, yAxis, chartHeight);
+        xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
+        yScale = this.getValueScale(data, yAxis, isMultiSeries, chartHeight);
       }
     }
 
@@ -208,7 +210,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     };
   }
 
-  getKeyScale(data, axis, width: number) {
+  getKeyScale(data, axis, isMultiSeries: boolean, width: number) {
     const { series } = this.props;
 
     return getXScale({
@@ -217,11 +219,12 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       roundDomains: axis.props.roundDomains,
       data,
       padding: series.props.padding,
-      domain: axis.props.domain
+      domain: axis.props.domain,
+      isMultiSeries
     });
   }
 
-  getValueScale(data, axis, height: number) {
+  getValueScale(data, axis, isMultiSeries: boolean, height: number) {
     const { series } = this.props;
 
     return getYScale({
@@ -230,7 +233,8 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       type: axis.props.type,
       height,
       data,
-      domain: axis.props.domain
+      domain: axis.props.domain,
+      isMultiSeries
     });
   }
 

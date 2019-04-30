@@ -7,7 +7,7 @@ import {
 } from './types';
 import { getGroupDomain } from '../utils/domains';
 import {
-  getMaxBigInteger,
+  getMaxBigIntegerForNested,
   normalizeValue,
   normalizeValueForFormatting
 } from './bigInteger';
@@ -27,7 +27,7 @@ import {
  */
 function transformDataToStack(data) {
   const result: any[] = [];
-  const maxBigInteger = getMaxBigInteger(data);
+  const maxBigInteger = getMaxBigIntegerForNested(data);
 
   for (const category of data) {
     for (const value of category.data) {

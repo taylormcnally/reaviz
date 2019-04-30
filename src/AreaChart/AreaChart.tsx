@@ -11,12 +11,14 @@ import {
 import { getXScale, getYScale } from '../common/scales';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
 import {
-  buildChartData,
   ChartDataShape,
   ChartInternalDataShape,
   ChartNestedDataShape,
   ChartDataTypes,
-  buildStackData
+  buildStackData,
+  buildShallowChartData,
+  ChartShallowDataShape,
+  buildNestedChartData
 } from '../common/data';
 import * as css from './AreaChart.module.scss';
 import { ChartBrushProps } from '../common/Brush';
@@ -95,15 +97,18 @@ export class AreaChart extends React.Component<AreaChartProps, AreaChartState> {
         data as ChartNestedDataShape[],
         type === 'stackedNormalized'
       );
+    } else if (type === 'grouped') {
+      return buildNestedChartData(data as ChartNestedDataShape[], true);
     } else {
-      return buildChartData(data, true);
+      return buildShallowChartData(data  as ChartShallowDataShape[]);
     }
   });
 
   getScales(
     data: ChartInternalDataShape[],
     chartWidth: number,
-    chartHeight: number
+    chartHeight: number,
+    isMultiSeries: boolean
   ) {
     const { zoomDomain } = this.state;
     const { yAxis, xAxis } = this.props;
@@ -113,7 +118,8 @@ export class AreaChart extends React.Component<AreaChartProps, AreaChartState> {
       type: xAxis.props.type,
       roundDomains: xAxis.props.roundDomains,
       data,
-      domain: zoomDomain || xAxis.props.domain
+      domain: zoomDomain || xAxis.props.domain,
+      isMultiSeries
     });
 
     const yScale = getYScale({
@@ -121,7 +127,8 @@ export class AreaChart extends React.Component<AreaChartProps, AreaChartState> {
       type: yAxis.props.type,
       height: chartHeight,
       data,
-      domain: yAxis.props.domain
+      domain: yAxis.props.domain,
+      isMultiSeries
     });
 
     return { xScale, yScale };
@@ -147,8 +154,11 @@ export class AreaChart extends React.Component<AreaChartProps, AreaChartState> {
     const { chartHeight, chartWidth, id, updateAxes } = containerProps;
     const { series, yAxis, xAxis, gridlines, brush, zoomPan } = this.props;
     const { zoomDomain, preventAnimation, isZoomed } = this.state;
-    const data = this.getData(this.props.data, series.props.type);
-    const { xScale, yScale } = this.getScales(data, chartWidth, chartHeight);
+
+    const seriesType = series.props.type;
+    const isMultiSeries = seriesType === 'stacked' || seriesType === 'stackedNormalized' || seriesType === 'grouped';
+    const data = this.getData(this.props.data, seriesType);
+    const { xScale, yScale } = this.getScales(data, chartWidth, chartHeight, isMultiSeries);
     const animated = preventAnimation === true ? false : series.props.animated;
 
     return (

@@ -5,8 +5,7 @@ import { MarkLine, MarkLineProps } from '../../common/MarkLine';
 import {
   ChartInternalDataShape,
   ChartInternalNestedDataShape,
-  ChartInternalShallowDataShape,
-  isMultiSeries
+  ChartInternalShallowDataShape
 } from '../../common/data';
 import { PoseGroup } from 'react-pose';
 import { PoseSVGGElement } from '../../common/utils/animations';
@@ -21,7 +20,7 @@ import { InterpolationTypes } from '../../common/utils/interpolation';
 import { getColor, sequentialScheme } from '../../common/utils/color';
 import bind from 'memoize-bind';
 
-export type AreaChartTypes = 'standard' | 'stacked' | 'stackedNormalized';
+export type AreaChartTypes = 'standard' | 'grouped' | 'stacked' | 'stackedNormalized';
 
 export interface AreaSeriesProps {
   id: string;
@@ -244,9 +243,13 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
       isZoomed,
       tooltip,
       xScale,
-      yScale
+      yScale,
+      type
     } = this.props;
-    const isMulti = isMultiSeries(data);
+    const isMulti =
+      type === 'grouped' ||
+      type === 'stacked' ||
+      type === 'stackedNormalized';
 
     return (
       <Fragment>

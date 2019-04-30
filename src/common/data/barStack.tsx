@@ -2,7 +2,7 @@ import { stack, stackOffsetExpand } from 'd3-shape';
 import { ChartNestedDataShape, ChartInternalNestedDataShape } from './types';
 import { getDeepGroupDomain } from '../utils/domains';
 import {
-  getMaxBigInteger,
+  getMaxBigIntegerForNested,
   normalizeValue,
   normalizeValueForFormatting
 } from './bigInteger';
@@ -23,7 +23,7 @@ import {
  */
 function transformDataToStack(data: ChartNestedDataShape[]) {
   const result: any[] = [];
-  const maxBigInteger = getMaxBigInteger(data);
+  const maxBigInteger = getMaxBigIntegerForNested(data);
 
   for (const category of data) {
     for (const value of category.data) {

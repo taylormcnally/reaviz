@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
 import { Gradient, GradientProps } from '../../common/gradients';
 import classNames from 'classnames';
-import { ChartInternalShallowDataShape } from '../../common/data';
+import { ChartInternalShallowDataShape, Direction } from '../../common/data';
 import { RangeLinesProps } from './RangeLines';
 import bind from 'memoize-bind';
 import * as css from './Bar.module.scss';
@@ -34,7 +34,7 @@ export interface BarProps {
   rangeLines: JSX.Element | null;
   mask: JSX.Element | null;
   tooltip: JSX.Element | null;
-  layout: 'vertical' | 'horizontal';
+  layout: Direction;
 }
 
 interface BarState {
