@@ -14,17 +14,16 @@ export interface DiscreteLegendEntryProps {
   active?: boolean;
   style?: any;
   className?: any;
+  orientation: 'horizontal' | 'vertical';
   onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) => void;
   onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => void;
   onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export class DiscreteLegendEntry extends Component<
-  DiscreteLegendEntryProps,
-  {}
-> {
+export class DiscreteLegendEntry extends Component<DiscreteLegendEntryProps> {
   static defaultProps: Partial<DiscreteLegendEntryProps> = {
     symbol: <DiscreteLegendSymbol />,
+    orientation: 'horizontal',
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined,
     onClick: () => undefined
@@ -39,10 +38,13 @@ export class DiscreteLegendEntry extends Component<
       color,
       style,
       onClick,
-      active
+      active,
+      orientation
     } = this.props;
     const className = classNames(css.entry, this.props.className, {
-      [css.inactive]: active === false
+      [css.inactive]: active === false,
+      [css.vertical]: orientation === 'vertical',
+      [css.horizontal]: orientation === 'horizontal'
     });
 
     return (
