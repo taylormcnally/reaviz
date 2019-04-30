@@ -12,7 +12,6 @@ import {
   ChartDataShape,
   ChartNestedDataShape,
   buildChartData,
-  isMultiSeries,
   buildBins,
   buildBarStackData,
   buildMarimekkoData,
@@ -46,7 +45,6 @@ export interface BarChartProps extends ChartProps {
   gridlines: JSX.Element | null;
   brush: JSX.Element;
   zoomPan: JSX.Element;
-  layout: 'horizontal' | 'vertical';
 }
 
 export class BarChart extends React.Component<BarChartProps, {}> {
@@ -62,24 +60,24 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     series: <BarSeries />,
     gridlines: <GridlineSeries />,
     brush: <ChartBrush disabled={true} />,
-    layout: 'vertical'
   };
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
-    const { yAxis, xAxis, series, layout } = this.props;
+    const { yAxis, xAxis, series } = this.props;
 
-    const seriesType = series.props.type;
+    const { type, layout } = series.props;
     const isVertical = this.getIsVertical();
-    const isMarimekko = seriesType === 'marimekko';
+    const isMarimekko = type === 'marimekko';
+    const isGrouped = type === 'grouped';
 
     let data;
-    if (seriesType === 'stacked' || seriesType === 'stackedNormalized') {
+    if (type === 'stacked' || type === 'stackedNormalized') {
       data = buildBarStackData(
         this.props.data as ChartNestedDataShape[],
-        seriesType === 'stackedNormalized',
+        type === 'stackedNormalized',
         layout
       );
-    } else if (seriesType === 'waterfall') {
+    } else if (type === 'waterfall') {
       data = buildWaterfall(
         this.props.data as ChartShallowDataShape[],
         layout
@@ -93,9 +91,6 @@ export class BarChart extends React.Component<BarChartProps, {}> {
         layout
       );
     }
-
-    const isMulti = isMultiSeries(data);
-    const isGrouped = seriesType === 'standard' && isMulti;
 
     let yScale;
     let xScale;
@@ -142,7 +137,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   }
 
   getIsVertical() {
-    return this.props.layout === 'vertical';
+    return this.props.series.props.layout === 'vertical';
   }
 
   getBinnedData(data, xScale, yScale) {
@@ -183,13 +178,14 @@ export class BarChart extends React.Component<BarChartProps, {}> {
   }
 
   getMultiGroupScales(data, height: number, width: number) {
-    const { series, layout } = this.props;
+    const { series } = this.props;
     const isVertical = this.getIsVertical();
+    const { groupPadding, layout } = series.props;
 
     const groupScale = getGroupScale({
       dimension: isVertical ? width : height,
       direction: layout,
-      padding: series.props.groupPadding,
+      padding: groupPadding,
       data
     });
 
@@ -234,7 +230,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartHeight, chartWidth, id, updateAxes } = containerProps;
-    const { series, xAxis, yAxis, brush, gridlines, layout } = this.props;
+    const { series, xAxis, yAxis, brush, gridlines } = this.props;
     const { xScale, xScale1, yScale, data } = this.getScalesAndData(
       chartHeight,
       chartWidth
@@ -286,7 +282,6 @@ export class BarChart extends React.Component<BarChartProps, {}> {
               xScale={xScale}
               xScale1={xScale1}
               yScale={yScale}
-              layout={layout}
             />
           </CloneElement>
         )}
