@@ -4,7 +4,7 @@ import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
 import { ChartTooltip, TooltipTemplate } from '../../common/TooltipArea';
 import { formatValue } from '../../common/utils/formatting';
-import { Gradient, GradientStop } from '../../common/Styles';
+import { Gradient, GradientStop } from '../../common/gradients';
 
 export class MarimekkoBarSeries extends Component<BarSeriesProps, {}> {
   static defaultProps: Partial<BarSeriesProps> = {

@@ -31,6 +31,7 @@ import {
   LinearYAxisTickSeries,
   LinearXAxisTickLabel
 } from '../common/Axis/LinearAxis';
+import { Stripes } from '../common/masks';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
   .add(
@@ -72,6 +73,22 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(largeCategoryData.length)}
+        />
+      }
+    />
+  ))
+  .add('Mask', () => (
+    <BarChart
+      width={350}
+      height={250}
+      data={categoryData}
+      series={
+        <BarSeries
+          bar={
+            <Bar
+              mask={<Stripes />}
+            />
+          }
         />
       }
     />

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { MaskProps } from './Mask';
 
-interface StripesProps {
+interface StripesProps extends MaskProps {
   id?: string;
   fill?: string;
 }
 
-export class Stripes extends React.Component<StripesProps, {}> {
+export class Stripes extends Component<StripesProps> {
+  static defaultProps: Partial<StripesProps> = {};
+
   render() {
     const { id, fill } = this.props;
+
     return (
       <pattern
         id={id}
