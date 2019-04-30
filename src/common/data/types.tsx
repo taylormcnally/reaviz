@@ -2,7 +2,7 @@ export type ChartDataTypes = ChartInternalDataTypes | bigInt.BigInteger;
 
 export type ChartInternalDataTypes = number | string | Date;
 
-interface BaseChartDataShape<T> {
+export interface BaseChartDataShape<T> {
   key: ChartDataTypes;
   data: T;
   meta?: any;
