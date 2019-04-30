@@ -110,7 +110,8 @@ export class RadialScatterPoint extends Component<
       symbol,
       active,
       tooltip,
-      yScale
+      yScale,
+      className
     } = this.props;
     const { hovered } = this.state;
 
@@ -134,7 +135,7 @@ export class RadialScatterPoint extends Component<
           onMouseEnter={bind(this.onMouseEnter, this)}
           onMouseLeave={bind(this.onMouseLeave, this)}
           onClick={bind(this.onClick, this)}
-          className={classNames({
+          className={classNames(className, {
             [css.inactive]: !active
           })}
         >
