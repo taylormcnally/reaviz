@@ -10,6 +10,7 @@ export interface LinearAxisLineProps {
   strokeGradient: JSX.Element | null;
   scale: any;
   orientation: 'horizontal' | 'vertical';
+  className?: any;
 }
 
 interface LinearAxisLineState {
@@ -32,13 +33,14 @@ export class LinearAxisLine extends Component<
   };
 
   render() {
-    const { strokeColor, strokeGradient, scale, orientation } = this.props;
+    const { strokeColor, strokeGradient, scale, orientation, className } = this.props;
     const { id } = this.state;
     const [range0, range1] = scale.range();
 
     return (
       <Fragment>
         <line
+          className={className}
           x1={orientation === 'vertical' ? 0 : range0}
           // Workaround for a Chrome/Firefox bug where it won't render gradients for straight lines
           x2={orientation === 'vertical' ? 0.00001 : range1}
