@@ -12,7 +12,8 @@ import {
   randomNumber,
   medDateData,
   numberData,
-  nonZeroCategoryData
+  nonZeroCategoryData,
+  durationCategoryData
 } from '../common/demo';
 import chroma from 'chroma-js';
 import { timeWeek, timeMonth } from 'd3-time';
@@ -83,15 +84,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
       width={350}
       height={250}
       data={categoryData}
-      series={
-        <BarSeries
-          bar={
-            <Bar
-              mask={<Stripes />}
-            />
-          }
-        />
-      }
+      series={<BarSeries bar={<Bar mask={<Stripes />} />} />}
     />
   ))
   .add('Custom Colors', () => (
@@ -146,22 +139,14 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
   ))
   .add('Waterfall', () => (
     <BarChart
-    width={350}
-    height={250}
+      width={350}
+      height={250}
       data={categoryData}
-      series={
-        <BarSeries
-          type="waterfall"
-        />
-      }
+      series={<BarSeries type="waterfall" />}
     />
   ))
   .add('Non-Zero', () => (
-    <BarChart
-      width={350}
-      height={250}
-      data={nonZeroCategoryData as any}
-    />
+    <BarChart width={350} height={250} data={nonZeroCategoryData as any} />
   ));
 
 storiesOf('Charts/Bar/Vertical/Histogram', module)
@@ -263,74 +248,49 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
     />
   ));
 
-storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
-  'Simple',
-  () => {
-    const hasGradient = boolean('Gradient', true);
-    const rounded = boolean('Rounded', true);
-    const padding = number('Padding', 0.1);
-    const height = number('Height', 350);
-    const width = number('Width', 500);
-    const fill = color('Color', '#418AD7');
-    const data = object('Data', categoryData);
-    const gradient = hasGradient ? Bar.defaultProps.gradient : null;
+storiesOf('Charts/Bar/Horizontal/Single Series', module)
+  .add(
+    'Simple',
+    () => {
+      const hasGradient = boolean('Gradient', true);
+      const rounded = boolean('Rounded', true);
+      const padding = number('Padding', 0.1);
+      const height = number('Height', 350);
+      const width = number('Width', 500);
+      const fill = color('Color', '#418AD7');
+      const data = object('Data', categoryData);
+      const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
-    return (
-      <BarChart
-        width={width}
-        height={height}
-        data={data}
-        xAxis={<LinearXAxis type="value" />}
-        yAxis={
-          <LinearYAxis
-            type="category"
-            tickSeries={<LinearYAxisTickSeries tickSize={20} />}
-          />
-        }
-        series={
-          <BarSeries
-            colorScheme={[fill]}
-            layout="horizontal"
-            padding={padding}
-            bar={<Bar rounded={rounded} gradient={gradient} />}
-          />
-        }
-      />
-    );
-  },
-  { options: { showAddonPanel: true } }
-)
-.add('Large Dataset', () => (
-  <BarChart
-    height={350}
-    width={500}
-    data={largeCategoryData}
-    xAxis={<LinearXAxis type="value" />}
-    yAxis={
-      <LinearYAxis
-        type="category"
-        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
-      />
-    }
-    series={
-      <BarSeries
-        layout="horizontal"
-        colorScheme={chroma
-          .scale(['ACB7C9', '418AD7'])
-          .colors(largeCategoryData.length)}
-      />
-    }
-  />
-))
-.add('Autosize', () => (
-  <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
-    <BarChart
-      data={categoryData}
-      series={
-        <BarSeries
-          layout="horizontal"
+      return (
+        <BarChart
+          width={width}
+          height={height}
+          data={data}
+          xAxis={<LinearXAxis type="value" />}
+          yAxis={
+            <LinearYAxis
+              type="category"
+              tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+            />
+          }
+          series={
+            <BarSeries
+              colorScheme={[fill]}
+              layout="horizontal"
+              padding={padding}
+              bar={<Bar rounded={rounded} gradient={gradient} />}
+            />
+          }
         />
-      }
+      );
+    },
+    { options: { showAddonPanel: true } }
+  )
+  .add('Large Dataset', () => (
+    <BarChart
+      height={350}
+      width={500}
+      data={largeCategoryData}
       xAxis={<LinearXAxis type="value" />}
       yAxis={
         <LinearYAxis
@@ -338,48 +298,85 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
           tickSeries={<LinearYAxisTickSeries tickSize={20} />}
         />
       }
+      series={
+        <BarSeries
+          layout="horizontal"
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(largeCategoryData.length)}
+        />
+      }
     />
-  </div>
-))
-.add('Waterfall', () => (
-  <BarChart
-    height={350}
-    width={500}
-    data={categoryData}
-    xAxis={<LinearXAxis type="value" />}
-    series={
-      <BarSeries
-        layout="horizontal"
-        type="waterfall"
+  ))
+  .add('Autosize', () => (
+    <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
+      <BarChart
+        data={categoryData}
+        series={<BarSeries layout="horizontal" />}
+        xAxis={<LinearXAxis type="value" />}
+        yAxis={
+          <LinearYAxis
+            type="category"
+            tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+          />
+        }
       />
-    }
-    yAxis={
-      <LinearYAxis
-        type="category"
-        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
-      />
-    }
-  />
-))
-.add('Non-Zero', () => (
-  <BarChart
-    height={350}
-    width={500}
-    data={nonZeroCategoryData}
-    xAxis={<LinearXAxis type="value" />}
-    series={
-      <BarSeries
-        layout="horizontal"
-      />
-    }
-    yAxis={
-      <LinearYAxis
-        type="category"
-        tickSeries={<LinearYAxisTickSeries tickSize={20} />}
-      />
-    }
-  />
-))
+    </div>
+  ))
+  .add('Waterfall', () => (
+    <BarChart
+      height={350}
+      width={500}
+      data={categoryData}
+      xAxis={<LinearXAxis type="value" />}
+      series={<BarSeries layout="horizontal" type="waterfall" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+    />
+  ))
+  .add('Duration', () => (
+    <BarChart
+      height={350}
+      width={500}
+      data={durationCategoryData}
+      xAxis={
+        <LinearXAxis
+          type="duration"
+          tickSeries={
+            <LinearXAxisTickSeries
+              label={<LinearXAxisTickLabel format={d => d / 3600 + 'h'} />}
+            />
+          }
+        />
+      }
+      series={<BarSeries layout="horizontal" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+    />
+  ))
+  .add('Non-Zero', () => (
+    <BarChart
+      height={350}
+      width={500}
+      data={nonZeroCategoryData}
+      xAxis={<LinearXAxis type="value" />}
+      series={<BarSeries layout="horizontal" />}
+      yAxis={
+        <LinearYAxis
+          type="category"
+          tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+        />
+      }
+    />
+  ));
 
 storiesOf('Charts/Bar/Horizontal/Multi Series', module)
   .add('Simple', () => (

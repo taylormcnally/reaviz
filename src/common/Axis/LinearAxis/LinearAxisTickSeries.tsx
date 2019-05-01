@@ -12,6 +12,7 @@ import { getTextWidth } from '../../utils/width';
 import { getTicks, getMaxTicks } from '../../utils/ticks';
 import { TimeInterval } from 'd3-time';
 import { CloneElement } from '../../utils/children';
+import { LinearAxisProps } from './LinearAxis';
 
 export interface LinearAxisTickSeriesProps {
   height: number;
@@ -23,6 +24,7 @@ export interface LinearAxisTickSeriesProps {
   orientation: 'horizontal' | 'vertical';
   label: JSX.Element | null;
   line: JSX.Element | null;
+  axis: LinearAxisProps;
 }
 
 interface ProcessedTick {
@@ -152,10 +154,10 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
    * the text and position.
    */
   getTicks(): ProcessedTick[] {
-    const { scale, tickSize, tickValues, interval } = this.props;
+    const { scale, tickSize, tickValues, interval, axis } = this.props;
     const dimension = this.getDimension();
     const maxTicks = getMaxTicks(tickSize, dimension);
-    const ticks = getTicks(scale, tickValues, maxTicks, interval);
+    const ticks = getTicks(scale, tickValues, axis.type, maxTicks, interval);
     const adjustedScale = this.getAdjustedScale();
     const format = this.getLabelFormat();
     const result: ProcessedTick[] = [];

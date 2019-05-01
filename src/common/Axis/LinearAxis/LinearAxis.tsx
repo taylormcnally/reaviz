@@ -16,7 +16,7 @@ export interface LinearAxisProps {
   domain?: [ChartDataTypes, ChartDataTypes];
   scaled?: boolean;
   roundDomains?: boolean;
-  type: 'value' | 'time' | 'category';
+  type: 'value' | 'time' | 'category' | 'duration';
   position: 'start' | 'end' | 'center';
   tickSeries: JSX.Element;
   axisLine: JSX.Element | null;
@@ -139,6 +139,7 @@ export class LinearAxis extends Component<LinearAxisProps, LinearAxisState> {
             width={width}
             scale={scale}
             orientation={orientation}
+            axis={this.props}
           />
         )}
       </g>

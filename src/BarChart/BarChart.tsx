@@ -60,7 +60,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     yAxis: <LinearYAxis type="value" />,
     series: <BarSeries />,
     gridlines: <GridlineSeries />,
-    brush: <ChartBrush disabled={true} />,
+    brush: <ChartBrush disabled={true} />
   };
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
@@ -81,10 +81,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
         layout
       );
     } else if (type === 'waterfall') {
-      data = buildWaterfall(
-        this.props.data as ChartShallowDataShape[],
-        layout
-      );
+      data = buildWaterfall(this.props.data as ChartShallowDataShape[], layout);
     } else if (isMarimekko) {
       data = buildMarimekkoData(this.props.data as ChartNestedDataShape[]);
     } else if (isGrouped) {
@@ -106,11 +103,19 @@ export class BarChart extends React.Component<BarChartProps, {}> {
 
     if (isVertical) {
       if (isGrouped) {
-        const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
+        const { keyScale, groupScale } = this.getMultiGroupScales(
+          data,
+          chartHeight,
+          chartWidth
+        );
         xScale = groupScale;
         xScale1 = keyScale;
       } else if (isMarimekko) {
-        const { keyScale, groupScale } = this.getMarimekkoGroupScales(data, xAxis, chartWidth);
+        const { keyScale, groupScale } = this.getMarimekkoGroupScales(
+          data,
+          xAxis,
+          chartWidth
+        );
         xScale = groupScale;
         xScale1 = keyScale;
       } else {
@@ -120,12 +125,18 @@ export class BarChart extends React.Component<BarChartProps, {}> {
       yScale = this.getValueScale(data, yAxis, isMultiSeries, chartHeight);
     } else {
       if (isGrouped) {
-        const { keyScale, groupScale } = this.getMultiGroupScales(data, chartHeight, chartWidth);
+        const { keyScale, groupScale } = this.getMultiGroupScales(
+          data,
+          chartHeight,
+          chartWidth
+        );
         yScale = groupScale;
         xScale1 = keyScale;
         xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
       } else if (isMarimekko) {
-        throw new Error('Marimekko is currently not supported for horizontal layouts');
+        throw new Error(
+          'Marimekko is currently not supported for horizontal layouts'
+        );
       } else {
         xScale = this.getKeyScale(data, xAxis, isMultiSeries, chartWidth);
         yScale = this.getValueScale(data, yAxis, isMultiSeries, chartHeight);
@@ -156,7 +167,11 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     const keyScale = isVertical ? xScale : yScale;
     const keyAxisType = keyAxis.props.type;
 
-    if (keyAxisType === 'time' || keyAxisType === 'value') {
+    if (
+      keyAxisType === 'time' ||
+      keyAxisType === 'value' ||
+      keyAxisType === 'duration'
+    ) {
       data = buildBins(
         keyScale,
         series.props.binThreshold || keyAxis.props.interval,
@@ -268,14 +283,22 @@ export class BarChart extends React.Component<BarChartProps, {}> {
           height={chartHeight}
           width={chartWidth}
           scale={xScale}
-          onDimensionsChange={bind(updateAxes, this, isVertical ? 'horizontal' : 'vertical')}
+          onDimensionsChange={bind(
+            updateAxes,
+            this,
+            isVertical ? 'horizontal' : 'vertical'
+          )}
         />
         <CloneElement<LinearAxisProps>
           element={yAxis}
           height={chartHeight}
           width={chartWidth}
           scale={yScale}
-          onDimensionsChange={bind(updateAxes, this, isVertical ? 'vertical' : 'horizontal')}
+          onDimensionsChange={bind(
+            updateAxes,
+            this,
+            isVertical ? 'vertical' : 'horizontal'
+          )}
         />
         {containerProps.chartSized && (
           <CloneElement<ChartBrushProps>

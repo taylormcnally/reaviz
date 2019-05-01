@@ -30,7 +30,7 @@ export class RadialAxisTickSeries extends Component<RadialAxisTickSeriesProps> {
       innerRadius,
       interval
     } = this.props;
-    const ticks = getTicks(scale, tickValues, count, interval);
+    const ticks = getTicks(scale, tickValues, 'time', count, interval);
 
     return (
       <Fragment>
