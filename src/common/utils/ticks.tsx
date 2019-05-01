@@ -30,7 +30,15 @@ export function getMaxTicks(size: number, dimension: number) {
 const ONE_DAY = 60 * 60 * 24;
 const DURATION_TICK_STEPS = [
   0.001, // 1 ms
+  0.005, // 5 ms
+  0.01, // 10 ms
+  0.05, // 50 ms
+  0.1, // 100 ms
+  0.5, // 500 ms
   1, // 1 s
+  5, // 5 s
+  10, // 10 s
+  15, // 15 s
   60, // 1 m
   60 * 15, // 15 m
   60 * 30, // 30 m
@@ -43,8 +51,7 @@ const DURATION_TICK_STEPS = [
   ONE_DAY // 24 h
 ];
 
-export function getDurationTicks(scale, maxTicks) {
-  const domain = scale.domain();
+export function getDurationTicks(domain, maxTicks) {
   const domainWidth = domain[1] - domain[0];
   let tickStep = null;
   for (const s of DURATION_TICK_STEPS) {
@@ -82,7 +89,7 @@ export function getTicks(
   } else {
     if (scale.ticks) {
       if (type === 'duration') {
-        result = getDurationTicks(scale, maxTicks);
+        result = getDurationTicks(scale.domain(), maxTicks);
       } else if (interval) {
         result = scale.ticks(interval);
       } else {

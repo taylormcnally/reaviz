@@ -21,7 +21,28 @@ export const categoryData = [
   }
 ];
 
-export const nonZeroCategoryData: ChartShallowDataShape<[ChartDataTypes, ChartDataTypes]>[] = [
+export const durationCategoryData = [
+  {
+    key: 'Phishing Attack',
+    data: 3263
+  },
+  {
+    key: 'IDS',
+    data: 14123
+  },
+  {
+    key: 'Malware',
+    data: 10357
+  },
+  {
+    key: 'DLP',
+    data: 8890
+  }
+];
+
+export const nonZeroCategoryData: ChartShallowDataShape<
+  [ChartDataTypes, ChartDataTypes]
+>[] = [
   {
     key: 'Phishing Attack',
     data: [5, 10]
