@@ -31,6 +31,7 @@ some sensible defaults here is what we use in the Storybook demo:
     --color-surface:#2c343a;
     --color-primary:#67c2e4;
     --color-on-primary:#fff;
+    --color-on-surface: #fff;
   }
 </style>
 ```
