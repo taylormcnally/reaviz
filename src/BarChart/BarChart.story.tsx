@@ -365,7 +365,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module).add(
   <BarChart
     height={350}
     width={500}
-    data={nonZeroCategoryData as any}
+    data={nonZeroCategoryData}
     xAxis={<LinearXAxis type="value" />}
     series={
       <BarSeries

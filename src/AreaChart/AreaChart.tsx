@@ -100,7 +100,7 @@ export class AreaChart extends React.Component<AreaChartProps, AreaChartState> {
     } else if (type === 'grouped') {
       return buildNestedChartData(data as ChartNestedDataShape[], true);
     } else {
-      return buildShallowChartData(data  as ChartShallowDataShape[]);
+      return buildShallowChartData(data as ChartShallowDataShape[]);
     }
   });
 

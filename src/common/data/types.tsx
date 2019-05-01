@@ -11,7 +11,7 @@ export interface BaseChartDataShape<T> {
 
 export type ChartNestedDataShape = BaseChartDataShape<ChartShallowDataShape<ChartDataTypes>[]>;
 
-export type ChartShallowDataShape<T = ChartDataTypes | [ChartInternalDataTypes, ChartInternalDataTypes]> =
+export type ChartShallowDataShape<T = ChartDataTypes | [ChartDataTypes, ChartDataTypes]> =
   BaseChartDataShape<T>;
 
 export type ChartDataShape = ChartNestedDataShape | ChartShallowDataShape;
@@ -24,16 +24,16 @@ export interface ChartInternalNestedDataShape {
 }
 
 export interface ChartInternalShallowDataShape {
+  id?: string;
   key?: ChartInternalDataTypes;
+  value?: ChartInternalDataTypes;
+  meta?: any;
   x?: ChartInternalDataTypes;
   x0: ChartInternalDataTypes;
   x1?: ChartInternalDataTypes;
   y: ChartInternalDataTypes;
   y0?: ChartInternalDataTypes;
   y1: ChartInternalDataTypes;
-  value?: ChartInternalDataTypes;
-  meta?: any;
-  id?: string;
 }
 
 export type ChartInternalDataShape =

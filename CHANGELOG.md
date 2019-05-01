@@ -1,4 +1,4 @@
-# Master
+# 2.0.0
 - [Feature] Radial Gauge Chart
 - [Feature] Horizontal Bar Charts
 - [Feature] Add waterfall bar charts
@@ -6,9 +6,10 @@
 - [Feature] Add ability to pass masks to bar charts
 - [Feature] Add ability to change legend label orientation
 - [Feature] Add non-zero offset data for bar charts
-- [BREAKING] Add `grouped` type to Bar/Area chart types for multi-series data points
-- [BREAKING] Refactor Gradient API
-- [BREAKING] Refactor Pattern API to Masks
+- [Feature] Add non-zero offset data for area charts
+- [BREAKING] Add `grouped` type to Bar/Area chart types for multi-series data points - [Migration](https://github.com/jask-oss/reaviz/pull/48)
+- [BREAKING] Refactor Gradient API - [Migration](https://github.com/jask-oss/reaviz/pull/39)
+- [BREAKING] Refactor Pattern API to Masks - [Migration](https://github.com/jask-oss/reaviz/pull/47)
 - [Fix] Fix a bug with gradient LinearAxisLines not working in Firefox #40
 - [Fix] Implements custom tweening for radial bar chart because of errors
 - [Fix] Abstracts tick methods and uses in radial axis

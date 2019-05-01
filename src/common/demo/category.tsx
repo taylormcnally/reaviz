@@ -1,5 +1,6 @@
 import { range } from 'd3-array';
 import { randomNumber } from './utils';
+import { ChartShallowDataShape, ChartDataTypes } from '../data';
 
 export const categoryData = [
   {
@@ -20,7 +21,7 @@ export const categoryData = [
   }
 ];
 
-export const nonZeroCategoryData = [
+export const nonZeroCategoryData: ChartShallowDataShape<[ChartDataTypes, ChartDataTypes]>[] = [
   {
     key: 'Phishing Attack',
     data: [5, 10]

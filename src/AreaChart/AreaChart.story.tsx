@@ -8,7 +8,8 @@ import {
   multiDateData,
   singleDateData,
   singleDateBigIntData,
-  randomNumber
+  randomNumber,
+  nonZeroDateData
 } from '../common/demo';
 import { AreaChart } from './AreaChart';
 import { StackedNormalizedAreaChart } from './StackedNormalizedAreaChart';
@@ -96,6 +97,13 @@ storiesOf('Charts/Area/Single Series', module)
       height={250}
       data={singleDateData}
       series={<AreaSeries animated={false} />}
+    />
+  ))
+  .add('Non-Zero', () => (
+    <AreaChart
+      width={350}
+      height={250}
+      data={nonZeroDateData}
     />
   ))
   .add('Interval', () => (

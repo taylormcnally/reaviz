@@ -38,11 +38,11 @@
   - Gridlines
   - Tooltips
   - Markline
-  - Styles
-      - Gradient
-          - Linear
-          - Radial
-      - Pattern
+  - Gradients
+      - Linear
+      - Radial
+  - Masks
+      - Stripes
 - Advanced
   - [Creating Custom Charts](advanced/custom-charts.md)
   - [Animations](advanced/animations.md)
