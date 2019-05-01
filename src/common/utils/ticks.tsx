@@ -53,22 +53,25 @@ const DURATION_TICK_STEPS = [
 
 export function getDurationTicks(domain, maxTicks) {
   const domainWidth = domain[1] - domain[0];
-  let tickStep = null;
+  let tickStep: number | null = null;
   for (const s of DURATION_TICK_STEPS) {
     if (domainWidth / s < maxTicks) {
       tickStep = s;
       break;
     }
   }
+
   if (tickStep === null) {
     const numDayTicks = domainWidth / ONE_DAY;
     const dayStep = Math.ceil(numDayTicks / maxTicks);
     tickStep = ONE_DAY * dayStep;
   }
+
   const ticks = [domain[0]];
   while (ticks[ticks.length - 1] + tickStep <= domain[1]) {
     ticks.push(ticks[ticks.length - 1] + tickStep);
   }
+
   return ticks;
 }
 
