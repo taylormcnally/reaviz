@@ -12,7 +12,7 @@ export interface ZoomPanChangeEvent {
 export interface ChartZoomPanProps {
   data: ChartInternalDataShape[];
   domain?: [ChartDataTypes, ChartDataTypes];
-  axisType: 'value' | 'time' | 'category';
+  axisType: 'value' | 'time' | 'category' | 'duration';
   roundDomains: boolean;
   onZoomPan?: (event: ZoomPanChangeEvent) => void;
   height: number;

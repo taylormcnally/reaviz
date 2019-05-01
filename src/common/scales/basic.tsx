@@ -14,7 +14,7 @@ import {
 } from '../data';
 
 interface ScaleConfig {
-  type: 'category' | 'value' | 'time';
+  type: 'category' | 'value' | 'time' | 'duration';
   roundDomains: boolean;
   data: any[];
   domain?: any[];
@@ -40,7 +40,7 @@ export function getXScale({
 }: ScaleConfig): ScalePoint<any> | ScaleBand<any> | ScaleTime<any, any> {
   let scale;
 
-  if (type === 'time' || type === 'value') {
+  if (type === 'time' || type === 'duration' || type === 'value') {
     if (type === 'time') {
       scale = scaleTime().rangeRound([0, width!]);
     } else {
@@ -81,7 +81,7 @@ export function getYScale({
   isMultiSeries = false
 }: ScaleConfig): ScaleLinear<any, any> {
   let scale;
-  if (type === 'time' || type === 'value') {
+  if (type === 'time' || type === 'value' || type === 'duration') {
     scale = scaleLinear()
       .range([height!, 0])
       .domain(domain || getYDomain({ scaled, data }));

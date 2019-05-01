@@ -29,12 +29,14 @@ export class GridlineSeries extends Component<GridlineSeriesProps, {}> {
       yAxisGrid: getTicks(
         yScale,
         yAxis.tickSeries.props.tickValues,
+        yAxis.type,
         getMaxTicks(yAxis.tickSeries.props.tickSize, height),
         yAxis.tickSeries.props.interval
       ),
       xAxisGrid: getTicks(
         xScale,
         xAxis.tickSeries.props.tickValues,
+        xAxis.type,
         getMaxTicks(xAxis.tickSeries.props.tickSize, width),
         xAxis.tickSeries.props.interval
       )
