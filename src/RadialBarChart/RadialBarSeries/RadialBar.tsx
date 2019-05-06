@@ -148,7 +148,7 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
     return (
       <PosedRadialBar
         pose="enter"
-        poseKey={`${data.x}-${data.y}`}
+        poseKey={`${data.x}-${data.y}-${index}`}
         ref={this.ref}
         animated={animated}
         enterProps={data}

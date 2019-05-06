@@ -35,13 +35,8 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
   renderBar(point: ChartInternalShallowDataShape, index: number) {
     const { innerRadius, xScale, yScale, bar, id, data, animated } = this.props;
 
-    let key = index.toString();
-    if (point.key) {
-      key = `${point.key!.toString()}-${point.x!.toString()}`;
-    }
-
     return (
-      <PoseSVGGElement key={key}>
+      <PoseSVGGElement key={index}>
         <CloneElement<RadialBarProps>
           element={bar}
           id={`radialbar-${id}-${index}`}
