@@ -64,6 +64,7 @@ export class RadialPointSeries extends React.Component<
           <CloneElement<RadialScatterPointProps>
             element={point}
             color={color}
+            tooltip={null}
             visible={this.isVisible.bind(this)}
           />
         }
