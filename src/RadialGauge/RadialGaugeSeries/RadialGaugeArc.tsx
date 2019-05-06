@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { arc } from 'd3-shape';
 import { PieArc } from '../../PieChart';
 import { ChartShallowDataShape } from '../../common/data';
+import { ChartTooltip } from '../../common/TooltipArea';
 
 export interface RadialGaugeArcProps {
   data?: ChartShallowDataShape;
@@ -12,6 +13,10 @@ export interface RadialGaugeArcProps {
   width: number;
   animated: boolean;
   disabled: boolean;
+  tooltip: JSX.Element | null;
+  onClick: (e) => void;
+  onMouseEnter: (e) => void;
+  onMouseLeave: (e) => void;
 }
 
 export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
@@ -19,7 +24,11 @@ export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
     width: 5,
     color: '#353d44',
     animated: false,
-    disabled: false
+    disabled: false,
+    onClick: () => undefined,
+    onMouseEnter: () => undefined,
+    onMouseLeave: () => undefined,
+    tooltip: <ChartTooltip />
   };
 
   getPaths() {
@@ -51,11 +60,20 @@ export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
   }
 
   render() {
-    const { color, animated, disabled } = this.props;
+    const { color, animated, disabled, tooltip, onClick, onMouseEnter, onMouseLeave } = this.props;
     const data = this.getPaths();
 
     return (
-      <PieArc {...data} animated={animated} color={color} disabled={disabled} />
+      <PieArc
+        {...data}
+        animated={animated}
+        color={color}
+        disabled={disabled}
+        tooltip={tooltip}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      />
     );
   }
 }

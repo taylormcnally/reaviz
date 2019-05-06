@@ -11,13 +11,16 @@ export interface RadialGaugeLabelProps {
   data: ChartShallowDataShape;
   offset: number;
   className?: any;
+  onClick: (e: { data, nativeEvent }) => void;
 }
 
 export class RadialGaugeLabel extends Component<RadialGaugeLabelProps> {
-  static defaultProps: Partial<RadialGaugeLabelProps> = {};
+  static defaultProps: Partial<RadialGaugeLabelProps> = {
+    onClick: () => undefined
+  };
 
   render() {
-    const { data, className, offset } = this.props;
+    const { data, className, offset, onClick } = this.props;
     const label = formatValue(data.key as ChartInternalDataTypes);
 
     return (
@@ -26,6 +29,7 @@ export class RadialGaugeLabel extends Component<RadialGaugeLabelProps> {
         x="0"
         y={offset}
         textAnchor="middle"
+        onClick={nativeEvent => onClick({ data, nativeEvent })}
         className={classNames(className, css.valueLabel)}
       >
         {label}
