@@ -1,3 +1,4 @@
+export * from './common';
 export * from './AreaChart';
 export * from './BarChart';
 export * from './HivePlot';
@@ -7,4 +8,7 @@ export * from './PieChart';
 export * from './Sankey';
 export * from './ScatterPlot';
 export * from './Sparkline';
-export * from './common';
+export * from './RadialAreaChart';
+export * from './RadialBarChart';
+export * from './RadialGauge';
+export * from './RadialScatterPlot';

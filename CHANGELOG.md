@@ -1,3 +1,12 @@
+# 2.0.1
+- [Feature] Add a new duration axis type which calculates better ticks #49
+- [Fix] Export radial charts from root #51
+- [Fix] Fix sankey `onClick` wrong element #53
+- [Fix] Fix radial bars not updating sometimes
+- [Fix] Ensure pass down options to arc label
+- [Fix] Add click events to radial gauge label
+- [Fix] Remove tooltip from radial area point
+
 # 2.0.0
 - [Feature] Radial Gauge Chart
 - [Feature] Horizontal Bar Charts
