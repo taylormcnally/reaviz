@@ -149,7 +149,12 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
     return (
       <Fragment>
         {nodes.map((node, index) =>
-          this.renderNode(node, nodeMap.get(node.title), index, chartWidth)
+          this.renderNode(
+            node,
+            nodeMap.get(node.title) || null,
+            index,
+            chartWidth
+          )
         )}
       </Fragment>
     );
