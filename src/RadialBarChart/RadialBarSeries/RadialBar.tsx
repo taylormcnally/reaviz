@@ -2,7 +2,7 @@ import React, { Component, Fragment, createRef } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { arc } from 'd3-shape';
 import { Gradient } from '../../common/gradients';
-import * as bind from 'memoize-bind';
+import bind from 'memoize-bind';
 import { PosedRadialBar } from './PosedRadialBar';
 import chroma from 'chroma-js';
 import { CloneElement } from '../../common/utils/children';
