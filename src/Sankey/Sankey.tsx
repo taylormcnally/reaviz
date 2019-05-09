@@ -107,9 +107,9 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
 
   renderNode(
     computedNode: Node,
-    node: JSX.Element,
     index: number,
-    chartWidth: number
+    chartWidth: number,
+    node?: JSX.Element
   ) {
     const { animated } = this.props;
     const { activeNodes } = this.state;
@@ -149,12 +149,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
     return (
       <Fragment>
         {nodes.map((node, index) =>
-          this.renderNode(
-            node,
-            nodeMap.get(node.title) || null,
-            index,
-            chartWidth
-          )
+          this.renderNode(node, index, chartWidth, nodeMap.get(node.title))
         )}
       </Fragment>
     );
