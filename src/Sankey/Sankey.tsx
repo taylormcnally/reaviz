@@ -105,15 +105,20 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
     this.setState({ activeNodes: [], activeLinks: [] });
   }
 
-  renderNode(computedNode: Node, index: number, chartWidth: number) {
-    const { animated, nodes } = this.props;
+  renderNode(
+    computedNode: Node,
+    node: JSX.Element,
+    index: number,
+    chartWidth: number
+  ) {
+    const { animated } = this.props;
     const { activeNodes } = this.state;
     const active = activeNodes.some(node => node.index === computedNode.index);
     const disabled = activeNodes.length > 0 && !active;
 
     return (
       <CloneElement<SankeyNodeProps>
-        element={nodes[index]}
+        element={node}
         key={`node-${index}`}
         active={active}
         animated={animated}
@@ -127,6 +132,11 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
   }
 
   renderNodes(nodes: Node[], chartWidth: number) {
+    const nodeMap = new Map<string, JSX.Element>();
+    this.props.nodes.forEach(
+      node => node && nodeMap.set(node.props.title, node)
+    );
+
     nodes.sort((a, b) => {
       const aX0 = a && a.x0 ? a.x0 : 0;
       const aY0 = a && a.y0 ? a.y0 : 0;
@@ -138,7 +148,9 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
 
     return (
       <Fragment>
-        {nodes.map((node, index) => this.renderNode(node, index, chartWidth))}
+        {nodes.map((node, index) =>
+          this.renderNode(node, nodeMap.get(node.title), index, chartWidth)
+        )}
       </Fragment>
     );
   }

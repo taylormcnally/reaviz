@@ -29,6 +29,8 @@ const colorScheme = chroma
   .mode('lch')
   .colors(sankeyNodes.length);
 
+const onNodeClick = (title: string) => window.alert(`${title} is clicked`);
+
 storiesOf('Charts/Sankey', module)
   .add('Simple', () => (
     <Sankey
@@ -36,7 +38,11 @@ storiesOf('Charts/Sankey', module)
       height={300}
       width={500}
       nodes={simpleSankeyNodes.map((node, i) => (
-        <SankeyNode key={`node-${i}`} {...node} />
+        <SankeyNode
+          key={`node-${i}`}
+          {...node}
+          onClick={() => onNodeClick(node.title)}
+        />
       ))}
       links={simpleSankeyLinks.map((link, i) => (
         <SankeyLink key={`link-${i}`} {...link} />
