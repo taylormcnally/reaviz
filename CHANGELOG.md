@@ -1,3 +1,6 @@
+# Master
+- [Fix] Fix containing not working when set false
+
 # 2.1.0
 - [Feature] Add ability to pan and zoom on x/y
 - [Feature] Add ability to pass min zoom

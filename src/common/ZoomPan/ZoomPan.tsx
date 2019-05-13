@@ -185,13 +185,12 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       disableMouseWheel
     } = this.props;
     const { isZooming, isPanning } = this.state;
-    const canPan = pannable && scale > 1;
-    const cursor = canPan ? 'move' : 'auto';
+    const cursor = pannable ? 'move' : 'auto';
     const selection = isZooming || isPanning ? 'none' : 'auto';
 
     return (
       <Pan
-        disabled={!canPan || disabled}
+        disabled={!pannable || disabled}
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}
         onPanEnd={bind(this.onPanEnd, this)}
