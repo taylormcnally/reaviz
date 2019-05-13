@@ -140,8 +140,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
               this.props.onZoomPan({
                 scale: this.props.scale,
                 offsetX: offset,
-                // TODO: Come back and add Y
-                offsetY: 0,
+                // TODO: Figure out how to do X & Y together
+                offsetY: this.props.offsetY,
                 type: 'pan'
               });
             });
