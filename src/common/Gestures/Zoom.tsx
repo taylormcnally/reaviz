@@ -6,6 +6,7 @@ import { getDistanceBetweenPoints, between, getMidpoint } from './pinchUtils';
 interface ZoomGestureProps {
   disabled?: boolean;
   maxZoom: number;
+  minZoom: number;
   zoomStep: number;
   scale: number;
   offsetX: number;
@@ -69,10 +70,14 @@ export class Zoom extends Component<ZoomGestureProps> {
       const pointB = getPointFromTouch(event.touches[1], this.childRef.current);
       const distance = getDistanceBetweenPoints(pointA, pointB);
 
-      const { maxZoom, zoomStep, offsetX, offsetY, scale } = this.props;
+      const { maxZoom, zoomStep, offsetX, offsetY, scale, minZoom } = this.props;
       const delta = distance - this.lastDistance;
       const ratio = Math.exp((delta / 30) * zoomStep);
       const newScale = between(1, maxZoom, scale * ratio);
+
+      if (newScale <= minZoom) {
+        return;
+      }
 
       const newOffsetX = Math.min(
         (offsetX - this.firstMidpoint.x) * ratio + this.firstMidpoint.x,
@@ -116,7 +121,8 @@ export class Zoom extends Component<ZoomGestureProps> {
       offsetX,
       offsetY,
       onZoomEnd,
-      disableMouseWheel
+      disableMouseWheel,
+      minZoom
     } = this.props;
 
     if (!disabled && !disableMouseWheel) {
@@ -131,6 +137,11 @@ export class Zoom extends Component<ZoomGestureProps> {
         event.preventDefault();
 
         const newScale = between(1, maxZoom, scale * ratio);
+
+        if (newScale <= minZoom) {
+          return;
+        }
+
         const newOffsetX = Math.min(
           (offsetX - positions.x) * ratio + positions.x,
           0

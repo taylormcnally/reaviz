@@ -22,6 +22,7 @@ export interface ZoomPanProps {
   zoomable: boolean;
   disabled?: boolean;
   maxZoom: number;
+  minZoom: number;
   zoomStep: number;
   contained: boolean;
   decay: boolean;
@@ -37,6 +38,7 @@ interface ZoomPanState {
 export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   static defaultProps: ZoomPanProps = {
     maxZoom: 10,
+    minZoom: 0,
     zoomStep: 0.1,
     pannable: true,
     zoomable: true,
@@ -82,9 +84,9 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     return width * scale! - width;
   }
 
-  ensureRange(delta: number) {
-    const { contained, offsetX } = this.props;
-    const prevOffset = offsetX;
+  ensureRange(offset: number, delta: number) {
+    const { contained } = this.props;
+    const prevOffset = offset;
     let newOffset = delta + prevOffset;
 
     if (contained) {
@@ -108,8 +110,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   onPanMove(event: PanMoveEvent) {
-    const offsetX = this.ensureRange(event.deltaX);
-    const offsetY = this.ensureRange(event.deltaY);
+    const offsetX = this.ensureRange(this.props.offsetX, event.deltaX);
+    const offsetY = this.ensureRange(this.props.offsetY, event.deltaY);
 
     this.observer && this.observer.update(offsetX);
 
@@ -124,6 +126,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   onPanEnd() {
     if (this.observer && this.props.decay) {
       const end = this.getEndOffset();
+
       this.decay = decay({
         from: this.observer.get(),
         velocity: this.observer.getVelocity()
@@ -132,6 +135,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         .start({
           update: offset => {
             cancelAnimationFrame(this.rqf);
+
             this.rqf = requestAnimationFrame(() => {
               this.props.onZoomPan({
                 scale: this.props.scale,
@@ -172,6 +176,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       disabled,
       pannable,
       maxZoom,
+      minZoom,
       zoomStep,
       zoomable,
       scale,
@@ -196,6 +201,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             disabled={!zoomable || disabled}
             disableMouseWheel={disableMouseWheel}
             maxZoom={maxZoom}
+            minZoom={minZoom}
             zoomStep={zoomStep}
             scale={scale}
             offsetX={offsetX}
