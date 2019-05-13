@@ -19,7 +19,7 @@ export interface ZoomEvent {
   offset: number;
 }
 
-export class Zoom extends Component<ZoomGestureProps, {}> {
+export class Zoom extends Component<ZoomGestureProps> {
   lastDistance: any;
   firstMidpoint: any;
   timeout: any;

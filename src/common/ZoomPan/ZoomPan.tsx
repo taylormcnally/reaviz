@@ -8,6 +8,7 @@ import { clamp } from '@popmotion/popcorn';
 export interface ZoomPanEvent {
   scale: number;
   offset: number;
+  type: 'zoom' | 'pan';
 }
 
 export interface ZoomPanProps {
@@ -20,6 +21,7 @@ export interface ZoomPanProps {
   disabled?: boolean;
   maxZoom: number;
   zoomStep: number;
+  contained: boolean;
   decay: boolean;
   disableMouseWheel?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
@@ -36,6 +38,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     zoomStep: 0.1,
     pannable: true,
     zoomable: true,
+    contained: true,
     decay: true,
     height: 0,
     width: 0,
@@ -77,13 +80,16 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   ensureRange(delta: number) {
-    const prevOffset = this.props.offset;
+    const { contained, offset } = this.props;
+    const prevOffset = offset;
     let newOffset = delta + prevOffset;
 
-    if (-newOffset <= 0) {
-      newOffset = 0;
-    } else if (-newOffset > this.getEndOffset()) {
-      newOffset = prevOffset;
+    if (contained) {
+      if (-newOffset <= 0) {
+        newOffset = 0;
+      } else if (-newOffset > this.getEndOffset()) {
+        newOffset = prevOffset;
+      }
     }
 
     return newOffset;
@@ -99,14 +105,13 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   onPanMove(event: PanMoveEvent) {
-    if (this.props.scale > 1) {
-      const offset = this.ensureRange(event.delta);
-      this.observer && this.observer.update(offset);
-      this.props.onZoomPan({
-        scale: this.props.scale,
-        offset
-      });
-    }
+    const offset = this.ensureRange(event.delta);
+    this.observer && this.observer.update(offset);
+    this.props.onZoomPan({
+      scale: this.props.scale,
+      offset,
+      type: 'pan'
+    });
   }
 
   onPanEnd() {
@@ -123,7 +128,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             this.rqf = requestAnimationFrame(() => {
               this.props.onZoomPan({
                 scale: this.props.scale,
-                offset
+                offset,
+                type: 'pan'
               });
             });
           },
@@ -136,7 +142,10 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   onZoom(event: ZoomEvent) {
     this.stopDecay();
-    this.props.onZoomPan(event);
+    this.props.onZoomPan({
+      ...event,
+      type: 'zoom'
+    });
   }
 
   onZoomEnd() {

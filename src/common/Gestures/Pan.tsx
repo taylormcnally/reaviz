@@ -32,7 +32,7 @@ export interface PanCancelEvent {
   nativeEvent: MouseEvent | TouchEvent;
 }
 
-export class Pan extends Component<PanProps, {}> {
+export class Pan extends Component<PanProps> {
   static defaultProps: PanProps = {
     onPanStart: () => undefined,
     onPanMove: () => undefined,
