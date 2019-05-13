@@ -1,3 +1,10 @@
+# 2.1.0
+- [Feature] Add ability to pan and zoom on x/y
+- [Feature] Add ability to pass min zoom
+- [Feature] Expose event type from pan/zoom
+- [Feature] Add ability to pan outside of a pan area
+- [Fix] Fix gauge label alignment
+
 # 2.0.1
 - [Feature] Add a new duration axis type which calculates better ticks #49
 - [Fix] Export radial charts from root #51
