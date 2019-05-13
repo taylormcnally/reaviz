@@ -26,7 +26,7 @@ export class BrushHandle extends Component<BrushHandleProps, BrushHandleState> {
   }
 
   onPanMove(event: PanMoveEvent) {
-    this.props.onHandleDrag(event.delta);
+    this.props.onHandleDrag(event.deltaX);
   }
 
   onPanEnd() {

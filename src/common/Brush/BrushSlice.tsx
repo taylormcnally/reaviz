@@ -33,8 +33,8 @@ export class BrushSlice extends Component<BrushSliceProps, BrushSliceState> {
   }
 
   onPanMove(event: PanMoveEvent) {
-    const start = this.props.start + event.delta;
-    const end = this.props.end + event.delta;
+    const start = this.props.start + event.deltaX;
+    const end = this.props.end + event.deltaX;
 
     if (start >= 0 && end <= this.props.width) {
       this.props.onBrushChange({

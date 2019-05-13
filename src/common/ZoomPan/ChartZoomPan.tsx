@@ -28,36 +28,43 @@ export interface ChartZoomPanProps {
   disableMouseWheel?: boolean;
 }
 
-export class ChartZoomPan extends Component<ChartZoomPanProps, {}> {
+export class ChartZoomPan extends Component<ChartZoomPanProps> {
   static defaultProps: Partial<ChartZoomPanProps> = {
     onZoomPan: () => undefined
   };
 
   onZoomPan(event: ZoomPanEvent) {
     const { width, data, axisType, roundDomains, onZoomPan } = this.props;
+    const can = event.type === 'zoom' || (event.type === 'pan' && event.scale > 1);
 
-    const scale: any = getXScale({
-      width: width,
-      type: axisType,
-      roundDomains,
-      data
-    });
+    if (can) {
+      const scale: any = getXScale({
+        width: width,
+        type: axisType,
+        roundDomains,
+        data
+      });
 
-    const newScale = scale.copy().domain(
-      scale
-        .range()
-        .map(x => (x - event.offset) / event.scale)
-        .map(scale.invert, event.offset)
-    );
+      const newScale = scale.copy().domain(
+        scale
+          .range()
+          .map(x => (x - event.offsetX) / event.scale)
+          .map(scale.invert, event.offsetX)
+      );
 
-    onZoomPan!({
-      domain: newScale.domain(),
-      isZoomed: event.scale !== 1
-    });
+      onZoomPan!({
+        domain: newScale.domain(),
+        isZoomed: event.scale !== 1
+      });
+    }
   }
 
   getOffset() {
-    let zoomOffset = {};
+    let zoomOffset = {
+      scale: undefined,
+      offsetX: undefined
+    } as any;
+
     const {
       disabled,
       domain,
@@ -84,7 +91,7 @@ export class ChartZoomPan extends Component<ChartZoomPanProps, {}> {
 
       zoomOffset = {
         scale: scale,
-        offset: -offset
+        offsetX: -offset
       };
     }
 
@@ -93,14 +100,17 @@ export class ChartZoomPan extends Component<ChartZoomPanProps, {}> {
 
   render() {
     const { data, height, children, width, onZoomPan, ...rest } = this.props;
+    const { scale, offsetX } = this.getOffset();
 
     return (
       <ZoomPan
         {...rest}
-        {...this.getOffset()}
-        onZoomPan={bind(this.onZoomPan, this)}
+        scale={scale}
+        offsetX={offsetX}
         height={height}
         width={width}
+        pannable={scale > 1}
+        onZoomPan={bind(this.onZoomPan, this)}
       >
         {children}
       </ZoomPan>

@@ -7,19 +7,24 @@ import { clamp } from '@popmotion/popcorn';
 
 export interface ZoomPanEvent {
   scale: number;
-  offset: number;
+  offsetX: number;
+  offsetY: number;
+  type: 'zoom' | 'pan';
 }
 
 export interface ZoomPanProps {
   height: number;
   width: number;
   scale: number;
-  offset: number;
+  offsetX: number;
+  offsetY: number;
   pannable: boolean;
   zoomable: boolean;
   disabled?: boolean;
   maxZoom: number;
+  minZoom: number;
   zoomStep: number;
+  contained: boolean;
   decay: boolean;
   disableMouseWheel?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
@@ -33,13 +38,16 @@ interface ZoomPanState {
 export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   static defaultProps: ZoomPanProps = {
     maxZoom: 10,
+    minZoom: 0,
     zoomStep: 0.1,
     pannable: true,
     zoomable: true,
+    contained: true,
     decay: true,
     height: 0,
     width: 0,
-    offset: 0,
+    offsetX: 0,
+    offsetY: 0,
     scale: 1,
     onZoomPan: () => undefined
   };
@@ -76,14 +84,17 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     return width * scale! - width;
   }
 
-  ensureRange(delta: number) {
-    const prevOffset = this.props.offset;
+  ensureRange(offset: number, delta: number) {
+    const { contained } = this.props;
+    const prevOffset = offset;
     let newOffset = delta + prevOffset;
 
-    if (-newOffset <= 0) {
-      newOffset = 0;
-    } else if (-newOffset > this.getEndOffset()) {
-      newOffset = prevOffset;
+    if (contained) {
+      if (-newOffset <= 0) {
+        newOffset = 0;
+      } else if (-newOffset > this.getEndOffset()) {
+        newOffset = prevOffset;
+      }
     }
 
     return newOffset;
@@ -95,23 +106,27 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     });
 
     this.stopDecay();
-    this.observer = value(this.props.offset);
+    this.observer = value(this.props.offsetX);
   }
 
   onPanMove(event: PanMoveEvent) {
-    if (this.props.scale > 1) {
-      const offset = this.ensureRange(event.delta);
-      this.observer && this.observer.update(offset);
-      this.props.onZoomPan({
-        scale: this.props.scale,
-        offset
-      });
-    }
+    const offsetX = this.ensureRange(this.props.offsetX, event.deltaX);
+    const offsetY = this.ensureRange(this.props.offsetY, event.deltaY);
+
+    this.observer && this.observer.update(offsetX);
+
+    this.props.onZoomPan({
+      scale: this.props.scale,
+      offsetX,
+      offsetY,
+      type: 'pan'
+    });
   }
 
   onPanEnd() {
     if (this.observer && this.props.decay) {
       const end = this.getEndOffset();
+
       this.decay = decay({
         from: this.observer.get(),
         velocity: this.observer.getVelocity()
@@ -120,10 +135,14 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         .start({
           update: offset => {
             cancelAnimationFrame(this.rqf);
+
             this.rqf = requestAnimationFrame(() => {
               this.props.onZoomPan({
                 scale: this.props.scale,
-                offset
+                offsetX: offset,
+                // TODO: Figure out how to do X & Y together
+                offsetY: this.props.offsetY,
+                type: 'pan'
               });
             });
           },
@@ -136,7 +155,11 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   onZoom(event: ZoomEvent) {
     this.stopDecay();
-    this.props.onZoomPan(event);
+
+    this.props.onZoomPan({
+      ...event,
+      type: 'zoom'
+    });
   }
 
   onZoomEnd() {
@@ -153,10 +176,12 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       disabled,
       pannable,
       maxZoom,
+      minZoom,
       zoomStep,
       zoomable,
       scale,
-      offset,
+      offsetX,
+      offsetY,
       disableMouseWheel
     } = this.props;
     const { isZooming, isPanning } = this.state;
@@ -176,9 +201,11 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             disabled={!zoomable || disabled}
             disableMouseWheel={disableMouseWheel}
             maxZoom={maxZoom}
+            minZoom={minZoom}
             zoomStep={zoomStep}
             scale={scale}
-            offset={offset}
+            offsetX={offsetX}
+            offsetY={offsetY}
             onZoom={bind(this.onZoom, this)}
             onZoomEnd={bind(this.onZoomEnd, this)}
           >

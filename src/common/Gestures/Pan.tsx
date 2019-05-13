@@ -18,7 +18,8 @@ export interface PanStartEvent {
 
 export interface PanMoveEvent {
   source: 'mouse' | 'touch';
-  delta: number;
+  deltaX: number;
+  deltaY: number;
   nativeEvent: MouseEvent | TouchEvent;
 }
 
@@ -32,7 +33,7 @@ export interface PanCancelEvent {
   nativeEvent: MouseEvent | TouchEvent;
 }
 
-export class Pan extends Component<PanProps, {}> {
+export class Pan extends Component<PanProps> {
   static defaultProps: PanProps = {
     onPanStart: () => undefined,
     onPanMove: () => undefined,
@@ -42,17 +43,21 @@ export class Pan extends Component<PanProps, {}> {
     threshold: 10
   };
 
-  prevPosition: number = 0;
+  prevXPosition: number = 0;
+  prevYPosition: number = 0;
   timeout: any;
   started: boolean = false;
-  delta: number = 0;
+  deltaX: number = 0;
+  deltaY: number = 0;
 
   componentWillUnmount() {
     this.disposeHandlers();
   }
 
   checkThreshold() {
-    return !this.started && Math.abs(this.delta) > this.props.threshold;
+    return !this.started &&
+      ((Math.abs(this.deltaX) > this.props.threshold) ||
+        (Math.abs(this.deltaY) > this.props.threshold));
   }
 
   disposeHandlers() {
@@ -89,14 +94,16 @@ export class Pan extends Component<PanProps, {}> {
     event.preventDefault();
     event.stopPropagation();
 
-    this.delta = this.delta + event.movementX;
+    this.deltaX = this.deltaX + event.movementX;
+    this.deltaY = this.deltaY + event.movementY;
 
     if (this.checkThreshold()) {
       if (this.props.cursor) {
         document.body.style['cursor'] = this.props.cursor;
       }
 
-      this.delta = 0;
+      this.deltaX = 0;
+      this.deltaY = 0;
       this.started = true;
       this.props.onPanStart({
         nativeEvent: event,
@@ -106,7 +113,8 @@ export class Pan extends Component<PanProps, {}> {
       this.props.onPanMove({
         source: 'mouse',
         nativeEvent: event,
-        delta: event.movementX
+        deltaX: event.movementX,
+        deltaY: event.movementY
       });
     }
   };
@@ -143,7 +151,8 @@ export class Pan extends Component<PanProps, {}> {
     toggleTextSelection(false);
 
     this.started = false;
-    this.prevPosition = event.touches[0].clientX;
+    this.prevXPosition = event.touches[0].clientX;
+    this.prevYPosition = event.touches[0].clientY;
 
     // Always bind event so we cancel movement even if no action was taken
     window.addEventListener('touchmove', this.onTouchMove);
@@ -156,12 +165,16 @@ export class Pan extends Component<PanProps, {}> {
 
     // Calculate delta from previous position and current
     const clientX = event.touches[0].clientX;
-    const delta = clientX - this.prevPosition;
+    const clientY = event.touches[0].clientY;
+    const deltaX = clientX - this.prevXPosition;
+    const deltaY = clientY - this.prevYPosition;
 
-    this.delta = this.delta + delta;
+    this.deltaX = this.deltaX + deltaX;
+    this.deltaY = this.deltaY + deltaY;
 
     if (this.checkThreshold()) {
-      this.delta = 0;
+      this.deltaX = 0;
+      this.deltaY = 0;
       this.started = true;
 
       this.props.onPanStart({
@@ -172,11 +185,13 @@ export class Pan extends Component<PanProps, {}> {
       this.props.onPanMove({
         source: 'touch',
         nativeEvent: event,
-        delta
+        deltaX,
+        deltaY
       });
     }
 
-    this.prevPosition = clientX;
+    this.prevXPosition = clientX;
+    this.prevYPosition = clientY;
   };
 
   onTouchEnd = (event: TouchEvent) => {

@@ -6,9 +6,11 @@ import { getDistanceBetweenPoints, between, getMidpoint } from './pinchUtils';
 interface ZoomGestureProps {
   disabled?: boolean;
   maxZoom: number;
+  minZoom: number;
   zoomStep: number;
   scale: number;
-  offset: number;
+  offsetX: number;
+  offsetY: number;
   disableMouseWheel?: boolean;
   onZoom: (event: ZoomEvent) => void;
   onZoomEnd: () => void;
@@ -16,10 +18,11 @@ interface ZoomGestureProps {
 
 export interface ZoomEvent {
   scale: number;
-  offset: number;
+  offsetX: number;
+  offsetY: number;
 }
 
-export class Zoom extends Component<ZoomGestureProps, {}> {
+export class Zoom extends Component<ZoomGestureProps> {
   lastDistance: any;
   firstMidpoint: any;
   timeout: any;
@@ -67,19 +70,30 @@ export class Zoom extends Component<ZoomGestureProps, {}> {
       const pointB = getPointFromTouch(event.touches[1], this.childRef.current);
       const distance = getDistanceBetweenPoints(pointA, pointB);
 
-      const { maxZoom, zoomStep, offset, scale } = this.props;
+      const { maxZoom, zoomStep, offsetX, offsetY, scale, minZoom } = this.props;
       const delta = distance - this.lastDistance;
       const ratio = Math.exp((delta / 30) * zoomStep);
       const newScale = between(1, maxZoom, scale * ratio);
-      const newOffset = Math.min(
-        (offset - this.firstMidpoint.x) * ratio + this.firstMidpoint.x,
+
+      if (newScale <= minZoom) {
+        return;
+      }
+
+      const newOffsetX = Math.min(
+        (offsetX - this.firstMidpoint.x) * ratio + this.firstMidpoint.x,
+        0
+      );
+
+      const newOffsetY = Math.min(
+        (offsetY - this.firstMidpoint.y) * ratio + this.firstMidpoint.y,
         0
       );
 
       if (scale < this.props.maxZoom) {
         this.props.onZoom({
           scale: newScale,
-          offset: newOffset
+          offsetX: newOffsetX,
+          offsetY: newOffsetY
         });
       }
 
@@ -104,9 +118,11 @@ export class Zoom extends Component<ZoomGestureProps, {}> {
       maxZoom,
       zoomStep,
       scale,
-      offset,
+      offsetX,
+      offsetY,
       onZoomEnd,
-      disableMouseWheel
+      disableMouseWheel,
+      minZoom
     } = this.props;
 
     if (!disabled && !disableMouseWheel) {
@@ -121,14 +137,25 @@ export class Zoom extends Component<ZoomGestureProps, {}> {
         event.preventDefault();
 
         const newScale = between(1, maxZoom, scale * ratio);
-        const newOffset = Math.min(
-          (offset - positions.x) * ratio + positions.x,
+
+        if (newScale <= minZoom) {
+          return;
+        }
+
+        const newOffsetX = Math.min(
+          (offsetX - positions.x) * ratio + positions.x,
+          0
+        );
+
+        const newOffsetY = Math.min(
+          (offsetY - positions.y) * ratio + positions.y,
           0
         );
 
         this.props.onZoom({
           scale: newScale,
-          offset: newOffset
+          offsetX: newOffsetX,
+          offsetY: newOffsetY
         });
 
         clearTimeout(this.timeout);
