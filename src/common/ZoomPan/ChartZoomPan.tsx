@@ -48,8 +48,8 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
       const newScale = scale.copy().domain(
         scale
           .range()
-          .map(x => (x - event.offset) / event.scale)
-          .map(scale.invert, event.offset)
+          .map(x => (x - event.offsetX) / event.scale)
+          .map(scale.invert, event.offsetX)
       );
 
       onZoomPan!({
@@ -62,8 +62,8 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
   getOffset() {
     let zoomOffset = {
       scale: undefined,
-      offset: undefined
-    };
+      offsetX: undefined
+    } as any;
 
     const {
       disabled,
@@ -91,7 +91,7 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
 
       zoomOffset = {
         scale: scale,
-        offset: -offset
+        offsetX: -offset
       };
     }
 
@@ -100,13 +100,13 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
 
   render() {
     const { data, height, children, width, onZoomPan, ...rest } = this.props;
-    const { scale, offset } = this.getOffset();
+    const { scale, offsetX } = this.getOffset();
 
     return (
       <ZoomPan
         {...rest}
         scale={scale}
-        offset={offset}
+        offsetX={offsetX}
         height={height}
         width={width}
         pannable={scale > 1}
