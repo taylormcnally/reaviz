@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import bind from 'memoize-bind';
 import { Pan, PanMoveEvent } from '../Gestures/Pan';
-import { Zoom, ZoomEvent } from '../Gestures/Zoom';
+import { panAndZoom } from '../Gestures/Zoom';
 import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
 import { clamp } from '@popmotion/popcorn';
+// import panAndZoomHoc from 'react-pan-and-zoom-hoc';
+
 
 export interface ZoomPanEvent {
   scale: number;
@@ -34,6 +36,8 @@ interface ZoomPanState {
   isZooming: boolean;
   isPanning: boolean;
 }
+
+const PanZoomHoc = panAndZoom('g');
 
 export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   static defaultProps: ZoomPanProps = {
@@ -84,9 +88,10 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     return width * scale! - width;
   }
 
-  ensureRange(offset: number, delta: number) {
+  ensureRange(prevOffset: number, delta: number) {
+    return true;
+
     const { contained } = this.props;
-    const prevOffset = offset;
     let newOffset = delta + prevOffset;
 
     if (contained) {
@@ -109,16 +114,16 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     this.observer = value(this.props.offsetX);
   }
 
-  onPanMove(event: PanMoveEvent) {
-    const offsetX = this.ensureRange(this.props.offsetX, event.deltaX);
-    const offsetY = this.ensureRange(this.props.offsetY, event.deltaY);
+  onPanMove(x, y) {
+    const offsetX = this.ensureRange(0, x);
+    const offsetY = this.ensureRange(0, y);
 
-    this.observer && this.observer.update(offsetX);
+    this.observer && this.observer.update(x);
 
     this.props.onZoomPan({
       scale: this.props.scale,
-      offsetX,
-      offsetY,
+      offsetX: x,
+      offsetY: y,
       type: 'pan'
     });
   }
@@ -153,13 +158,22 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     }
   }
 
-  onZoom(event: ZoomEvent) {
+  timeout: any;
+
+  onZoom(x, y, scale) {
     this.stopDecay();
 
     this.props.onZoomPan({
-      ...event,
+      offsetX: x,
+      offsetY: y,
+      scale,
       type: 'zoom'
     });
+
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.onZoomEnd();
+    }, 500);
   }
 
   onZoomEnd() {
@@ -188,6 +202,33 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     const cursor = pannable ? 'move' : 'auto';
     const selection = isZooming || isPanning ? 'none' : 'auto';
 
+    return (
+      <PanZoomHoc
+        x={offsetX}
+        y={offsetY}
+        scale={scale}
+        minScale={1}
+        maxScale={10}
+        disableScrollZoom={disableMouseWheel}
+        onZoom={bind(this.onZoom, this)}
+        onPanStart={bind(this.onPanStart, this)}
+        onPanMove={bind(this.onPanMove, this)}
+        onPanEnd={bind(this.onPanEnd, this)}
+      >
+        {!disabled && <rect height={height} width={width} opacity={0} />}
+        <g
+          style={{
+            pointerEvents: selection,
+            userSelect: selection,
+            cursor
+          }}
+        >
+          {children}
+        </g>
+      </PanZoomHoc>
+    )
+
+    /*
     return (
       <Pan
         disabled={!pannable || disabled}
@@ -223,5 +264,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         </g>
       </Pan>
     );
+    */
   }
 }

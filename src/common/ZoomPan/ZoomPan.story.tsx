@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
 import { largeDateData, largeSignalChartData } from '../demo';
 import { LineChart, LineSeries } from '../../LineChart';
-import { ChartZoomPan } from '../ZoomPan';
+import { ChartZoomPan, ZoomPan } from '../ZoomPan';
 import { ScatterPlot, ScatterSeries, ScatterPoint } from '../../ScatterPlot';
 import { AreaChart, AreaSeries } from '../../AreaChart';
 import { TooltipArea } from '../TooltipArea';
@@ -74,7 +74,50 @@ storiesOf('Charts/Zoom Pan', module)
       }
     />
   ))
+  .add('Generic Zoom Pan', () => <GenericZoomPanStory />)
   .add('Default Zoom', () => <DefaultZoomStory />);
+
+class GenericZoomPanStory extends Component<{}, any> {
+  state = {
+    zoomLevel: 1,
+    offsetX: 125,
+    offsetY: 100
+  };
+
+  onZoomPan = (event) => {
+    this.setState(event);
+  };
+
+  render() {
+    const { offsetX, offsetY, zoomLevel } = this.state;
+
+    // console.log('here', offsetX, offsetY)
+
+    return (
+      <div>
+        <svg height="350" width="500">
+          <ZoomPan
+            height={350}
+            width={500}
+            pannable={true}
+            contained={false}
+            decay={false}
+            scale={zoomLevel}
+            offsetY={offsetX}
+            offsetX={offsetY}
+            onZoomPan={this.onZoomPan}
+          >
+            <g transform={`translate(${offsetX}, ${offsetY}) scale(${zoomLevel})`}>
+              <circle cx="50" cy="100" r="10" fill="blue" />
+              <circle cx="100" cy="100" r="10" fill="red" />
+              <circle cx="150" cy="100" r="10" fill="green" />
+            </g>
+          </ZoomPan>
+        </svg>
+      </div>
+    );
+  }
+}
 
 class DefaultZoomStory extends Component<{}, { domain: [any, any] }> {
   state: { domain: [any, any] } = {
