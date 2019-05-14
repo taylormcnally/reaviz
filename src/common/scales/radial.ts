@@ -9,18 +9,16 @@ export const getRadialYScale = (
   outerRadius: number,
   domain: any[]
 ) => {
+  if (domain[0] === 0 && domain[1] === 0) {
+    // If all values are 0, set the domain to [0, 1], so the zero values are
+    // all at the bottom of the chart, not the middle.
+    domain = [0, 1];
+  }
   const y = scaleLinear()
     .range([innerRadius * innerRadius, outerRadius * outerRadius])
     .domain(domain);
 
-  const yScale = Object.assign(d => {
-    // If the value is 0, don't sqrt it
-    if (d === 0) {
-      return 0;
-    }
-
-    return Math.sqrt(y(d))
-  }, y);
+  const yScale = Object.assign(d => Math.sqrt(y(d)), y);
 
   return yScale;
 };
