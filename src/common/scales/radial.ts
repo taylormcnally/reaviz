@@ -13,7 +13,14 @@ export const getRadialYScale = (
     .range([innerRadius * innerRadius, outerRadius * outerRadius])
     .domain(domain);
 
-  const yScale = Object.assign(d => Math.sqrt(y(d)), y);
+  const yScale = Object.assign(d => {
+    // If the value is 0, don't sqrt it
+    if (d === 0) {
+      return 0;
+    }
+
+    return Math.sqrt(y(d))
+  }, y);
 
   return yScale;
 };
