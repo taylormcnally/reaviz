@@ -1,291 +1,306 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React, { Component, createRef } from 'react';
+import { toggleTextSelection } from '../utils/selection';
+import { getPointFromTouch, getPositionForTarget } from '../utils/position';
+import { getDistanceBetweenPoints, between, getMidpoint } from './pinchUtils';
+import ReactDOM from 'react-dom';
 
-export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
-
-export interface PanAndZoomHOCProps {
-    x?: number;
-    y?: number;
-    scale?: number;
-    scaleFactor?: number;
-    minScale?: number;
-    maxScale?: number;
-    renderOnChange?: boolean;
-    passOnProps?: boolean;
-    ignorePanOutside?: boolean;
-    disableScrollZoom?: boolean;
-    onPanStart?: (event: MouseEvent | TouchEvent) => void;
-    onPanMove?: (x: number, y: number, event: MouseEvent | TouchEvent) => void;
-    onPanEnd?: (x: number, y: number, event: MouseEvent | TouchEvent) => void;
-    onZoom?: (x: number | undefined, y: number | undefined, scale: number | undefined, event: WheelEvent) => void;
-    onPanAndZoom?: (x: number, y: number, scale: number, event: WheelEvent) => void;
+interface ZoomGestureProps {
+  disabled?: boolean;
+  maxZoom: number;
+  minZoom: number;
+  scaleFactor: number;
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+  disableMouseWheel?: boolean;
+  onZoom: (event: ZoomEvent) => void;
+  onZoomEnd: () => void;
 }
 
-export function panAndZoom<P>(WrappedComponent: React.SFC<P> | React.ComponentClass<P> | string): React.ComponentClass<Overwrite<P, PanAndZoomHOCProps>> {
-    return class PanAndZoomHOC extends React.PureComponent<PanAndZoomHOCProps, never> {
-        /*
-        static propTypes = {
-            x: PropTypes.number,
-            y: PropTypes.number,
-            scale: PropTypes.number,
-            scaleFactor: PropTypes.number,
-            minScale: PropTypes.number,
-            maxScale: PropTypes.number,
-            renderOnChange: PropTypes.bool,
-            passOnProps: PropTypes.bool,
-            ignorePanOutside: PropTypes.bool,
-            disableScrollZoom: PropTypes.bool,
-            onPanStart: PropTypes.func,
-            onPanMove: PropTypes.func,
-            onPanEnd: PropTypes.func,
-            onZoom: PropTypes.func,
-            onPanAndZoom: PropTypes.func
-        };
-        */
+export interface ZoomEvent {
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+}
 
-        static defaultProps = {
-            x: 0.5,
-            y: 0.5,
-            scale: 1,
-            scaleFactor: Math.sqrt(2),
-            minScale: Number.EPSILON,
-            maxScale: Number.POSITIVE_INFINITY,
-            renderOnChange: false,
-            passOnProps: false
-        };
+export class Zoom extends Component<ZoomGestureProps> {
+  static defaultProps: Partial<ZoomGestureProps> = {
+    offsetX: 0.5,
+    offsetY: 0.5,
+    scale: 1,
+    scaleFactor: 0.2,
+    minZoom: 1, // Number.EPSILON,
+    maxZoom: 10 //Number.POSITIVE_INFINITY,
+  }
 
-        dx: number = 0;
-        dy: number = 0;
-        ds: number = 0;
-        element: Element | null = null;
 
-        componentWillReceiveProps(nextProps: PanAndZoomHOCProps) {
-            if (this.props.x !== nextProps.x || this.props.y !== nextProps.y) {
-                this.dx = 0;
-                this.dy = 0;
-            }
-            if (this.props.scale !== nextProps.scale) {
-                this.ds = 0;
-            }
+  lastDistance: any;
+  firstMidpoint: any;
+  timeout: any;
+  childRef = createRef<SVGGElement>();
+
+  componentDidMount() {
+    if (!this.props.disabled) {
+      // Manually bind due to pinch issues not being prevented
+      // https://github.com/facebook/react/issues/9809
+      if (this.childRef.current) {
+        this.childRef.current.addEventListener('touchstart', this.onTouchStart);
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('touchstart', this.onTouchStart);
+    window.removeEventListener('touchmove', this.onTouchMove);
+    window.removeEventListener('touchend', this.onTouchEnd);
+    toggleTextSelection(true);
+  }
+
+  onTouchStart = (event: TouchEvent) => {
+    if (event.touches.length === 2 && this.childRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleTextSelection(false);
+
+      const pointA = getPointFromTouch(event.touches[0], this.childRef.current);
+      const pointB = getPointFromTouch(event.touches[1], this.childRef.current);
+      this.lastDistance = getDistanceBetweenPoints(pointA, pointB);
+      this.firstMidpoint = getMidpoint(pointA, pointB);
+
+      window.addEventListener('touchmove', this.onTouchMove);
+      window.addEventListener('touchend', this.onTouchEnd);
+    }
+  };
+
+  onTouchMove = (event: TouchEvent) => {
+    if (event.touches.length === 2 && this.childRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const pointA = getPointFromTouch(event.touches[0], this.childRef.current);
+      const pointB = getPointFromTouch(event.touches[1], this.childRef.current);
+      const distance = getDistanceBetweenPoints(pointA, pointB);
+
+      const { maxZoom, scaleFactor, offsetX, offsetY, scale, minZoom } = this.props;
+      const delta = distance - this.lastDistance;
+      const ratio = Math.exp((delta / 30) * scaleFactor);
+      const newScale = between(1, maxZoom, scale * ratio);
+
+      if (newScale <= minZoom) {
+        return;
+      }
+
+      const newOffsetX = Math.min(
+        (offsetX - this.firstMidpoint.x) * ratio + this.firstMidpoint.x,
+        0
+      );
+
+      const newOffsetY = Math.min(
+        (offsetY - this.firstMidpoint.y) * ratio + this.firstMidpoint.y,
+        0
+      );
+
+      if (scale < this.props.maxZoom) {
+        this.props.onZoom({
+          scale: newScale,
+          offsetX: newOffsetX,
+          offsetY: newOffsetY
+        });
+      }
+
+      this.lastDistance = distance;
+    }
+  };
+
+  onTouchEnd = (event: TouchEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.removeEventListener('touchmove', this.onTouchMove);
+    window.removeEventListener('touchend', this.onTouchEnd);
+
+    toggleTextSelection(true);
+    this.props.onZoomEnd();
+  };
+
+    /*
+  onWheel(event: React.MouseEvent) {
+    const {
+      disabled,
+      maxZoom,
+      zoomStep,
+      scale,
+      offsetX,
+      offsetY,
+      onZoomEnd,
+      disableMouseWheel,
+      minZoom
+    } = this.props;
+
+    if (!disabled && !disableMouseWheel) {
+      const nativeEvent = event.nativeEvent as WheelEvent;
+      const position = this.getNewPosition();
+
+      const positions = getPositionForTarget(nativeEvent);
+      const wheel = (nativeEvent.deltaY / 120) * -1;
+      const ratio = Math.exp(wheel * zoomStep);
+      const roundedScale = Math.ceil(scale * ratio);
+      const inBounds = roundedScale <= maxZoom && roundedScale >= minZoom;
+
+      console.log('here', roundedScale);
+
+      if (inBounds && roundedScale !== scale) {
+        // nativeEvent.preventDefault();
+
+        const newScale = between(minZoom, maxZoom, scale * ratio);
+
+
+        const newOffsetX = Math.min(
+          (offsetX - positions.x) * ratio + positions.x,
+          0
+        );
+
+        const newOffsetY = Math.min(
+          (offsetY - positions.y) * ratio + positions.y,
+          0
+        );
+
+        this.props.onZoom({
+          scale: newScale,
+          offsetX: newOffsetX,
+          offsetY: newOffsetY
+        });
+
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          onZoomEnd();
+        }, 500);
+      }
+    }
+  }
+
+    disabled?: boolean;
+  maxZoom: number;
+  minZoom: number;
+  zoomStep: number;
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+  disableMouseWheel?: boolean;
+  onZoom: (event: ZoomEvent) => void;
+  onZoomEnd: () => void;
+
+    */
+
+
+  onWheel(event: WheelEvent) {
+    event.preventDefault()
+    const { minZoom, maxZoom } = this.props
+    let { scale, offsetX, offsetY, scaleFactor } = this.props
+
+    // Keep the previous zoom value
+    const prevZoom = scale
+
+    // Determine if we are increasing or decreasing the zoom
+    const increaseZoom = event.deltaY < 0
+
+    // Set the new zoom value
+    if (increaseZoom) {
+      scale = (scale + scaleFactor < maxZoom ? scale + scaleFactor : maxZoom)
+    } else {
+      scale = (scale - scaleFactor > minZoom ? scale - scaleFactor : minZoom)
+    }
+
+    /*
+    if (scale <= 1) {
+      scale = 1;
+    }
+
+    if (scale >= 10) {
+      scale = 10;
+    }
+    */
+
+    if (scale !== prevZoom) {
+      if (scale !== minZoom) {
+        [ offsetX, offsetY ] = this.getNewPosition(event.pageX, event.pageY, scale)
+      } else {
+        // Reset to original position
+        [ offsetX, offsetY ] = [0, 0]
+        // [ offsetX, offsetY ] = [this.constructor.defaultState.posX, this.constructor.defaultState.posY]
+      }
+    }
+
+    // offsetX = Math.min(offsetX, 0);
+    // offsetY = Math.min(offsetY, 0);
+
+    console.log('here', scale, offsetX, offsetY);
+
+
+    /*
+    if (isNaN(offsetX)) {
+      offsetX = 0;
+    }
+
+    if (isNaN(offsetY)) {
+      offsetY = 0;
+    }
+    */
+
+    // const newScale = between(minZoom, maxZoom, scale);
+
+    this.props.onZoom({
+      scale,
+      offsetY,
+      offsetX
+    })
+
+    // this.setState({ zoom, posX, posY, transitionDuration: 0.05 })
+  }
+
+  getNewPosition(x, y, zoom) {
+    const [prevZoom, prevPosX, prevPosY] = [this.props.scale, this.props.offsetX, this.props.offsetY]
+
+    if (zoom === 1) {
+      return [0, 0]
+    }
+
+    if (zoom > prevZoom) {
+      // Get container coordinates
+      const rect = this.childRef.current.getBoundingClientRect()
+
+      // Retrieve rectangle dimensions and mouse position
+      const [centerX, centerY] = [rect.width / 2, rect.height / 2]
+      const [relativeX, relativeY] = [x - rect.left, y - rect.top]
+
+      // If we are zooming down, we must try to center to mouse position
+      const [absX, absY] = [(centerX - relativeX) / prevZoom, (centerY - relativeY) / prevZoom]
+      const ratio = zoom - prevZoom
+      return [
+        prevPosX + (absX * ratio),
+        prevPosY + (absY * ratio)
+      ]
+    } else {
+      // If we are zooming down, we shall re-center the element
+      return [
+        (prevPosX * (zoom - 1)) / (prevZoom - 1),
+        (prevPosY * (zoom - 1)) / (prevZoom - 1)
+      ]
+    }
+  }
+
+  render() {
+    return React.Children.map(this.props.children, (child: any) =>
+      React.cloneElement(child, {
+        ...child.props,
+        ref: this.childRef,
+        onWheel: e => {
+          this.onWheel(e);
+          if (child.props.onWheel) {
+            child.props.onWheel(e);
+          }
         }
-
-        componentDidMount() {
-            const component = ReactDOM.findDOMNode(this);
-            if (component) {
-                component.addEventListener('wheel', this.handleWheel);
-            }
-        }
-
-        componentWillUnmount() {
-            if (this.panning) {
-                document.removeEventListener('mousemove', this.handleMouseMove);
-                document.removeEventListener('mouseup', this.handleMouseUp);
-                document.removeEventListener('touchmove', this.handleMouseMove);
-                document.removeEventListener('touchend', this.handleMouseUp);
-            }
-            const component = ReactDOM.findDOMNode(this);
-            if (component) {
-                component.removeEventListener('wheel', this.handleWheel);
-            }
-        }
-
-        handleWheel = (event: WheelEvent) => {
-            const { onPanAndZoom, renderOnChange, disableScrollZoom, onZoom } = this.props;
-
-            if (disableScrollZoom) {
-                return;
-            }
-
-            const x: number | undefined = this.props.x;
-            const y: number | undefined = this.props.y;
-            const scale: number | undefined = this.props.scale;
-            const scaleFactor: number | undefined = this.props.scaleFactor;
-            const minScale: number | undefined = this.props.minScale;
-            const maxScale: number | undefined = this.props.maxScale;
-
-            if (x !== undefined && y !== undefined && scale !== undefined && scaleFactor !== undefined && minScale !== undefined && maxScale !== undefined) {
-                const { deltaY } = event;
-                const newScale = deltaY < 0 ? Math.min((scale + this.ds) * scaleFactor, maxScale) : Math.max((scale + this.ds) / scaleFactor, minScale);
-                const factor = newScale / (scale + this.ds);
-
-                if (factor !== 1) {
-                    const target = ReactDOM.findDOMNode(this);
-                    if (target !== null && 'getBoundingClientRect' in target) {
-                        const { width, height } = target.getBoundingClientRect();
-                        const { clientX, clientY } = this.normalizeTouchPosition(event, target);
-                        const dx = (clientX / width - 0.5) / (scale + this.ds);
-                        const dy = (clientY / height - 0.5) / (scale + this.ds);
-                        const sdx = dx * (1 - 1 / factor);
-                        const sdy = dy * (1 - 1 / factor);
-
-                        this.dx += sdx;
-                        this.dy += sdy;
-                        this.ds = newScale - scale;
-
-                        if (onPanAndZoom) {
-                            onPanAndZoom(x + this.dx, y + this.dy, scale + this.ds, event);
-                        }
-
-                        if (renderOnChange) {
-                            this.forceUpdate();
-                        }
-                    }
-                }
-            }
-
-            if (onZoom) {
-                onZoom(x, y, scale, event);
-            }
-
-            event.preventDefault();
-        };
-
-        panning = false;
-        panLastX = 0;
-        panLastY = 0;
-
-        handleMouseDown = (event: MouseEvent) => {
-            if (!this.panning) {
-                const { onPanStart } = this.props;
-                const target = ReactDOM.findDOMNode(this);
-                if (target !== null && 'getBoundingClientRect' in target) {
-                    const { clientX, clientY } = this.normalizeTouchPosition(event, target);
-                    this.panLastX = clientX;
-                    this.panLastY = clientY;
-                    this.panning = true;
-
-                    document.addEventListener('mousemove', this.handleMouseMove);
-                    document.addEventListener('mouseup', this.handleMouseUp);
-                    document.addEventListener('touchmove', this.handleMouseMove);
-                    document.addEventListener('touchend', this.handleMouseUp);
-
-                    if (onPanStart) {
-                        onPanStart(event);
-                    }
-                }
-            }
-        };
-
-        handleMouseMove = (event: MouseEvent | TouchEvent) => {
-            if (this.panning) {
-                const { onPanMove, renderOnChange, ignorePanOutside } = this.props;
-                const x: number | undefined = this.props.x;
-                const y: number | undefined = this.props.y;
-                const scale: number | undefined = this.props.scale;
-
-                if (x !== undefined && y !== undefined && scale !== undefined) {
-                    const target = ReactDOM.findDOMNode(this);
-                    if (target !== null && 'getBoundingClientRect' in target) {
-                        const { clientX, clientY } = this.normalizeTouchPosition(event, target);
-                        const { width, height } = target.getBoundingClientRect();
-
-                        if (!ignorePanOutside || 0 <= clientX && clientX <= width && 0 <= clientY && clientY <= height) {
-                            const dx = clientX - this.panLastX;
-                            const dy = clientY - this.panLastY;
-                            this.panLastX = clientX;
-                            this.panLastY = clientY;
-                            const sdx = dx / (width * (scale + this.ds));
-                            const sdy = dy / (height * (scale + this.ds));
-                            this.dx -= sdx;
-                            this.dy -= sdy;
-
-                            if (onPanMove) {
-                                onPanMove(x + this.dx, y + this.dy, event);
-                            }
-
-                            if (renderOnChange) {
-                                this.forceUpdate();
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
-        handleMouseUp = (event: MouseEvent | TouchEvent) => {
-            if (this.panning) {
-                const { onPanEnd, renderOnChange, ignorePanOutside } = this.props;
-                const x: number | undefined = this.props.x;
-                const y: number | undefined = this.props.y;
-                const scale: number | undefined = this.props.scale;
-
-                document.removeEventListener('mousemove', this.handleMouseMove);
-                document.removeEventListener('mouseup', this.handleMouseUp);
-                document.removeEventListener('touchmove', this.handleMouseMove);
-                document.removeEventListener('touchend', this.handleMouseUp);
-
-                if (x !== undefined && y !== undefined && scale !== undefined) {
-                    const target = ReactDOM.findDOMNode(this);
-                    if (target !== null && 'getBoundingClientRect' in target) {
-                        try {
-                            const { clientX, clientY } = this.normalizeTouchPosition(event, target);
-                            const { width, height } = target.getBoundingClientRect();
-
-                            if (!ignorePanOutside || 0 <= clientX && clientX <= width && 0 <= clientY && clientY <= height) {
-                                const dx = clientX - this.panLastX;
-                                const dy = clientY - this.panLastY;
-                                this.panLastX = clientX;
-                                this.panLastY = clientY;
-                                const sdx = dx / (width * (scale + this.ds));
-                                const sdy = dy / (height * (scale + this.ds));
-                                this.dx -= sdx;
-                                this.dy -= sdy;
-                            }
-                        } catch (error) {
-                            // Happens when touches are used
-                        }
-                    }
-
-                    this.panning = false;
-
-                    if (onPanEnd) {
-                        onPanEnd(x + this.dx, y + this.dy, event);
-                    }
-
-                    if (renderOnChange) {
-                        this.forceUpdate();
-                    }
-                }
-            }
-        };
-
-        normalizeTouchPosition(event: MouseEvent | TouchEvent, parent: Element) {
-            const position = {
-                clientX: ('targetTouches' in event) ? event.targetTouches[0].pageX : event.clientX,
-                clientY: ('targetTouches' in event) ? event.targetTouches[0].pageY : event.clientY
-            };
-
-            while ((parent as HTMLElement).offsetParent) {
-                position.clientX -= (parent as HTMLElement).offsetLeft - parent.scrollLeft;
-                position.clientY -= (parent as HTMLElement).offsetTop - parent.scrollTop;
-                parent = (parent as HTMLElement).offsetParent;
-            }
-
-            return position;
-        }
-
-        render() {
-            const { children, scaleFactor, x: tempX, y: tempY, scale: tempScale, minScale, maxScale, onPanStart, onPanMove, onPanEnd, onZoom, onPanAndZoom, renderOnChange, passOnProps, ignorePanOutside, disableScrollZoom, ...other } = this.props;
-            const x: number | undefined = this.props.x;
-            const y: number | undefined = this.props.y;
-            const scale: number | undefined = this.props.scale;
-
-            if (x !== undefined && y !== undefined && scale !== undefined) {
-                const passedProps = passOnProps ? { x: x + this.dx, y: y + this.dy, scale: scale + this.ds } : {};
-
-                return (
-                    <WrappedComponent
-                        {...passedProps}
-                        {...other}
-                        onMouseDown={this.handleMouseDown}
-                        onTouchStart={this.handleMouseDown}
-                    >
-                        {children}
-                    </WrappedComponent>
-                );
-            } else {
-                return null;
-            }
-        }
-    } as any as React.ComponentClass<Overwrite<P, PanAndZoomHOCProps>>;
-};
+      })
+    );
+  }
+}

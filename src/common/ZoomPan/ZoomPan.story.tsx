@@ -80,8 +80,8 @@ storiesOf('Charts/Zoom Pan', module)
 class GenericZoomPanStory extends Component<{}, any> {
   state = {
     zoomLevel: 1,
-    offsetX: 125,
-    offsetY: 100
+    offsetX: 0,
+    offsetY: 0
   };
 
   onZoomPan = (event) => {
@@ -94,12 +94,14 @@ class GenericZoomPanStory extends Component<{}, any> {
     // console.log('here', offsetX, offsetY)
 
     return (
-      <div>
+      <div style={{ border: 'dotted 2px red' }}>
         <svg height="350" width="500">
           <ZoomPan
             height={350}
             width={500}
             pannable={true}
+            minZoom={1}
+            maxZoom={10}
             contained={false}
             decay={false}
             scale={zoomLevel}

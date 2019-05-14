@@ -37,15 +37,13 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
     const { width, data, axisType, roundDomains, onZoomPan } = this.props;
     const can = event.type === 'zoom' || (event.type === 'pan' && event.scale > 1);
 
-   //  if (can) {
+    if (can) {
       const scale: any = getXScale({
         width: width,
         type: axisType,
         roundDomains,
         data
       });
-
-      console.log('here', event.offsetX, event.scale);
 
       const newScale = scale.copy().domain(
         scale
@@ -54,13 +52,11 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
           .map(scale.invert, event.offsetX)
       );
 
-      console.log('here', )
-
       onZoomPan!({
         domain: newScale.domain(),
         isZoomed: event.scale !== 1
       });
-    // }
+    }
   }
 
   getOffset() {
@@ -94,7 +90,7 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
       offset = offset * scale;
 
       zoomOffset = {
-        scale,
+        scale: scale,
         offsetX: -offset
       };
     }
