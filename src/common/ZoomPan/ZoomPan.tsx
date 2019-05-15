@@ -24,7 +24,7 @@ export interface ZoomPanProps {
   maxZoom: number;
   minZoom: number;
   zoomStep: number;
-  contained: boolean;
+  constrained: boolean;
   decay: boolean;
   disableMouseWheel?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
@@ -42,7 +42,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     zoomStep: 0.1,
     pannable: true,
     zoomable: true,
-    contained: true,
+    constrained: true,
     decay: true,
     height: 0,
     width: 0,
@@ -54,16 +54,11 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   observer?: ValueReaction;
   decay?: ColdSubscription;
-  rqf?: any;
 
-  constructor(props: ZoomPanProps) {
-    super(props);
-
-    this.state = {
-      isZooming: false,
-      isPanning: false
-    };
-  }
+  state: ZoomPanState = {
+    isZooming: false,
+    isPanning: false
+  };
 
   componentWillUnmount() {
     this.stopDecay();
@@ -81,13 +76,13 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   getEndOffset() {
     const { width, scale } = this.props;
-    return width * scale! - width;
+    return width * scale - width;
   }
 
   ensureRange(offset: number) {
-    const { contained } = this.props;
+    const { constrained } = this.props;
 
-    if (contained) {
+    if (constrained) {
       if (-offset <= 0) {
         offset = 0;
       } else if (-offset > this.getEndOffset()) {
@@ -107,7 +102,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     this.observer = value(this.props.offsetX);
   }
 
-  onPanMove(event: any) {
+  onPanMove(event) {
     const offsetX = this.ensureRange(event.offsetX);
     const offsetY = this.ensureRange(event.offsetY);
 
@@ -124,17 +119,20 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   onPanEnd() {
     if (this.observer && this.props.decay) {
       const end = this.getEndOffset();
+      const constrained = this.props.constrained;
 
       this.decay = decay({
         from: this.observer.get(),
         velocity: this.observer.getVelocity()
       })
-        .pipe(clamp(-end, 0))
+        .pipe(res => {
+          return constrained ?
+            clamp(-end, 0)(res) :
+            res;
+        })
         .start({
           update: offset => {
-            cancelAnimationFrame(this.rqf);
-
-            this.rqf = requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
               this.props.onZoomPan({
                 scale: this.props.scale,
                 offsetX: offset,
@@ -190,6 +188,9 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
     return (
       <Pan
+        offsetX={offsetX}
+        offsetY={offsetY}
+        scale={scale}
         disabled={!pannable || disabled}
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}

@@ -37,8 +37,17 @@ export class Zoom extends Component<ZoomGestureProps> {
   firstMidpoint: any;
   timeout: any;
   childRef = createRef<SVGGElement>();
-  transformationMatrix: any = identity();
+  transformationMatrix = identity();
   updating = false;
+
+
+  constructor(props: ZoomGestureProps) {
+    super(props);
+
+    this.transformationMatrix = smoothMatrix(transform(
+      translate(props.offsetX, props.offsetY)
+    ), 100);
+  }
 
   componentDidMount() {
     if (!this.props.disabled) {
@@ -50,20 +59,17 @@ export class Zoom extends Component<ZoomGestureProps> {
     }
   }
 
-  getSnapshotBeforeUpdate() {
-    let { offsetX, offsetY, scale: newScale } = this.props;
+  componentDidUpdate() {
+    let { offsetX: x, offsetY: y, scale: newScale } = this.props;
 
     if (!this.updating) {
       this.transformationMatrix = smoothMatrix(transform(
-        translate(offsetX / 1, offsetY / 1),
-        scale(newScale, newScale),
-        translate(-offsetX / 1, -offsetY / 1)
+        this.transformationMatrix,
+        translate(x, y)
       ), 100);
     }
 
     this.updating = false;
-
-    return null;
   }
 
   componentWillUnmount() {
@@ -71,6 +77,11 @@ export class Zoom extends Component<ZoomGestureProps> {
     window.removeEventListener('touchmove', this.onTouchMove);
     window.removeEventListener('touchend', this.onTouchEnd);
     toggleTextSelection(true);
+  }
+
+  getStep(delta: number) {
+    const { scaleFactor } = this.props;
+    return -delta > 0 ? scaleFactor + 1 : 1 - scaleFactor;
   }
 
   onTouchStart = (event: TouchEvent) => {
@@ -88,11 +99,6 @@ export class Zoom extends Component<ZoomGestureProps> {
       window.addEventListener('touchend', this.onTouchEnd);
     }
   };
-
-  getStep(delta) {
-    const { scaleFactor } = this.props;
-    return -delta > 0 ? scaleFactor + 1 : 1 - scaleFactor;
-  }
 
   onTouchMove = (event: TouchEvent) => {
     if (event.touches.length === 2 && this.childRef.current) {
