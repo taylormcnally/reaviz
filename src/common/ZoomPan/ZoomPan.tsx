@@ -84,20 +84,18 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     return width * scale! - width;
   }
 
-  ensureRange(offset: number, delta: number) {
+  ensureRange(offset: number) {
     const { contained } = this.props;
-    const prevOffset = offset;
-    let newOffset = delta + prevOffset;
 
     if (contained) {
-      if (-newOffset <= 0) {
-        newOffset = 0;
-      } else if (-newOffset > this.getEndOffset()) {
-        newOffset = prevOffset;
+      if (-offset <= 0) {
+        offset = 0;
+      } else if (-offset > this.getEndOffset()) {
+        offset = offset;
       }
     }
 
-    return newOffset;
+    return offset;
   }
 
   onPanStart() {
@@ -109,9 +107,9 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     this.observer = value(this.props.offsetX);
   }
 
-  onPanMove(event: PanMoveEvent) {
-    const offsetX = this.ensureRange(this.props.offsetX, event.deltaX);
-    const offsetY = this.ensureRange(this.props.offsetY, event.deltaY);
+  onPanMove(event: any) {
+    const offsetX = this.ensureRange(event.offsetX);
+    const offsetY = this.ensureRange(event.offsetY);
 
     this.observer && this.observer.update(offsetX);
 
@@ -155,11 +153,14 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   onZoom(event: ZoomEvent) {
     this.stopDecay();
+    const inRange = this.ensureRange(event.offsetX);
 
-    this.props.onZoomPan({
-      ...event,
-      type: 'zoom'
-    });
+    if (inRange) {
+      this.props.onZoomPan({
+        ...event,
+        type: 'zoom'
+      });
+    }
   }
 
   onZoomEnd() {
@@ -177,7 +178,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       pannable,
       maxZoom,
       minZoom,
-      zoomStep,
       zoomable,
       scale,
       offsetX,
@@ -201,7 +201,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             disableMouseWheel={disableMouseWheel}
             maxZoom={maxZoom}
             minZoom={minZoom}
-            zoomStep={zoomStep}
             scale={scale}
             offsetX={offsetX}
             offsetY={offsetY}

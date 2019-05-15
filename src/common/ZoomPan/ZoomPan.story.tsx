@@ -79,7 +79,7 @@ storiesOf('Charts/Zoom Pan', module)
 
 class GenericZoomPanStory extends Component<{}, any> {
   state = {
-    zoomLevel: 1,
+    scale: 1,
     offsetX: 0,
     offsetY: 0
   };
@@ -89,9 +89,7 @@ class GenericZoomPanStory extends Component<{}, any> {
   };
 
   render() {
-    const { offsetX, offsetY, zoomLevel } = this.state;
-
-    // console.log('here', offsetX, offsetY)
+    const { offsetX, offsetY, scale } = this.state;
 
     return (
       <div style={{ border: 'dotted 2px red' }}>
@@ -104,12 +102,12 @@ class GenericZoomPanStory extends Component<{}, any> {
             maxZoom={10}
             contained={false}
             decay={false}
-            scale={zoomLevel}
+            scale={scale}
             offsetY={offsetX}
             offsetX={offsetY}
             onZoomPan={this.onZoomPan}
           >
-            <g transform={`translate(${offsetX}, ${offsetY}) scale(${zoomLevel})`}>
+            <g transform={`translate(${offsetX}, ${offsetY}) scale(${scale})`}>
               <circle cx="50" cy="100" r="10" fill="blue" />
               <circle cx="100" cy="100" r="10" fill="red" />
               <circle cx="150" cy="100" r="10" fill="green" />

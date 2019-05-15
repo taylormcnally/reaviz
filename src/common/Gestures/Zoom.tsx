@@ -1,8 +1,8 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromTouch, getPositionForTarget } from '../utils/position';
+import { getPointFromTouch, localPoint } from '../utils/position';
 import { getDistanceBetweenPoints, between, getMidpoint } from './pinchUtils';
-import ReactDOM from 'react-dom';
+import { identity, scale, smoothMatrix, transform, translate } from 'transformation-matrix';
 
 interface ZoomGestureProps {
   disabled?: boolean;
@@ -25,19 +25,20 @@ export interface ZoomEvent {
 
 export class Zoom extends Component<ZoomGestureProps> {
   static defaultProps: Partial<ZoomGestureProps> = {
-    offsetX: 0.5,
-    offsetY: 0.5,
+    offsetX: 0,
+    offsetY: 0,
     scale: 1,
-    scaleFactor: 0.2,
-    minZoom: 1, // Number.EPSILON,
-    maxZoom: 10 //Number.POSITIVE_INFINITY,
-  }
-
+    scaleFactor: 0.1,
+    minZoom: 1,
+    maxZoom: 10
+  };
 
   lastDistance: any;
   firstMidpoint: any;
   timeout: any;
   childRef = createRef<SVGGElement>();
+  transformationMatrix: any = identity();
+  updating = false;
 
   componentDidMount() {
     if (!this.props.disabled) {
@@ -123,169 +124,51 @@ export class Zoom extends Component<ZoomGestureProps> {
     this.props.onZoomEnd();
   };
 
-    /*
-  onWheel(event: React.MouseEvent) {
-    const {
-      disabled,
-      maxZoom,
-      zoomStep,
-      scale,
-      offsetX,
-      offsetY,
-      onZoomEnd,
-      disableMouseWheel,
-      minZoom
-    } = this.props;
+  getSnapshotBeforeUpdate() {
+    let { offsetX, offsetY, scale: newScale } = this.props;
 
-    if (!disabled && !disableMouseWheel) {
-      const nativeEvent = event.nativeEvent as WheelEvent;
-      const position = this.getNewPosition();
+    if (!this.updating) {
+      this.transformationMatrix = smoothMatrix(transform(
+        translate(offsetX / 1, offsetY / 1),
+        scale(newScale, newScale),
+        translate(-offsetX / 1, -offsetY / 1)
+      ), 100);
+    }
 
-      const positions = getPositionForTarget(nativeEvent);
-      const wheel = (nativeEvent.deltaY / 120) * -1;
-      const ratio = Math.exp(wheel * zoomStep);
-      const roundedScale = Math.ceil(scale * ratio);
-      const inBounds = roundedScale <= maxZoom && roundedScale >= minZoom;
+    this.updating = false;
 
-      console.log('here', roundedScale);
+    return null;
+  }
 
-      if (inBounds && roundedScale !== scale) {
-        // nativeEvent.preventDefault();
+  onWheel(event) {
+    event.preventDefault();
+    const { x, y } = localPoint(event);
+    const { scaleFactor } = this.props;
+    const step = -event.deltaY > 0 ? scaleFactor + 1 : 1 - scaleFactor;
+    this.scale({ step, x, y })
+  }
 
-        const newScale = between(minZoom, maxZoom, scale * ratio);
+  scale({ step, x, y }) {
+    const prevZoomScale = this.props.scale;
+    const zoomLevel = prevZoomScale * step;
+    const { minZoom, maxZoom, onZoom } = this.props;
 
+    if (zoomLevel > minZoom && zoomLevel < maxZoom) {
+      this.transformationMatrix = smoothMatrix(transform(
+        translate(x / 1, y / 1),
+        scale(zoomLevel, zoomLevel),
+        translate(-x / 1, -y / 1)
+      ), 100);
 
-        const newOffsetX = Math.min(
-          (offsetX - positions.x) * ratio + positions.x,
-          0
-        );
+      requestAnimationFrame(() => {
+        this.updating = true;
 
-        const newOffsetY = Math.min(
-          (offsetY - positions.y) * ratio + positions.y,
-          0
-        );
-
-        this.props.onZoom({
-          scale: newScale,
-          offsetX: newOffsetX,
-          offsetY: newOffsetY
+        onZoom({
+          scale: this.transformationMatrix.a,
+          offsetX: this.transformationMatrix.e,
+          offsetY: this.transformationMatrix.f
         });
-
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          onZoomEnd();
-        }, 500);
-      }
-    }
-  }
-
-    disabled?: boolean;
-  maxZoom: number;
-  minZoom: number;
-  zoomStep: number;
-  scale: number;
-  offsetX: number;
-  offsetY: number;
-  disableMouseWheel?: boolean;
-  onZoom: (event: ZoomEvent) => void;
-  onZoomEnd: () => void;
-
-    */
-
-
-  onWheel(event: WheelEvent) {
-    event.preventDefault()
-    const { minZoom, maxZoom } = this.props
-    let { scale, offsetX, offsetY, scaleFactor } = this.props
-
-    // Keep the previous zoom value
-    const prevZoom = scale
-
-    // Determine if we are increasing or decreasing the zoom
-    const increaseZoom = event.deltaY < 0
-
-    // Set the new zoom value
-    if (increaseZoom) {
-      scale = (scale + scaleFactor < maxZoom ? scale + scaleFactor : maxZoom)
-    } else {
-      scale = (scale - scaleFactor > minZoom ? scale - scaleFactor : minZoom)
-    }
-
-    /*
-    if (scale <= 1) {
-      scale = 1;
-    }
-
-    if (scale >= 10) {
-      scale = 10;
-    }
-    */
-
-    if (scale !== prevZoom) {
-      if (scale !== minZoom) {
-        [ offsetX, offsetY ] = this.getNewPosition(event.pageX, event.pageY, scale)
-      } else {
-        // Reset to original position
-        [ offsetX, offsetY ] = [0, 0]
-        // [ offsetX, offsetY ] = [this.constructor.defaultState.posX, this.constructor.defaultState.posY]
-      }
-    }
-
-    // offsetX = Math.min(offsetX, 0);
-    // offsetY = Math.min(offsetY, 0);
-
-    console.log('here', scale, offsetX, offsetY);
-
-
-    /*
-    if (isNaN(offsetX)) {
-      offsetX = 0;
-    }
-
-    if (isNaN(offsetY)) {
-      offsetY = 0;
-    }
-    */
-
-    // const newScale = between(minZoom, maxZoom, scale);
-
-    this.props.onZoom({
-      scale,
-      offsetY,
-      offsetX
-    })
-
-    // this.setState({ zoom, posX, posY, transitionDuration: 0.05 })
-  }
-
-  getNewPosition(x, y, zoom) {
-    const [prevZoom, prevPosX, prevPosY] = [this.props.scale, this.props.offsetX, this.props.offsetY]
-
-    if (zoom === 1) {
-      return [0, 0]
-    }
-
-    if (zoom > prevZoom) {
-      // Get container coordinates
-      const rect = this.childRef.current.getBoundingClientRect()
-
-      // Retrieve rectangle dimensions and mouse position
-      const [centerX, centerY] = [rect.width / 2, rect.height / 2]
-      const [relativeX, relativeY] = [x - rect.left, y - rect.top]
-
-      // If we are zooming down, we must try to center to mouse position
-      const [absX, absY] = [(centerX - relativeX) / prevZoom, (centerY - relativeY) / prevZoom]
-      const ratio = zoom - prevZoom
-      return [
-        prevPosX + (absX * ratio),
-        prevPosY + (absY * ratio)
-      ]
-    } else {
-      // If we are zooming down, we shall re-center the element
-      return [
-        (prevPosX * (zoom - 1)) / (prevZoom - 1),
-        (prevPosY * (zoom - 1)) / (prevZoom - 1)
-      ]
+      });
     }
   }
 
