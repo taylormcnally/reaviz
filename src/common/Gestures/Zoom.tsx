@@ -1,8 +1,8 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromTouch, localPoint } from '../utils/position';
-import { getDistanceBetweenPoints, between, getMidpoint } from './pinchUtils';
-import { identity, scale, smoothMatrix, transform, translate } from 'transformation-matrix';
+import { getPointFromTouch, getPointFromMouse } from '../utils/position';
+import { getDistanceBetweenPoints, getMidpoint } from './pinchUtils';
+import { identity, scale, smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
 
 interface ZoomGestureProps {
   disabled?: boolean;
@@ -50,80 +50,6 @@ export class Zoom extends Component<ZoomGestureProps> {
     }
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('touchstart', this.onTouchStart);
-    window.removeEventListener('touchmove', this.onTouchMove);
-    window.removeEventListener('touchend', this.onTouchEnd);
-    toggleTextSelection(true);
-  }
-
-  onTouchStart = (event: TouchEvent) => {
-    if (event.touches.length === 2 && this.childRef.current) {
-      event.preventDefault();
-      event.stopPropagation();
-      toggleTextSelection(false);
-
-      const pointA = getPointFromTouch(event.touches[0], this.childRef.current);
-      const pointB = getPointFromTouch(event.touches[1], this.childRef.current);
-      this.lastDistance = getDistanceBetweenPoints(pointA, pointB);
-      this.firstMidpoint = getMidpoint(pointA, pointB);
-
-      window.addEventListener('touchmove', this.onTouchMove);
-      window.addEventListener('touchend', this.onTouchEnd);
-    }
-  };
-
-  onTouchMove = (event: TouchEvent) => {
-    if (event.touches.length === 2 && this.childRef.current) {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const pointA = getPointFromTouch(event.touches[0], this.childRef.current);
-      const pointB = getPointFromTouch(event.touches[1], this.childRef.current);
-      const distance = getDistanceBetweenPoints(pointA, pointB);
-
-      const { maxZoom, scaleFactor, offsetX, offsetY, scale, minZoom } = this.props;
-      const delta = distance - this.lastDistance;
-      const ratio = Math.exp((delta / 30) * scaleFactor);
-      const newScale = between(1, maxZoom, scale * ratio);
-
-      if (newScale <= minZoom) {
-        return;
-      }
-
-      const newOffsetX = Math.min(
-        (offsetX - this.firstMidpoint.x) * ratio + this.firstMidpoint.x,
-        0
-      );
-
-      const newOffsetY = Math.min(
-        (offsetY - this.firstMidpoint.y) * ratio + this.firstMidpoint.y,
-        0
-      );
-
-      if (scale < this.props.maxZoom) {
-        this.props.onZoom({
-          scale: newScale,
-          offsetX: newOffsetX,
-          offsetY: newOffsetY
-        });
-      }
-
-      this.lastDistance = distance;
-    }
-  };
-
-  onTouchEnd = (event: TouchEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    window.removeEventListener('touchmove', this.onTouchMove);
-    window.removeEventListener('touchend', this.onTouchEnd);
-
-    toggleTextSelection(true);
-    this.props.onZoomEnd();
-  };
-
   getSnapshotBeforeUpdate() {
     let { offsetX, offsetY, scale: newScale } = this.props;
 
@@ -140,12 +66,70 @@ export class Zoom extends Component<ZoomGestureProps> {
     return null;
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('touchstart', this.onTouchStart);
+    window.removeEventListener('touchmove', this.onTouchMove);
+    window.removeEventListener('touchend', this.onTouchEnd);
+    toggleTextSelection(true);
+  }
+
+  onTouchStart = (event: TouchEvent) => {
+    if (event.touches.length === 2 && this.childRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleTextSelection(false);
+
+      const [pointA, pointB] = getPointFromTouch(this.childRef.current, event);
+
+      this.lastDistance = getDistanceBetweenPoints(pointA, pointB);
+      this.firstMidpoint = getMidpoint(pointA, pointB);
+
+      window.addEventListener('touchmove', this.onTouchMove);
+      window.addEventListener('touchend', this.onTouchEnd);
+    }
+  };
+
+  getStep(delta) {
+    const { scaleFactor } = this.props;
+    return -delta > 0 ? scaleFactor + 1 : 1 - scaleFactor;
+  }
+
+  onTouchMove = (event: TouchEvent) => {
+    if (event.touches.length === 2 && this.childRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const [pointA, pointB] = getPointFromTouch(this.childRef.current, event);
+      const distance = getDistanceBetweenPoints(pointA, pointB);
+      const delta = distance - this.lastDistance;
+      const step = this.getStep(-delta);
+
+      this.scale({
+        step,
+        x: this.firstMidpoint.x,
+        y: this.firstMidpoint.y
+      });
+
+      this.lastDistance = distance;
+    }
+  };
+
+  onTouchEnd = (event: TouchEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.removeEventListener('touchmove', this.onTouchMove);
+    window.removeEventListener('touchend', this.onTouchEnd);
+
+    toggleTextSelection(true);
+    this.props.onZoomEnd();
+  };
+
   onWheel(event) {
     event.preventDefault();
-    const { x, y } = localPoint(event);
-    const { scaleFactor } = this.props;
-    const step = -event.deltaY > 0 ? scaleFactor + 1 : 1 - scaleFactor;
-    this.scale({ step, x, y })
+    const point = getPointFromMouse(event);
+    const step = this.getStep(event.deltaY);
+    this.scale({ step, ...point });
   }
 
   scale({ step, x, y }) {
@@ -154,19 +138,22 @@ export class Zoom extends Component<ZoomGestureProps> {
     const { minZoom, maxZoom, onZoom } = this.props;
 
     if (zoomLevel > minZoom && zoomLevel < maxZoom) {
-      this.transformationMatrix = smoothMatrix(transform(
-        translate(x / 1, y / 1),
-        scale(zoomLevel, zoomLevel),
-        translate(-x / 1, -y / 1)
-      ), 100);
+      this.updating = true;
 
       requestAnimationFrame(() => {
-        this.updating = true;
+        this.transformationMatrix = smoothMatrix(transform(
+          translate(x / 1, y / 1),
+          scale(zoomLevel, zoomLevel),
+          translate(-x / 1, -y / 1)
+        ), 100);
+
+        // Clone the object before sending up
+        const result = fromObject(this.transformationMatrix);
 
         onZoom({
-          scale: this.transformationMatrix.a,
-          offsetX: this.transformationMatrix.e,
-          offsetY: this.transformationMatrix.f
+          scale: result.a,
+          offsetX: result.e,
+          offsetY: result.f
         });
       });
     }
