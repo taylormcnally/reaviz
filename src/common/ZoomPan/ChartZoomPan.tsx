@@ -49,7 +49,7 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
         scale
           .range()
           .map(x => (x - event.x) / event.scale)
-          .map(scale.invert, event.x)
+          .map(scale.clamp(true).invert, event.x)
       );
 
       onZoomPan!({

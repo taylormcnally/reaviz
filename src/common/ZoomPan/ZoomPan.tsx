@@ -211,9 +211,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             scale={scale}
             x={x}
             y={y}
-            constrain={constrain}
-            height={height}
-            width={width}
             onZoom={bind(this.onZoom, this)}
             onZoomEnd={bind(this.onZoomEnd, this)}
             matrix={matrix}

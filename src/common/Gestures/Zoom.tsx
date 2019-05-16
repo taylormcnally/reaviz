@@ -1,8 +1,8 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromTouch, getPointFromMatrix, constrainMatrix, isZoomLevelGoingOutOfBounds } from '../utils/position';
+import { getPointFromTouch, getPointFromMatrix, isZoomLevelGoingOutOfBounds } from '../utils/position';
 import { getDistanceBetweenPoints, getMidpoint } from './pinchUtils';
-import { scale, smoothMatrix, transform, translate, fromObject, applyToPoint } from 'transformation-matrix';
+import { scale, smoothMatrix, transform, translate } from 'transformation-matrix';
 
 interface ZoomGestureProps {
   disabled?: boolean;
@@ -13,9 +13,6 @@ interface ZoomGestureProps {
   matrix: any;
   x: number;
   y: number;
-  width: number;
-  height: number;
-  constrain: boolean;
   disableMouseWheel?: boolean;
   onZoom: (event: ZoomEvent) => void;
   onZoomEnd: () => void;
@@ -66,7 +63,7 @@ export class Zoom extends Component<ZoomGestureProps> {
   }
 
   scale(x: number, y: number, step: number) {
-    const { minZoom, maxZoom, onZoom, constrain, height, width, matrix } = this.props;
+    const { minZoom, maxZoom, onZoom, matrix } = this.props;
 
     const outside = isZoomLevelGoingOutOfBounds({
       d: matrix.a,
@@ -82,30 +79,14 @@ export class Zoom extends Component<ZoomGestureProps> {
         translate(-x, -y)
       ), 100);
 
-      const shouldConstrain = constrain && constrainMatrix(height, width, newMatrix);
-
-      if (!shouldConstrain) {
-        requestAnimationFrame(() => {
-          onZoom({
-            scale: newMatrix.a,
-            x: newMatrix.e,
-            y: newMatrix.f,
-            matrix: newMatrix
-          });
+      requestAnimationFrame(() => {
+        onZoom({
+          scale: newMatrix.a,
+          x: newMatrix.e,
+          y: newMatrix.f,
+          matrix: newMatrix
         });
-      } else {
-        // TODO: not 100% but close!
-        requestAnimationFrame(() => {
-          const point = applyToPoint(newMatrix, { x: 0, y: 0 });
-
-          onZoom({
-            scale: newMatrix.d,
-            x: point.x,
-            y: point.y,
-            matrix: matrix
-          });
-        });
-      }
+      });
     }
   }
 
