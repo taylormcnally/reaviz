@@ -38,12 +38,12 @@ export class Zoom extends Component<ZoomGestureProps> {
   firstMidpoint: any;
   timeout: any;
   childRef = createRef<SVGGElement>();
-  transformationMatrix = identity();
+  matrix: any;
   updating = false;
 
   constructor(props: ZoomGestureProps) {
     super(props);
-    this.transformationMatrix = fromObject(props.matrix);
+    this.matrix = fromObject(props.matrix);
   }
 
   componentDidMount() {
@@ -58,8 +58,9 @@ export class Zoom extends Component<ZoomGestureProps> {
 
   componentDidUpdate() {
     if (!this.updating) {
-      this.transformationMatrix = fromObject(this.props.matrix);
-     this.updating = false;
+      this.matrix = fromObject(this.props.matrix);
+      this.updating = false;
+      console.log('updating zoom...')
     }
   }
 
@@ -124,35 +125,34 @@ export class Zoom extends Component<ZoomGestureProps> {
 
   onWheel(event) {
     event.preventDefault();
-    const point = getPointFromMatrix(event, this.transformationMatrix);
+    const point = getPointFromMatrix(event, this.matrix);
     const step = this.getStep(event.deltaY);
     this.scale({ step, ...point });
   }
 
   scale({ step, x, y }) {
-    const prevZoomScale = this.props.scale;
-    const zoomLevel = prevZoomScale * step;
     const { minZoom, maxZoom, onZoom } = this.props;
+
+    let zoomLevel = Math.min(this.matrix.a, maxZoom);
+    zoomLevel = Math.max(this.matrix.a, minZoom);
+    zoomLevel = zoomLevel * step;
 
     if (zoomLevel > minZoom && zoomLevel < maxZoom) {
       this.updating = true;
 
       requestAnimationFrame(() => {
-        const matrix = transform(
-          this.transformationMatrix,
+        this.matrix = smoothMatrix(transform(
+          this.matrix,
           translate(x, y),
-          scale(zoomLevel, zoomLevel),
+          scale(step, step),
           translate(-x, -y)
-        );
-
-        // Clone the object before sending up
-        const result = fromObject(smoothMatrix(matrix, 100));
+        ), 100);
 
         onZoom({
-          scale: result.a,
-          offsetX: result.e,
-          offsetY: result.f,
-          matrix: result
+          scale: this.matrix.a,
+          offsetX: this.matrix.e,
+          offsetY: this.matrix.f,
+          matrix: this.matrix
         } as any);
 
         clearTimeout(this.timeout);

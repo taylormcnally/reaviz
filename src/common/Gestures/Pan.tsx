@@ -56,18 +56,19 @@ export class Pan extends Component<PanProps> {
   started: boolean = false;
   deltaX: number = 0;
   deltaY: number = 0;
-  transformationMatrix = identity();
+  matrix: any;
   updating = false;
 
   constructor(props: PanProps) {
     super(props);
-    this.transformationMatrix = fromObject(props.matrix);
+    this.matrix = fromObject(props.matrix);
   }
 
   componentDidUpdate() {
     if (!this.updating) {
-      this.transformationMatrix = fromObject(this.props.matrix);
+      this.matrix = fromObject(this.props.matrix);
       this.updating = false;
+      console.log('updating pan...')
     }
   }
 
@@ -98,20 +99,17 @@ export class Pan extends Component<PanProps> {
     requestAnimationFrame(() => {
       const curScale = this.props.scale;
 
-      this.transformationMatrix = transform(
-        this.transformationMatrix,
+      this.matrix = smoothMatrix(transform(
+        this.matrix,
         translate(x / curScale, y / curScale)
-      );
-
-      // Clone the object before sending up
-      const result = fromObject(smoothMatrix(this.transformationMatrix, 100));
+      ), 100);
 
       this.props.onPanMove({
         source,
         nativeEvent,
-        offsetX: result.e,
-        offsetY: result.f,
-        matrix: result
+        offsetX: this.matrix.e,
+        offsetY: this.matrix.f,
+        matrix: this.matrix
       } as any);
     });
   }
