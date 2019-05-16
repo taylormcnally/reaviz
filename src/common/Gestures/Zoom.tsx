@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromTouch, getPointFromMatrix } from '../utils/position';
+import { getPointFromTouch, getPointFromMatrix, constrainMatrix } from '../utils/position';
 import { getDistanceBetweenPoints, getMidpoint } from './pinchUtils';
 import { scale, smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
 
@@ -13,6 +13,9 @@ interface ZoomGestureProps {
   matrix: any;
   offsetX: number;
   offsetY: number;
+  width: number;
+  height: number;
+  constrain: boolean;
   disableMouseWheel?: boolean;
   onZoom: (event: ZoomEvent) => void;
   onZoomEnd: () => void;
@@ -131,32 +134,35 @@ export class Zoom extends Component<ZoomGestureProps> {
   }
 
   scale({ step, x, y }) {
-    const { minZoom, maxZoom, onZoom } = this.props;
+    const { minZoom, maxZoom, onZoom, constrain, height, width } = this.props;
 
     let zoomLevel = Math.min(this.matrix.a, maxZoom);
     zoomLevel = Math.max(this.matrix.a, minZoom);
     zoomLevel = zoomLevel * step;
 
     if (zoomLevel >= minZoom && zoomLevel <= maxZoom) {
-      this.updating = true;
-
       requestAnimationFrame(() => {
-        this.matrix = smoothMatrix(transform(
+        const matrix = smoothMatrix(transform(
           this.matrix,
           translate(x, y),
           scale(step, step),
           translate(-x, -y)
         ), 100);
 
-        onZoom({
-          scale: this.matrix.a,
-          offsetX: this.matrix.e,
-          offsetY: this.matrix.f,
-          matrix: this.matrix
-        } as any);
+        if (!constrain || constrainMatrix(height, width, matrix)) {
+          this.matrix = matrix;
+          this.updating = true;
 
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => this.updating = false, 100);
+          onZoom({
+            scale: this.matrix.a,
+            offsetX: this.matrix.e,
+            offsetY: this.matrix.f,
+            matrix: this.matrix
+          } as any);
+
+          clearTimeout(this.timeout);
+          this.timeout = setTimeout(() => this.updating = false, 100);
+        }
       });
     }
   }
