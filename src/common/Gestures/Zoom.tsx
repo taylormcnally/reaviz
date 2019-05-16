@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 import { getPointFromTouch, getPointFromMatrix } from '../utils/position';
 import { getDistanceBetweenPoints, getMidpoint } from './pinchUtils';
-import { identity, scale, smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
+import { scale, smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
 
 interface ZoomGestureProps {
   disabled?: boolean;
@@ -137,7 +137,7 @@ export class Zoom extends Component<ZoomGestureProps> {
     zoomLevel = Math.max(this.matrix.a, minZoom);
     zoomLevel = zoomLevel * step;
 
-    if (zoomLevel > minZoom && zoomLevel < maxZoom) {
+    if (zoomLevel >= minZoom && zoomLevel <= maxZoom) {
       this.updating = true;
 
       requestAnimationFrame(() => {

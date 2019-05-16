@@ -127,3 +127,22 @@ export function getPointFromMouse(node, event?) {
     clientY
   });
 }
+
+/**
+ * Constrain the matrix.
+ */
+export function constrainMatrix(height: number, width: number, matrix) {
+  const limitX = width * matrix.a - width;
+  const limitY = height * matrix.a - height;
+
+  const { x, y } = applyToPoint(matrix, { x: 0, y: 0 });
+  if ((-x > limitX) || (-x <= 0)) {
+    return false;
+  }
+
+  if ((-y > limitY) || (-y <= 0)) {
+    return false;
+  }
+
+  return true;
+}

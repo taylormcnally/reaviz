@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { identity, smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
+import { smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
+import { constrainMatrix } from '../utils/position';
 
 interface PanProps {
   disabled: boolean;
@@ -10,6 +11,9 @@ interface PanProps {
   scale: number;
   matrix: any;
   offsetY: number;
+  width: number;
+  height: number;
+  constrain: boolean;
   onPanStart: (event: PanStartEvent) => void;
   onPanMove: (event: PanMoveEvent) => void;
   onPanEnd: (event: PanEndEvent) => void;
@@ -93,24 +97,27 @@ export class Pan extends Component<PanProps> {
         (Math.abs(this.deltaY) > this.props.threshold));
   }
 
-  pan(x, y, nativeEvent, source) {
-    this.updating = true;
+  pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
+    const { scale, constrain, width, height } = this.props;
 
     requestAnimationFrame(() => {
-      const curScale = this.props.scale;
-
-      this.matrix = smoothMatrix(transform(
+      const matrix = smoothMatrix(transform(
         this.matrix,
-        translate(x / curScale, y / curScale)
+        translate(x / scale, y / scale)
       ), 100);
 
-      this.props.onPanMove({
-        source,
-        nativeEvent,
-        offsetX: this.matrix.e,
-        offsetY: this.matrix.f,
-        matrix: this.matrix
-      } as any);
+      if (!constrain || constrainMatrix(height, width, matrix)) {
+        this.updating = true;
+        this.matrix = matrix;
+
+        this.props.onPanMove({
+          source,
+          nativeEvent,
+          offsetX: matrix.e,
+          offsetY: matrix.f,
+          matrix: matrix
+        } as any);
+      }
     });
   }
 

@@ -25,7 +25,7 @@ export interface ZoomPanProps {
   maxZoom: number;
   minZoom: number;
   zoomStep: number;
-  constrained: boolean;
+  constrain: boolean;
   decay: boolean;
   disableMouseWheel?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
@@ -43,7 +43,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     zoomStep: 0.1,
     pannable: true,
     zoomable: true,
-    constrained: true,
+    constrain: true,
     decay: true,
     height: 0,
     width: 0,
@@ -82,9 +82,9 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   ensureRange(offset: number) {
-    const { constrained } = this.props;
+    const { constrain } = this.props;
 
-    if (constrained) {
+    if (constrain) {
       if (-offset <= 0) {
         offset = 0;
       } else if (-offset > this.getEndOffset()) {
@@ -105,17 +105,17 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   onPanMove(event) {
-    const offsetX = this.ensureRange(event.offsetX);
-    const offsetY = this.ensureRange(event.offsetY);
+    // const offsetX = this.ensureRange(event.offsetX);
+    // const offsetY = this.ensureRange(event.offsetY);
 
     this.matrix = fromObject(event.matrix);
 
-    this.observer && this.observer.update(offsetX);
+    this.observer && this.observer.update(event.offsetX);
 
     this.props.onZoomPan({
       scale: this.props.scale,
-      offsetX,
-      offsetY,
+      offsetX: event.offsetX,
+      offsetY: event.offsetY,
       type: 'pan'
     });
   }
@@ -124,7 +124,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     if (false) {
     // if (this.observer && this.props.decay) {
       const end = this.getEndOffset();
-      const constrained = this.props.constrained;
+      const constrained = this.props.constrain;
 
       this.decay = decay({
         from: this.observer.get(),
@@ -158,14 +158,14 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     this.stopDecay();
     const inRange = this.ensureRange(event.offsetX);
 
-    if (inRange) {
+    // if (inRange) {
       this.matrix = fromObject(event.matrix);
 
       this.props.onZoomPan({
         ...event,
         type: 'zoom'
       });
-    }
+    // }
   }
 
   onZoomEnd() {
@@ -187,7 +187,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       scale,
       offsetX,
       offsetY,
-      disableMouseWheel
+      disableMouseWheel,
+      constrain
     } = this.props;
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
@@ -200,6 +201,9 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         offsetY={offsetY}
         scale={scale}
         matrix={matrix}
+        constrain={constrain}
+        height={height}
+        width={width}
         disabled={!pannable || disabled}
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}
