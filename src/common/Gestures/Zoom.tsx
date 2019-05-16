@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromTouch, getPointFromMouse } from '../utils/position';
+import { getPointFromTouch, getPointFromMatrix } from '../utils/position';
 import { getDistanceBetweenPoints, getMidpoint } from './pinchUtils';
 import { identity, scale, smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
 
@@ -10,6 +10,7 @@ interface ZoomGestureProps {
   minZoom: number;
   scaleFactor: number;
   scale: number;
+  matrix: any;
   offsetX: number;
   offsetY: number;
   disableMouseWheel?: boolean;
@@ -40,13 +41,9 @@ export class Zoom extends Component<ZoomGestureProps> {
   transformationMatrix = identity();
   updating = false;
 
-
   constructor(props: ZoomGestureProps) {
     super(props);
-
-    this.transformationMatrix = smoothMatrix(transform(
-      translate(props.offsetX, props.offsetY)
-    ), 100);
+    this.transformationMatrix = fromObject(props.matrix);
   }
 
   componentDidMount() {
@@ -60,16 +57,10 @@ export class Zoom extends Component<ZoomGestureProps> {
   }
 
   componentDidUpdate() {
-    let { offsetX: x, offsetY: y, scale: newScale } = this.props;
-
     if (!this.updating) {
-      this.transformationMatrix = smoothMatrix(transform(
-        this.transformationMatrix,
-        translate(x, y)
-      ), 100);
+      this.transformationMatrix = fromObject(this.props.matrix);
+     this.updating = false;
     }
-
-    this.updating = false;
   }
 
   componentWillUnmount() {
@@ -133,7 +124,7 @@ export class Zoom extends Component<ZoomGestureProps> {
 
   onWheel(event) {
     event.preventDefault();
-    const point = getPointFromMouse(event);
+    const point = getPointFromMatrix(event, this.transformationMatrix);
     const step = this.getStep(event.deltaY);
     this.scale({ step, ...point });
   }
@@ -147,20 +138,25 @@ export class Zoom extends Component<ZoomGestureProps> {
       this.updating = true;
 
       requestAnimationFrame(() => {
-        this.transformationMatrix = smoothMatrix(transform(
-          translate(x / 1, y / 1),
+        const matrix = transform(
+          this.transformationMatrix,
+          translate(x, y),
           scale(zoomLevel, zoomLevel),
-          translate(-x / 1, -y / 1)
-        ), 100);
+          translate(-x, -y)
+        );
 
         // Clone the object before sending up
-        const result = fromObject(this.transformationMatrix);
+        const result = fromObject(smoothMatrix(matrix, 100));
 
         onZoom({
           scale: result.a,
           offsetX: result.e,
-          offsetY: result.f
-        });
+          offsetY: result.f,
+          matrix: result
+        } as any);
+
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => this.updating = false, 100);
       });
     }
   }

@@ -4,6 +4,7 @@ import { Pan, PanMoveEvent } from '../Gestures/Pan';
 import { Zoom, ZoomEvent } from '../Gestures/Zoom';
 import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
 import { clamp } from '@popmotion/popcorn';
+import { identity, fromObject } from 'transformation-matrix';
 
 export interface ZoomPanEvent {
   scale: number;
@@ -54,6 +55,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   observer?: ValueReaction;
   decay?: ColdSubscription;
+  matrix = identity();
 
   state: ZoomPanState = {
     isZooming: false,
@@ -106,6 +108,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     const offsetX = this.ensureRange(event.offsetX);
     const offsetY = this.ensureRange(event.offsetY);
 
+    this.matrix = fromObject(event.matrix);
+
     this.observer && this.observer.update(offsetX);
 
     this.props.onZoomPan({
@@ -117,7 +121,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   onPanEnd() {
-    if (this.observer && this.props.decay) {
+    if (false) {
+    // if (this.observer && this.props.decay) {
       const end = this.getEndOffset();
       const constrained = this.props.constrained;
 
@@ -149,11 +154,13 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     }
   }
 
-  onZoom(event: ZoomEvent) {
+  onZoom(event) {
     this.stopDecay();
     const inRange = this.ensureRange(event.offsetX);
 
     if (inRange) {
+      this.matrix = fromObject(event.matrix);
+
       this.props.onZoomPan({
         ...event,
         type: 'zoom'
@@ -185,12 +192,14 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
     const selection = isZooming || isPanning ? 'none' : 'auto';
+    const matrix = fromObject(this.matrix);
 
     return (
       <Pan
         offsetX={offsetX}
         offsetY={offsetY}
         scale={scale}
+        matrix={matrix}
         disabled={!pannable || disabled}
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}
@@ -207,6 +216,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             offsetY={offsetY}
             onZoom={bind(this.onZoom, this)}
             onZoomEnd={bind(this.onZoomEnd, this)}
+            matrix={matrix}
           >
             <g style={{ cursor }}>
               {!disabled && <rect height={height} width={width} opacity={0} />}

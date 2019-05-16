@@ -1,4 +1,5 @@
 import { bisector } from 'd3-array';
+import { applyToPoint, inverse } from 'transformation-matrix';
 
 /**
  * Given a point position, get the closes data point in the dataset.
@@ -88,6 +89,21 @@ export function getPointFromTouch(node, event?) {
     });
   })
 }
+
+/**
+ * Gets the point from q given matrix.
+*/
+export function getPointFromMatrix(event, matrix) {
+  const parent = getParentSVG(event);
+
+  // Determines client coordinates relative to the editor component
+  const rect = parent.getBoundingClientRect();
+  const relativeClientX = event.clientX - rect.left;
+  const relativeClientY = event.clientY - rect.top;
+
+  // Transforms the coordinate to world coordinate (in the SVG/DIV world)
+  return applyToPoint(inverse(matrix), {x: relativeClientX, y: relativeClientY});
+};
 
 /**
  * Get the point given a node.

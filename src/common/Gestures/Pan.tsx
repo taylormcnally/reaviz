@@ -8,6 +8,7 @@ interface PanProps {
   cursor?: string;
   offsetX: number;
   scale: number;
+  matrix: any;
   offsetY: number;
   onPanStart: (event: PanStartEvent) => void;
   onPanMove: (event: PanMoveEvent) => void;
@@ -38,7 +39,7 @@ export interface PanCancelEvent {
 }
 
 export class Pan extends Component<PanProps> {
-  static defaultProps: PanProps = {
+  static defaultProps: Partial<PanProps> = {
     offsetX: 0,
     offsetY: 0,
     disabled: false,
@@ -52,7 +53,6 @@ export class Pan extends Component<PanProps> {
 
   prevXPosition: number = 0;
   prevYPosition: number = 0;
-  timeout: any;
   started: boolean = false;
   deltaX: number = 0;
   deltaY: number = 0;
@@ -61,22 +61,14 @@ export class Pan extends Component<PanProps> {
 
   constructor(props: PanProps) {
     super(props);
-
-    this.transformationMatrix = smoothMatrix(transform(
-      translate(props.offsetX, props.offsetY)
-    ), 100);
+    this.transformationMatrix = fromObject(props.matrix);
   }
 
   componentDidUpdate() {
-    let { offsetX: x, offsetY: y } = this.props;
-
     if (!this.updating) {
-      this.transformationMatrix = smoothMatrix(transform(
-        translate(x, y)
-      ), 100);
+      this.transformationMatrix = fromObject(this.props.matrix);
+      this.updating = false;
     }
-
-    this.updating = false;
   }
 
   componentWillUnmount() {
@@ -84,7 +76,6 @@ export class Pan extends Component<PanProps> {
   }
 
   disposeHandlers() {
-    clearTimeout(this.timeout);
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('mouseup', this.onMouseUp);
     window.removeEventListener('touchmove', this.onTouchMove);
@@ -102,21 +93,26 @@ export class Pan extends Component<PanProps> {
   }
 
   pan(x, y, nativeEvent, source) {
+    this.updating = true;
+
     requestAnimationFrame(() => {
       const curScale = this.props.scale;
-     this.transformationMatrix = transform(this.transformationMatrix, translate(x / curScale, y / curScale));
+
+      this.transformationMatrix = transform(
+        this.transformationMatrix,
+        translate(x / curScale, y / curScale)
+      );
 
       // Clone the object before sending up
-      const result = fromObject(this.transformationMatrix);
+      const result = fromObject(smoothMatrix(this.transformationMatrix, 100));
 
       this.props.onPanMove({
         source,
         nativeEvent,
         offsetX: result.e,
-        offsetY: result.f
+        offsetY: result.f,
+        matrix: result
       } as any);
-
-      this.updating = true;
     });
   }
 
@@ -181,6 +177,8 @@ export class Pan extends Component<PanProps> {
         source: 'mouse'
       });
     }
+
+    this.updating = false;
   };
 
   onTouchStart(event: React.TouchEvent) {
