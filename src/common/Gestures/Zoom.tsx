@@ -1,8 +1,8 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromTouch, getPointFromMatrix, constrainMatrix } from '../utils/position';
+import { getPointFromTouch, getPointFromMatrix, constrainMatrix, isZoomLevelGoingOutOfBounds } from '../utils/position';
 import { getDistanceBetweenPoints, getMidpoint } from './pinchUtils';
-import { scale, smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
+import { scale, smoothMatrix, transform, translate, fromObject, applyToPoint } from 'transformation-matrix';
 
 interface ZoomGestureProps {
   disabled?: boolean;
@@ -42,13 +42,6 @@ export class Zoom extends Component<ZoomGestureProps> {
   firstMidpoint: any;
   timeout: any;
   childRef = createRef<SVGGElement>();
-  matrix: any;
-  updating = false;
-
-  constructor(props: ZoomGestureProps) {
-    super(props);
-    this.matrix = fromObject(props.matrix);
-  }
 
   componentDidMount() {
     if (!this.props.disabled) {
@@ -57,13 +50,6 @@ export class Zoom extends Component<ZoomGestureProps> {
       if (this.childRef.current) {
         this.childRef.current.addEventListener('touchstart', this.onTouchStart);
       }
-    }
-  }
-
-  componentDidUpdate() {
-    if (!this.updating) {
-      this.matrix = fromObject(this.props.matrix);
-      this.updating = false;
     }
   }
 
@@ -77,6 +63,57 @@ export class Zoom extends Component<ZoomGestureProps> {
   getStep(delta: number) {
     const { scaleFactor } = this.props;
     return -delta > 0 ? scaleFactor + 1 : 1 - scaleFactor;
+  }
+
+  scale(x: number, y: number, step: number) {
+    const { minZoom, maxZoom, onZoom, constrain, height, width, matrix } = this.props;
+
+    const outside = isZoomLevelGoingOutOfBounds({
+      d: matrix.a,
+      scaleFactorMin: minZoom,
+      scaleFactorMax: maxZoom
+    }, step);
+
+    if (!outside) {
+      let newMatrix = smoothMatrix(transform(
+        matrix,
+        translate(x, y),
+        scale(step, step),
+        translate(-x, -y)
+      ), 100);
+
+      const shouldConstrain = constrain && constrainMatrix(height, width, newMatrix);
+
+      if (!shouldConstrain) {
+        requestAnimationFrame(() => {
+          onZoom({
+            scale: newMatrix.a,
+            x: newMatrix.e,
+            y: newMatrix.f,
+            matrix: newMatrix
+          });
+        });
+      } else {
+        // TODO: not 100% but close!
+        requestAnimationFrame(() => {
+          const point = applyToPoint(newMatrix, { x: 0, y: 0 });
+
+          onZoom({
+            scale: newMatrix.d,
+            x: point.x,
+            y: point.y,
+            matrix: matrix
+          });
+        });
+      }
+    }
+  }
+
+  onWheel(event: MouseWheelEvent) {
+    event.preventDefault();
+    const { x, y } = getPointFromMatrix(event, this.props.matrix);
+    const step = this.getStep(event.deltaY);
+    this.scale(x, y, step);
   }
 
   onTouchStart = (event: TouchEvent) => {
@@ -121,47 +158,6 @@ export class Zoom extends Component<ZoomGestureProps> {
     toggleTextSelection(true);
     this.props.onZoomEnd();
   };
-
-  onWheel(event: MouseWheelEvent) {
-    event.preventDefault();
-    const { x, y } = getPointFromMatrix(event, this.matrix);
-    const step = this.getStep(event.deltaY);
-    this.scale(x, y, step);
-  }
-
-  scale(x: number, y: number, step: number) {
-    const { minZoom, maxZoom, onZoom, constrain, height, width } = this.props;
-
-    let zoomLevel = Math.min(this.matrix.a, maxZoom);
-    zoomLevel = Math.max(this.matrix.a, minZoom);
-    zoomLevel = zoomLevel * step;
-
-    if (zoomLevel >= minZoom && zoomLevel <= maxZoom) {
-      requestAnimationFrame(() => {
-        const matrix = smoothMatrix(transform(
-          this.matrix,
-          translate(x, y),
-          scale(step, step),
-          translate(-x, -y)
-        ), 100);
-
-        if (!constrain || constrainMatrix(height, width, matrix)) {
-          this.matrix = matrix;
-          this.updating = true;
-
-          onZoom({
-            scale: this.matrix.a,
-            x: this.matrix.e,
-            y: this.matrix.f,
-            matrix: this.matrix
-          });
-
-          clearTimeout(this.timeout);
-          this.timeout = setTimeout(() => this.updating = false, 100);
-        }
-      });
-    }
-  }
 
   render() {
     return React.Children.map(this.props.children, (child: any) =>

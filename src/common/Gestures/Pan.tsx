@@ -61,20 +61,6 @@ export class Pan extends Component<PanProps> {
   started: boolean = false;
   deltaX: number = 0;
   deltaY: number = 0;
-  matrix: any;
-  updating = false;
-
-  constructor(props: PanProps) {
-    super(props);
-    this.matrix = fromObject(props.matrix);
-  }
-
-  componentDidUpdate() {
-    if (!this.updating) {
-      this.matrix = fromObject(this.props.matrix);
-      this.updating = false;
-    }
-  }
 
   componentWillUnmount() {
     this.disposeHandlers();
@@ -99,27 +85,23 @@ export class Pan extends Component<PanProps> {
   }
 
   pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
-    const { scale, constrain, width, height } = this.props;
+    const { scale, constrain, width, height, matrix } = this.props;
 
-    requestAnimationFrame(() => {
-      const matrix = smoothMatrix(transform(
-        this.matrix,
-        translate(x / scale, y / scale)
-      ), 100);
+    let newMatrix = smoothMatrix(transform(
+      matrix,
+      translate(x / scale, y / scale)
+    ), 100);
 
-      if (!constrain || constrainMatrix(height, width, matrix)) {
-        this.updating = true;
-        this.matrix = matrix;
-
-        this.props.onPanMove({
-          source,
-          nativeEvent,
-          x: matrix.e,
-          y: matrix.f,
-          matrix
-        });
-      }
-    });
+    const shouldConstrain = constrain && constrainMatrix(height, width, newMatrix);
+    if (!shouldConstrain) {
+      this.props.onPanMove({
+        source,
+        nativeEvent,
+        x: newMatrix.e,
+        y: newMatrix.f,
+        matrix: newMatrix
+      });
+    }
   }
 
   onMouseDown(event: React.MouseEvent) {
@@ -183,8 +165,6 @@ export class Pan extends Component<PanProps> {
         source: 'mouse'
       });
     }
-
-    this.updating = false;
   };
 
   onTouchStart(event: React.TouchEvent) {

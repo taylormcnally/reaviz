@@ -4,7 +4,8 @@ import { Pan, PanMoveEvent } from '../Gestures/Pan';
 import { Zoom, ZoomEvent } from '../Gestures/Zoom';
 import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
 import { clamp } from '@popmotion/popcorn';
-import { identity, fromObject } from 'transformation-matrix';
+import { identity, fromObject, fromDefinition, transform } from 'transformation-matrix';
+import { isEqual } from 'lodash-es';
 
 export interface ZoomPanEvent {
   scale: number;
@@ -34,6 +35,7 @@ export interface ZoomPanProps {
 interface ZoomPanState {
   isZooming: boolean;
   isPanning: boolean;
+  matrix: any;
 }
 
 export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
@@ -53,25 +55,29 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     onZoomPan: () => undefined
   };
 
+  static getDerivedStateFromProps(props, state) {
+    const matrix = transform(fromDefinition([
+      { type: 'translate', tx: props.x, ty: props.y },
+      { type: 'scale', sx: props.scale, sy: props.scale }
+    ]) as any);
+
+    if (!isEqual(matrix, state.matrix)) {
+      return {
+        matrix
+      };
+    }
+
+    return null;
+  }
+
   observer?: ValueReaction;
   decay?: ColdSubscription;
-  matrix: any;
 
   state: ZoomPanState = {
     isZooming: false,
-    isPanning: false
+    isPanning: false,
+    matrix: identity()
   };
-
-  constructor(props: ZoomPanProps) {
-    super(props);
-
-    this.matrix = fromObject({
-      ...identity(),
-      a: props.scale,
-      e: props.x,
-      f: props.y
-    });
-  }
 
   componentWillUnmount() {
     this.stopDecay();
@@ -97,7 +103,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   onPanMove(event: PanMoveEvent) {
-    this.matrix = fromObject(event.matrix);
+    // this.matrix = fromObject(event.matrix);
 
     this.observer && this.observer.update(event.x);
 
@@ -147,7 +153,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   onZoom(event: ZoomEvent) {
     this.stopDecay();
-    this.matrix = fromObject(event.matrix);
+    // this.matrix = fromObject(event.matrix);
 
     this.props.onZoomPan({
       ...event,
@@ -180,7 +186,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
     const selection = isZooming || isPanning ? 'none' : 'auto';
-    const matrix = fromObject(this.matrix);
+    const matrix = fromObject(this.state.matrix);
 
     return (
       <Pan

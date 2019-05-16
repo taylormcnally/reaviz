@@ -1,5 +1,5 @@
 import { bisector } from 'd3-array';
-import { applyToPoint, inverse } from 'transformation-matrix';
+import { applyToPoint, inverse, applyToPoints } from 'transformation-matrix';
 
 /**
  * Given a point position, get the closes data point in the dataset.
@@ -131,18 +131,33 @@ export function getPointFromMouse(node, event?) {
 /**
  * Constrain the matrix.
  */
-export function constrainMatrix(height: number, width: number, matrix) {
-  const limitX = width * matrix.a - width;
-  const limitY = height * matrix.a - height;
+export function constrainMatrix(height: number, width: number, transformMatrix) {
+ const [min, max] = applyToPoints(transformMatrix, [
+   { x: 0, y: 0 },
+   { x: width, y: height }
+  ]);
 
-  const { x, y } = applyToPoint(matrix, { x: 0, y: 0 });
-  if ((-x > limitX) || (-x <= 0)) {
-    return false;
-  }
+ if (max.x < width || max.y < height) {
+   return true;
+ }
 
-  if ((-y > limitY) || (-y <= 0)) {
-    return false;
-  }
+ if (min.x > 0 || min.y > 0) {
+   return true;
+ }
 
-  return true;
+ return false;
+}
+
+function lessThanScaleFactorMin(value, scaleFactor) {
+  return value.scaleFactorMin && (value.d * (scaleFactor)) <= value.scaleFactorMin;
+}
+
+function moreThanScaleFactorMax (value, scaleFactor) {
+  return value.scaleFactorMax && (value.d * scaleFactor) >= value.scaleFactorMax;
+}
+
+export function isZoomLevelGoingOutOfBounds(value, scaleFactor) {
+  const a = lessThanScaleFactorMin(value, scaleFactor) && scaleFactor < 1;
+  const b = moreThanScaleFactorMax(value, scaleFactor) && scaleFactor > 1;
+  return a || b;
 }
