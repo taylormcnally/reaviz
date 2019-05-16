@@ -55,12 +55,23 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   observer?: ValueReaction;
   decay?: ColdSubscription;
-  matrix = identity();
+  matrix: any;
 
   state: ZoomPanState = {
     isZooming: false,
     isPanning: false
   };
+
+  constructor(props: ZoomPanProps) {
+    super(props);
+
+    this.matrix = fromObject({
+      ...identity(),
+      a: props.scale,
+      e: props.x,
+      f: props.y
+    });
+  }
 
   componentWillUnmount() {
     this.stopDecay();
