@@ -8,8 +8,8 @@ import { identity, fromObject } from 'transformation-matrix';
 
 export interface ZoomPanEvent {
   scale: number;
-  offsetX: number;
-  offsetY: number;
+  x: number;
+  y: number;
   type: 'zoom' | 'pan';
 }
 
@@ -17,8 +17,8 @@ export interface ZoomPanProps {
   height: number;
   width: number;
   scale: number;
-  offsetX: number;
-  offsetY: number;
+  x: number;
+  y: number;
   pannable: boolean;
   zoomable: boolean;
   disabled?: boolean;
@@ -47,8 +47,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     decay: true,
     height: 0,
     width: 0,
-    offsetX: 0,
-    offsetY: 0,
+    x: 0,
+    y: 0,
     scale: 1,
     onZoomPan: () => undefined
   };
@@ -76,51 +76,30 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     }
   }
 
-  getEndOffset() {
-    const { width, scale } = this.props;
-    return width * scale - width;
-  }
-
-  ensureRange(offset: number) {
-    const { constrain } = this.props;
-
-    if (constrain) {
-      if (-offset <= 0) {
-        offset = 0;
-      } else if (-offset > this.getEndOffset()) {
-        offset = offset;
-      }
-    }
-
-    return offset;
-  }
-
   onPanStart() {
     this.setState({
       isPanning: true
     });
 
     this.stopDecay();
-    this.observer = value(this.props.offsetX);
+    this.observer = value(this.props.x);
   }
 
-  onPanMove(event) {
-    // const offsetX = this.ensureRange(event.offsetX);
-    // const offsetY = this.ensureRange(event.offsetY);
-
+  onPanMove(event: PanMoveEvent) {
     this.matrix = fromObject(event.matrix);
 
-    this.observer && this.observer.update(event.offsetX);
+    this.observer && this.observer.update(event.x);
 
     this.props.onZoomPan({
       scale: this.props.scale,
-      offsetX: event.offsetX,
-      offsetY: event.offsetY,
+      x: event.x,
+      y: event.y,
       type: 'pan'
     });
   }
 
   onPanEnd() {
+    /*
     if (false) {
     // if (this.observer && this.props.decay) {
       const end = this.getEndOffset();
@@ -150,22 +129,19 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
           complete: () => this.setState({ isPanning: false })
         });
     } else {
+      */
       this.setState({ isPanning: false });
-    }
+    // }
   }
 
-  onZoom(event) {
+  onZoom(event: ZoomEvent) {
     this.stopDecay();
-    const inRange = this.ensureRange(event.offsetX);
+    this.matrix = fromObject(event.matrix);
 
-    // if (inRange) {
-      this.matrix = fromObject(event.matrix);
-
-      this.props.onZoomPan({
-        ...event,
-        type: 'zoom'
-      });
-    // }
+    this.props.onZoomPan({
+      ...event,
+      type: 'zoom'
+    });
   }
 
   onZoomEnd() {
@@ -185,8 +161,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       minZoom,
       zoomable,
       scale,
-      offsetX,
-      offsetY,
+      x,
+      y,
       disableMouseWheel,
       constrain
     } = this.props;
@@ -197,8 +173,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
     return (
       <Pan
-        offsetX={offsetX}
-        offsetY={offsetY}
+        x={x}
+        y={y}
         scale={scale}
         matrix={matrix}
         constrain={constrain}
@@ -216,8 +192,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             maxZoom={maxZoom}
             minZoom={minZoom}
             scale={scale}
-            offsetX={offsetX}
-            offsetY={offsetY}
+            x={x}
+            y={y}
             constrain={constrain}
             height={height}
             width={width}

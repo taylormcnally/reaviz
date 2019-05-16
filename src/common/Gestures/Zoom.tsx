@@ -11,8 +11,8 @@ interface ZoomGestureProps {
   scaleFactor: number;
   scale: number;
   matrix: any;
-  offsetX: number;
-  offsetY: number;
+  x: number;
+  y: number;
   width: number;
   height: number;
   constrain: boolean;
@@ -23,14 +23,15 @@ interface ZoomGestureProps {
 
 export interface ZoomEvent {
   scale: number;
-  offsetX: number;
-  offsetY: number;
+  x: number;
+  y: number;
+  matrix: any;
 }
 
 export class Zoom extends Component<ZoomGestureProps> {
   static defaultProps: Partial<ZoomGestureProps> = {
-    offsetX: 0,
-    offsetY: 0,
+    x: 0,
+    y: 0,
     scale: 1,
     scaleFactor: 0.1,
     minZoom: 1,
@@ -105,11 +106,7 @@ export class Zoom extends Component<ZoomGestureProps> {
       const delta = distance - this.lastDistance;
       const step = this.getStep(-delta);
 
-      this.scale({
-        step,
-        x: this.firstMidpoint.x,
-        y: this.firstMidpoint.y
-      });
+      this.scale(this.firstMidpoint.x, this.firstMidpoint.y, step);
 
       this.lastDistance = distance;
     }
@@ -126,14 +123,14 @@ export class Zoom extends Component<ZoomGestureProps> {
     this.props.onZoomEnd();
   };
 
-  onWheel(event) {
+  onWheel(event: MouseWheelEvent) {
     event.preventDefault();
-    const point = getPointFromMatrix(event, this.matrix);
+    const { x, y } = getPointFromMatrix(event, this.matrix);
     const step = this.getStep(event.deltaY);
-    this.scale({ step, ...point });
+    this.scale(x, y, step);
   }
 
-  scale({ step, x, y }) {
+  scale(x: number, y: number, step: number) {
     const { minZoom, maxZoom, onZoom, constrain, height, width } = this.props;
 
     let zoomLevel = Math.min(this.matrix.a, maxZoom);
@@ -155,10 +152,10 @@ export class Zoom extends Component<ZoomGestureProps> {
 
           onZoom({
             scale: this.matrix.a,
-            offsetX: this.matrix.e,
-            offsetY: this.matrix.f,
+            x: this.matrix.e,
+            y: this.matrix.f,
             matrix: this.matrix
-          } as any);
+          });
 
           clearTimeout(this.timeout);
           this.timeout = setTimeout(() => this.updating = false, 100);

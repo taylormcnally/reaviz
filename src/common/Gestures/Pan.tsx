@@ -7,10 +7,10 @@ interface PanProps {
   disabled: boolean;
   threshold: number;
   cursor?: string;
-  offsetX: number;
+  x: number;
+  y: number;
   scale: number;
   matrix: any;
-  offsetY: number;
   width: number;
   height: number;
   constrain: boolean;
@@ -27,9 +27,10 @@ export interface PanStartEvent {
 
 export interface PanMoveEvent {
   source: 'mouse' | 'touch';
-  deltaX: number;
-  deltaY: number;
+  x: number;
+  y: number;
   nativeEvent: MouseEvent | TouchEvent;
+  matrix: any;
 }
 
 export interface PanEndEvent {
@@ -44,8 +45,8 @@ export interface PanCancelEvent {
 
 export class Pan extends Component<PanProps> {
   static defaultProps: Partial<PanProps> = {
-    offsetX: 0,
-    offsetY: 0,
+    x: 0,
+    y: 0,
     disabled: false,
     scale: 1,
     threshold: 10,
@@ -72,7 +73,6 @@ export class Pan extends Component<PanProps> {
     if (!this.updating) {
       this.matrix = fromObject(this.props.matrix);
       this.updating = false;
-      console.log('updating pan...')
     }
   }
 
@@ -92,9 +92,10 @@ export class Pan extends Component<PanProps> {
   }
 
   checkThreshold() {
+    const { threshold } = this.props;
     return !this.started &&
-      ((Math.abs(this.deltaX) > this.props.threshold) ||
-        (Math.abs(this.deltaY) > this.props.threshold));
+      ((Math.abs(this.deltaX) > threshold) ||
+        (Math.abs(this.deltaY) > threshold));
   }
 
   pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
@@ -113,10 +114,10 @@ export class Pan extends Component<PanProps> {
         this.props.onPanMove({
           source,
           nativeEvent,
-          offsetX: matrix.e,
-          offsetY: matrix.f,
-          matrix: matrix
-        } as any);
+          x: matrix.e,
+          y: matrix.f,
+          matrix
+        });
       }
     });
   }
@@ -234,8 +235,9 @@ export class Pan extends Component<PanProps> {
       this.props.onPanMove({
         source: 'touch',
         nativeEvent: event,
-        deltaX: x,
-        deltaY: y
+        x,
+        y,
+        matrix: null
       });
     }
 
