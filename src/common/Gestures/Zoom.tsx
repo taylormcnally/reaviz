@@ -64,7 +64,6 @@ export class Zoom extends Component<ZoomGestureProps> {
     if (!this.updating) {
       this.matrix = fromObject(this.props.matrix);
       this.updating = false;
-      console.log('updating zoom...')
     }
   }
 
