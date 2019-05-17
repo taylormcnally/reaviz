@@ -165,7 +165,7 @@ export class Pan extends Component<PanProps> {
   pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
     const { scale, constrain, width, height, matrix } = this.props;
 
-    let newMatrix = smoothMatrix(transform(
+    const newMatrix = smoothMatrix(transform(
       matrix,
       translate(x / scale, y / scale)
     ), 100);
@@ -174,6 +174,8 @@ export class Pan extends Component<PanProps> {
     if (!shouldConstrain) {
       this.onPanMove(newMatrix.e, newMatrix.f, source, nativeEvent);
     }
+
+    return shouldConstrain;
   }
 
   onMouseDown(event: React.MouseEvent) {
@@ -273,21 +275,15 @@ export class Pan extends Component<PanProps> {
       this.deltaY = 0;
       this.started = true;
 
-      this.props.onPanStart({
-        nativeEvent: event,
-        source: 'touch'
-      });
+      this.onPanStart(event, 'touch');
     } else {
-      this.props.onPanMove({
-        source: 'touch',
-        nativeEvent: event,
-        x,
-        y
-      });
-    }
+      const contrained = this.pan(deltaX, deltaY, event, 'touch');
 
-    this.prevXPosition = x;
-    this.prevYPosition = y;
+      if (!contrained) {
+        this.prevXPosition = x;
+        this.prevYPosition = y;
+      }
+    }
   };
 
   onTouchEnd = (event: TouchEvent) => {
