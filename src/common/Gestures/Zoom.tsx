@@ -1,8 +1,8 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromTouch, getPointFromMatrix, isZoomLevelGoingOutOfBounds } from '../utils/position';
-import { getDistanceBetweenPoints, getMidpoint } from './pinchUtils';
-import { scale, smoothMatrix, transform, translate } from 'transformation-matrix';
+import { getPointFromMatrix, isZoomLevelGoingOutOfBounds } from '../utils/position';
+import { getTouchPoints } from './pinchUtils';
+import { scale, smoothMatrix, transform, translate, applyToPoint, inverse } from 'transformation-matrix';
 
 interface ZoomGestureProps {
   disabled?: boolean;
@@ -34,8 +34,8 @@ export class Zoom extends Component<ZoomGestureProps> {
     maxZoom: 10
   };
 
+  firstTouch: any;
   lastDistance: any;
-  firstMidpoint: any;
   timeout: any;
   childRef = createRef<SVGGElement>();
 
@@ -71,7 +71,7 @@ export class Zoom extends Component<ZoomGestureProps> {
     }, step);
 
     if (!outside) {
-      let newMatrix = smoothMatrix(transform(
+      const newMatrix = smoothMatrix(transform(
         matrix,
         translate(x, y),
         scale(step, step),
@@ -86,27 +86,35 @@ export class Zoom extends Component<ZoomGestureProps> {
         });
       });
     }
+
+    return outside;
   }
 
   onWheel(event: MouseWheelEvent) {
-    if (!this.props.disableMouseWheel) {
+    const { disableMouseWheel, matrix, onZoomEnd } = this.props;
+
+    if (!disableMouseWheel) {
       event.preventDefault();
-      const { x, y } = getPointFromMatrix(event, this.props.matrix);
+
+      const { x, y } = getPointFromMatrix(event, matrix);
       const step = this.getStep(event.deltaY);
+
       this.scale(x, y, step);
+
+      // Do small timeout to 'guess' when its done zooming
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => onZoomEnd(), 500);
     }
   }
 
   onTouchStart = (event: TouchEvent) => {
-    if (event.touches.length === 2 && this.childRef.current) {
+    if (event.touches.length === 2) {
       event.preventDefault();
       event.stopPropagation();
       toggleTextSelection(false);
 
-      const [pointA, pointB] = getPointFromTouch(this.childRef.current, event);
-
-      this.lastDistance = getDistanceBetweenPoints(pointA, pointB);
-      this.firstMidpoint = getMidpoint(pointA, pointB);
+      this.firstTouch = getTouchPoints(event, this.childRef.current);
+      this.lastDistance = this.firstTouch.distance;
 
       window.addEventListener('touchmove', this.onTouchMove);
       window.addEventListener('touchend', this.onTouchEnd);
@@ -114,18 +122,25 @@ export class Zoom extends Component<ZoomGestureProps> {
   };
 
   onTouchMove = (event: TouchEvent) => {
-    if (event.touches.length === 2 && this.childRef.current) {
+    if (event.touches.length === 2) {
       event.preventDefault();
       event.stopPropagation();
 
-      const [pointA, pointB] = getPointFromTouch(this.childRef.current, event);
-      const distance = getDistanceBetweenPoints(pointA, pointB);
-      const delta = distance - this.lastDistance;
-      const step = this.getStep(-delta);
+      const { distance } = getTouchPoints(event, this.childRef.current);
+      const distanceFactor = distance / this.lastDistance;
 
-      this.scale(this.firstMidpoint.x, this.firstMidpoint.y, step);
+      const point = applyToPoint(inverse(this.props.matrix), {
+        x: this.firstTouch.midpoint.x,
+        y: this.firstTouch.midpoint.y
+      });
 
-      this.lastDistance = distance;
+      if (point.x && point.y) {
+        const outside = this.scale(point.x, point.y, distanceFactor);
+
+        if (!outside) {
+          this.lastDistance = distance;
+        }
+      }
     }
   };
 

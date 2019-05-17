@@ -55,28 +55,6 @@ export function getPositionForTarget({ target, clientX, clientY }) {
 }
 
 /**
- * Get the point from a touch event.
- */
-export function getPointFromTouch(node, event?) {
-  // called with no args
-  if (!node) return;
-
-  // called with localPoint(event)
-  if (node.target) {
-    event = node;
-    node = getParentSVG(node);
-  }
-
-  return [...event.touches].map(touch => {
-    return getPositionForTarget({
-      target: node,
-      clientX: touch.clientX,
-      clientY: touch.clientY
-    });
-  });
-}
-
-/**
  * Gets the point from q given matrix.
 */
 export function getPointFromMatrix(event, matrix) {

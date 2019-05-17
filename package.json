@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
-    "start": "start-storybook",
+    "start": "start-storybook -p 9010",
     "build-storybook": "build-storybook",
     "deploy-storybook": "gh-pages -d storybook-static",
     "build": "rollup -c",
