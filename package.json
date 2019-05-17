@@ -61,7 +61,6 @@
     "popper.js": "^1.14.7",
     "rdk": "^1.0.2",
     "react-countup": "^4.1.2",
-    "react-pan-and-zoom-hoc": "^2.0.1",
     "react-pose": "^4.0.8",
     "react-scrolllock": "^4.0.1",
     "react-sizeme": "^2.5.2",
