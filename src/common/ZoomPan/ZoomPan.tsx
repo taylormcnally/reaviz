@@ -54,10 +54,11 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   };
 
   static getDerivedStateFromProps(props: ZoomPanProps, state: ZoomPanState) {
-    const matrix = transform(fromDefinition([
+    // TODO: the types in the library don't seem to be correct...
+    const matrix = transform((fromDefinition as any)([
       { type: 'translate', tx: props.x, ty: props.y },
       { type: 'scale', sx: props.scale, sy: props.scale }
-    ]) as any);
+    ]));
 
     if (!isEqual(matrix, state.matrix)) {
       return {

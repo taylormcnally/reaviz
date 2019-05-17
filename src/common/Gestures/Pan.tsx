@@ -101,7 +101,6 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanStart(nativeEvent, source) {
-    this.stopDecay();
     this.observer = value(this.props.x);
 
     this.props.onPanStart({
@@ -188,6 +187,7 @@ export class Pan extends Component<PanProps> {
     event.stopPropagation();
     event.persist();
 
+    this.stopDecay();
     toggleTextSelection(false);
     this.started = false;
 
@@ -244,8 +244,8 @@ export class Pan extends Component<PanProps> {
     event.stopPropagation();
     event.persist();
 
+    this.stopDecay();
     toggleTextSelection(false);
-
     this.started = false;
 
     this.prevXPosition = event.touches[0].clientX;
