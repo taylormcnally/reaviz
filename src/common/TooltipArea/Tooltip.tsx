@@ -117,8 +117,8 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
         {...rest}
         visible={this.state.visible}
         content={this.renderContent}
-        closeOnBodyClick={true}
-        closeOnEscape={true}
+        closeOnBodyClick={false}
+        closeOnEscape={false}
         onActivate={bind(this.onActivate, this)}
         onDeactivate={bind(this.onDeactivate, this)}
       >
