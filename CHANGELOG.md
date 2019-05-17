@@ -1,5 +1,8 @@
-# Master
+# 2.2.0
 - [Fix] Fix containing not working when set false
+- [Fix] Completely refactor zoom/panning
+- [Fix] Fix tooltip hiding when clicking
+- [Fix] Update RDK for tooltip fixes
 
 # 2.1.0
 - [Feature] Add ability to pan and zoom on x/y
