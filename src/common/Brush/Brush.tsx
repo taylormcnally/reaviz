@@ -3,7 +3,7 @@ import bind from 'memoize-bind';
 import { getPositionForTarget } from '../utils/position';
 import { BrushSlice, BrushChangeEvent } from './BrushSlice';
 import { ChartDataTypes } from '../data';
-import { Pan, PanMoveEvent, PanStartEvent } from '../Gestures/Pan';
+import { toggleTextSelection } from '../utils/selection';
 
 export interface BrushConfiguration {
   disabled?: boolean;
@@ -38,6 +38,7 @@ export class Brush extends Component<BrushProps, BrushState> {
   };
 
   ref: any;
+  moved = false;
 
   constructor(props: BrushProps) {
     super(props);
@@ -74,7 +75,20 @@ export class Brush extends Component<BrushProps, BrushState> {
     }
   }
 
-  getStartEnd(event: PanMoveEvent, state: BrushState = this.state) {
+  componentWillUnmount() {
+    this.disposeHandlers();
+  }
+
+  disposeHandlers() {
+    window.removeEventListener('mousemove', this.onMouseMove);
+    window.removeEventListener('mouseup', this.onMouseUp);
+
+    // Reset cursor on body back to original
+    document.body.style['cursor'] = 'inherit';
+    toggleTextSelection(true);
+  }
+
+  getStartEnd(event: MouseEvent, state: BrushState = this.state) {
     const { x } = this.getPositionsForPanEvent(event);
 
     let start;
@@ -90,23 +104,12 @@ export class Brush extends Component<BrushProps, BrushState> {
     return this.ensurePositionInBounds(start, end, state);
   }
 
-  getPositionsForPanEvent(event: PanStartEvent | PanMoveEvent) {
-    let eventObj;
-    if (event.source === 'mouse') {
-      const nativeEvent = event.nativeEvent as MouseEvent;
-      eventObj = {
-        target: this.ref,
-        clientX: nativeEvent.clientX,
-        clientY: nativeEvent.clientY
-      };
-    } else {
-      const touchEvent = event.nativeEvent as TouchEvent;
-      eventObj = {
-        target: this.ref,
-        clientX: touchEvent.touches[0].clientX,
-        clientY: touchEvent.touches[0].clientY
-      };
-    }
+  getPositionsForPanEvent(event: MouseEvent) {
+    const eventObj = {
+      target: this.ref,
+      clientX: event.clientX,
+      clientY: event.clientY
+    };
 
     return getPositionForTarget(eventObj);
   }
@@ -143,16 +146,39 @@ export class Brush extends Component<BrushProps, BrushState> {
     return { start, end };
   }
 
-  onPanStart(event: PanStartEvent) {
-    const positions = this.getPositionsForPanEvent(event);
+  onMouseDown(event: React.MouseEvent) {
+    // Ignore right click
+    if (event.nativeEvent.which === 3 || this.props.disabled) {
+      return;
+    }
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    const positions = this.getPositionsForPanEvent(event.nativeEvent);
+    this.moved = false;
 
     this.setState({
       isSlicing: true,
       initial: positions.x
     });
+
+    // Always bind event so we cancel movement even if no action was taken
+    window.addEventListener('mousemove', this.onMouseMove);
+    window.addEventListener('mouseup', this.onMouseUp);
   }
 
-  onPanMove(event: PanMoveEvent) {
+  onMouseMove = (event) => {
+    if (!this.state.isSlicing) {
+      return;
+    }
+
+    event.stopPropagation();
+    event.preventDefault();
+    toggleTextSelection(false);
+    document.body.style['cursor'] = 'crosshair';
+    this.moved = true;
+
     this.setState(prev => {
       const { onBrushChange } = this.props;
 
@@ -172,15 +198,23 @@ export class Brush extends Component<BrushProps, BrushState> {
         end
       };
     });
-  }
+  };
 
-  onPanEnd() {
+  onMouseUp = () => {
+    this.disposeHandlers();
+
+    if (!this.moved) {
+      this.onCancel();
+    }
+
+    this.moved = false;
+
     this.setState({
       isSlicing: false
     });
-  }
+  };
 
-  onPanCancel() {
+  onCancel() {
     const val = {
       start: 0,
       end: this.props.width
@@ -208,42 +242,34 @@ export class Brush extends Component<BrushProps, BrushState> {
     const { isSlicing, start, end } = this.state;
 
     return (
-      <Pan
-        disabled={disabled}
-        onPanStart={bind(this.onPanStart, this)}
-        onPanMove={bind(this.onPanMove, this)}
-        onPanEnd={bind(this.onPanEnd, this)}
-        onPanCancel={bind(this.onPanCancel, this)}
-        cursor="crosshair"
+      <g
+        onMouseDown={bind(this.onMouseDown, this)}
+        style={{
+          pointerEvents: isSlicing ? 'none' : 'auto',
+          cursor: disabled ? '' : 'crosshair'
+        }}
       >
-        <g
-          style={{
-            pointerEvents: isSlicing ? 'none' : 'auto',
-            cursor: disabled ? '' : 'crosshair'
-          }}
-        >
-          {children}
-          {!disabled && (
-            <Fragment>
-              <rect
-                ref={ref => (this.ref = ref)}
+        {children}
+        {!disabled && (
+          <Fragment>
+            <rect
+              ref={ref => (this.ref = ref)}
+              height={height}
+              width={width}
+              opacity={0}
+            />
+            {start !== undefined && end !== undefined && (
+              <BrushSlice
+                start={start}
+                end={end}
                 height={height}
                 width={width}
-                opacity={0}
+                onBrushChange={bind(this.onSliceChange, this)}
               />
-              {start !== undefined && end !== undefined && (
-                <BrushSlice
-                  start={start}
-                  end={end}
-                  height={height}
-                  width={width}
-                  onBrushChange={bind(this.onSliceChange, this)}
-                />
-              )}
-            </Fragment>
-          )}
-        </g>
-      </Pan>
+            )}
+          </Fragment>
+        )}
+      </g>
     );
   }
 }
