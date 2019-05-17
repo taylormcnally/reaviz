@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import bind from 'memoize-bind';
 import { BrushHandle } from './BrushHandle';
 import * as css from './BrushSlice.module.scss';
-import { toggleTextSelection } from '../utils/selection';
+import { Move } from '../Gestures/Move';
 
 export interface BrushChangeEvent {
   start?: number;
@@ -26,28 +26,7 @@ export class BrushSlice extends Component<BrushSliceProps, BrushSliceState> {
     isDragging: false
   };
 
-  componentWillUnmount() {
-    this.disposeHandlers();
-  }
-
-  disposeHandlers() {
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
-
-    // Reset cursor on body back to original
-    document.body.style['cursor'] = 'inherit';
-    toggleTextSelection(true);
-  }
-
-  onMouseDown(event: React.MouseEvent) {
-    // Ignore right click
-    if (event.nativeEvent.which === 3) {
-      return;
-    }
-
-    event.stopPropagation();
-    event.preventDefault();
-
+  onMoveStart() {
     const { start, end, width } = this.props;
     const hasNoSlice = start === 0 && end === width;
 
@@ -55,49 +34,37 @@ export class BrushSlice extends Component<BrushSliceProps, BrushSliceState> {
       this.setState({
         isDragging: true
       });
-
-      // Always bind event so we cancel movement even if no action was taken
-      window.addEventListener('mousemove', this.onMouseMove);
-      window.addEventListener('mouseup', this.onMouseUp);
     }
   }
 
-  onMouseMove = (event) => {
-    if (!this.state.isDragging) {
-      return;
-    }
+  onMove({ x }) {
+    const { onBrushChange, width } = this.props;
+    let { start, end } = this.props;
+    start = start + x;
+    end = end + x;
 
-    toggleTextSelection(false);
-    document.body.style['cursor'] = 'grabbing';
-    event.preventDefault();
-    event.stopPropagation();
-
-    const start = this.props.start + event.movementX;
-    const end = this.props.end + event.movementX;
-
-    if (start >= 0 && end <= this.props.width) {
-      this.props.onBrushChange({
+    if (start >= 0 && end <= width) {
+      onBrushChange({
         start,
         end
       });
     }
-  };
+  }
 
-  onMouseUp = () => {
-    this.disposeHandlers();
-
+  onMoveEnd() {
     this.setState({
       isDragging: false
     });
-  };
+  }
 
   onHandleDrag(direction: 'start' | 'end', deltaX: number) {
-    const start =
-      direction === 'start' ? this.props.start + deltaX : this.props.start;
-    const end =
-      direction !== 'start' ? this.props.end + deltaX : this.props.end;
+    const { onBrushChange } = this.props;
+    let { start, end } = this.props;
 
-    this.props.onBrushChange({
+    start = direction === 'start' ? start + deltaX : start;
+    end = direction !== 'start' ? end + deltaX : end;
+
+    onBrushChange({
       start,
       end
     });
@@ -120,20 +87,23 @@ export class BrushSlice extends Component<BrushSliceProps, BrushSliceState> {
           width={endSliceWidth}
         />
         <g transform={`translate(${start}, 0)`}>
-          <g
-            onMouseDown={bind(this.onMouseDown, this)}
+          <Move
+            cursor="grabbing"
+            onMoveStart={bind(this.onMoveStart, this)}
+            onMove={bind(this.onMove, this)}
+            onMoveEnd={bind(this.onMoveEnd, this)}
           >
             <rect
               className={css.slice}
               height={height}
+              width={sliceWidth}
               style={{
                 cursor: isDragging ? 'grabbing' : 'grab',
                 opacity: hasNoSlice ? 0 : 0.1,
                 pointerEvents: !hasNoSlice ? 'initial' : 'none'
               }}
-              width={sliceWidth}
             />
-          </g>
+          </Move>
           <g transform={`translate(-4, 0)`}>
             <BrushHandle
               height={height}

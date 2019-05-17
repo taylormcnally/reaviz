@@ -3,7 +3,7 @@ import bind from 'memoize-bind';
 import { getPositionForTarget } from '../utils/position';
 import { BrushSlice, BrushChangeEvent } from './BrushSlice';
 import { ChartDataTypes } from '../data';
-import { toggleTextSelection } from '../utils/selection';
+import { Move } from '../Gestures/Move';
 
 export interface BrushConfiguration {
   disabled?: boolean;
@@ -38,7 +38,6 @@ export class Brush extends Component<BrushProps, BrushState> {
   };
 
   ref: any;
-  moved = false;
 
   constructor(props: BrushProps) {
     super(props);
@@ -73,19 +72,6 @@ export class Brush extends Component<BrushProps, BrushState> {
         });
       }
     }
-  }
-
-  componentWillUnmount() {
-    this.disposeHandlers();
-  }
-
-  disposeHandlers() {
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
-
-    // Reset cursor on body back to original
-    document.body.style['cursor'] = 'inherit';
-    toggleTextSelection(true);
   }
 
   getStartEnd(event: MouseEvent, state: BrushState = this.state) {
@@ -146,45 +132,22 @@ export class Brush extends Component<BrushProps, BrushState> {
     return { start, end };
   }
 
-  onMouseDown(event: React.MouseEvent) {
-    // Ignore right click
-    if (event.nativeEvent.which === 3 || this.props.disabled) {
-      return;
-    }
-
-    event.stopPropagation();
-    event.preventDefault();
-
+  onMoveStart(event) {
     const positions = this.getPositionsForPanEvent(event.nativeEvent);
-    this.moved = false;
 
     this.setState({
       isSlicing: true,
       initial: positions.x
     });
-
-    // Always bind event so we cancel movement even if no action was taken
-    window.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('mouseup', this.onMouseUp);
   }
 
-  onMouseMove = (event) => {
-    if (!this.state.isSlicing) {
-      return;
-    }
-
-    event.stopPropagation();
-    event.preventDefault();
-    toggleTextSelection(false);
-    document.body.style['cursor'] = 'crosshair';
-    this.moved = true;
-
+  onMove(event) {
     this.setState(prev => {
       const { onBrushChange } = this.props;
 
       // Use setState callback so we can get the true previous value
       // rather than the bulk updated value react will trigger
-      const { start, end } = this.getStartEnd(event, prev);
+      const { start, end } = this.getStartEnd(event.nativeEvent, prev);
 
       if (onBrushChange) {
         onBrushChange({
@@ -198,23 +161,15 @@ export class Brush extends Component<BrushProps, BrushState> {
         end
       };
     });
-  };
+  }
 
-  onMouseUp = () => {
-    this.disposeHandlers();
-
-    if (!this.moved) {
-      this.onCancel();
-    }
-
-    this.moved = false;
-
+  onMoveEnd() {
     this.setState({
       isSlicing: false
     });
-  };
+  }
 
-  onCancel() {
+  onMoveCancel() {
     const val = {
       start: 0,
       end: this.props.width
@@ -242,34 +197,41 @@ export class Brush extends Component<BrushProps, BrushState> {
     const { isSlicing, start, end } = this.state;
 
     return (
-      <g
-        onMouseDown={bind(this.onMouseDown, this)}
-        style={{
-          pointerEvents: isSlicing ? 'none' : 'auto',
-          cursor: disabled ? '' : 'crosshair'
-        }}
+      <Move
+        cursor="crosshair"
+        onMoveStart={bind(this.onMoveStart, this)}
+        onMove={bind(this.onMove, this)}
+        onMoveEnd={bind(this.onMoveEnd, this)}
+        onMoveCancel={bind(this.onMoveCancel, this)}
       >
-        {children}
-        {!disabled && (
-          <Fragment>
-            <rect
-              ref={ref => (this.ref = ref)}
-              height={height}
-              width={width}
-              opacity={0}
-            />
-            {start !== undefined && end !== undefined && (
-              <BrushSlice
-                start={start}
-                end={end}
+        <g
+          style={{
+            pointerEvents: isSlicing ? 'none' : 'auto',
+            cursor: disabled ? '' : 'crosshair'
+          }}
+        >
+          {children}
+          {!disabled && (
+            <Fragment>
+              <rect
+                ref={ref => (this.ref = ref)}
                 height={height}
                 width={width}
-                onBrushChange={bind(this.onSliceChange, this)}
+                opacity={0}
               />
-            )}
-          </Fragment>
-        )}
-      </g>
+              {start !== undefined && end !== undefined && (
+                <BrushSlice
+                  start={start}
+                  end={end}
+                  height={height}
+                  width={width}
+                  onBrushChange={bind(this.onSliceChange, this)}
+                />
+              )}
+            </Fragment>
+          )}
+        </g>
+      </Move>
     );
   }
 }
