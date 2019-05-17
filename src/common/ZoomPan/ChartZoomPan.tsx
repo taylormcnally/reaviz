@@ -14,7 +14,6 @@ export interface ChartZoomPanProps {
   domain?: [ChartDataTypes, ChartDataTypes];
   axisType: 'value' | 'time' | 'category' | 'duration';
   roundDomains: boolean;
-  onZoomPan?: (event: ZoomPanChangeEvent) => void;
   height: number;
   width: number;
   scale: number;
@@ -26,6 +25,7 @@ export interface ChartZoomPanProps {
   zoomStep: number;
   decay: boolean;
   disableMouseWheel?: boolean;
+  onZoomPan?: (event: ZoomPanChangeEvent) => void;
 }
 
 export class ChartZoomPan extends Component<ChartZoomPanProps> {
@@ -48,8 +48,8 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
       const newScale = scale.copy().domain(
         scale
           .range()
-          .map(x => (x - event.offsetX) / event.scale)
-          .map(scale.invert, event.offsetX)
+          .map(x => (x - event.x) / event.scale)
+          .map(scale.clamp(true).invert, event.x)
       );
 
       onZoomPan!({
@@ -62,7 +62,7 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
   getOffset() {
     let zoomOffset = {
       scale: undefined,
-      offsetX: undefined
+      x: undefined
     } as any;
 
     const {
@@ -91,7 +91,7 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
 
       zoomOffset = {
         scale: scale,
-        offsetX: -offset
+        x: -offset
       };
     }
 
@@ -100,13 +100,13 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
 
   render() {
     const { data, height, children, width, onZoomPan, ...rest } = this.props;
-    const { scale, offsetX } = this.getOffset();
+    const { scale, x } = this.getOffset();
 
     return (
       <ZoomPan
         {...rest}
         scale={scale}
-        offsetX={offsetX}
+        x={x}
         height={height}
         width={width}
         pannable={scale > 1}

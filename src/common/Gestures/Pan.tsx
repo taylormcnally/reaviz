@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import { toggleTextSelection } from '../utils/selection';
+import { smoothMatrix, transform, translate } from 'transformation-matrix';
+import { constrainMatrix, getLimitMatrix } from '../utils/position';
+import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
+import { clamp } from '@popmotion/popcorn';
 
 interface PanProps {
+  disabled: boolean;
+  threshold: number;
+  cursor?: string;
+  x: number;
+  y: number;
+  scale: number;
+  matrix: any;
+  width: number;
+  height: number;
+  constrain: boolean;
+  decay: boolean;
   onPanStart: (event: PanStartEvent) => void;
   onPanMove: (event: PanMoveEvent) => void;
   onPanEnd: (event: PanEndEvent) => void;
   onPanCancel: (event: PanCancelEvent) => void;
-  disabled: boolean;
-  threshold: number;
-  cursor?: string;
 }
 
 export interface PanStartEvent {
@@ -18,8 +30,8 @@ export interface PanStartEvent {
 
 export interface PanMoveEvent {
   source: 'mouse' | 'touch';
-  deltaX: number;
-  deltaY: number;
+  x: number;
+  y: number;
   nativeEvent: MouseEvent | TouchEvent;
 }
 
@@ -34,34 +46,33 @@ export interface PanCancelEvent {
 }
 
 export class Pan extends Component<PanProps> {
-  static defaultProps: PanProps = {
+  static defaultProps: Partial<PanProps> = {
+    x: 0,
+    y: 0,
+    disabled: false,
+    scale: 1,
+    threshold: 10,
+    decay: true,
     onPanStart: () => undefined,
     onPanMove: () => undefined,
     onPanEnd: () => undefined,
-    onPanCancel: () => undefined,
-    disabled: false,
-    threshold: 10
+    onPanCancel: () => undefined
   };
 
   prevXPosition: number = 0;
   prevYPosition: number = 0;
-  timeout: any;
   started: boolean = false;
   deltaX: number = 0;
   deltaY: number = 0;
+  observer?: ValueReaction;
+  decay?: ColdSubscription;
 
   componentWillUnmount() {
+    this.stopDecay();
     this.disposeHandlers();
   }
 
-  checkThreshold() {
-    return !this.started &&
-      ((Math.abs(this.deltaX) > this.props.threshold) ||
-        (Math.abs(this.deltaY) > this.props.threshold));
-  }
-
   disposeHandlers() {
-    clearTimeout(this.timeout);
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('mouseup', this.onMouseUp);
     window.removeEventListener('touchmove', this.onTouchMove);
@@ -70,6 +81,101 @@ export class Pan extends Component<PanProps> {
     // Reset cursor on body back to original
     document.body.style['cursor'] = 'inherit';
     toggleTextSelection(true);
+  }
+
+  checkThreshold() {
+    const { threshold } = this.props;
+    return !this.started &&
+      ((Math.abs(this.deltaX) > threshold) ||
+        (Math.abs(this.deltaY) > threshold));
+  }
+
+  stopDecay() {
+    if (this.decay && this.decay.stop) {
+      this.decay.stop();
+    }
+
+    if (this.observer) {
+      this.observer.complete();
+    }
+  }
+
+  onPanStart(nativeEvent, source) {
+    this.stopDecay();
+    this.observer = value(this.props.x);
+
+    this.props.onPanStart({
+      nativeEvent,
+      source
+    });
+  }
+
+  onPanMove(x, y, source, nativeEvent) {
+    this.observer && this.observer.update(x);
+
+    this.props.onPanMove({
+      source,
+      nativeEvent,
+      x,
+      y
+    });
+  }
+
+  onPanEnd(nativeEvent, source: 'mouse' | 'touch') {
+    if (this.observer && this.props.decay) {
+      const { height, width, matrix, constrain } = this.props;
+      const end = getLimitMatrix(height, width, matrix)[1].x;
+
+      this.decay = decay({
+        from: this.observer.get(),
+        velocity: this.observer.getVelocity()
+      })
+      .pipe(res => {
+        return constrain ?
+          clamp(-end, 0)(res) :
+          res;
+      })
+      .start({
+        update: offset => {
+          requestAnimationFrame(() => {
+           this.props.onPanMove({
+              source: 'touch',
+              nativeEvent,
+              x: offset,
+              // TODO: Figure out how to do X & Y together
+              y: this.props.y
+            });
+          });
+        },
+        complete: () => {
+          this.props.onPanEnd({
+            nativeEvent,
+            source
+          });
+        }
+      });
+    } else {
+      this.props.onPanEnd({
+        nativeEvent,
+        source
+      });
+    }
+  }
+
+  pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
+    const { scale, constrain, width, height, matrix } = this.props;
+
+    const newMatrix = smoothMatrix(transform(
+      matrix,
+      translate(x / scale, y / scale)
+    ), 100);
+
+    const shouldConstrain = constrain && constrainMatrix(height, width, newMatrix);
+    if (!shouldConstrain) {
+      this.onPanMove(newMatrix.e, newMatrix.f, source, nativeEvent);
+    }
+
+    return shouldConstrain;
   }
 
   onMouseDown(event: React.MouseEvent) {
@@ -105,17 +211,10 @@ export class Pan extends Component<PanProps> {
       this.deltaX = 0;
       this.deltaY = 0;
       this.started = true;
-      this.props.onPanStart({
-        nativeEvent: event,
-        source: 'mouse'
-      });
+
+      this.onPanStart(event, 'mouse');
     } else {
-      this.props.onPanMove({
-        source: 'mouse',
-        nativeEvent: event,
-        deltaX: event.movementX,
-        deltaY: event.movementY
-      });
+      this.pan(event.movementX, event.movementY, event, 'mouse');
     }
   };
 
@@ -127,10 +226,7 @@ export class Pan extends Component<PanProps> {
     toggleTextSelection(true);
 
     if (this.started) {
-      this.props.onPanEnd({
-        nativeEvent: event,
-        source: 'mouse'
-      });
+      this.onPanEnd(event, 'mouse');
     } else {
       this.props.onPanCancel({
         nativeEvent: event,
@@ -151,6 +247,7 @@ export class Pan extends Component<PanProps> {
     toggleTextSelection(false);
 
     this.started = false;
+
     this.prevXPosition = event.touches[0].clientX;
     this.prevYPosition = event.touches[0].clientY;
 
@@ -164,10 +261,11 @@ export class Pan extends Component<PanProps> {
     event.stopPropagation();
 
     // Calculate delta from previous position and current
-    const clientX = event.touches[0].clientX;
-    const clientY = event.touches[0].clientY;
-    const deltaX = clientX - this.prevXPosition;
-    const deltaY = clientY - this.prevYPosition;
+    const x = event.touches[0].clientX;
+    const y = event.touches[0].clientY;
+
+    const deltaX = x - this.prevXPosition;
+    const deltaY = y - this.prevYPosition;
 
     this.deltaX = this.deltaX + deltaX;
     this.deltaY = this.deltaY + deltaY;
@@ -177,21 +275,15 @@ export class Pan extends Component<PanProps> {
       this.deltaY = 0;
       this.started = true;
 
-      this.props.onPanStart({
-        nativeEvent: event,
-        source: 'touch'
-      });
+      this.onPanStart(event, 'touch');
     } else {
-      this.props.onPanMove({
-        source: 'touch',
-        nativeEvent: event,
-        deltaX,
-        deltaY
-      });
-    }
+      const contrained = this.pan(deltaX, deltaY, event, 'touch');
 
-    this.prevXPosition = clientX;
-    this.prevYPosition = clientY;
+      if (!contrained) {
+        this.prevXPosition = x;
+        this.prevYPosition = y;
+      }
+    }
   };
 
   onTouchEnd = (event: TouchEvent) => {
@@ -202,10 +294,7 @@ export class Pan extends Component<PanProps> {
     toggleTextSelection(true);
 
     if (this.started) {
-      this.props.onPanEnd({
-        nativeEvent: event,
-        source: 'touch'
-      });
+      this.onPanEnd(event, 'touch');
     } else {
       this.props.onPanCancel({
         nativeEvent: event,

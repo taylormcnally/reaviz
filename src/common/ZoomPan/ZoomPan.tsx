@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import bind from 'memoize-bind';
 import { Pan, PanMoveEvent } from '../Gestures/Pan';
 import { Zoom, ZoomEvent } from '../Gestures/Zoom';
-import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
-import { clamp } from '@popmotion/popcorn';
+import { identity, fromObject, fromDefinition, transform } from 'transformation-matrix';
+import { isEqual } from 'lodash-es';
 
 export interface ZoomPanEvent {
   scale: number;
-  offsetX: number;
-  offsetY: number;
+  x: number;
+  y: number;
   type: 'zoom' | 'pan';
 }
 
@@ -16,15 +16,15 @@ export interface ZoomPanProps {
   height: number;
   width: number;
   scale: number;
-  offsetX: number;
-  offsetY: number;
+  x: number;
+  y: number;
   pannable: boolean;
   zoomable: boolean;
   disabled?: boolean;
   maxZoom: number;
   minZoom: number;
   zoomStep: number;
-  contained: boolean;
+  constrain: boolean;
   decay: boolean;
   disableMouseWheel?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
@@ -33,6 +33,7 @@ export interface ZoomPanProps {
 interface ZoomPanState {
   isZooming: boolean;
   isPanning: boolean;
+  matrix: any;
 }
 
 export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
@@ -42,119 +43,61 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     zoomStep: 0.1,
     pannable: true,
     zoomable: true,
-    contained: true,
+    constrain: true,
     decay: true,
     height: 0,
     width: 0,
-    offsetX: 0,
-    offsetY: 0,
+    x: 0,
+    y: 0,
     scale: 1,
     onZoomPan: () => undefined
   };
 
-  observer?: ValueReaction;
-  decay?: ColdSubscription;
-  rqf?: any;
+  static getDerivedStateFromProps(props: ZoomPanProps, state: ZoomPanState) {
+    const matrix = transform(fromDefinition([
+      { type: 'translate', tx: props.x, ty: props.y },
+      { type: 'scale', sx: props.scale, sy: props.scale }
+    ]) as any);
 
-  constructor(props: ZoomPanProps) {
-    super(props);
-
-    this.state = {
-      isZooming: false,
-      isPanning: false
-    };
-  }
-
-  componentWillUnmount() {
-    this.stopDecay();
-  }
-
-  stopDecay() {
-    if (this.decay && this.decay.stop) {
-      this.decay.stop();
+    if (!isEqual(matrix, state.matrix)) {
+      return {
+        matrix
+      };
     }
 
-    if (this.observer) {
-      this.observer.complete();
-    }
+    return null;
   }
 
-  getEndOffset() {
-    const { width, scale } = this.props;
-    return width * scale! - width;
-  }
-
-  ensureRange(offset: number, delta: number) {
-    const { contained } = this.props;
-    const prevOffset = offset;
-    let newOffset = delta + prevOffset;
-
-    if (contained) {
-      if (-newOffset <= 0) {
-        newOffset = 0;
-      } else if (-newOffset > this.getEndOffset()) {
-        newOffset = prevOffset;
-      }
-    }
-
-    return newOffset;
-  }
+  panRef = createRef<Pan>();
+  state: ZoomPanState = {
+    isZooming: false,
+    isPanning: false,
+    matrix: identity()
+  };
 
   onPanStart() {
     this.setState({
       isPanning: true
     });
-
-    this.stopDecay();
-    this.observer = value(this.props.offsetX);
   }
 
   onPanMove(event: PanMoveEvent) {
-    const offsetX = this.ensureRange(this.props.offsetX, event.deltaX);
-    const offsetY = this.ensureRange(this.props.offsetY, event.deltaY);
-
-    this.observer && this.observer.update(offsetX);
-
     this.props.onZoomPan({
       scale: this.props.scale,
-      offsetX,
-      offsetY,
+      x: event.x,
+      y: event.y,
       type: 'pan'
     });
   }
 
   onPanEnd() {
-    if (this.observer && this.props.decay) {
-      const end = this.getEndOffset();
-
-      this.decay = decay({
-        from: this.observer.get(),
-        velocity: this.observer.getVelocity()
-      })
-        .pipe(clamp(-end, 0))
-        .start({
-          update: offset => {
-            cancelAnimationFrame(this.rqf);
-
-            this.rqf = requestAnimationFrame(() => {
-              this.props.onZoomPan({
-                scale: this.props.scale,
-                offsetX: offset,
-                // TODO: Figure out how to do X & Y together
-                offsetY: this.props.offsetY,
-                type: 'pan'
-              });
-            });
-          },
-          complete: () => this.setState({ isPanning: false })
-        });
-    } else {
-      this.setState({ isPanning: false });
-    }
+    this.setState({ isPanning: false });
   }
 
   onZoom(event: ZoomEvent) {
-    this.stopDecay();
+    if (this.panRef.current) {
+      this.panRef.current.stopDecay();
+    }
 
     this.props.onZoomPan({
       ...event,
@@ -177,20 +120,31 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       pannable,
       maxZoom,
       minZoom,
-      zoomStep,
       zoomable,
       scale,
-      offsetX,
-      offsetY,
-      disableMouseWheel
+      x,
+      y,
+      disableMouseWheel,
+      constrain,
+      decay
     } = this.props;
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
     const selection = isZooming || isPanning ? 'none' : 'auto';
+    const matrix = fromObject(this.state.matrix);
 
     return (
       <Pan
+        x={x}
+        y={y}
+        scale={scale}
+        matrix={matrix}
+        constrain={constrain}
+        height={height}
+        width={width}
+        decay={decay}
         disabled={!pannable || disabled}
+        ref={this.panRef}
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}
         onPanEnd={bind(this.onPanEnd, this)}
@@ -201,12 +155,12 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             disableMouseWheel={disableMouseWheel}
             maxZoom={maxZoom}
             minZoom={minZoom}
-            zoomStep={zoomStep}
             scale={scale}
-            offsetX={offsetX}
-            offsetY={offsetY}
+            x={x}
+            y={y}
             onZoom={bind(this.onZoom, this)}
             onZoomEnd={bind(this.onZoomEnd, this)}
+            matrix={matrix}
           >
             <g style={{ cursor }}>
               {!disabled && <rect height={height} width={width} opacity={0} />}

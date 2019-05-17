@@ -11,10 +11,27 @@ export const getMidpoint = (pointA, pointB) => ({
  */
 export const getDistanceBetweenPoints = (pointA, pointB) =>
   Math.sqrt(
-    Math.pow(pointA.y - pointB.y, 2) + Math.pow(pointA.x - pointB.x, 2)
+    Math.pow(pointB.y - pointA.y, 2) + Math.pow(pointB.x - pointA.x, 2)
   );
 
 /**
- * Gets the value between a set of numeric values.
+ * Get touch points.
  */
-export const between = (min, max, value) => Math.min(max, Math.max(min, value));
+export function getTouchPoints(event, node) {
+  const { left, top } = node.getBoundingClientRect();
+
+  const [pointA, pointB] = [...event.touches].map(touch => ({
+    x: touch.clientX - Math.round(left),
+    y: touch.clientY - Math.round(top)
+  }));
+
+  const distance = getDistanceBetweenPoints(pointA, pointB);
+  const midpoint = getMidpoint(pointA, pointB);
+
+  return {
+    pointA,
+    pointB,
+    distance,
+    midpoint
+  };
+}
