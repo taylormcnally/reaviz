@@ -74,7 +74,7 @@ export class Brush extends Component<BrushProps, BrushState> {
     }
   }
 
-  getStartEnd(event: MouseEvent, state: BrushState = this.state) {
+  getStartEnd(event, state: BrushState = this.state) {
     const { x } = this.getPositionsForPanEvent(event);
 
     let start;
@@ -90,7 +90,7 @@ export class Brush extends Component<BrushProps, BrushState> {
     return this.ensurePositionInBounds(start, end, state);
   }
 
-  getPositionsForPanEvent(event: MouseEvent) {
+  getPositionsForPanEvent(event) {
     const eventObj = {
       target: this.ref,
       clientX: event.clientX,

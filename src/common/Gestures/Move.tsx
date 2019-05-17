@@ -27,6 +27,8 @@ export class Move extends Component<MoveProps> {
   started = false;
   deltaX = 0;
   deltaY = 0;
+  prevXPosition = 0;
+  prevYPosition = 0;
 
   componentWillUnmount() {
     this.disposeHandlers();
@@ -35,8 +37,8 @@ export class Move extends Component<MoveProps> {
   disposeHandlers() {
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('mouseup', this.onMouseUp);
-    // window.removeEventListener('touchmove', this.onTouchMove);
-    // window.removeEventListener('touchend', this.onTouchEnd);
+    window.removeEventListener('touchmove', this.onTouchMove);
+    window.removeEventListener('touchend', this.onTouchEnd);
 
     this.setCursor(false);
     this.disableText(true);
@@ -66,6 +68,14 @@ export class Move extends Component<MoveProps> {
     return !this.started &&
       ((Math.abs(this.deltaX) > threshold) ||
         (Math.abs(this.deltaY) > threshold));
+  }
+
+  getTouchCoords(event) {
+    const { clientX, clientY } = event.touches[0];
+    return {
+      clientX,
+      clientY
+    };
   }
 
   onMouseDown(event: React.MouseEvent) {
@@ -137,6 +147,93 @@ export class Move extends Component<MoveProps> {
     }
   };
 
+  onTouchStart(event: React.TouchEvent) {
+    const { disabled } = this.props;
+
+    if (disabled || event.touches.length !== 1) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.started = false;
+    this.prevXPosition = event.touches[0].clientX;
+    this.prevYPosition = event.touches[0].clientY;
+
+    // Always bind event so we cancel movement even if no action was taken
+    window.addEventListener('touchmove', this.onTouchMove);
+    window.addEventListener('touchend', this.onTouchEnd);
+  }
+
+  onTouchMove = (event: TouchEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Calculate delta from previous position and current
+    const { clientX, clientY } = this.getTouchCoords(event);
+    const deltaX = clientX - this.prevXPosition;
+    const deltaY = clientY - this.prevYPosition;
+
+    // Track the delta
+    this.deltaX = this.deltaX + deltaX;
+    this.deltaY = this.deltaY + deltaY;
+
+    if (this.checkThreshold()) {
+      this.disableText(true);
+      this.setCursor(true);
+
+      this.deltaX = 0;
+      this.deltaY = 0;
+      this.started = true;
+
+      this.props.onMoveStart({
+        // TODO: Come back and clean this up...
+        nativeEvent: {
+          ...event,
+          clientX,
+          clientY
+        },
+        type: 'touch'
+      });
+    } else {
+      requestAnimationFrame(() => {
+        this.props.onMove({
+          // TODO: Come back and clean this up...
+          nativeEvent: {
+            ...event,
+            clientX,
+            clientY
+          },
+          type: 'touch',
+          x: deltaX,
+          y: deltaY
+        });
+      });
+    }
+
+    this.prevXPosition = clientX;
+    this.prevYPosition = clientY;
+  };
+
+  onTouchEnd = (event: TouchEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    this.disposeHandlers();
+
+    if (this.started) {
+      this.props.onMoveEnd({
+        nativeEvent: event,
+        type: 'touch'
+      });
+    } else {
+      this.props.onMoveCancel({
+        nativeEvent: event,
+        type: 'touch'
+      });
+    }
+  };
+
   render() {
     return React.Children.map(this.props.children, (child: any) =>
       React.cloneElement(child, {
@@ -147,14 +244,12 @@ export class Move extends Component<MoveProps> {
             child.props.onMouseDown(e);
           }
         },
-        /*
         onTouchStart: e => {
           this.onTouchStart(e);
           if (child.props.onTouchStart) {
             child.props.onTouchStart(e);
           }
         }
-        */
       })
     );
   }
