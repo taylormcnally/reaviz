@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import bind from 'memoize-bind';
 import { Pan, PanMoveEvent } from '../Gestures/Pan';
 import { Zoom, ZoomEvent } from '../Gestures/Zoom';
-import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
-import { clamp } from '@popmotion/popcorn';
 import { identity, fromObject, fromDefinition, transform } from 'transformation-matrix';
 import { isEqual } from 'lodash-es';
 
@@ -55,7 +53,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     onZoomPan: () => undefined
   };
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props: ZoomPanProps, state: ZoomPanState) {
     const matrix = transform(fromDefinition([
       { type: 'translate', tx: props.x, ty: props.y },
       { type: 'scale', sx: props.scale, sy: props.scale }
@@ -70,43 +68,20 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     return null;
   }
 
-  observer?: ValueReaction;
-  decay?: ColdSubscription;
-
+  panRef = createRef<Pan>();
   state: ZoomPanState = {
     isZooming: false,
     isPanning: false,
     matrix: identity()
   };
 
-  componentWillUnmount() {
-    this.stopDecay();
-  }
-
-  stopDecay() {
-    if (this.decay && this.decay.stop) {
-      this.decay.stop();
-    }
-
-    if (this.observer) {
-      this.observer.complete();
-    }
-  }
-
   onPanStart() {
     this.setState({
       isPanning: true
     });
-
-    this.stopDecay();
-    this.observer = value(this.props.x);
   }
 
   onPanMove(event: PanMoveEvent) {
-    // this.matrix = fromObject(event.matrix);
-
-    this.observer && this.observer.update(event.x);
-
     this.props.onZoomPan({
       scale: this.props.scale,
       x: event.x,
@@ -116,44 +91,13 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   onPanEnd() {
-    /*
-    if (false) {
-    // if (this.observer && this.props.decay) {
-      const end = this.getEndOffset();
-      const constrained = this.props.constrain;
-
-      this.decay = decay({
-        from: this.observer.get(),
-        velocity: this.observer.getVelocity()
-      })
-        .pipe(res => {
-          return constrained ?
-            clamp(-end, 0)(res) :
-            res;
-        })
-        .start({
-          update: offset => {
-            requestAnimationFrame(() => {
-              this.props.onZoomPan({
-                scale: this.props.scale,
-                offsetX: offset,
-                // TODO: Figure out how to do X & Y together
-                offsetY: this.props.offsetY,
-                type: 'pan'
-              });
-            });
-          },
-          complete: () => this.setState({ isPanning: false })
-        });
-    } else {
-      */
-      this.setState({ isPanning: false });
-    // }
+    this.setState({ isPanning: false });
   }
 
   onZoom(event: ZoomEvent) {
-    this.stopDecay();
-    // this.matrix = fromObject(event.matrix);
+    if (this.panRef.current) {
+      this.panRef.current.stopDecay();
+    }
 
     this.props.onZoomPan({
       ...event,
@@ -181,7 +125,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       x,
       y,
       disableMouseWheel,
-      constrain
+      constrain,
+      decay
     } = this.props;
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
@@ -197,7 +142,9 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         constrain={constrain}
         height={height}
         width={width}
+        decay={decay}
         disabled={!pannable || disabled}
+        ref={this.panRef}
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}
         onPanEnd={bind(this.onPanEnd, this)}

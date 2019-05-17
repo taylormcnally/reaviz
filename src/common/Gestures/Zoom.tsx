@@ -22,7 +22,6 @@ export interface ZoomEvent {
   scale: number;
   x: number;
   y: number;
-  matrix: any;
 }
 
 export class Zoom extends Component<ZoomGestureProps> {
@@ -83,18 +82,19 @@ export class Zoom extends Component<ZoomGestureProps> {
         onZoom({
           scale: newMatrix.a,
           x: newMatrix.e,
-          y: newMatrix.f,
-          matrix: newMatrix
+          y: newMatrix.f
         });
       });
     }
   }
 
   onWheel(event: MouseWheelEvent) {
-    event.preventDefault();
-    const { x, y } = getPointFromMatrix(event, this.props.matrix);
-    const step = this.getStep(event.deltaY);
-    this.scale(x, y, step);
+    if (!this.props.disableMouseWheel) {
+      event.preventDefault();
+      const { x, y } = getPointFromMatrix(event, this.props.matrix);
+      const step = this.getStep(event.deltaY);
+      this.scale(x, y, step);
+    }
   }
 
   onTouchStart = (event: TouchEvent) => {

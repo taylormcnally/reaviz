@@ -26,32 +26,7 @@ export function getClosestPoint(pos: number, scale, data, attr = 'x') {
   afterVal = afterVal - domain;
 
   return beforeVal < afterVal ? before : after;
-}
-
-/**
- * Given an event, get the relative X/Y position for a target.
- */
-export function getPositionForTarget({ target, clientX, clientY }) {
-  // calculate coordinates from svg
-  if (target.createSVGPoint) {
-    let point = target.createSVGPoint();
-    point.x = clientX;
-    point.y = clientY;
-    point = point.matrixTransform(target.getScreenCTM().inverse());
-
-    return {
-      x: point.x,
-      y: point.y
-    };
-  }
-
-  // fallback to calculating position from non-svg dom node
-  const rect = target.getBoundingClientRect();
-  return {
-    x: clientX - rect.left - target.clientLeft,
-    y: clientY - rect.top - target.clientTop
-  };
-}
+};
 
 /**
  * Given an event, get the parent svg element;
@@ -66,6 +41,17 @@ export function getParentSVG(event) {
   }
 
   return node;
+}
+
+/**
+ * Given an event, get the relative X/Y position for a target.
+ */
+export function getPositionForTarget({ target, clientX, clientY }) {
+  const { top, left } = target.getBoundingClientRect();
+  return {
+    x: clientX - left - target.clientLeft,
+    y: clientY - top - target.clientTop
+  };
 }
 
 /**
@@ -87,7 +73,7 @@ export function getPointFromTouch(node, event?) {
       clientX: touch.clientX,
       clientY: touch.clientY
     });
-  })
+  });
 }
 
 /**
@@ -97,66 +83,59 @@ export function getPointFromMatrix(event, matrix) {
   const parent = getParentSVG(event);
 
   // Determines client coordinates relative to the editor component
-  const rect = parent.getBoundingClientRect();
-  const relativeClientX = event.clientX - rect.left;
-  const relativeClientY = event.clientY - rect.top;
+  const { top, left } = parent.getBoundingClientRect();
+  const x = event.clientX - left;
+  const y = event.clientY - top;
 
   // Transforms the coordinate to world coordinate (in the SVG/DIV world)
-  return applyToPoint(inverse(matrix), {x: relativeClientX, y: relativeClientY});
+  return applyToPoint(inverse(matrix), { x, y });
 };
 
 /**
- * Get the point given a node.
+ * Get the start/end matrix.
  */
-export function getPointFromMouse(node, event?) {
-  // called with no args
-  if (!node) return;
-
-  // called with localPoint(event)
-  if (node.target) {
-    event = node;
-    node = getParentSVG(node);
-  }
-
-  // default to mouse event
-  const { clientX, clientY } = event;
-
-  return getPositionForTarget({
-    target: node,
-    clientX,
-    clientY
-  });
+export function getLimitMatrix(height: number, width: number, matrix) {
+  return applyToPoints(matrix, [
+    { x: 0, y: 0 },
+    { x: width, y: height }
+  ]);
 }
 
 /**
  * Constrain the matrix.
  */
-export function constrainMatrix(height: number, width: number, transformMatrix) {
- const [min, max] = applyToPoints(transformMatrix, [
-   { x: 0, y: 0 },
-   { x: width, y: height }
-  ]);
+export function constrainMatrix(height: number, width: number, matrix) {
+  const [min, max] = getLimitMatrix(height, width, matrix);
 
- if (max.x < width || max.y < height) {
-   return true;
- }
+  if (max.x < width || max.y < height) {
+    return true;
+  }
 
- if (min.x > 0 || min.y > 0) {
-   return true;
- }
+  if (min.x > 0 || min.y > 0) {
+    return true;
+  }
 
- return false;
+  return false;
 }
 
-function lessThanScaleFactorMin(value, scaleFactor) {
+/**
+ * Determine if scale factor is less than allowed.
+ */
+function lessThanScaleFactorMin(value, scaleFactor: number) {
   return value.scaleFactorMin && (value.d * (scaleFactor)) <= value.scaleFactorMin;
 }
 
-function moreThanScaleFactorMax (value, scaleFactor) {
+/**
+ * Determine if scale factor is larger than allowed.
+ */
+function moreThanScaleFactorMax (value, scaleFactor: number) {
   return value.scaleFactorMax && (value.d * scaleFactor) >= value.scaleFactorMax;
 }
 
-export function isZoomLevelGoingOutOfBounds(value, scaleFactor) {
+/**
+ * Determine if both min and max scale fctors are going out of bounds.
+ */
+export function isZoomLevelGoingOutOfBounds(value, scaleFactor: number) {
   const a = lessThanScaleFactorMin(value, scaleFactor) && scaleFactor < 1;
   const b = moreThanScaleFactorMax(value, scaleFactor) && scaleFactor > 1;
   return a || b;

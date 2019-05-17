@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { smoothMatrix, transform, translate, fromObject } from 'transformation-matrix';
-import { constrainMatrix } from '../utils/position';
+import { smoothMatrix, transform, translate } from 'transformation-matrix';
+import { constrainMatrix, getLimitMatrix } from '../utils/position';
+import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
+import { clamp } from '@popmotion/popcorn';
 
 interface PanProps {
   disabled: boolean;
@@ -14,6 +16,7 @@ interface PanProps {
   width: number;
   height: number;
   constrain: boolean;
+  decay: boolean;
   onPanStart: (event: PanStartEvent) => void;
   onPanMove: (event: PanMoveEvent) => void;
   onPanEnd: (event: PanEndEvent) => void;
@@ -30,7 +33,6 @@ export interface PanMoveEvent {
   x: number;
   y: number;
   nativeEvent: MouseEvent | TouchEvent;
-  matrix: any;
 }
 
 export interface PanEndEvent {
@@ -50,6 +52,7 @@ export class Pan extends Component<PanProps> {
     disabled: false,
     scale: 1,
     threshold: 10,
+    decay: true,
     onPanStart: () => undefined,
     onPanMove: () => undefined,
     onPanEnd: () => undefined,
@@ -61,8 +64,11 @@ export class Pan extends Component<PanProps> {
   started: boolean = false;
   deltaX: number = 0;
   deltaY: number = 0;
+  observer?: ValueReaction;
+  decay?: ColdSubscription;
 
   componentWillUnmount() {
+    this.stopDecay();
     this.disposeHandlers();
   }
 
@@ -84,6 +90,78 @@ export class Pan extends Component<PanProps> {
         (Math.abs(this.deltaY) > threshold));
   }
 
+  stopDecay() {
+    if (this.decay && this.decay.stop) {
+      this.decay.stop();
+    }
+
+    if (this.observer) {
+      this.observer.complete();
+    }
+  }
+
+  onPanStart(nativeEvent, source) {
+    this.stopDecay();
+    this.observer = value(this.props.x);
+
+    this.props.onPanStart({
+      nativeEvent,
+      source
+    });
+  }
+
+  onPanMove(x, y, source, nativeEvent) {
+    this.observer && this.observer.update(x);
+
+    this.props.onPanMove({
+      source,
+      nativeEvent,
+      x,
+      y
+    });
+  }
+
+  onPanEnd(nativeEvent, source: 'mouse' | 'touch') {
+    if (this.observer && this.props.decay) {
+      const { height, width, matrix, constrain } = this.props;
+      const end = getLimitMatrix(height, width, matrix)[1].x;
+
+      this.decay = decay({
+        from: this.observer.get(),
+        velocity: this.observer.getVelocity()
+      })
+      .pipe(res => {
+        return constrain ?
+          clamp(-end, 0)(res) :
+          res;
+      })
+      .start({
+        update: offset => {
+          requestAnimationFrame(() => {
+           this.props.onPanMove({
+              source: 'touch',
+              nativeEvent,
+              x: offset,
+              // TODO: Figure out how to do X & Y together
+              y: this.props.y
+            });
+          });
+        },
+        complete: () => {
+          this.props.onPanEnd({
+            nativeEvent,
+            source
+          });
+        }
+      });
+    } else {
+      this.props.onPanEnd({
+        nativeEvent,
+        source
+      });
+    }
+  }
+
   pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
     const { scale, constrain, width, height, matrix } = this.props;
 
@@ -94,13 +172,7 @@ export class Pan extends Component<PanProps> {
 
     const shouldConstrain = constrain && constrainMatrix(height, width, newMatrix);
     if (!shouldConstrain) {
-      this.props.onPanMove({
-        source,
-        nativeEvent,
-        x: newMatrix.e,
-        y: newMatrix.f,
-        matrix: newMatrix
-      });
+      this.onPanMove(newMatrix.e, newMatrix.f, source, nativeEvent);
     }
   }
 
@@ -138,10 +210,7 @@ export class Pan extends Component<PanProps> {
       this.deltaY = 0;
       this.started = true;
 
-      this.props.onPanStart({
-        nativeEvent: event,
-        source: 'mouse'
-      });
+      this.onPanStart(event, 'mouse');
     } else {
       this.pan(event.movementX, event.movementY, event, 'mouse');
     }
@@ -155,10 +224,7 @@ export class Pan extends Component<PanProps> {
     toggleTextSelection(true);
 
     if (this.started) {
-      this.props.onPanEnd({
-        nativeEvent: event,
-        source: 'mouse'
-      });
+      this.onPanEnd(event, 'mouse');
     } else {
       this.props.onPanCancel({
         nativeEvent: event,
@@ -216,8 +282,7 @@ export class Pan extends Component<PanProps> {
         source: 'touch',
         nativeEvent: event,
         x,
-        y,
-        matrix: null
+        y
       });
     }
 
@@ -233,10 +298,7 @@ export class Pan extends Component<PanProps> {
     toggleTextSelection(true);
 
     if (this.started) {
-      this.props.onPanEnd({
-        nativeEvent: event,
-        source: 'touch'
-      });
+      this.onPanEnd(event, 'touch');
     } else {
       this.props.onPanCancel({
         nativeEvent: event,
