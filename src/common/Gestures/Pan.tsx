@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 import { smoothMatrix, transform, translate } from 'transformation-matrix';
-import { constrainMatrix, getLimitMatrix } from '../utils/position';
+import { constrainMatrix } from '../utils/position';
 import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
 import { clamp } from '@popmotion/popcorn';
 
@@ -100,7 +100,7 @@ export class Pan extends Component<PanProps> {
     }
   }
 
-  onPanStart(nativeEvent, source) {
+  onPanStart(nativeEvent, source: 'mouse' | 'touch') {
     this.observer = value(this.props.x);
 
     this.props.onPanStart({
@@ -109,7 +109,7 @@ export class Pan extends Component<PanProps> {
     });
   }
 
-  onPanMove(x, y, source, nativeEvent) {
+  onPanMove(x: number, y: number, source: 'mouse' | 'touch', nativeEvent) {
     this.observer && this.observer.update(x);
 
     this.props.onPanMove({
@@ -121,9 +121,11 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanEnd(nativeEvent, source: 'mouse' | 'touch') {
+    const { width, matrix, constrain, onPanEnd, onPanMove } = this.props;
+
     if (this.observer && this.props.decay) {
-      const { height, width, matrix, constrain } = this.props;
-      const end = getLimitMatrix(height, width, matrix)[1].x;
+      // Calculate the end matrix
+      const endX = width * matrix.a - width;
 
       this.decay = decay({
         from: this.observer.get(),
@@ -131,13 +133,13 @@ export class Pan extends Component<PanProps> {
       })
       .pipe(res => {
         return constrain ?
-          clamp(-end, 0)(res) :
+          clamp(-endX, 0)(res) :
           res;
       })
       .start({
         update: offset => {
           requestAnimationFrame(() => {
-           this.props.onPanMove({
+            onPanMove({
               source: 'touch',
               nativeEvent,
               x: offset,
@@ -147,14 +149,14 @@ export class Pan extends Component<PanProps> {
           });
         },
         complete: () => {
-          this.props.onPanEnd({
+          onPanEnd({
             nativeEvent,
             source
           });
         }
       });
     } else {
-      this.props.onPanEnd({
+      onPanEnd({
         nativeEvent,
         source
       });

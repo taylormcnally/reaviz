@@ -37,7 +37,7 @@ interface ZoomPanState {
 }
 
 export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
-  static defaultProps: ZoomPanProps = {
+  static defaultProps: Partial<ZoomPanProps> = {
     maxZoom: 10,
     minZoom: 0,
     zoomStep: 0.1,
