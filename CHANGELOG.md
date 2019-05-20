@@ -1,3 +1,6 @@
+# 2.2.1
+- [Fix] Fix decay not working w/ y values
+
 # 2.2.0
 - [Fix] Fix containing not working when set false
 - [Fix] Completely refactor zoom/panning

@@ -99,7 +99,6 @@ class GenericZoomPanStory extends Component<{}, any> {
             width={500}
             pannable={true}
             minZoom={1}
-            decay={false}
             maxZoom={10}
             constrain={false}
             scale={scale}

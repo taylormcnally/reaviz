@@ -101,7 +101,8 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanStart(nativeEvent, source: 'mouse' | 'touch') {
-    this.observer = value(this.props.x);
+    const { x, y } = this.props;
+    this.observer = value({ x, y });
 
     this.props.onPanStart({
       nativeEvent,
@@ -110,7 +111,7 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanMove(x: number, y: number, source: 'mouse' | 'touch', nativeEvent) {
-    this.observer && this.observer.update(x);
+    this.observer && this.observer.update({ x, y });
 
     this.props.onPanMove({
       source,
@@ -121,30 +122,29 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanEnd(nativeEvent, source: 'mouse' | 'touch') {
-    const { width, matrix, constrain, onPanEnd, onPanMove } = this.props;
+    const { width, height, matrix, constrain, onPanEnd, onPanMove } = this.props;
 
     if (this.observer && this.props.decay) {
       // Calculate the end matrix
       const endX = width * matrix.a - width;
+      const endY = height * matrix.a - height;
 
       this.decay = decay({
         from: this.observer.get(),
         velocity: this.observer.getVelocity()
       })
-      .pipe(res => {
-        return constrain ?
-          clamp(-endX, 0)(res) :
-          res;
-      })
+      .pipe((res) => ({
+        x: constrain ? clamp(-endX, 0)(res.x) : res.x,
+        y: constrain ? clamp(-endY, 0)(res.y) : res.y
+      }))
       .start({
-        update: offset => {
+        update: ({ x, y }) => {
           requestAnimationFrame(() => {
             onPanMove({
               source: 'touch',
               nativeEvent,
-              x: offset,
-              // TODO: Figure out how to do X & Y together
-              y: this.props.y
+              x,
+              y
             });
           });
         },
