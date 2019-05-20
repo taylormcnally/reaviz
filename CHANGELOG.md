@@ -1,5 +1,6 @@
 # 2.2.1
 - [Fix] Fix decay not working w/ y values
+- [Fix] Fix area chart points showing tooltip on hover
 
 # 2.2.0
 - [Fix] Fix containing not working when set false
