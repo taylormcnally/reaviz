@@ -127,7 +127,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       y,
       disableMouseWheel,
       constrain,
-      decay
+      decay,
+      zoomStep
     } = this.props;
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
@@ -153,6 +154,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         <g>
           <Zoom
             disabled={!zoomable || disabled}
+            scaleFactor={zoomStep}
             disableMouseWheel={disableMouseWheel}
             maxZoom={maxZoom}
             minZoom={minZoom}

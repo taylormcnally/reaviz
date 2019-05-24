@@ -1,3 +1,6 @@
+# 2.2.2
+- [Fix] Fix `zoomStep` not being passed down in `ZoomPan`
+
 # 2.2.1
 - [Fix] Fix decay not working w/ y values
 - [Fix] Fix area chart points showing tooltip on hover
