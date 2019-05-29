@@ -36,8 +36,10 @@ export function getParentSVG(event) {
   let node = event.target.ownerSVGElement;
 
   // find the outermost svg
-  while (node.ownerSVGElement) {
-    node = node.ownerSVGElement;
+  if (node) {
+    while (node.ownerSVGElement) {
+      node = node.ownerSVGElement;
+    }
   }
 
   return node;
@@ -59,6 +61,10 @@ export function getPositionForTarget({ target, clientX, clientY }) {
 */
 export function getPointFromMatrix(event, matrix) {
   const parent = getParentSVG(event);
+
+  if (!parent) {
+    return null;
+  }
 
   // Determines client coordinates relative to the editor component
   const { top, left } = parent.getBoundingClientRect();
