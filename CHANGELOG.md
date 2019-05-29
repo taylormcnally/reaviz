@@ -1,3 +1,6 @@
+# 2.2.3
+- [Fix] Fix `getParentSVG` blowing up when mouse goes outside of SVG element
+
 # 2.2.2
 - [Fix] Fix `zoomStep` not being passed down in `ZoomPan`
 
