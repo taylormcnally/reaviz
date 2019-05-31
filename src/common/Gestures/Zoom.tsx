@@ -22,6 +22,7 @@ export interface ZoomEvent {
   scale: number;
   x: number;
   y: number;
+  nativeEvent: any;
 }
 
 export class Zoom extends Component<ZoomGestureProps> {
@@ -61,7 +62,7 @@ export class Zoom extends Component<ZoomGestureProps> {
     return -delta > 0 ? scaleFactor + 1 : 1 - scaleFactor;
   }
 
-  scale(x: number, y: number, step: number) {
+  scale(x: number, y: number, step: number, nativeEvent) {
     const { minZoom, maxZoom, onZoom, matrix } = this.props;
 
     const outside = isZoomLevelGoingOutOfBounds({
@@ -82,7 +83,8 @@ export class Zoom extends Component<ZoomGestureProps> {
         onZoom({
           scale: newMatrix.a,
           x: newMatrix.e,
-          y: newMatrix.f
+          y: newMatrix.f,
+          nativeEvent
         });
       });
     }
@@ -99,7 +101,7 @@ export class Zoom extends Component<ZoomGestureProps> {
       const { x, y } = getPointFromMatrix(event, matrix);
       const step = this.getStep(event.deltaY);
 
-      this.scale(x, y, step);
+      this.scale(x, y, step, event.nativeEvent);
 
       // Do small timeout to 'guess' when its done zooming
       clearTimeout(this.timeout);
@@ -135,7 +137,7 @@ export class Zoom extends Component<ZoomGestureProps> {
       });
 
       if (point.x && point.y) {
-        const outside = this.scale(point.x, point.y, distanceFactor);
+        const outside = this.scale(point.x, point.y, distanceFactor, event);
 
         if (!outside) {
           this.lastDistance = distance;

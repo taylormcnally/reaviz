@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import bind from 'memoize-bind';
-import { Pan, PanMoveEvent } from '../Gestures/Pan';
+import { Pan, PanMoveEvent, PanStartEvent, PanEndEvent, PanCancelEvent } from '../Gestures/Pan';
 import { Zoom, ZoomEvent } from '../Gestures/Zoom';
 import { identity, fromObject, fromDefinition, transform } from 'transformation-matrix';
 import { isEqual } from 'lodash-es';
@@ -28,6 +28,12 @@ export interface ZoomPanProps {
   decay: boolean;
   disableMouseWheel?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
+  onZoom: (event: ZoomEvent) => void;
+  onZoomEnd: () => void;
+  onPanStart: (event: PanStartEvent) => void;
+  onPanMove: (event: PanMoveEvent) => void;
+  onPanEnd: (event: PanEndEvent) => void;
+  onPanCancel: (event: PanCancelEvent) => void;
 }
 
 interface ZoomPanState {
@@ -50,7 +56,12 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     x: 0,
     y: 0,
     scale: 1,
-    onZoomPan: () => undefined
+    onPanStart: () => undefined,
+    onPanMove: () => undefined,
+    onPanEnd: () => undefined,
+    onPanCancel: () => undefined,
+    onZoom: () => undefined,
+    onZoomEnd: () => undefined
   };
 
   static getDerivedStateFromProps(props: ZoomPanProps, state: ZoomPanState) {
@@ -76,10 +87,12 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     matrix: identity()
   };
 
-  onPanStart() {
+  onPanStart(event: PanStartEvent) {
     this.setState({
       isPanning: true
     });
+
+    this.props.onPanStart(event);
   }
 
   onPanMove(event: PanMoveEvent) {
@@ -89,10 +102,13 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       y: event.y,
       type: 'pan'
     });
+
+    this.props.onPanMove(event);
   }
 
-  onPanEnd() {
+  onPanEnd(event: PanEndEvent) {
     this.setState({ isPanning: false });
+    this.props.onPanEnd(event);
   }
 
   onZoom(event: ZoomEvent) {
@@ -104,12 +120,16 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       ...event,
       type: 'zoom'
     });
+
+    this.props.onZoom(event);
   }
 
   onZoomEnd() {
     this.setState({
       isZooming: false
     });
+
+    this.props.onZoomEnd();
   }
 
   render() {
@@ -128,7 +148,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       disableMouseWheel,
       constrain,
       decay,
-      zoomStep
+      zoomStep,
+      onPanCancel
     } = this.props;
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
@@ -150,6 +171,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}
         onPanEnd={bind(this.onPanEnd, this)}
+        onPanCancel={onPanCancel}
       >
         <g>
           <Zoom
