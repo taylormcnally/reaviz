@@ -1,8 +1,18 @@
 import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
-import { getPointFromMatrix, isZoomLevelGoingOutOfBounds } from '../utils/position';
+import {
+  getPointFromMatrix,
+  isZoomLevelGoingOutOfBounds
+} from '../utils/position';
 import { getTouchPoints } from './pinchUtils';
-import { scale, smoothMatrix, transform, translate, applyToPoint, inverse } from 'transformation-matrix';
+import {
+  scale,
+  smoothMatrix,
+  transform,
+  translate,
+  applyToPoint,
+  inverse
+} from 'transformation-matrix';
 
 interface ZoomGestureProps {
   disabled?: boolean;
@@ -65,19 +75,25 @@ export class Zoom extends Component<ZoomGestureProps> {
   scale(x: number, y: number, step: number, nativeEvent) {
     const { minZoom, maxZoom, onZoom, matrix } = this.props;
 
-    const outside = isZoomLevelGoingOutOfBounds({
-      d: matrix.a,
-      scaleFactorMin: minZoom,
-      scaleFactorMax: maxZoom
-    }, step);
+    const outside = isZoomLevelGoingOutOfBounds(
+      {
+        d: matrix.a,
+        scaleFactorMin: minZoom,
+        scaleFactorMax: maxZoom
+      },
+      step
+    );
 
     if (!outside) {
-      const newMatrix = smoothMatrix(transform(
-        matrix,
-        translate(x, y),
-        scale(step, step),
-        translate(-x, -y)
-      ), 100);
+      const newMatrix = smoothMatrix(
+        transform(
+          matrix,
+          translate(x, y),
+          scale(step, step),
+          translate(-x, -y)
+        ),
+        100
+      );
 
       requestAnimationFrame(() => {
         onZoom({
@@ -98,14 +114,17 @@ export class Zoom extends Component<ZoomGestureProps> {
     if (!disableMouseWheel) {
       event.preventDefault();
 
-      const { x, y } = getPointFromMatrix(event, matrix);
-      const step = this.getStep(event.deltaY);
+      const point = getPointFromMatrix(event, matrix);
+      if (point) {
+        const { x, y } = point;
+        const step = this.getStep(event.deltaY);
 
-      this.scale(x, y, step, event.nativeEvent);
+        this.scale(x, y, step, event.nativeEvent);
 
-      // Do small timeout to 'guess' when its done zooming
-      clearTimeout(this.timeout);
-      this.timeout = setTimeout(() => onZoomEnd(), 500);
+        // Do small timeout to 'guess' when its done zooming
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => onZoomEnd(), 500);
+      }
     }
   }
 
