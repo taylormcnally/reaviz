@@ -1,3 +1,7 @@
+# 2.3.0
+- [Feature] Expose pan/zoom events from  `ZoomPan`
+- [Chore] Bump depedencies due to security
+
 # 2.2.3
 - [Fix] Fix `getParentSVG` blowing up when mouse goes outside of SVG element
 
