@@ -1,5 +1,5 @@
 import React, { Fragment, PureComponent, ReactNode } from 'react';
-import sizeMe from 'react-sizeme';
+import { withSize } from 'react-sizeme';
 
 export interface ResizeEvent {
   height: number;
@@ -22,7 +22,7 @@ export class ResizeContainer extends PureComponent<ResizeContainerProps> {
     super(props);
 
     if (this.shouldAutosize()) {
-      this.SizeMe = sizeMe({
+      this.SizeMe = withSize({
         monitorHeight: !props.height,
         monitorWidth: !props.width,
         refreshMode: 'debounce'
