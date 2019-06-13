@@ -98,8 +98,7 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
     const cls = classNames(css.tooltip, className, {
       [css.active]: animationState === 'entered',
-      [css.inactive]:
-        animationState === 'entering' || animationState === 'exiting'
+      [css.inactive]: animationState === 'exited'
     });
 
     return (

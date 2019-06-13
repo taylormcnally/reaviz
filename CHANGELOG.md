@@ -1,3 +1,6 @@
+# 2.3.1
+- [Fix] Fix tooltip flicker
+
 # 2.3.0
 - [Feature] Expose pan/zoom events from  `ZoomPan`
 - [Chore] Bump depedencies due to security
