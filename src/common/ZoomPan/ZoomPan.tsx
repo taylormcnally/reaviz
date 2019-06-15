@@ -27,6 +27,7 @@ export interface ZoomPanProps {
   constrain: boolean;
   decay: boolean;
   disableMouseWheel?: boolean;
+  requireZoomModifier?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
   onZoom: (event: ZoomEvent) => void;
   onZoomEnd: () => void;
@@ -149,7 +150,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       constrain,
       decay,
       zoomStep,
-      onPanCancel
+      onPanCancel,
+      requireZoomModifier
     } = this.props;
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
@@ -183,9 +185,10 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             scale={scale}
             x={x}
             y={y}
+            requireZoomModifier={requireZoomModifier}
+            matrix={matrix}
             onZoom={bind(this.onZoom, this)}
             onZoomEnd={bind(this.onZoomEnd, this)}
-            matrix={matrix}
           >
             <g style={{ cursor }}>
               {!disabled && <rect height={height} width={width} opacity={0} />}

@@ -75,9 +75,10 @@ storiesOf('Charts/Zoom Pan', module)
     />
   ))
   .add('Generic Zoom Pan', () => <GenericZoomPanStory />)
+  .add('Generic Zoom Pan w/ Modifier', () => <GenericZoomPanStory modifier={true} />)
   .add('Default Zoom', () => <DefaultZoomStory />);
 
-class GenericZoomPanStory extends Component<{}, any> {
+class GenericZoomPanStory extends Component<any, any> {
   state = {
     scale: 1,
     x: 0,
@@ -104,6 +105,7 @@ class GenericZoomPanStory extends Component<{}, any> {
             scale={scale}
             x={x}
             y={y}
+            requireZoomModifier={this.props.modifier}
             onZoomPan={this.onZoomPan}
           >
             <g transform={`translate(${x}, ${y}) scale(${scale})`}>

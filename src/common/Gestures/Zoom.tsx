@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import { Component, createRef, Children, cloneElement } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 import {
   getPointFromMatrix,
@@ -24,6 +24,7 @@ interface ZoomGestureProps {
   x: number;
   y: number;
   disableMouseWheel?: boolean;
+  requireZoomModifier?: boolean;
   onZoom: (event: ZoomEvent) => void;
   onZoomEnd: () => void;
 }
@@ -51,19 +52,24 @@ export class Zoom extends Component<ZoomGestureProps> {
   childRef = createRef<SVGGElement>();
 
   componentDidMount() {
-    if (!this.props.disabled) {
-      // Manually bind due to pinch issues not being prevented
-      // https://github.com/facebook/react/issues/9809
-      if (this.childRef.current) {
-        this.childRef.current.addEventListener('touchstart', this.onTouchStart);
+    if (!this.props.disabled && this.childRef.current) {
+      if (this.props.disableMouseWheel) {
+        this.childRef.current.addEventListener('mousewheel', this.onMouseWheel, { passive: false });
       }
+
+      this.childRef.current.addEventListener('touchstart', this.onTouchStart, { passive: false });
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('touchstart', this.onTouchStart);
     window.removeEventListener('touchmove', this.onTouchMove);
     window.removeEventListener('touchend', this.onTouchEnd);
+
+    if (this.childRef.current) {
+      this.childRef.current.removeEventListener('mousewheel', this.onMouseWheel);
+      this.childRef.current.removeEventListener('touchstart', this.onTouchStart);
+    }
+
     toggleTextSelection(true);
   }
 
@@ -108,25 +114,33 @@ export class Zoom extends Component<ZoomGestureProps> {
     return outside;
   }
 
-  onWheel(event) {
-    const { disableMouseWheel, matrix, onZoomEnd } = this.props;
+  onMouseWheel = (event: MouseWheelEvent) => {
+    const { disableMouseWheel, requireZoomModifier, matrix, onZoomEnd } = this.props;
 
-    if (!disableMouseWheel) {
-      event.preventDefault();
-
-      const point = getPointFromMatrix(event, matrix);
-      if (point) {
-        const { x, y } = point;
-        const step = this.getStep(event.deltaY);
-
-        this.scale(x, y, step, event.nativeEvent);
-
-        // Do small timeout to 'guess' when its done zooming
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => onZoomEnd(), 500);
-      }
+    if (disableMouseWheel) {
+      return false;
     }
-  }
+
+    const hasModifier = event.metaKey || event.ctrlKey;
+    if (requireZoomModifier && !hasModifier) {
+      return false;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const point = getPointFromMatrix(event, matrix);
+    if (point) {
+      const { x, y } = point;
+      const step = this.getStep(event.deltaY);
+
+      this.scale(x, y, step, event);
+
+      // Do small timeout to 'guess' when its done zooming
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => onZoomEnd(), 500);
+    }
+  };
 
   onTouchStart = (event: TouchEvent) => {
     if (event.touches.length === 2) {
@@ -177,16 +191,10 @@ export class Zoom extends Component<ZoomGestureProps> {
   };
 
   render() {
-    return React.Children.map(this.props.children, (child: any) =>
-      React.cloneElement(child, {
+    return Children.map(this.props.children, (child: any) =>
+      cloneElement(child, {
         ...child.props,
-        ref: this.childRef,
-        onWheel: e => {
-          this.onWheel(e);
-          if (child.props.onWheel) {
-            child.props.onWheel(e);
-          }
-        }
+        ref: this.childRef
       })
     );
   }

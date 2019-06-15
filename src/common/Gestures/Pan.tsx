@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 import { smoothMatrix, transform, translate } from 'transformation-matrix';
 import { constrainMatrix } from '../utils/position';
@@ -66,10 +66,23 @@ export class Pan extends Component<PanProps> {
   deltaY: number = 0;
   observer?: ValueReaction;
   decay?: ColdSubscription;
+  childRef = createRef<SVGGElement>();
+
+  componentDidMount() {
+    if (!this.props.disabled && this.childRef.current) {
+      this.childRef.current.addEventListener('mousedown', this.onMouseDown, { passive: false });
+      this.childRef.current.addEventListener('touchstart', this.onTouchStart, { passive: false });
+    }
+  }
 
   componentWillUnmount() {
     this.stopDecay();
     this.disposeHandlers();
+
+    if (this.childRef.current) {
+      this.childRef.current.removeEventListener('mousedown', this.onMouseDown);
+      this.childRef.current.removeEventListener('touchstart', this.onTouchStart);
+    }
   }
 
   disposeHandlers() {
@@ -179,15 +192,14 @@ export class Pan extends Component<PanProps> {
     return shouldConstrain;
   }
 
-  onMouseDown(event: React.MouseEvent) {
+  onMouseDown = (event: MouseEvent) => {
     // Ignore right click
-    if (event.nativeEvent.which === 3 || this.props.disabled) {
+    if (event.which === 3) {
       return;
     }
 
     event.preventDefault();
     event.stopPropagation();
-    event.persist();
 
     this.stopDecay();
     toggleTextSelection(false);
@@ -237,14 +249,13 @@ export class Pan extends Component<PanProps> {
     }
   };
 
-  onTouchStart(event: React.TouchEvent) {
-    if (this.props.disabled || event.touches.length !== 1) {
+  onTouchStart = (event: TouchEvent) => {
+    if (event.touches.length !== 1) {
       return;
     }
 
     event.preventDefault();
     event.stopPropagation();
-    event.persist();
 
     this.stopDecay();
     toggleTextSelection(false);
@@ -309,18 +320,7 @@ export class Pan extends Component<PanProps> {
     return React.Children.map(this.props.children, (child: any) =>
       React.cloneElement(child, {
         ...child.props,
-        onMouseDown: e => {
-          this.onMouseDown(e);
-          if (child.props.onMouseDown) {
-            child.props.onMouseDown(e);
-          }
-        },
-        onTouchStart: e => {
-          this.onTouchStart(e);
-          if (child.props.onTouchStart) {
-            child.props.onTouchStart(e);
-          }
-        }
+        ref: this.childRef
       })
     );
   }

@@ -1,3 +1,8 @@
+# 2.4.0
+- [Feature] Add ability to require modifier before using mouse wheel for zoom
+- [Fix] Fix touch memory leak
+- [Fix] Fix passive event errors on wheel
+
 # 2.3.1
 - [Fix] Fix tooltip flicker
 
