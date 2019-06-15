@@ -52,8 +52,10 @@ export class Zoom extends Component<ZoomGestureProps> {
   childRef = createRef<SVGGElement>();
 
   componentDidMount() {
-    if (!this.props.disabled && this.childRef.current) {
-      if (this.props.disableMouseWheel) {
+    const { disabled, disableMouseWheel } = this.props;
+
+    if (!disabled && this.childRef.current) {
+      if (!disableMouseWheel) {
         this.childRef.current.addEventListener('mousewheel', this.onMouseWheel, { passive: false });
       }
 

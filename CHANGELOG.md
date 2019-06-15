@@ -1,3 +1,6 @@
+# 2.4.2
+- [Fix] Fix invalid logic on wheel
+
 # 2.4.1
 - [Feature] Add ability to pass styles to SVG container
 
