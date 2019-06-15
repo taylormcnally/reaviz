@@ -12,6 +12,7 @@ export interface ChartProps {
   height?: number;
   margins?: Margins;
   className?: any;
+  style?: any;
   center?: boolean;
   centerX?: boolean;
   centerY?: boolean;
@@ -136,7 +137,7 @@ export class ChartContainer extends React.Component<
   }
 
   render() {
-    const { className, children, center, centerX, centerY } = this.props;
+    const { className, children, center, centerX, centerY, style } = this.props;
     const { xMargin, yMargin, width, height } = this.state;
     const id = this.props.id || this.state.id;
     const chartSized = this.getChartSized();
@@ -157,7 +158,7 @@ export class ChartContainer extends React.Component<
         width={this.props.width}
       >
         {height && width && (
-          <svg width={width} height={height} className={className}>
+          <svg width={width} height={height} className={className} style={style}>
             <g transform={`translate(${translateX}, ${translateY})`}>
               {children(childProps)}
             </g>

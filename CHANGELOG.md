@@ -1,3 +1,6 @@
+# 2.4.1
+- [Feature] Add ability to pass styles to SVG container
+
 # 2.4.0
 - [Feature] Add ability to require modifier before using mouse wheel for zoom
 - [Fix] Fix touch memory leak

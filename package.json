@@ -1,6 +1,6 @@
 {
   "name": "reaviz",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook -p 9010",
@@ -29,9 +29,12 @@
     "d3",
     "dataviz",
     "charts",
+    "charting",
+    "svg",
     "bar-chart",
     "scatter-plot",
     "area-chart",
+    "sparkline",
     "line-chart",
     "pie-chart",
     "sankey",
