@@ -25,6 +25,7 @@ export interface ChartZoomPanProps {
   zoomStep: number;
   decay: boolean;
   disableMouseWheel?: boolean;
+  requireZoomModifier?: boolean;
   onZoomPan?: (event: ZoomPanChangeEvent) => void;
 }
 

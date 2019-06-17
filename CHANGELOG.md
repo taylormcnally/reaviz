@@ -1,3 +1,6 @@
+# 2.4.3
+- [Fix] Add missing type to `ChartZoomPan` class
+
 # 2.4.2
 - [Fix] Fix invalid logic on wheel
 
