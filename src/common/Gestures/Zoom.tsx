@@ -116,7 +116,7 @@ export class Zoom extends Component<ZoomGestureProps> {
     return outside;
   }
 
-  onMouseWheel = (event: MouseWheelEvent) => {
+  onMouseWheel = (event) => {
     const { disableMouseWheel, requireZoomModifier, matrix, onZoomEnd } = this.props;
 
     if (disableMouseWheel) {
