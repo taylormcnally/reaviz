@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import { Component, createRef, Children, cloneElement } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 import { smoothMatrix, transform, translate } from 'transformation-matrix';
 import { constrainMatrix } from '../utils/position';
@@ -67,6 +67,7 @@ export class Pan extends Component<PanProps> {
   observer?: ValueReaction;
   decay?: ColdSubscription;
   childRef = createRef<SVGGElement>();
+  rqf: any;
 
   componentDidMount() {
     if (!this.props.disabled && this.childRef.current) {
@@ -78,6 +79,7 @@ export class Pan extends Component<PanProps> {
   componentWillUnmount() {
     this.stopDecay();
     this.disposeHandlers();
+    cancelAnimationFrame(this.rqf);
 
     if (this.childRef.current) {
       this.childRef.current.removeEventListener('mousedown', this.onMouseDown);
@@ -152,7 +154,7 @@ export class Pan extends Component<PanProps> {
       }))
       .start({
         update: ({ x, y }) => {
-          requestAnimationFrame(() => {
+          this.rqf = requestAnimationFrame(() => {
             onPanMove({
               source: 'touch',
               nativeEvent,
@@ -317,8 +319,8 @@ export class Pan extends Component<PanProps> {
   };
 
   render() {
-    return React.Children.map(this.props.children, (child: any) =>
-      React.cloneElement(child, {
+    return Children.map(this.props.children, (child: any) =>
+      cloneElement(child, {
         ...child.props,
         ref: this.childRef
       })

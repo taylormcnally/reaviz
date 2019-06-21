@@ -50,26 +50,31 @@ export class Zoom extends Component<ZoomGestureProps> {
   lastDistance: any;
   timeout: any;
   childRef = createRef<SVGGElement>();
+  rqf: any;
 
   componentDidMount() {
     const { disabled, disableMouseWheel } = this.props;
 
-    if (!disabled && this.childRef.current) {
+    const ref = this.childRef.current;
+    if (!disabled && ref) {
       if (!disableMouseWheel) {
-        this.childRef.current.addEventListener('mousewheel', this.onMouseWheel, { passive: false });
+        ref.addEventListener('mousewheel', this.onMouseWheel, { passive: false });
       }
 
-      this.childRef.current.addEventListener('touchstart', this.onTouchStart, { passive: false });
+      ref.addEventListener('touchstart', this.onTouchStart, { passive: false });
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('touchmove', this.onTouchMove);
     window.removeEventListener('touchend', this.onTouchEnd);
+    cancelAnimationFrame(this.rqf);
+    clearTimeout(this.timeout);
 
-    if (this.childRef.current) {
-      this.childRef.current.removeEventListener('mousewheel', this.onMouseWheel);
-      this.childRef.current.removeEventListener('touchstart', this.onTouchStart);
+    const ref = this.childRef.current;
+    if (ref) {
+      ref.removeEventListener('mousewheel', this.onMouseWheel);
+      ref.removeEventListener('touchstart', this.onTouchStart);
     }
 
     toggleTextSelection(true);
@@ -103,7 +108,7 @@ export class Zoom extends Component<ZoomGestureProps> {
         100
       );
 
-      requestAnimationFrame(() => {
+      this.rqf = requestAnimationFrame(() => {
         onZoom({
           scale: newMatrix.a,
           x: newMatrix.e,

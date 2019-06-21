@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Children, cloneElement } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 
 interface MoveProps {
@@ -29,8 +29,10 @@ export class Move extends Component<MoveProps> {
   deltaY = 0;
   prevXPosition = 0;
   prevYPosition = 0;
+  rqf: any;
 
   componentWillUnmount() {
+    cancelAnimationFrame(this.rqf);
     this.disposeHandlers();
   }
 
@@ -117,7 +119,7 @@ export class Move extends Component<MoveProps> {
         type: 'mouse'
       });
     } else {
-      requestAnimationFrame(() => {
+      this.rqf = requestAnimationFrame(() => {
         this.props.onMove({
           nativeEvent: event,
           type: 'mouse',
@@ -197,7 +199,7 @@ export class Move extends Component<MoveProps> {
         type: 'touch'
       });
     } else {
-      requestAnimationFrame(() => {
+      this.rqf = requestAnimationFrame(() => {
         this.props.onMove({
           // TODO: Come back and clean this up...
           nativeEvent: {
@@ -235,8 +237,8 @@ export class Move extends Component<MoveProps> {
   };
 
   render() {
-    return React.Children.map(this.props.children, (child: any) =>
-      React.cloneElement(child, {
+    return Children.map(this.props.children, (child: any) =>
+      cloneElement(child, {
         ...child.props,
         onMouseDown: e => {
           this.onMouseDown(e);
