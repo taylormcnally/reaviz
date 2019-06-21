@@ -1,3 +1,6 @@
+# 2.4.5
+- [Fix] Timeout null ref issues on move/brush/pan/zoom
+
 # 2.4.4
 - [Fix] Remove deprecated type
 
