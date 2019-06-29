@@ -199,7 +199,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
           type="grouped"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
+            .colors(multiCategory[0].data.length)}
           padding={0.8}
         />
       }
