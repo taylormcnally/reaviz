@@ -22,6 +22,9 @@ import {
 import { symbolStar, symbol } from 'd3-shape';
 
 storiesOf('Charts/Scatter Plot', module)
+  .addParameters({
+    component: ScatterPlot
+  })
   .add(
     'Simple',
     () => {
@@ -139,7 +142,7 @@ storiesOf('Charts/Scatter Plot', module)
           point={
             <ScatterPoint
               color="rgba(174, 52, 255, .5)"
-              size={v => v.meta.severity + 5}
+              size={v => v.meta && v.meta.severity + 5}
             />
           }
         />

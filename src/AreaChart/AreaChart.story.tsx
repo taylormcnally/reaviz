@@ -31,6 +31,9 @@ import { Gradient, GradientStop } from '../common/gradients';
 import { Stripes } from '../common/masks';
 
 storiesOf('Charts/Area/Single Series', module)
+  .addParameters({
+    component: AreaChart
+  })
   .add(
     'Simple',
     () => {
@@ -100,11 +103,7 @@ storiesOf('Charts/Area/Single Series', module)
     />
   ))
   .add('Non-Zero', () => (
-    <AreaChart
-      width={350}
-      height={250}
-      data={nonZeroDateData}
-    />
+    <AreaChart width={350} height={250} data={nonZeroDateData} />
   ))
   .add('Interval', () => (
     <AreaChart

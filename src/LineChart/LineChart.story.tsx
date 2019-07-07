@@ -26,6 +26,9 @@ import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
 
 storiesOf('Charts/Line/Single Series', module)
+  .addParameters({
+    component: LineChart
+  })
   .add(
     'Simple',
     () => {
@@ -110,6 +113,9 @@ storiesOf('Charts/Line/Single Series', module)
   .add('Live Updating', () => <LiveUpdatingStory />);
 
 storiesOf('Charts/Line/Multi Series', module)
+  .addParameters({
+    component: LineChart
+  })
   .add('Simple', () => (
     <LineChart
       width={550}
