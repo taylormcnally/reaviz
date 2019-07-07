@@ -36,6 +36,9 @@ import {
 import { Stripes } from '../common/masks';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
+  .addParameters({
+    component: BarChart
+  })
   .add(
     'Simple',
     () => {

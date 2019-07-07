@@ -16,15 +16,18 @@ module.exports = async ({ config, mode }) => ({
         include: resolve(__dirname, '../src'),
         use: [
           require.resolve('babel-loader'),
-          ...(mode === 'PRODUCTION' ? [require.resolve("react-docgen-typescript-loader")] : [])
+          require.resolve('react-docgen-typescript-loader')
         ]
       },
       {
         test: /\.story\.tsx?$/,
         loaders: [
           {
-            loader: require.resolve('@storybook/addon-storysource/loader'),
-            options: { parser: 'typescript' }
+            loader: require.resolve('@storybook/source-loader'),
+            options: {
+              parser: 'typescript',
+              injectParameters: true
+            }
           }
         ],
         enforce: 'pre'
@@ -41,12 +44,12 @@ module.exports = async ({ config, mode }) => ({
         loaders: [
           'style-loader',
           {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              modules: true,
-              localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
-            }
+            loader: 'css-loader'
+            // options: {
+            //   importLoaders: 1,
+            //   modules: true,
+            //   localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
+            // }
           },
           {
             loader: 'postcss-loader',
@@ -68,10 +71,7 @@ module.exports = async ({ config, mode }) => ({
   plugins: config.plugins,
   resolve: {
     ...config.resolve,
-    modules: [
-      ...config.resolve.modules,
-      resolve(__dirname, '../src')
-    ],
-    extensions: [...config.resolve.extensions, '.ts', '.tsx'],
-  },
+    modules: [...config.resolve.modules, resolve(__dirname, '../src')],
+    extensions: [...config.resolve.extensions, '.ts', '.tsx']
+  }
 });

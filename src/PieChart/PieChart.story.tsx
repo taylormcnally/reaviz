@@ -7,6 +7,12 @@ import { categoryData, randomNumber } from '../common/demo';
 import { PieArcSeries, PieArcLabel } from './PieArcSeries';
 
 storiesOf('Charts/Pie', module)
+  .addParameters({
+    component: PieChart
+  })
+  .addDecorator(storyFn => (
+    <div style={{ width: 500, height: 400 }}>{storyFn()}</div>
+  ))
   .add('Simple', () => (
     <PieChart
       width={350}
