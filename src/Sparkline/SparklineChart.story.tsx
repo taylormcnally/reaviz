@@ -7,9 +7,6 @@ import { AreaSparklineChart } from './AreaSparklineChart';
 import { BarSparklineChart } from './BarSparklineChart';
 
 storiesOf('Charts/Sparkline', module)
-  .addParameters({
-    component: SparklineChart
-  })
   .add('Line', () => (
     <SparklineChart width={200} height={55} data={medDateData} />
   ))

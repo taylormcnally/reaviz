@@ -5,9 +5,6 @@ import { nodes, links } from '../common/demo';
 import { range } from 'd3-array';
 
 storiesOf('Charts/Hive', module)
-  .addParameters({
-    component: HivePlot
-  })
   .add('Mini', () => (
     <HivePlot
       height={250}
@@ -51,29 +48,27 @@ storiesOf('Charts/Hive', module)
   ))
   .add('Performance', () =>
     range(20).map(i => (
-      <>
-        <div
-          key={i}
-          style={{
-            width: '250px',
-            height: '250px',
-            border: 'solid 1px green',
-            margin: '25px',
-            display: 'inline-block'
-          }}
-        >
-          <HivePlot
-            axis={[
-              { label: 'Severity', attribute: 'severity' },
-              { label: 'Stage', attribute: 'category' },
-              { label: 'Time', attribute: 'timestamp' }
-            ]}
-            height={250}
-            width={250}
-            nodes={nodes}
-            links={links}
-          />
-        </div>
-      </>
+      <div
+        key={i}
+        style={{
+          width: '250px',
+          height: '250px',
+          border: 'solid 1px green',
+          margin: '25px',
+          display: 'inline-block'
+        }}
+      >
+        <HivePlot
+          axis={[
+            { label: 'Severity', attribute: 'severity' },
+            { label: 'Stage', attribute: 'category' },
+            { label: 'Time', attribute: 'timestamp' }
+          ]}
+          height={250}
+          width={250}
+          nodes={nodes}
+          links={links}
+        />
+      </div>
     ))
   );

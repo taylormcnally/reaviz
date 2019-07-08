@@ -7,9 +7,6 @@ import { RadialGaugeSeries } from './RadialGaugeSeries';
 import { max } from 'd3-array';
 
 storiesOf('Charts/Radial Gauge', module)
-  .addParameters({
-    component: RadialGauge
-  })
   .add(
     'Single',
     () => {

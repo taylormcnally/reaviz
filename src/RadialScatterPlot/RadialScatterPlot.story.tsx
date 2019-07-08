@@ -17,9 +17,6 @@ import {
 } from '../common/Axis/RadialAxis';
 
 storiesOf('Charts/Scatter Plot/Radial', module)
-  .addParameters({
-    component: RadialScatterPlot
-  })
   .add(
     'Simple',
     () => {

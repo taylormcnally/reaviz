@@ -32,9 +32,6 @@ const colorScheme = chroma
 const onNodeClick = (title: string) => window.alert(`${title} is clicked`);
 
 storiesOf('Charts/Sankey', module)
-  .addParameters({
-    component: Sankey
-  })
   .add('Simple', () => (
     <Sankey
       colorScheme={colorScheme}
