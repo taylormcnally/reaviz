@@ -14,9 +14,6 @@ import {
 } from '../common/Axis/RadialAxis';
 
 storiesOf('Charts/Bar/Radial', module)
-  .addParameters({
-    component: RadialBarChart
-  })
   .add(
     'Simple',
     () => {
