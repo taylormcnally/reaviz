@@ -71,10 +71,11 @@ export class BarSeries extends Component<BarSeriesProps> {
   }
 
   getColor(point, index) {
-    const { colorScheme, data } = this.props;
+    const { colorScheme, data, type } = this.props;
+    const isMultiSeries = type === 'grouped';
 
     return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(index)
+      ? getColor(colorScheme, data, isMultiSeries)(index)
       : colorScheme(point, index);
   }
 
