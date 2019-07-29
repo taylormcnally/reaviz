@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import bind from 'memoize-bind';
 import { Placement, ReferenceObject, ConnectedOverlay, TriggerTypes } from 'rdk';
@@ -25,7 +25,7 @@ interface TooltipState {
   visible: boolean;
 }
 
-export class Tooltip extends React.Component<TooltipProps, TooltipState> {
+export class Tooltip extends Component<TooltipProps, TooltipState> {
   static defaultProps: Partial<TooltipProps> = {
     enterDelay: 0,
     leaveDelay: 200,
@@ -101,9 +101,15 @@ export class Tooltip extends React.Component<TooltipProps, TooltipState> {
       [css.inactive]: animationState === 'exited'
     });
 
+    const children = isFunction(content) ? content() : content;
+
+    if (!children) {
+      return null;
+    }
+
     return (
       <div className={cls}>
-        {isFunction(content) ? content() : content}
+        {children}
       </div>
     );
   };
