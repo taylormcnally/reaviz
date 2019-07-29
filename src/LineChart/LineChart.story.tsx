@@ -116,6 +116,7 @@ storiesOf('Charts/Line/Multi Series', module)
       height={350}
       series={
         <LineSeries
+          type="grouped"
           colorScheme={chroma
             .scale(['27efb5', '00bfff'])
             .colors(multiDateData.length)}
