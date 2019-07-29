@@ -1,3 +1,7 @@
+# 2.4.6
+- [Fix] Fix pie chart label overlap
+- [Fix] Fix tooltip lag appear delay
+
 # 2.4.5
 - [Fix] Timeout null ref issues on move/brush/pan/zoom
 
