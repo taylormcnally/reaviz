@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import bind from 'memoize-bind';
 import { Placement, ReferenceObject, ConnectedOverlay, TriggerTypes } from 'rdk';
