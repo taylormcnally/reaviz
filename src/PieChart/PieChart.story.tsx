@@ -3,10 +3,10 @@ import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 
 import { PieChart } from './PieChart';
-import { categoryData, randomNumber } from '../common/demo';
+import { categoryData, randomNumber, browserData } from '../common/demo';
 import { PieArcSeries, PieArcLabel } from './PieArcSeries';
 
-storiesOf('Charts/Pie', module)
+storiesOf('Charts/Pie/Pie', module)
   .add('Simple', () => (
     <PieChart
       width={350}
@@ -15,8 +15,23 @@ storiesOf('Charts/Pie', module)
       series={
         <PieArcSeries
           colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
+            .scale(['#ACB7C9', '#418AD7'])
             .colors(categoryData.length)}
+        />
+      }
+    />
+  ))
+  .add('Label Overlap', () => (
+    <PieChart
+      width={350}
+      height={250}
+      data={browserData}
+      series={
+        <PieArcSeries
+          label={<PieArcLabel show={true} />}
+          colorScheme={chroma
+            .scale(['#ACB7C9', '#418AD7'])
+            .colors(browserData.length)}
         />
       }
     />
@@ -26,8 +41,10 @@ storiesOf('Charts/Pie', module)
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
       <PieChart data={categoryData} />
     </div>
-  ))
-  .add('Donut', () => (
+  ));
+
+storiesOf('Charts/Pie/Donut', module)
+  .add('Simple', () => (
     <PieChart
       width={350}
       height={250}
@@ -36,7 +53,7 @@ storiesOf('Charts/Pie', module)
         <PieArcSeries
           doughnut={true}
           colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
+            .scale(['#ACB7C9', '#418AD7'])
             .colors(categoryData.length)}
         />
       }
@@ -51,7 +68,7 @@ storiesOf('Charts/Pie', module)
         <PieArcSeries
           doughnut={true}
           colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
+            .scale(['#ACB7C9', '#418AD7'])
             .colors(categoryData.length)}
           label={<PieArcLabel show={true} />}
         />
@@ -78,7 +95,7 @@ storiesOf('Charts/Pie', module)
             <PieArcSeries
               doughnut={true}
               colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
+                .scale(['#ACB7C9', '#418AD7'])
                 .colors(categoryData.length)}
             />
           }
@@ -128,7 +145,7 @@ class LiveUpdatingStory extends React.Component<any, any> {
           series={
             <PieArcSeries
               colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
+                .scale(['#ACB7C9', '#418AD7'])
                 .colors(data.length)}
             />
           }
