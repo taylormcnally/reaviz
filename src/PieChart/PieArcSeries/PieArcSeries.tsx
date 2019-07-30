@@ -57,7 +57,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
     });
 
     if (label.props.show) {
-      const minDistance = 10;
+      const minDistance = 15;
 
       for (let i = 0; i < data.length - 1; i++) {
         const a = data[i];
@@ -122,13 +122,6 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
       <PoseGroup animateOnMount={animated}>
         {data.map((arcData: any, index: number) => (
           <PoseSVGGElement key={arcData.data.key.toString()}>
-            <CloneElement<PieArcProps>
-              element={arc}
-              data={arcData}
-              animated={animated}
-              innerArc={innerArc}
-              color={this.getColor(arcData, index)}
-            />
             {label.props.show && labelVisible(arcData) && (
               <CloneElement<PieArcLabelProps>
                 element={label}
@@ -138,6 +131,13 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
                 position={positions[index]}
               />
             )}
+            <CloneElement<PieArcProps>
+              element={arc}
+              data={arcData}
+              animated={animated}
+              innerArc={innerArc}
+              color={this.getColor(arcData, index)}
+            />
           </PoseSVGGElement>
         ))}
       </PoseGroup>

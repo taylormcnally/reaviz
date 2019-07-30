@@ -1,3 +1,7 @@
+# 2.4.7
+- [Fix] Fix pie chart line overlap with slice
+- [Fix] Improve spacing on pie chart labels
+
 # 2.4.6
 - [Fix] Fix pie chart label overlap
 - [Fix] Fix tooltip lag appear delay
