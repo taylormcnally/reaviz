@@ -1,3 +1,6 @@
+# 2.4.9
+- [Fix] Fix bar chart having dupe ids
+
 # 2.4.8
 - [Fix] Fix bar chart brush always enabled
 
