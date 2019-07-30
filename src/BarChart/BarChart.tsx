@@ -28,7 +28,7 @@ import {
   getMarimekkoScale,
   getMarimekkoGroupScale
 } from '../common/scales';
-import { ChartBrush, ChartBrushProps } from '../common/Brush';
+import { ChartBrushProps } from '../common/Brush';
 import * as css from './BarChart.module.scss';
 import {
   ChartContainer,
@@ -44,8 +44,7 @@ export interface BarChartProps extends ChartProps {
   yAxis: JSX.Element;
   xAxis: JSX.Element;
   gridlines: JSX.Element | null;
-  brush: JSX.Element;
-  zoomPan: JSX.Element;
+  brush: JSX.Element | null;
 }
 
 export class BarChart extends React.Component<BarChartProps, {}> {
@@ -60,7 +59,7 @@ export class BarChart extends React.Component<BarChartProps, {}> {
     yAxis: <LinearYAxis type="value" />,
     series: <BarSeries />,
     gridlines: <GridlineSeries />,
-    brush: <ChartBrush disabled={true} />
+    brush: null
   };
 
   getScalesAndData(chartHeight: number, chartWidth: number) {
