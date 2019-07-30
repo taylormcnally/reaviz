@@ -1,3 +1,6 @@
+# 2.4.8
+- [Fix] Fix bar chart brush always enabled
+
 # 2.4.7
 - [Fix] Fix pie chart line overlap with slice
 - [Fix] Improve spacing on pie chart labels
