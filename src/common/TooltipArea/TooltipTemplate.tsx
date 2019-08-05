@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { formatValue } from '../utils/formatting';
 import { ChartInternalDataTypes } from '../data';
 import * as css from './TooltipTemplate.module.scss';
@@ -21,7 +21,7 @@ interface TooltipTemplateProps {
   className?: any;
 }
 
-export class TooltipTemplate extends Component<TooltipTemplateProps, {}> {
+export class TooltipTemplate extends PureComponent<TooltipTemplateProps> {
   renderValues(data: SingleTooltipValue, index: number) {
     const { color } = this.props;
     const fill = color(data, index);
@@ -34,6 +34,22 @@ export class TooltipTemplate extends Component<TooltipTemplateProps, {}> {
         </span>
         <span>{formatValue(data.value || data.y)}</span>
       </span>
+    );
+  }
+
+  renderMultiple(value: MultipleTooltipValues) {
+    const excessCount = value.data.length - 15;
+    const pagedValues = value.data.slice(0, 15);
+
+    return (
+      <Fragment>
+        {pagedValues.map((point, i) => (
+          <Fragment key={i}>{this.renderValues(point, i)}</Fragment>
+        ))}
+        {excessCount > 0 && (
+          <div>...{excessCount} more...</div>
+        )}
+      </Fragment>
     );
   }
 
@@ -50,10 +66,7 @@ export class TooltipTemplate extends Component<TooltipTemplateProps, {}> {
       <div className={className}>
         <div className={css.label}>{formatValue(value!.x)}</div>
         <div className={css.value}>
-          {isMultiple &&
-            (value as MultipleTooltipValues).data.map((point, i) => (
-              <Fragment key={i}>{this.renderValues(point, i)}</Fragment>
-            ))}
+          {isMultiple && this.renderMultiple(value as MultipleTooltipValues)}
           {!isMultiple && (
             <Fragment>
               {formatValue(

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import bind from 'memoize-bind';
 import { getPositionForTarget } from '../utils/position';
 import { BrushSlice, BrushChangeEvent } from './BrushSlice';
@@ -29,7 +29,7 @@ interface BrushState {
   initial?: number;
 }
 
-export class Brush extends Component<BrushProps, BrushState> {
+export class Brush extends PureComponent<BrushProps, BrushState> {
   static defaultProps: Partial<BrushProps> = {
     disabled: false,
     height: 0,

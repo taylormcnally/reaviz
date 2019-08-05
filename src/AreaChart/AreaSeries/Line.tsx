@@ -1,4 +1,4 @@
-import React, { createRef, Fragment } from 'react';
+import React, { createRef, Fragment, PureComponent } from 'react';
 import { line } from 'd3-shape';
 import {
   interpolate,
@@ -25,7 +25,7 @@ export interface LineProps {
   hasArea: boolean;
 }
 
-export class Line extends React.Component<LineProps, {}> {
+export class Line extends PureComponent<LineProps> {
   static defaultProps: Partial<LineProps> = {
     showZeroStroke: true,
     strokeWidth: 0

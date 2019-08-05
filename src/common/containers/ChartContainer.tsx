@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import bind from 'memoize-bind';
 import { Dimensions, getDimension, Margins } from '../utils/dimensions';
 import { ResizeEvent, ResizeContainer } from './ResizeContainer';
@@ -45,7 +45,7 @@ interface UpdateSizeProps {
   width?: number;
 }
 
-export class ChartContainer extends React.Component<
+export class ChartContainer extends Component<
   ChartContainerProps,
   ChartContainerState
 > {

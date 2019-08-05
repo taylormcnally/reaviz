@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { isEqual } from 'lodash-es';
 import {
   RadialScatterSeries,
@@ -19,9 +19,8 @@ export interface RadialPointSeriesProps {
   point: JSX.Element;
 }
 
-export class RadialPointSeries extends React.Component<
-  RadialPointSeriesProps,
-  {}
+export class RadialPointSeries extends Component<
+  RadialPointSeriesProps
 > {
   static defaultProps: Partial<RadialPointSeriesProps> = {
     show: 'hover',

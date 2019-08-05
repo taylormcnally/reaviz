@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import { object, color, number, select } from '@storybook/addon-knobs';
 
@@ -9,7 +9,8 @@ import {
   multiDateData,
   singleDateData,
   largeDateData,
-  randomNumber
+  randomNumber,
+  longMultiDateData
 } from '../common/demo';
 import { LineChart, LineSeries } from './LineChart';
 import {
@@ -123,6 +124,21 @@ storiesOf('Charts/Line/Multi Series', module)
         />
       }
       data={multiDateData}
+    />
+  ))
+  .add('Large Dataset', () => (
+    <LineChart
+      width={550}
+      height={350}
+      series={
+        <LineSeries
+          type="grouped"
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(longMultiDateData.length)}
+        />
+      }
+      data={longMultiDateData}
     />
   ))
   .add('Stacked', () => (
@@ -295,12 +311,12 @@ class LiveUpdatingStory extends React.Component<any, any> {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <LineChart width={550} height={350} data={this.state.data} />
         <br />
         <button onClick={this.startData}>Start</button>
         <button onClick={this.stopData}>Stop</button>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }
