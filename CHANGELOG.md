@@ -1,3 +1,8 @@
+# 2.4.10
+- [Fix] Fix lots of options in line/area overflowing screen
+- [Fix] Include rdk overlay css by default
+- [Chore] Misc code cleanup and pure component transitions
+
 # 2.4.9
 - [Fix] Fix bar chart having dupe ids
 
