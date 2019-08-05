@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { formatValue } from '../../../utils/formatting';
 
 const rad2deg = (angle: number) => (angle * 180) / Math.PI;
@@ -17,7 +17,7 @@ export interface RadialAxisTickLabelProps {
   format?: (value: any, index: number) => any | string;
 }
 
-export class RadialAxisTickLabel extends Component<RadialAxisTickLabelProps> {
+export class RadialAxisTickLabel extends PureComponent<RadialAxisTickLabelProps> {
   static defaultProps: Partial<RadialAxisTickLabelProps> = {
     fill: '#71808d',
     fontSize: 11,

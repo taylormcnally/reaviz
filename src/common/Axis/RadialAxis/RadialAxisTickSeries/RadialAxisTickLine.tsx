@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 export interface RadialAxisTickLineProps {
   size?: number;
@@ -8,7 +8,7 @@ export interface RadialAxisTickLineProps {
   position: 'inside' | 'outside';
 }
 
-export class RadialAxisTickLine extends Component<RadialAxisTickLineProps> {
+export class RadialAxisTickLine extends PureComponent<RadialAxisTickLineProps> {
   static defaultProps: Partial<RadialAxisTickLineProps> = {
     stroke: 'rgba(113, 128, 141, .5)',
     size: 10,

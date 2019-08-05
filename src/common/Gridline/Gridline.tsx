@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as css from './Gridline.module.scss';
 
 export interface GridlineProps {
@@ -12,7 +12,7 @@ export interface GridlineProps {
   index: number;
 }
 
-export class Gridline extends Component<GridlineProps, {}> {
+export class Gridline extends PureComponent<GridlineProps> {
   static defaultProps: Partial<GridlineProps> = {
     strokeWidth: 1,
     direction: 'all',

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import classNames from 'classnames';
 import {
   isAxisVisible,
@@ -47,7 +47,7 @@ export interface BarChartProps extends ChartProps {
   brush: JSX.Element | null;
 }
 
-export class BarChart extends React.Component<BarChartProps, {}> {
+export class BarChart extends Component<BarChartProps> {
   static defaultProps: Partial<BarChartProps> = {
     data: [],
     xAxis: (

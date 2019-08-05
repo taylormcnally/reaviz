@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 export interface GradientStopProps {
   offset: number | string;
@@ -6,7 +6,7 @@ export interface GradientStopProps {
   color?: string;
 }
 
-export class GradientStop extends Component<GradientStopProps> {
+export class GradientStop extends PureComponent<GradientStopProps> {
   static defaultProps: Partial<GradientStopProps> = {
     stopOpacity: 1
   };

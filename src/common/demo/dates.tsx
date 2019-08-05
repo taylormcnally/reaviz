@@ -142,3 +142,12 @@ export const singleDateBigIntData = [
     data: bigInt(76129235932)
   }
 ];
+
+export const longMultiDateData =
+  range(25)
+  .map(i => ({
+    id: (i + 1).toString(),
+    key: `Series ${i}`,
+    data: generateData(15)
+  }))
+  .reverse();

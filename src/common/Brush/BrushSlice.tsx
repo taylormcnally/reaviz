@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import bind from 'memoize-bind';
 import { BrushHandle } from './BrushHandle';
 import * as css from './BrushSlice.module.scss';
@@ -21,7 +21,7 @@ interface BrushSliceState {
   isDragging: boolean;
 }
 
-export class BrushSlice extends Component<BrushSliceProps, BrushSliceState> {
+export class BrushSlice extends PureComponent<BrushSliceProps, BrushSliceState> {
   state: BrushSliceState = {
     isDragging: false
   };

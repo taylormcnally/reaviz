@@ -9,7 +9,8 @@ import {
   multiDateData,
   singleDateData,
   largeDateData,
-  randomNumber
+  randomNumber,
+  longMultiDateData
 } from '../common/demo';
 import { LineChart, LineSeries } from './LineChart';
 import {
@@ -123,6 +124,22 @@ storiesOf('Charts/Line/Multi Series', module)
         />
       }
       data={multiDateData}
+    />
+  ))
+  .add('Large Dataset', () => (
+    <StackedAreaChart
+      width={550}
+      height={350}
+      series={
+        <StackedAreaSeries
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(longMultiDateData.length)}
+          area={null}
+          line={<Line strokeWidth={3} />}
+        />
+      }
+      data={longMultiDateData}
     />
   ))
   .add('Stacked', () => (

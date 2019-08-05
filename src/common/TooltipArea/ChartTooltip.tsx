@@ -10,7 +10,7 @@ export interface ChartTooltipProps extends TooltipProps {
   metadata: any;
 }
 
-export class ChartTooltip extends Component<ChartTooltipProps, {}> {
+export class ChartTooltip extends Component<ChartTooltipProps> {
   static defaultProps: Partial<ChartTooltipProps> = {
     content: <TooltipTemplate />
   };
