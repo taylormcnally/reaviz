@@ -9,7 +9,8 @@ import {
   singleDateData,
   singleDateBigIntData,
   randomNumber,
-  nonZeroDateData
+  nonZeroDateData,
+  longMultiDateData
 } from '../common/demo';
 import { AreaChart } from './AreaChart';
 import { StackedNormalizedAreaChart } from './StackedNormalizedAreaChart';
@@ -158,6 +159,21 @@ storiesOf('Charts/Area/Multi Series', module)
             .colors(multiDateData.length)}
         />
       }
+    />
+  ))
+  .add('Large Dataset', () => (
+    <AreaChart
+      width={550}
+      height={350}
+      series={
+        <AreaSeries
+          type="grouped"
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(longMultiDateData.length)}
+        />
+      }
+      data={longMultiDateData}
     />
   ))
   .add('Live Updating', () => <LiveUpdatingStory />)

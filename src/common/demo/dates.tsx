@@ -146,8 +146,7 @@ export const singleDateBigIntData = [
 export const longMultiDateData =
   range(25)
   .map(i => ({
-    id: (i + 1).toString(),
-    key: `Series ${i}`,
-    data: generateData(15)
+    key: `Series-${i + 1}`,
+    data: generateData(15).map(({ id, ...rest }) => ({ ...rest }))
   }))
   .reverse();
