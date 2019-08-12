@@ -13,6 +13,7 @@ import { getTicks, getMaxTicks } from '../../utils/ticks';
 import { TimeInterval } from 'd3-time';
 import { CloneElement } from '../../utils/children';
 import { LinearAxisProps } from './LinearAxis';
+import ellipsize from 'ellipsize';
 
 export interface LinearAxisTickSeriesProps {
   height: number;
@@ -101,7 +102,8 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
     for (const tick of ticks) {
       const textLen = getTextWidth(
         tick.text,
-        `${label.fontSize} ${label.fontFamily}`
+        label.fontFamily,
+        label.fontSize
       );
 
       // cache the length of the text for overlap
@@ -116,7 +118,8 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
       if (label.rotation === true) {
         const maxAllowedLength = getTextWidth(
           '1234567890123456',
-          `${label.fontSize} ${label.fontFamily}`
+          label.fontFamily,
+          label.fontSize
         );
         const wordWidth = Math.min(maxTicksLength, maxAllowedLength);
         let baseWidth = wordWidth;
@@ -209,9 +212,10 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
       );
 
       if (!overlaps) {
-        if (angle && tick.text.length > 16) {
-          tick.text = tick.text.substring(0, 16) + '...';
+        if (angle) {
+          tick.text = ellipsize(tick.text, 16);
         }
+
         result.push(tick);
       }
 

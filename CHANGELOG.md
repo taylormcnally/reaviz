@@ -1,5 +1,6 @@
 # Master
 - [Fix] Make sankey node text ignore mouse events
+- [Fix] Improve font size calculations and ellipsis
 
 # 2.4.10
 - [Fix] Fix lots of options in line/area overflowing screen
