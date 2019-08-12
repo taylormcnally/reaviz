@@ -1,3 +1,6 @@
+# Master
+- [Fix] Make sankey node text ignore mouse events
+
 # 2.4.10
 - [Fix] Fix lots of options in line/area overflowing screen
 - [Fix] Include rdk overlay css by default
