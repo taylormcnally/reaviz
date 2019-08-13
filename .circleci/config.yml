@@ -78,8 +78,10 @@ jobs:
       - *checkout_code
       - *attach_workspace
       - run: npm run build-storybook
-      - store_artifacts:
-          path: ./storybook-static
+      - persist_to_workspace:
+          root: .
+          paths:
+            - storybook-static
 
   test:
     <<: *job_defaults
