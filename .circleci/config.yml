@@ -99,6 +99,8 @@ jobs:
     steps:
       - *checkout_code
       - *attach_workspace
+      - run: git config --global user.email "amcdaniel2@gmail.com"
+      - run: git config --global user.name "amcdnl"
       - run: npm run deploy-storybook
 
 workflows:
