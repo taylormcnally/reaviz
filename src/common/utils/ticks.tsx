@@ -99,7 +99,14 @@ export function getTicks(
       } else if (interval) {
         result = scale.ticks(interval);
       } else {
-        result = scale.ticks.apply(scale, [maxTicks]);
+        if (type === 'time') {
+          // If its time, we need to handle the time count
+          // manually because d3 does this odd rounding
+          result = scale.ticks();
+          result = reduceTicks(result, maxTicks);
+        } else {
+          result = scale.ticks(maxTicks);
+        }
       }
     } else {
       tickValues = scale.domain();
