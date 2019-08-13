@@ -120,5 +120,6 @@ workflows:
       - deploy_storybook:
           filters: *publish_branches_filter
           requires:
+            - test
             - build_package
             - build_storybook
