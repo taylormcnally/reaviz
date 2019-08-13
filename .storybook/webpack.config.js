@@ -1,5 +1,4 @@
 const { resolve } = require('path');
-const postcssFocusVisible = require('postcss-focus-visible');
 const autoprefixer = require('autoprefixer');
 
 const sassRegex = /\.(scss|sass)$/;
@@ -24,7 +23,10 @@ module.exports = async ({ config, mode }) => ({
         loaders: [
           {
             loader: require.resolve('@storybook/addon-storysource/loader'),
-            options: { parser: 'typescript' }
+            options: {
+              parser: 'typescript',
+              injectParameters: true
+            }
           }
         ],
         enforce: 'pre'
@@ -55,8 +57,7 @@ module.exports = async ({ config, mode }) => ({
               plugins: () => [
                 autoprefixer({
                   flexbox: 'no-2009'
-                }),
-                postcssFocusVisible()
+                })
               ]
             }
           },
@@ -68,10 +69,7 @@ module.exports = async ({ config, mode }) => ({
   plugins: config.plugins,
   resolve: {
     ...config.resolve,
-    modules: [
-      ...config.resolve.modules,
-      resolve(__dirname, '../src')
-    ],
-    extensions: [...config.resolve.extensions, '.ts', '.tsx'],
-  },
+    modules: [...config.resolve.modules, resolve(__dirname, '../src')],
+    extensions: [...config.resolve.extensions, '.ts', '.tsx']
+  }
 });
