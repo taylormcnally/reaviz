@@ -5,7 +5,7 @@
   "scripts": {
     "start": "start-storybook -p 9010",
     "build-storybook": "build-storybook",
-    "deploy-storybook": "storybook-to-ghpages --existing-output-dir=storybook-static",
+    "deploy-storybook": "gh-pages -d storybook-static -m '[ci skip]'",
     "build": "rollup -c",
     "test": "jest --env=jsdom",
     "pretty": "prettier --loglevel warn --write 'src/**/*.{ts,tsx,js,jsx}'"
@@ -100,9 +100,9 @@
     "@storybook/addon-info": "^5.1.11",
     "@storybook/addon-knobs": "^5.1.11",
     "@storybook/addon-storysource": "^5.1.11",
+    "gh-pages": "^2.1.1",
     "@storybook/addons": "^5.1.11",
     "@storybook/react": "^5.1.11",
-    "@storybook/storybook-deployer": "^2.8.1",
     "@types/classnames": "^2.2.9",
     "@types/d3-array": "^1.2.6",
     "@types/d3-geo": "^1.11.1",
@@ -116,7 +116,6 @@
     "@types/topojson-client": "^3.0.0",
     "autoprefixer": "^9.6.1",
     "babel-loader": "^8.0.6",
-    "gh-pages": "^2.1.1",
     "jest": "^24.8.0",
     "jest-junit": "^6.4.0",
     "node-sass": "^4.12.0",
@@ -173,10 +172,5 @@
       "js",
       "json"
     ]
-  },
-  "storybook-deployer": {
-    "gitUsername": "amcdnl",
-    "gitEmail": "amcdaniel2@gmail.com",
-    "commitMessage": "Deploy Storybook [skip ci]"
   }
 }
