@@ -1,5 +1,29 @@
 import { TimeInterval } from 'd3-time';
 
+const ONE_DAY = 60 * 60 * 24;
+const DURATION_TICK_STEPS = [
+  0.001, // 1 ms
+  0.005, // 5 ms
+  0.01, // 10 ms
+  0.05, // 50 ms
+  0.1, // 100 ms
+  0.5, // 500 ms
+  1, // 1 s
+  5, // 5 s
+  10, // 10 s
+  15, // 15 s
+  60, // 1 m
+  60 * 15, // 15 m
+  60 * 30, // 30 m
+  60 * 60, // 1 h
+  60 * 60 * 2, // 2 h
+  60 * 60 * 4, // 4 h
+  60 * 60 * 6, // 6 h
+  60 * 60 * 8, // 8 h
+  60 * 60 * 12, // 12 h
+  ONE_DAY // 24 h
+];
+
 /**
  * Reduce the ticks to the max number of ticks.
  */
@@ -27,30 +51,9 @@ export function getMaxTicks(size: number, dimension: number) {
   return Math.floor(dimension / tickWidth);
 }
 
-const ONE_DAY = 60 * 60 * 24;
-const DURATION_TICK_STEPS = [
-  0.001, // 1 ms
-  0.005, // 5 ms
-  0.01, // 10 ms
-  0.05, // 50 ms
-  0.1, // 100 ms
-  0.5, // 500 ms
-  1, // 1 s
-  5, // 5 s
-  10, // 10 s
-  15, // 15 s
-  60, // 1 m
-  60 * 15, // 15 m
-  60 * 30, // 30 m
-  60 * 60, // 1 h
-  60 * 60 * 2, // 2 h
-  60 * 60 * 4, // 4 h
-  60 * 60 * 6, // 6 h
-  60 * 60 * 8, // 8 h
-  60 * 60 * 12, // 12 h
-  ONE_DAY // 24 h
-];
-
+/**
+ * Formats the ticks in a duration format.
+ */
 export function getDurationTicks(domain, maxTicks) {
   const domainWidth = domain[1] - domain[0];
   let tickStep: number | null = null;
