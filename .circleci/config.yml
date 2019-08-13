@@ -77,7 +77,6 @@ jobs:
     steps:
       - *checkout_code
       - *attach_workspace
-      - *npm_install
       - run: npm run build-storybook
       - store_artifacts:
           path: ./storybook-static
