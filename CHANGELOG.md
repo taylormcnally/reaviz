@@ -1,6 +1,9 @@
 # Master
+- [Fix] Improve date axis scaling
+- [Fix] Remove un-needed post-processing tick code
 - [Fix] Make sankey node text ignore mouse events
 - [Fix] Improve font size calculations and ellipsis
+- [Chore] Update depedencies
 
 # 2.4.10
 - [Fix] Fix lots of options in line/area overflowing screen

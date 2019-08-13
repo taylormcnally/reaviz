@@ -33,9 +33,9 @@ var_6: &save_cache
     paths:
       - "node_modules"
 
-# Ensure depedencies installed
-var_7: &npm_install
-  run: npm install
+var_7: &attach_workspace
+  attach_workspace:
+    at: .
 
 # Publish branches
 var_8: &publish_branches_filter
@@ -50,13 +50,23 @@ var_9: &ignore_branch_filter
       - "gh-pages"
 
 jobs:
+  prepare:
+    <<: *job_defaults
+    steps:
+      - *checkout_code
+      - *restore_cache
+      - run: npm install
+      - *save_cache
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
 
   build_package:
     <<: *job_defaults
     steps:
       - *checkout_code
-      - *restore_cache
-      - *npm_install
+      - *attach_workspace
       - run: npm run build
       - store_artifacts:
           path: ./dist
@@ -66,7 +76,7 @@ jobs:
     <<: *job_defaults
     steps:
       - *checkout_code
-      - *restore_cache
+      - *attach_workspace
       - *npm_install
       - run: npm run build-storybook
       - store_artifacts:
@@ -76,20 +86,30 @@ jobs:
     <<: *job_defaults
     steps:
       - *checkout_code
-      - *restore_cache
-      - *npm_install
+      - *attach_workspace
       - run: npm test -- --runInBand --no-cache --coverage
       - store_test_results:
           path: ./coverage
       - store_artifacts:
           path: ./coverage
 
+  deploy_storybook:
+    <<: *job_defaults
+    steps:
+      - *checkout_code
+      - *attach_workspace
+      - run: npm run deploy-storybook
+
 workflows:
   version: 2
-  build-test:
+  build-test-deploy:
     jobs:
+      - prepare:
+          filters: *ignore_branch_filter
       - build_package:
           filters: *ignore_branch_filter
+          requires:
+            - prepare
       - test:
           filters: *ignore_branch_filter
           requires:
@@ -97,4 +117,9 @@ workflows:
       - build_storybook:
           filters: *ignore_branch_filter
           requires:
+            - prepare
+      - deploy_storybook:
+          filters: *publish_branches_filter
+          requires:
             - build_package
+            - build_storybook
