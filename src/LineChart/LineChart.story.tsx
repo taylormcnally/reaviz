@@ -4,6 +4,7 @@ import { timeDay } from 'd3-time';
 import React, { Fragment } from 'react';
 import moment from 'moment';
 import { object, color, number, select } from '@storybook/addon-knobs';
+import { get } from 'lodash-es';
 
 import {
   multiDateData,
@@ -118,6 +119,34 @@ storiesOf('Charts/Line/Multi Series', module)
       series={
         <LineSeries
           type="grouped"
+          colorScheme={chroma
+            .scale(['27efb5', '00bfff'])
+            .colors(multiDateData.length)}
+        />
+      }
+      data={multiDateData}
+    />
+  ))
+  .add('Custom Line Styles', () => (
+    <LineChart
+      width={550}
+      height={350}
+      series={
+        <LineSeries
+          type="grouped"
+          line={
+            <Line
+              strokeWidth={3}
+              style={(data) => {
+                if(get(data, '[0].key') === 'Threat Intel') {
+                  console.log('Style callback...', data);
+                  return {
+                    'strokeDasharray': '5'
+                  };
+                }
+              }}
+            />
+          }
           colorScheme={chroma
             .scale(['27efb5', '00bfff'])
             .colors(multiDateData.length)}

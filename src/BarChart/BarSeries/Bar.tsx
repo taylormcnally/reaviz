@@ -10,8 +10,9 @@ import * as css from './Bar.module.scss';
 import { PosedBar } from './PosedBar';
 import { CloneElement } from '../../common/utils/children';
 import { Mask, MaskProps } from '../../common/masks';
+import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
 
-export interface BarProps {
+export type BarProps = {
   xScale: any;
   xScale1: any;
   data: ChartInternalShallowDataShape;
@@ -35,7 +36,7 @@ export interface BarProps {
   mask: JSX.Element | null;
   tooltip: JSX.Element | null;
   layout: Direction;
-}
+} & PropFunctionTypes;
 
 interface BarState {
   active?: boolean;
@@ -270,19 +271,20 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const { rounded, cursor, barCount, animated, layout, mask, id } = this.props;
+    const { rounded, cursor, barCount, animated, layout, mask, id, data } = this.props;
     const maskPath = mask ? `url(#mask-${id})` : '';
     const fill = this.getFill(currentColorShade);
     const enterProps = coords;
     const exitProps = this.getExit(coords);
     const isVertical = this.getIsVertical();
+    const extras = constructFunctionProps(this.props, data);
 
     return (
       <PosedBar
         pose="enter"
         poseKey={`${coords.x}-${coords.y}-${coords.height}-${coords.width}`}
         ref={this.rect}
-        style={{ cursor }}
+        style={{ ...extras.style, cursor }}
         fill={fill}
         mask={maskPath}
         onMouseEnter={bind(this.onMouseEnter, this)}
@@ -293,7 +295,7 @@ export class Bar extends Component<BarProps, BarState> {
           [css.rounded]: rounded,
           [css.vertical]: isVertical,
           [css.horizontal]: !isVertical
-        })}
+        }, extras.className)}
         enterProps={enterProps}
         exitProps={exitProps}
         index={index}
@@ -365,7 +367,6 @@ export class Bar extends Component<BarProps, BarState> {
               id={`mask-pattern-${id}`}
               fill={stroke}
             />
-
           </Fragment>
         )}
         {gradient && (

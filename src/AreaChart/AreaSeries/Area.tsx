@@ -12,8 +12,9 @@ import {
 } from '../../common/data';
 import { PosedArea } from './PosedArea';
 import { CloneElement } from '../../common/utils/children';
+import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
 
-export interface AreaProps {
+export type AreaProps = {
   id: string;
   data: ChartInternalDataShape[];
   width: number;
@@ -25,7 +26,7 @@ export interface AreaProps {
   animated: boolean;
   mask: JSX.Element | null;
   gradient: JSX.Element | null;
-}
+} & PropFunctionTypes;
 
 export class Area extends Component<AreaProps, {}> {
   static defaultProps: Partial<AreaProps> = {
@@ -98,14 +99,16 @@ export class Area extends Component<AreaProps, {}> {
   }
 
   renderArea(coords: ChartInternalShallowDataShape[]) {
-    const { mask, index, id, animated } = this.props;
+    const { mask, index, id, animated, data } = this.props;
     const fill = this.getFill();
     const maskPath = mask ? `url(#mask-${id})` : '';
     const enterProps = this.getAreaEnter(coords);
     const exitProps = this.getAreaExit();
+    const extras = constructFunctionProps(this.props, data);
 
     return (
       <PosedArea
+        {...extras}
         pose="enter"
         poseKey={enterProps.d}
         animated={animated}

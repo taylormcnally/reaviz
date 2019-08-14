@@ -9,9 +9,10 @@ import {
   ChartInternalShallowDataShape
 } from '../../common/data';
 import { calculateShowStroke } from '../../common/utils/stroke';
+import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
 import { PosedLine } from './PosedLine';
 
-export interface LineProps {
+export type LineProps = {
   data: ChartInternalDataShape[];
   width: number;
   color: any;
@@ -23,12 +24,12 @@ export interface LineProps {
   interpolation: InterpolationTypes;
   animated: boolean;
   hasArea: boolean;
-}
+} & PropFunctionTypes;
 
 export class Line extends PureComponent<LineProps> {
   static defaultProps: Partial<LineProps> = {
     showZeroStroke: true,
-    strokeWidth: 0
+    strokeWidth: 3
   };
 
   ghostPathRef = createRef<SVGPathElement>();
@@ -95,10 +96,14 @@ export class Line extends PureComponent<LineProps> {
     const stroke = color(data, index);
     const enterProps = this.getLineEnter(coords);
     const exitProps = this.getLineExit();
+    const extras = constructFunctionProps(this.props, data);
+
+    console.log('here', extras);
 
     return (
       <Fragment>
         <PosedLine
+          {...extras}
           pose="enter"
           poseKey={enterProps.d}
           pointerEvents="none"
