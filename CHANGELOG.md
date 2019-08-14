@@ -1,3 +1,6 @@
+# 2.6.0
+- [Improvement] Add ability to have style/className callbacks
+
 # 2.5.0
 - [Improvement] Improve date axis scaling
 - [Fix] Remove un-needed post-processing tick code
