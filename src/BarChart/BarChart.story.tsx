@@ -65,6 +65,31 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
     },
     { options: { showAddonPanel: true } }
   )
+  .add('Custom Style', () => (
+    <BarChart
+      width={350}
+      height={250}
+      data={categoryData}
+      series={
+        <BarSeries
+          bar={
+            <Bar
+              gradient={null}
+              rounded={false}
+              style={(data) => {
+                if(data.key === 'DLP') {
+                  console.log('Style callback...', data);
+                  return {
+                    'fill': 'blue'
+                  };
+                }
+              }}
+            />
+          }
+        />
+      }
+    />
+  ))
   .add('Large Dataset', () => (
     <BarChart
       width={350}

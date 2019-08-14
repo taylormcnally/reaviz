@@ -21,7 +21,7 @@ import { ChartBrush } from './ChartBrush';
 import { ScatterPlot, ScatterSeries, ScatterPoint } from '../../ScatterPlot';
 import { timeDay } from 'd3-time';
 import { BarChart, BarSeries, Bar } from '../../BarChart';
-import { range } from 'lodash-es';
+import { range } from 'd3-array';
 import { Tooltip } from '../../common/TooltipArea';
 import { GridlineSeries, Gridline, GridStripe } from '../Gridline';
 import { ChartZoomPan } from '../ZoomPan';
