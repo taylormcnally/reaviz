@@ -98,8 +98,6 @@ export class Line extends PureComponent<LineProps> {
     const exitProps = this.getLineExit();
     const extras = constructFunctionProps(this.props, data);
 
-    console.log('here', extras);
-
     return (
       <Fragment>
         <PosedLine
