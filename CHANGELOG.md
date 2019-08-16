@@ -1,3 +1,6 @@
+# 2.6.3
+- [Fix] Fix sankey and radial charts color regression #77
+
 # 2.6.2
 - [Fix] Fix regression with area chart in 2.6.1 color fn
 
