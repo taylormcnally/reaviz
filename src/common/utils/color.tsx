@@ -1,18 +1,25 @@
 import { scaleOrdinal } from 'd3-scale';
-import { range } from 'd3-array';
+import { maxIndex } from 'd3-array';
 
 export const sequentialScheme = ['#3ec4e8'];
 
 /**
  * Get a color given a range.
  */
-export function getColor(colorScheme: string[], data: any[]) {
-  const isMultiSeries = data[0].hasOwnProperty('data');
-  let dataRange;
+export const getColor = (colorScheme: string[], data: any[], attr = 'key', isMultiSeries = false) => {
   if(isMultiSeries) {
-    dataRange = range(data[0]['data'].length).map(r => r.toString());
-  } else {
-    dataRange = range(data.length).map(r => r.toString());
+    const maxIdx = maxIndex(data, d => d.data.length);
+    const maxVal = data[maxIdx];
+    data = maxVal.data;
   }
+
+  const dataRange = data.map((r, i) => {
+    if (r && r[attr] !== undefined) {
+      return r[attr];
+    }
+
+    return i;
+  });
+
   return scaleOrdinal(colorScheme).domain(dataRange);
-}
+};
