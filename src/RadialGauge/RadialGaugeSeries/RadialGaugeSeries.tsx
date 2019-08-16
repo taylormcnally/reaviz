@@ -39,9 +39,10 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
 
   getColor(point, index) {
     const { colorScheme, data } = this.props;
+    const key = point.key;
 
     return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(index)
+      ? getColor(colorScheme, data)(key.toString())
       : colorScheme(point, index);
   }
 
