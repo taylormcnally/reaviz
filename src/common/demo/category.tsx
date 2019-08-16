@@ -95,12 +95,20 @@ export const multiCategory = [
     key: 'Discovery',
     data: [
       {
+        key: 'XML',
+        data: 100
+      },
+      {
+        key: 'JSON',
+        data: 34
+      },
+      {
         key: 'HTTPS',
-        data: 190
+        data: 22
       },
       {
         key: 'SSH',
-        data: 100
+        data: 111
       }
     ]
   },
