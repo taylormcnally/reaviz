@@ -1,3 +1,6 @@
+# 2.6.2
+- [Fix] Fix regression with area chart in 2.6.1 color fn
+
 # 2.6.1
 - [Fix] Make multi-series color works correctly
 = [Fix] Fix horz aligned legend spacing
