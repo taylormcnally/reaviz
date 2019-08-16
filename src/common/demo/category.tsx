@@ -96,19 +96,19 @@ export const multiCategory = [
     data: [
       {
         key: 'XML',
-        data: 188
+        data: 100
       },
       {
         key: 'JSON',
-        data: 135
+        data: 34
       },
       {
         key: 'HTTPS',
-        data: 190
+        data: 22
       },
       {
         key: 'SSH',
-        data: 100
+        data: 111
       }
     ]
   },
