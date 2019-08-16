@@ -1,3 +1,8 @@
+# 2.6.1
+- [Fix] Make multi-series color works correctly
+= [Fix] Fix horz aligned legend spacing
+- [Chore] Remove unneeded depedencies
+
 # 2.6.0
 - [Improvement] Add ability to have style/className callbacks
 
