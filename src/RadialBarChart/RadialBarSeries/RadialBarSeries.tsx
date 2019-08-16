@@ -26,9 +26,10 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
 
   getColor(point: ChartInternalShallowDataShape, index: number) {
     const { colorScheme, data } = this.props;
+    const key = point.key;
 
     return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(index as any)
+      ? getColor(colorScheme, data)(key.toString())
       : colorScheme(point, index);
   }
 
