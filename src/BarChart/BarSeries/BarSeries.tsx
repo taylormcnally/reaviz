@@ -92,7 +92,8 @@ export class BarSeries extends Component<BarSeriesProps> {
       padding,
       animated,
       isCategorical,
-      layout
+      layout,
+      id
     } = this.props;
 
     const isVertical = layout === 'vertical';
@@ -117,7 +118,7 @@ export class BarSeries extends Component<BarSeriesProps> {
       <PoseSVGGElement key={key}>
         <CloneElement<BarProps>
           element={bar}
-          id={`bar-${groupIndex}-${barIndex}`}
+          id={`${id}-bar-${groupIndex}-${barIndex}`}
           animated={animated}
           xScale={xScale}
           xScale1={xScale1}

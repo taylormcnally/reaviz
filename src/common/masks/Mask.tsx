@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 export interface MaskProps {
   id?: string;
   fill?: string;
 }
 
-export class Mask extends Component<MaskProps> {
+export class Mask extends PureComponent<MaskProps> {
   render() {
     const { id, fill } = this.props;
 

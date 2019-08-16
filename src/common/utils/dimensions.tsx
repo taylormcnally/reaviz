@@ -24,7 +24,10 @@ export type Margins =
   | [number, number, number, number]
   | number;
 
-const parseMargins = (margins?: Margins) => {
+/**
+ * Given a margins object, returns the top/left/right/bottom positions.
+ */
+function parseMargins(margins?: Margins) {
   let top = 0;
   let right = 0;
   let bottom = 0;

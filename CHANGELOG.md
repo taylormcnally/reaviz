@@ -1,3 +1,33 @@
+# 2.6.0
+- [Improvement] Add ability to have style/className callbacks
+
+# 2.5.0
+- [Improvement] Improve date axis scaling
+- [Fix] Remove un-needed post-processing tick code
+- [Fix] Make sankey node text ignore mouse events
+- [Fix] Improve font size calculations and ellipsis
+- [Chore] Update depedencies
+- [Chore] Setup auto deploys on circle
+
+# 2.4.10
+- [Fix] Fix lots of options in line/area overflowing screen
+- [Fix] Include rdk overlay css by default
+- [Chore] Misc code cleanup and pure component transitions
+
+# 2.4.9
+- [Fix] Fix bar chart having dupe ids
+
+# 2.4.8
+- [Fix] Fix bar chart brush always enabled
+
+# 2.4.7
+- [Fix] Fix pie chart line overlap with slice
+- [Fix] Improve spacing on pie chart labels
+
+# 2.4.6
+- [Fix] Fix pie chart label overlap
+- [Fix] Fix tooltip lag appear delay
+
 # 2.4.5
 - [Fix] Timeout null ref issues on move/brush/pan/zoom
 

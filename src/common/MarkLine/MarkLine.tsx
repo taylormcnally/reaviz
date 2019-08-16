@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as css from './MarkLine.module.scss';
 
 export interface MarkLineProps {
@@ -8,7 +8,7 @@ export interface MarkLineProps {
   strokeWidth: number;
 }
 
-export class MarkLine extends Component<MarkLineProps, {}> {
+export class MarkLine extends PureComponent<MarkLineProps> {
   static defaultProps: Partial<MarkLineProps> = {
     strokeWidth: 1,
     strokeColor: '#eee'

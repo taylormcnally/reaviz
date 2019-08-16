@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import { TooltipAreaEvent } from './TooltipAreaEvent';
 import { Placement } from 'rdk';
 import {
@@ -46,7 +46,7 @@ interface TooltipDataShape {
   data?: ChartDataTypes | Array<ChartDataTypes | ChartInternalShallowDataShape>;
 }
 
-export class TooltipArea extends React.Component<
+export class TooltipArea extends Component<
   TooltipAreaProps,
   TooltipAreaState
 > {

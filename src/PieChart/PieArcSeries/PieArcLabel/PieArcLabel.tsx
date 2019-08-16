@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { formatValue } from '../../../common/utils/formatting';
 import { PosedArcLabelGroup } from './PosedArcLabelGroup';
 
 export interface PieArcLabelProps {
   data: any;
   innerArc: any;
-  outerArc: any;
-  outerRadius: number;
   show: boolean;
+  outerArc: any;
   format?: (v) => any;
   fontFill: string;
   fontSize: number;
   fontFamily: string;
   lineStroke: string;
   padding: string;
+  position: [number, number];
 }
 
-const mid = ({ startAngle, endAngle }) =>
-  Math.PI > startAngle + (endAngle - startAngle) / 2;
+const getTextAnchor = ({ startAngle, endAngle }) =>
+  ((startAngle + (endAngle - startAngle) / 2) < Math.PI ? 'start' : 'end');
 
-export class PieArcLabel extends Component<PieArcLabelProps, {}> {
+export class PieArcLabel extends PureComponent<PieArcLabelProps> {
   static defaultProps: Partial<PieArcLabelProps> = {
     show: false,
     format: undefined,
@@ -32,42 +32,52 @@ export class PieArcLabel extends Component<PieArcLabelProps, {}> {
 
   render() {
     const {
-      outerArc,
       innerArc,
-      outerRadius,
       data,
       lineStroke,
       padding,
       fontSize,
       fontFill,
       format,
-      fontFamily
+      fontFamily,
+      position
     } = this.props;
+
     const text = format ? format(data.data) : formatValue(data.data.key);
-    const midPoint = mid(data);
-    const textAnchor = midPoint ? 'start' : 'end';
-    const linePosition = outerArc.centroid(data);
-    const textPosition = midPoint
-      ? `${linePosition[0] + outerRadius * 0.5},${linePosition[1]}`
-      : `${linePosition[0] - outerRadius * 0.5},${linePosition[1]}`;
+    const textAnchor = getTextAnchor(data);
+    const [posX, posY] = position;
+
+    const innerLinePos = innerArc.centroid(data);
+    let scale = posY / innerLinePos[1];
+    if (posY === 0 || innerLinePos[1] === 0) {
+      scale = 1;
+    }
+
+    const outerPos = [
+      scale * innerLinePos[0],
+      scale * innerLinePos[1]
+    ];
 
     return (
       <PosedArcLabelGroup>
+        <title>{text}</title>
         <text
           dy={padding}
           fill={fontFill}
           fontSize={fontSize}
           fontFamily={fontFamily}
-          transform={`translate(${textPosition})`}
           textAnchor={textAnchor}
-          style={{ shapeRendering: 'crispEdges' }}
+          style={{
+            shapeRendering: 'crispEdges',
+            transform: `translate3d(${posX}px,${posY}px, 0)`
+          }}
         >
           {text}
         </text>
         <polyline
           fill="none"
           stroke={lineStroke}
-          points={`${innerArc.centroid(data)},${linePosition},${textPosition}`}
+          points={`${innerLinePos},${outerPos},${posX} ${posY}`}
         />
       </PosedArcLabelGroup>
     );

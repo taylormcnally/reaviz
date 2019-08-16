@@ -1,15 +1,17 @@
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import { object, color, number, select } from '@storybook/addon-knobs';
+import { get } from 'lodash-es';
 
 import {
   multiDateData,
   singleDateData,
   largeDateData,
-  randomNumber
+  randomNumber,
+  longMultiDateData
 } from '../common/demo';
 import { LineChart, LineSeries } from './LineChart';
 import {
@@ -116,12 +118,56 @@ storiesOf('Charts/Line/Multi Series', module)
       height={350}
       series={
         <LineSeries
+          type="grouped"
           colorScheme={chroma
             .scale(['27efb5', '00bfff'])
             .colors(multiDateData.length)}
         />
       }
       data={multiDateData}
+    />
+  ))
+  .add('Custom Line Styles', () => (
+    <LineChart
+      width={550}
+      height={350}
+      series={
+        <LineSeries
+          type="grouped"
+          line={
+            <Line
+              strokeWidth={3}
+              style={(data) => {
+                if(get(data, '[0].key') === 'Threat Intel') {
+                  console.log('Style callback...', data);
+                  return {
+                    'strokeDasharray': '5'
+                  };
+                }
+              }}
+            />
+          }
+          colorScheme={chroma
+            .scale(['27efb5', '00bfff'])
+            .colors(multiDateData.length)}
+        />
+      }
+      data={multiDateData}
+    />
+  ))
+  .add('Large Dataset', () => (
+    <LineChart
+      width={550}
+      height={350}
+      series={
+        <LineSeries
+          type="grouped"
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(longMultiDateData.length)}
+        />
+      }
+      data={longMultiDateData}
     />
   ))
   .add('Stacked', () => (
@@ -294,12 +340,12 @@ class LiveUpdatingStory extends React.Component<any, any> {
 
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <LineChart width={550} height={350} data={this.state.data} />
         <br />
         <button onClick={this.startData}>Start</button>
         <button onClick={this.stopData}>Stop</button>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

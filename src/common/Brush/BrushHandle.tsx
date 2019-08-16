@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import bind from 'memoize-bind';
 import classNames from 'classnames';
 import { range } from 'd3-array';
@@ -14,7 +14,7 @@ interface BrushHandleState {
   isDragging: boolean;
 }
 
-export class BrushHandle extends Component<BrushHandleProps, BrushHandleState> {
+export class BrushHandle extends PureComponent<BrushHandleProps, BrushHandleState> {
   state: BrushHandleState = {
     isDragging: false
   };

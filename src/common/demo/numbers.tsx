@@ -8,3 +8,11 @@ export const numberData = range(50)
     data: randomNumber(1, 10)
   }))
   .sort((a, b) => (a > b ? -1 : a < b ? 1 : 0));
+
+export const browserData = [
+  { key: 'Chrome', data: 39360 },
+  { key: 'Firefox', data: 2228 },
+  { key: 'Internet Explorer', data: 100 },
+  { key: 'Safari', data: 91 },
+  { key: 'Microsoft Edge', data: 2636 }
+];

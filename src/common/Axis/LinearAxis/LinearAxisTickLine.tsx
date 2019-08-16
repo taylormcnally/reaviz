@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 export interface LinearAxisTickLineProps {
   height: number;
@@ -11,7 +11,7 @@ export interface LinearAxisTickLineProps {
   className?: any;
 }
 
-export class LinearAxisTickLine extends Component<LinearAxisTickLineProps> {
+export class LinearAxisTickLine extends PureComponent<LinearAxisTickLineProps> {
   static defaultProps: Partial<LinearAxisTickLineProps> = {
     strokeColor: '#8F979F',
     strokeWidth: 1,

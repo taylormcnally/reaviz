@@ -8,11 +8,13 @@ import {
   LinearAxisTickLineProps
 } from './LinearAxisTickLine';
 import { formatValue } from '../../utils/formatting';
-import { getTextWidth } from '../../utils/width';
 import { getTicks, getMaxTicks } from '../../utils/ticks';
 import { TimeInterval } from 'd3-time';
 import { CloneElement } from '../../utils/children';
 import { LinearAxisProps } from './LinearAxis';
+import ellipsize from 'ellipsize';
+import { max } from 'd3-array';
+import calculateSize from 'calculate-size';
 
 export interface LinearAxisTickSeriesProps {
   height: number;
@@ -30,7 +32,10 @@ export interface LinearAxisTickSeriesProps {
 interface ProcessedTick {
   text: string;
   fullText: string;
-  position: [number, number];
+  x: number;
+  y: number;
+  height: number;
+  width: number;
   half: 'start' | 'end' | 'center';
 }
 
@@ -62,13 +67,13 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
   /**
    * Gets the x/y position for a given tick.
    */
-  getPosition(scaledTick: number): [number, number] {
+  getPosition(scaledTick: number) {
     const { orientation } = this.props;
 
     if (orientation === 'horizontal') {
-      return [scaledTick, 0];
+      return { x: scaledTick, y: 0 };
     } else {
-      return [0, scaledTick];
+      return { x: 0, y: scaledTick };
     }
   }
 
@@ -87,51 +92,31 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
    */
   getRotationAngle(
     ticks: any[]
-  ): { angle: number; textLengths?: { [key: string]: number } } {
+  ): number {
     if (!this.props.label) {
-      return { angle: 0 };
+      return 0;
     }
 
     const label = this.props.label.props;
     const dimension = this.getDimension();
+    const maxTicksLength = max(ticks, tick => tick.width);
     let angle = 0;
-    let maxTicksLength = 0;
-    const textLengths = {};
-
-    for (const tick of ticks) {
-      const textLen = getTextWidth(
-        tick.text,
-        `${label.fontSize} ${label.fontFamily}`
-      );
-
-      // cache the length of the text for overlap
-      // detection later when post-processing
-      textLengths[tick.text] = textLen;
-
-      // Determine the max length for rotation measuring
-      maxTicksLength = textLen > maxTicksLength ? textLen : maxTicksLength;
-    }
 
     if (label.rotation) {
       if (label.rotation === true) {
-        const maxAllowedLength = getTextWidth(
-          '1234567890123456',
-          `${label.fontSize} ${label.fontFamily}`
-        );
-        const wordWidth = Math.min(maxTicksLength, maxAllowedLength);
-        let baseWidth = wordWidth;
+        let baseWidth = maxTicksLength;
         const maxBaseWidth = Math.floor(dimension / ticks.length);
 
         while (baseWidth > maxBaseWidth && angle > -90) {
           angle -= 30;
-          baseWidth = Math.cos(angle * (Math.PI / 180)) * wordWidth;
+          baseWidth = Math.cos(angle * (Math.PI / 180)) * maxTicksLength;
         }
-      } else if (label.rotation) {
+      } else {
         angle = label.rotation;
       }
     }
 
-    return { angle, textLengths };
+    return angle;
   }
 
   /**
@@ -154,121 +139,51 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
    * the text and position.
    */
   getTicks(): ProcessedTick[] {
-    const { scale, tickSize, tickValues, interval, axis } = this.props;
+    const { scale, tickSize, tickValues, interval, axis, label } = this.props;
     const dimension = this.getDimension();
     const maxTicks = getMaxTicks(tickSize, dimension);
     const ticks = getTicks(scale, tickValues, axis.type, maxTicks, interval);
     const adjustedScale = this.getAdjustedScale();
     const format = this.getLabelFormat();
-    const result: ProcessedTick[] = [];
     const midpoint = dimension / 2;
 
-    for (const tick of ticks) {
-      const text = format(tick);
+    return ticks.map(tick => {
+      const fullText = format(tick);
       const scaledTick = adjustedScale(tick);
+      const position = this.getPosition(scaledTick);
+      const text = ellipsize(fullText, 18);
+      const size = label ?
+        calculateSize(text, {
+          font: label.props.fontFamily,
+          fontSize: `${label.props.fontSize}px`
+        }) : {};
 
-      result.push({
+      return {
+        ...position,
+        ...size,
         text,
-        fullText: text,
-        position: this.getPosition(scaledTick),
+        fullText,
         half:
           scaledTick === midpoint
             ? 'center'
             : scaledTick < midpoint
             ? 'start'
             : 'end'
-      });
-    }
-
-    return result;
-  }
-
-  /**
-   * Post processes the ticks to:
-   *
-   * - Ellipsis the labels if they are exceed a given length
-   * - Filter out any ticks that might overlap each other.
-   *
-   */
-  postProcessTicks(
-    ticks: ProcessedTick[],
-    angle: number,
-    textLengths?: { [key: string]: number }
-  ) {
-    const result: ProcessedTick[] = [];
-
-    let i = 0;
-    for (const tick of ticks) {
-      const prevTick = result[result.length - 1];
-      const overlaps = this.getTickOverlap(
-        i,
-        ticks,
-        angle,
-        textLengths,
-        prevTick
-      );
-
-      if (!overlaps) {
-        if (angle && tick.text.length > 16) {
-          tick.text = tick.text.substring(0, 16) + '...';
-        }
-        result.push(tick);
-      }
-
-      i++;
-    }
-
-    return result;
-  }
-
-  /**
-   * Calculates whether the current tick will overlap with
-   * the next tick.
-   */
-  getTickOverlap(
-    index: number,
-    ticks: ProcessedTick[],
-    angle: number,
-    textLengths: { [key: string]: number } | undefined,
-    prevTick: ProcessedTick
-  ) {
-    if (index === 0) {
-      return false;
-    }
-
-    const { orientation } = this.props;
-    const current = ticks[index];
-    const [curX, curY] = current.position;
-    const [prevX, prevY] = prevTick.position;
-    const padding = 10;
-
-    // Determine whether the previous item and the next one will overlap
-    let curLength = 10;
-    let prevLength = 10;
-    if (!angle && textLengths && textLengths[current.text]) {
-      curLength = textLengths[current.text];
-      prevLength = textLengths[prevTick.text];
-    }
-
-    if (orientation === 'vertical') {
-      return curY - curLength / 2 - padding > prevY + prevLength / 2;
-    } else {
-      return curX - curLength / 2 - padding < prevX + prevLength / 2;
-    }
+      };
+    });
   }
 
   render() {
     const { label, line, height, width, orientation } = this.props;
     const ticks = this.getTicks();
-    const { angle, textLengths } = this.getRotationAngle(ticks);
-    const formattedTicks = this.postProcessTicks(ticks, angle, textLengths);
+    const angle = this.getRotationAngle(ticks);
 
     return (
       <Fragment>
-        {formattedTicks.map((tick, i) => (
+        {ticks.map((tick, i) => (
           <g
             key={i}
-            transform={`translate(${tick.position[0]}, ${tick.position[1]})`}
+            transform={`translate(${tick.x}, ${tick.y})`}
           >
             {line && (
               <CloneElement<LinearAxisTickLineProps>

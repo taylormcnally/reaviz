@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { MaskProps } from './Mask';
 
 interface StripesProps extends MaskProps {
@@ -6,7 +6,7 @@ interface StripesProps extends MaskProps {
   fill?: string;
 }
 
-export class Stripes extends Component<StripesProps> {
+export class Stripes extends PureComponent<StripesProps> {
   static defaultProps: Partial<StripesProps> = {};
 
   render() {

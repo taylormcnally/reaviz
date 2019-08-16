@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as css from './DiscreteLegendSymbol.module.scss';
 import classNames from 'classnames';
 
@@ -7,9 +7,8 @@ export interface DiscreteLegendSymbolProps {
   className?: any;
 }
 
-export class DiscreteLegendSymbol extends Component<
-  DiscreteLegendSymbolProps,
-  {}
+export class DiscreteLegendSymbol extends PureComponent<
+  DiscreteLegendSymbolProps
 > {
   static defaultProps: Partial<DiscreteLegendSymbolProps> = {};
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as css from './GridStripe.module.scss';
 
 export interface GridStripeProps {
@@ -12,7 +12,7 @@ export interface GridStripeProps {
   index: number;
 }
 
-export class GridStripe extends Component<GridStripeProps, {}> {
+export class GridStripe extends PureComponent<GridStripeProps> {
   static defaultProps: Partial<GridStripeProps> = {
     fill: '#2a3138'
   };

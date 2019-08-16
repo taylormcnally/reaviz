@@ -7,8 +7,9 @@ import { PosedGroupTransform } from '../../common/utils/animations';
 import classNames from 'classnames';
 import * as css from './ScatterPoint.module.scss';
 import { CloneElement } from '../../common/utils/children';
+import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
 
-export interface ScatterPointProps {
+export type ScatterPointProps = {
   symbol: (data: ChartInternalShallowDataShape) => ReactNode;
   active?: boolean;
   size?: ((data: ChartInternalShallowDataShape) => number) | number;
@@ -20,13 +21,12 @@ export interface ScatterPointProps {
   animated: boolean;
   index: number;
   tooltip: JSX.Element | null;
-  className?: any;
   data: ChartInternalShallowDataShape;
   visible?: (data: ChartInternalShallowDataShape, index: number) => boolean;
   onClick: (data: ChartInternalShallowDataShape) => void;
   onMouseEnter: (data: ChartInternalShallowDataShape) => void;
   onMouseLeave: (data: ChartInternalShallowDataShape) => void;
-}
+} & PropFunctionTypes;
 
 interface ScatterPointState {
   active: boolean;
@@ -141,9 +141,11 @@ export class ScatterPoint extends Component<
     const sizeVal = typeof size === 'function' ? size(data) : size;
     const enterProps = this.getCircleEnter();
     const exitProps = this.getCircleExit();
+    const extras = constructFunctionProps(this.props, data);
 
     return (
       <PosedCircle
+        {...extras}
         pose="enter"
         poseKey={`${enterProps.cy}-${enterProps.cx}`}
         enterProps={enterProps}
@@ -159,20 +161,21 @@ export class ScatterPoint extends Component<
   }
 
   renderSymbol() {
-    const { data, animated, index, symbol, className } = this.props;
+    const { data, animated, index, symbol } = this.props;
     const enterProps = this.getSymbolEnter();
     const exitProps = this.getSymbolExit();
     const renderedSymbol = symbol(data);
+    const extras = constructFunctionProps(this.props, data);
 
     return (
       <PosedGroupTransform
+        {...extras}
         pose="enter"
         poseKey={`${enterProps.y}-${enterProps.x}`}
         enterProps={enterProps}
         exitProps={exitProps}
         animated={animated}
         index={index}
-        className={className}
       >
         {renderedSymbol}
       </PosedGroupTransform>

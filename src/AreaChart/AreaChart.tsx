@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import classNames from 'classnames';
 import bind from 'memoize-bind';
 import { AreaSeries, AreaChartTypes, AreaSeriesProps } from './AreaSeries';
@@ -48,7 +48,7 @@ interface AreaChartState {
   zoomControlled: boolean;
 }
 
-export class AreaChart extends React.Component<AreaChartProps, AreaChartState> {
+export class AreaChart extends Component<AreaChartProps, AreaChartState> {
   static defaultProps: Partial<AreaChartProps> = {
     data: [],
     xAxis: <LinearXAxis type="time" />,
