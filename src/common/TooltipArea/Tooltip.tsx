@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import bind from 'memoize-bind';
 import { Placement, ReferenceObject, ConnectedOverlay, TriggerTypes } from 'rdk';
 import { isFunction } from 'lodash-es';
-import 'rdk/dist/index.css';
 import * as css from './Tooltip.module.scss';
 
 const tooltips: Tooltip[] = [];

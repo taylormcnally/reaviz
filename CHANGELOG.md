@@ -1,3 +1,8 @@
+# 2.6.4
+- [Fix] Radial axis not generating correctly
+- [Fix] RDK css reference not working correctly
+- [Fix] Fix TypeScript null reference exceptions
+
 # 2.6.3
 - [Fix] Fix sankey and radial charts color regression #77
 

@@ -29,7 +29,7 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
     const key = point.key;
 
     return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(key.toString())
+      ? getColor(colorScheme, data)(key!.toString())
       : colorScheme(point, index);
   }
 

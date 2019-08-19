@@ -61,7 +61,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
 
     if (colorScheme) {
       return Array.isArray(colorScheme)
-        ? getColor(colorScheme, nodes)(key.toString())
+        ? getColor(colorScheme, nodes)(key!.toString())
         : colorScheme(node, index);
     } else {
       return node.props.color;
