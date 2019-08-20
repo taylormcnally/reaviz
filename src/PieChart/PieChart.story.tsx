@@ -15,7 +15,22 @@ storiesOf('Charts/Pie/Pie', module)
       series={
         <PieArcSeries
           colorScheme={chroma
-            .scale(['#ACB7C9', '#418AD7'])
+            .scale(['#4dd0e1', '#1976d2'])
+            .colors(categoryData.length)}
+        />
+      }
+    />
+  ))
+  .add('Explode', () => (
+    <PieChart
+      width={350}
+      height={250}
+      data={categoryData}
+      series={
+        <PieArcSeries
+          explode={true}
+          colorScheme={chroma
+            .scale(['#4dd0e1', '#1976d2'])
             .colors(categoryData.length)}
         />
       }
@@ -28,9 +43,8 @@ storiesOf('Charts/Pie/Pie', module)
       data={browserData}
       series={
         <PieArcSeries
-          label={<PieArcLabel show={true} />}
           colorScheme={chroma
-            .scale(['#ACB7C9', '#418AD7'])
+            .scale(['#4dd0e1', '#1976d2'])
             .colors(browserData.length)}
         />
       }
@@ -53,7 +67,7 @@ storiesOf('Charts/Pie/Donut', module)
         <PieArcSeries
           doughnut={true}
           colorScheme={chroma
-            .scale(['#ACB7C9', '#418AD7'])
+            .scale(['#4dd0e1', '#1976d2'])
             .colors(categoryData.length)}
         />
       }
@@ -68,9 +82,8 @@ storiesOf('Charts/Pie/Donut', module)
         <PieArcSeries
           doughnut={true}
           colorScheme={chroma
-            .scale(['#ACB7C9', '#418AD7'])
+            .scale(['#4dd0e1', '#1976d2'])
             .colors(categoryData.length)}
-          label={<PieArcLabel show={true} />}
         />
       }
     />
@@ -94,14 +107,15 @@ storiesOf('Charts/Pie/Donut', module)
           series={
             <PieArcSeries
               doughnut={true}
+              label={null}
               colorScheme={chroma
-                .scale(['#ACB7C9', '#418AD7'])
+                .scale(['#4dd0e1', '#1976d2'])
                 .colors(categoryData.length)}
             />
           }
         />
       </div>
-      <h1 style={{ margin: '0 5px', padding: 0 }}>
+      <h1 style={{ margin: '0 5px', padding: 0, color: 'white' }}>
         {categoryData.length} Attacks
       </h1>
     </div>

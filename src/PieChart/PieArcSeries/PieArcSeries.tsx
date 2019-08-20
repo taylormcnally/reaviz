@@ -6,6 +6,7 @@ import { arc } from 'd3-shape';
 import { PieArcLabel, PieArcLabelProps } from './PieArcLabel';
 import { CloneElement } from '../../common/utils/children';
 import { sequentialScheme, getColor } from '../../common/utils/color';
+import { max } from 'd3-array';
 
 export interface PieArcSeriesProps {
   animated: boolean;
@@ -14,9 +15,10 @@ export interface PieArcSeriesProps {
   data: any;
   arcWidth: number;
   doughnut: boolean;
+  explode: boolean;
   height: number;
   width: number;
-  label: JSX.Element;
+  label?: JSX.Element;
   arc: JSX.Element;
   colorScheme: ((data, index: number) => string) | string[];
 }
@@ -30,6 +32,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
     animated: true,
     colorScheme: sequentialScheme,
     innerRadius: 0,
+    explode: false,
     arcWidth: 0.25,
     label: <PieArcLabel />,
     arc: <PieArc />
@@ -38,7 +41,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
   calculateRadius() {
     const { doughnut, arcWidth, label, width, height } = this.props;
 
-    const outerRadius = Math.min(width, height) / (label.props.show ? 3 : 2);
+    const outerRadius = Math.min(width, height) / (label ? 3 : 2);
     const innerRadius = doughnut ? outerRadius * (1 - arcWidth) : 0;
 
     return {
@@ -56,7 +59,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
       return pos;
     });
 
-    if (label.props.show) {
+    if (label) {
       const minDistance = 15;
 
       for (let i = 0; i < data.length - 1; i++) {
@@ -99,9 +102,40 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
   }
 
   innerArc(innerRadius: number, outerRadius: number) {
-    return arc()
-      .innerRadius(innerRadius)
-      .outerRadius(outerRadius);
+    return (point) => {
+      const newOuter = this.calculateOuterRadius(outerRadius, point);
+      return arc()
+        .innerRadius(innerRadius)
+        .outerRadius(newOuter)(point);
+    };
+  }
+
+  calculateOuterRadius(outerRadius, point) {
+    const { explode, data } = this.props;
+
+    if (!explode) {
+      return outerRadius;
+    }
+
+    const maxVal = max(data, d => d.value);
+
+    let newOuter = outerRadius;
+    if (explode && data !== undefined) {
+      newOuter = (outerRadius * point.value) / maxVal;
+    }
+
+    return newOuter;
+  }
+
+  centroid(innerRadius: number, outerRadius: number) {
+    return (data) => {
+      const newOuter = this.calculateOuterRadius(outerRadius, data);
+
+      return arc()
+        .innerRadius(innerRadius)
+        .outerRadius(newOuter)
+        .centroid(data);
+    };
   }
 
   outerArc(outerRadius: number) {
@@ -117,17 +151,17 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
     const innerArc = this.innerArc(innerRadius, outerRadius);
     const outerArc = this.outerArc(outerRadius);
     const positions = this.calculateLabelPositions(outerArc, outerRadius);
+    const centroid = this.centroid(innerRadius, outerRadius);
 
     return (
       <PoseGroup animateOnMount={animated}>
         {data.map((arcData: any, index: number) => (
           <PoseSVGGElement key={arcData.data.key.toString()}>
-            {label.props.show && labelVisible(arcData) && (
+            {label && labelVisible(arcData) && (
               <CloneElement<PieArcLabelProps>
                 element={label}
                 data={arcData}
-                innerArc={innerArc}
-                outerArc={outerArc}
+                centroid={centroid}
                 position={positions[index]}
               />
             )}
