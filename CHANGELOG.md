@@ -1,3 +1,6 @@
+# 2.7.0
+- [Feature] Add ability to explode pie charts
+
 # 2.6.5
 - [Fix] Fix area/line not pulling colors correctly
 
