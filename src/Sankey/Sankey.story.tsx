@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import chroma from 'chroma-js';
 import { storiesOf } from '@storybook/react';
 import { Sankey } from './Sankey';
@@ -31,6 +31,54 @@ const colorScheme = chroma
 
 const onNodeClick = (title: string) => window.alert(`${title} is clicked`);
 
+let filtered = false;
+const DemoStory = () => {
+  const [state, setState] = useState({
+    nodes: [...simpleSankeyNodes],
+    links: [...simpleSankeyLinks]
+  });
+
+
+  const onClick = (node) => {
+    const { links } = state;
+
+    if (filtered) {
+      filtered = false;
+      setState({
+        nodes: simpleSankeyNodes,
+        links: simpleSankeyLinks
+      });
+    } else {
+      filtered = true;
+      setState({
+        nodes: [
+          node,
+          ...links.filter(n => n.source === node.id).map(n => simpleSankeyNodes.find(nn => nn.id === n.target))
+        ],
+        links: links.filter(l => l.source === node.id)
+      });
+    }
+  }
+
+  return (
+    <Sankey
+      colorScheme={colorScheme}
+      height={300}
+      width={500}
+      nodes={state.nodes.map((node, i) => (
+        <SankeyNode
+          key={`node-${i}`}
+          {...node}
+          onClick={() => onClick(node)}
+        />
+      ))}
+      links={state.links.map((link, i) => (
+        <SankeyLink key={`link-${i}`} {...link} />
+      ))}
+    />
+  );
+};
+
 storiesOf('Charts/Sankey', module)
   .add('Simple', () => (
     <Sankey
@@ -49,6 +97,7 @@ storiesOf('Charts/Sankey', module)
       ))}
     />
   ))
+  .add('Filtering', () => <DemoStory />)
   .add('Multilevels', () => (
     <Sankey
       colorScheme={colorScheme}
