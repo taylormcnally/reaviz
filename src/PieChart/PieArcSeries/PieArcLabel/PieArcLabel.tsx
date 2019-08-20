@@ -4,9 +4,7 @@ import { PosedArcLabelGroup } from './PosedArcLabelGroup';
 
 export interface PieArcLabelProps {
   data: any;
-  innerArc: any;
-  show: boolean;
-  outerArc: any;
+  centroid: any;
   format?: (v) => any;
   fontFill: string;
   fontSize: number;
@@ -21,7 +19,6 @@ const getTextAnchor = ({ startAngle, endAngle }) =>
 
 export class PieArcLabel extends PureComponent<PieArcLabelProps> {
   static defaultProps: Partial<PieArcLabelProps> = {
-    show: false,
     format: undefined,
     lineStroke: 'rgba(127,127,127,0.5)',
     fontFill: '#8F979F',
@@ -32,7 +29,7 @@ export class PieArcLabel extends PureComponent<PieArcLabelProps> {
 
   render() {
     const {
-      innerArc,
+      centroid,
       data,
       lineStroke,
       padding,
@@ -47,7 +44,7 @@ export class PieArcLabel extends PureComponent<PieArcLabelProps> {
     const textAnchor = getTextAnchor(data);
     const [posX, posY] = position;
 
-    const innerLinePos = innerArc.centroid(data);
+    const innerLinePos = centroid(data);
     let scale = posY / innerLinePos[1];
     if (posY === 0 || innerLinePos[1] === 0) {
       scale = 1;
