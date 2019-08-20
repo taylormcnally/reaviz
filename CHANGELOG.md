@@ -1,3 +1,6 @@
+# 2.6.5
+- [Fix] Fix area/line not pulling colors correctly
+
 # 2.6.4
 - [Fix] Radial axis not generating correctly
 - [Fix] RDK css reference not working correctly

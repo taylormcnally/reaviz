@@ -67,15 +67,14 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
   state: AreaSeriesState = {};
 
   getColor(point, index) {
-    const { colorScheme, data, type } = this.props;
+    const { colorScheme, data } = this.props;
     const { activeValues } = this.state;
-    const isMulti = type !== 'standard';
     const key = Array.isArray(point) ?
       point[0].key :
       point.key;
 
     return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data, 'key', isMulti)(key.toString())
+      ? getColor(colorScheme, data, 'key')(key.toString())
       : colorScheme(point, index, activeValues);
   }
 
