@@ -1,3 +1,6 @@
+# 2.7.1
+- [Fix] Revert transformation-matrix to `2.0.3` from `2.1.0` due to position issue
+
 # 2.7.0
 - [Feature] Add ability to explode pie charts
 

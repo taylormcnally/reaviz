@@ -1,6 +1,6 @@
 {
   "name": "reaviz",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook -p 9010",
@@ -76,7 +76,7 @@
     "react-sizeme": "^2.6.7",
     "react-transition-group": "^4.2.2",
     "topojson-client": "^3.0.0",
-    "transformation-matrix": "^2.1.0",
+    "transformation-matrix": "^2.0.3",
     "world-atlas": "^1.1.4"
   },
   "peerDependencies": {
