@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { HivePlot } from './HivePlot';
-import { nodes, links } from '../common/demo';
+import { nodes, links } from '../../demo';
 import { range } from 'd3-array';
 
 storiesOf('Charts/Hive', module)

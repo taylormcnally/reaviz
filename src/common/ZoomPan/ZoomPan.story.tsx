@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
-import { largeDateData, largeSignalChartData } from '../demo';
+import { largeDateData, largeSignalChartData } from '../../../demo';
 import { LineChart, LineSeries } from '../../LineChart';
 import { ChartZoomPan, ZoomPan } from '../ZoomPan';
 import { ScatterPlot, ScatterSeries, ScatterPoint } from '../../ScatterPlot';

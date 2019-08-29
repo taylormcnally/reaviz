@@ -1,5 +1,5 @@
 import { buildShallowChartData } from './builder';
-import { categoryData } from '../demo/category';
+import { categoryData } from '../../../demo/category';
 
  describe('Builder', () => {
   it('it should build zero based chart', () => {

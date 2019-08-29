@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 
 import { PieChart } from './PieChart';
-import { categoryData, randomNumber, browserData } from '../common/demo';
+import { categoryData, randomNumber, browserData } from '../../demo';
 import { PieArcSeries, PieArcLabel } from './PieArcSeries';
 
 storiesOf('Charts/Pie/Pie', module)

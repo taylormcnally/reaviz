@@ -4,7 +4,7 @@ import {
   medDateData,
   largeSignalChartData,
   medSignalChartData
-} from '../common/demo';
+} from '../../demo';
 import { number, boolean, object, color, select } from '@storybook/addon-knobs';
 import { RadialScatterPlot } from './RadialScatterPlot';
 import { RadialScatterSeries, RadialScatterPoint } from './RadialScatterSeries';

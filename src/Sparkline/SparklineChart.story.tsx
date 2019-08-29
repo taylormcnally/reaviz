@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 
-import { singleDateData, medDateData, smallDateData } from '../common/demo';
+import { singleDateData, medDateData, smallDateData } from '../../demo';
 import { SparklineChart } from './SparklineChart';
 import { AreaSparklineChart } from './AreaSparklineChart';
 import { BarSparklineChart } from './BarSparklineChart';

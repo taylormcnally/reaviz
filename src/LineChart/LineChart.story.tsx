@@ -12,7 +12,7 @@ import {
   largeDateData,
   randomNumber,
   longMultiDateData
-} from '../common/demo';
+} from '../../demo';
 import { LineChart, LineSeries } from './LineChart';
 import {
   StackedAreaChart,

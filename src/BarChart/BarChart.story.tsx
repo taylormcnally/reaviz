@@ -14,7 +14,7 @@ import {
   numberData,
   nonZeroCategoryData,
   durationCategoryData
-} from '../common/demo';
+} from '../../demo';
 import chroma from 'chroma-js';
 import { timeWeek, timeMonth } from 'd3-time';
 import { range } from 'd3-array';

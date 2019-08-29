@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialAreaChart } from './RadialAreaChart';
-import { medDateData } from '../common/demo';
+import { medDateData } from '../../demo';
 import { RadialAreaSeries, RadialArea } from './RadialAreaSeries';
 import { number, boolean, object, array, select } from '@storybook/addon-knobs';
 import { sequentialScheme } from '../common/utils/color';

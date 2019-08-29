@@ -9,8 +9,8 @@ import {
   medSignalChartData,
   signalStageData,
   signalStages
-} from '../common/demo/signals';
-import { randomNumber } from '../common/demo';
+} from '../../demo/signals';
+import { randomNumber } from '../../demo';
 import { range } from 'd3-array';
 import { GridlineSeries, Gridline, GridStripe } from '../common/Gridline';
 import { ScatterSeries, ScatterPoint } from './ScatterSeries';

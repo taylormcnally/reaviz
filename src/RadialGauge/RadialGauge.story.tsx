@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialGauge } from './RadialGauge';
 import { number, object, color, array } from '@storybook/addon-knobs';
-import { categoryData } from '../common/demo';
+import { categoryData } from '../../demo';
 import { RadialGaugeSeries } from './RadialGaugeSeries';
 import { max } from 'd3-array';
 

@@ -1,7 +1,6 @@
 import bigInt from 'big-integer';
 import { range } from 'd3-array';
 import { generateDate, randomNumber } from './utils';
-import { ChartShallowDataShape, ChartDataTypes } from '../data';
 
 const generateData = (count, minVal = 1, maxVal = 50) =>
   range(count)
@@ -39,7 +38,7 @@ export const singleDateData = [
   }
 ];
 
-export const nonZeroDateData: ChartShallowDataShape<[ChartDataTypes, ChartDataTypes]>[] = [
+export const nonZeroDateData = [
   {
     key: generateDate(14),
     data: [5, 10]

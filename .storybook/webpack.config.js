@@ -69,7 +69,11 @@ module.exports = async ({ config, mode }) => ({
   plugins: config.plugins,
   resolve: {
     ...config.resolve,
-    modules: [...config.resolve.modules, resolve(__dirname, '../src')],
+    modules: [
+      ...config.resolve.modules,
+      resolve(__dirname, '../src'),
+      resolve(__dirname, '../demo'),
+    ],
     extensions: [...config.resolve.extensions, '.ts', '.tsx']
   }
 });

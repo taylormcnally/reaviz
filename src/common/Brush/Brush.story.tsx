@@ -7,7 +7,7 @@ import {
   generateDate,
   signalStageData,
   signalStages
-} from '../demo';
+} from '../../../demo';
 import {
   LinearXAxis,
   LinearXAxisTickSeries,

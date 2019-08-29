@@ -11,7 +11,7 @@ import {
   randomNumber,
   nonZeroDateData,
   longMultiDateData
-} from '../common/demo';
+} from '../../demo';
 import { AreaChart } from './AreaChart';
 import { StackedNormalizedAreaChart } from './StackedNormalizedAreaChart';
 import { StackedAreaChart } from './StackedAreaChart';

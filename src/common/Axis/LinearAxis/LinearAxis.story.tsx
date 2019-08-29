@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { largeSignalChartData, categoryData } from '../../demo';
+import { largeSignalChartData, categoryData } from '../../../../demo';
 import { ScatterPlot } from '../../../ScatterPlot';
 import { BarChart } from '../../../BarChart';
 import {

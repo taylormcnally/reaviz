@@ -1,6 +1,11 @@
 import { range } from 'd3-array';
 import { randomNumber } from './utils';
-import { ChartShallowDataShape, ChartDataTypes } from '../data';
+
+const generateData = count =>
+  range(count).map(i => ({
+    key: categoryData[randomNumber(0, categoryData.length - 1)].key + '' + i,
+    data: randomNumber(0, 50)
+  }));
 
 export const categoryData = [
   {
@@ -40,9 +45,7 @@ export const durationCategoryData = [
   }
 ];
 
-export const nonZeroCategoryData: ChartShallowDataShape<
-  [ChartDataTypes, ChartDataTypes]
->[] = [
+export const nonZeroCategoryData = [
   {
     key: 'Phishing Attack',
     data: [5, 10]
@@ -60,12 +63,6 @@ export const nonZeroCategoryData: ChartShallowDataShape<
     data: [10, 18]
   }
 ];
-
-const generateData = count =>
-  range(count).map(i => ({
-    key: categoryData[randomNumber(0, categoryData.length - 1)].key + '' + i,
-    data: randomNumber(0, 50)
-  }));
 
 export const largeCategoryData = generateData(50);
 
