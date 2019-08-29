@@ -15,6 +15,87 @@ export const largeDateData = generateData(100);
 export const medDateData = generateData(50);
 export const smallDateData = generateData(15);
 
+export const binnedDateData = [
+  {
+    key: '1/10/2019',
+    data: [
+      {
+        key: 'Closed',
+        data: -8
+      },
+      {
+        key: 'Opened',
+        data: 5
+      }
+    ]
+  },
+  {
+    key: '1/11/2019',
+    data: [
+      {
+        key: 'Closed',
+        data: -1
+      },
+      {
+        key: 'Opened',
+        data: 10
+      }
+    ]
+  },
+  {
+    key: '1/12/2019',
+    data: [
+      {
+        key: 'Closed',
+        data: -10
+      },
+      {
+        key: 'Opened',
+        data: 3
+      }
+    ]
+  },
+  {
+    key: '1/13/2019',
+    data: [
+      {
+        key: 'Closed',
+        data: -5
+      },
+      {
+        key: 'Opened',
+        data: 0
+      }
+    ]
+  },
+  {
+    key: '1/14/2019',
+    data: [
+      {
+        key: 'Closed',
+        data: -2
+      },
+      {
+        key: 'Opened',
+        data: 10
+      }
+    ]
+  },
+  {
+    key: '1/15/2019',
+    data: [
+      {
+        key: 'Closed',
+        data: -8
+      },
+      {
+        key: 'Opened',
+        data: 3
+      }
+    ]
+  }
+];
+
 export const singleDateData = [
   {
     key: generateDate(14),

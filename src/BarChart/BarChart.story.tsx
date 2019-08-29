@@ -13,7 +13,8 @@ import {
   medDateData,
   numberData,
   nonZeroCategoryData,
-  durationCategoryData
+  durationCategoryData,
+  binnedDateData
 } from '../../demo';
 import chroma from 'chroma-js';
 import { timeWeek, timeMonth } from 'd3-time';
@@ -31,7 +32,8 @@ import {
   LinearXAxisTickSeries,
   LinearYAxis,
   LinearYAxisTickSeries,
-  LinearXAxisTickLabel
+  LinearXAxisTickLabel,
+  LinearXAxisTickLine
 } from '../common/Axis/LinearAxis';
 import { Stripes } from '../common/masks';
 
@@ -240,6 +242,41 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
+        />
+      }
+    />
+  ))
+  .add('Stacked Diverging', () => (
+    <StackedBarChart
+      width={400}
+      height={250}
+      data={binnedDateData}
+      series={
+        <StackedBarSeries
+          type="stackedDiverging"
+          bar={
+            <Bar
+              rounded={false}
+              rangeLines={null}
+              gradient={null}
+            />
+          }
+          colorScheme={[
+            'rgba(244, 67, 54, .7)',
+            'rgba(76, 175, 80, .7)'
+          ]}
+        />
+      }
+      xAxis={
+        <LinearXAxis
+          type="category"
+          position="center"
+          tickSeries={
+            <LinearXAxisTickSeries
+              line={<LinearXAxisTickLine position="center" />}
+              label={<LinearXAxisTickLabel padding={3} />}
+            />
+          }
         />
       }
     />
