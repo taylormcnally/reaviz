@@ -12,7 +12,10 @@ module.exports = async ({ config, mode }) => ({
       ...config.module.rules,
       {
         test: /\.(ts|tsx)$/,
-        include: resolve(__dirname, '../src'),
+        include: [
+          resolve(__dirname, '../src'),
+          resolve(__dirname, '../demo')
+        ],
         use: [
           require.resolve('babel-loader'),
           ...(mode === 'PRODUCTION' ? [require.resolve("react-docgen-typescript-loader")] : [])
