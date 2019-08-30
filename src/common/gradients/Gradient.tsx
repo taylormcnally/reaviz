@@ -41,11 +41,7 @@ export class Gradient extends Component<GradientProps> {
     const direction = this.getDirection();
 
     return (
-      <linearGradient
-        spreadMethod="pad"
-        id={id}
-        {...direction}
-      >
+      <linearGradient spreadMethod="pad" id={id} {...direction}>
         {stops.map((stop, index) => (
           <CloneElement<GradientStopProps>
             element={stop}

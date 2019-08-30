@@ -1,8 +1,4 @@
-import {
-  scaleLinear,
-  scaleTime,
-  scaleBand
-} from 'd3-scale';
+import { scaleLinear, scaleTime, scaleBand } from 'd3-scale';
 import { getXDomain, getYDomain, getGroupDomain } from '../utils/domains';
 import {
   ChartInternalShallowDataShape,

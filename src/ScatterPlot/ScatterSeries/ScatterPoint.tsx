@@ -7,7 +7,10 @@ import { PosedGroupTransform } from '../../common/utils/animations';
 import classNames from 'classnames';
 import * as css from './ScatterPoint.module.scss';
 import { CloneElement } from '../../common/utils/children';
-import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
+import {
+  constructFunctionProps,
+  PropFunctionTypes
+} from '../../common/utils/functions';
 
 export type ScatterPointProps = {
   symbol: (data: ChartInternalShallowDataShape) => ReactNode;

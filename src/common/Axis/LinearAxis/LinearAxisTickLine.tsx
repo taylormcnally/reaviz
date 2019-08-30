@@ -42,6 +42,13 @@ export class LinearAxisTickLine extends PureComponent<LinearAxisTickLineProps> {
     const { strokeColor, strokeWidth, className } = this.props;
     const path = this.positionTick();
 
-    return <line className={className} strokeWidth={strokeWidth} stroke={strokeColor} {...path} />;
+    return (
+      <line
+        className={className}
+        strokeWidth={strokeWidth}
+        stroke={strokeColor}
+        {...path}
+      />
+    );
   }
 }

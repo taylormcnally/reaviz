@@ -38,7 +38,9 @@ export class RadialBarChart extends Component<RadialBarChartProps> {
       innerRadius: number,
       outerRadius: number
     ) => {
-      const data = buildShallowChartData(preData) as ChartInternalShallowDataShape[];
+      const data = buildShallowChartData(
+        preData
+      ) as ChartInternalShallowDataShape[];
       const xDomain = getGroupDomain(
         data as ChartInternalShallowDataShape[],
         'x'

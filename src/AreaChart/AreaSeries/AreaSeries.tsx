@@ -20,7 +20,11 @@ import { InterpolationTypes } from '../../common/utils/interpolation';
 import { getColor, sequentialScheme } from '../../common/utils/color';
 import bind from 'memoize-bind';
 
-export type AreaChartTypes = 'standard' | 'grouped' | 'stacked' | 'stackedNormalized';
+export type AreaChartTypes =
+  | 'standard'
+  | 'grouped'
+  | 'stacked'
+  | 'stackedNormalized';
 
 export interface AreaSeriesProps {
   id: string;
@@ -69,9 +73,7 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
   getColor(point, index) {
     const { colorScheme, data } = this.props;
     const { activeValues } = this.state;
-    const key = Array.isArray(point) ?
-      point[0].key :
-      point.key;
+    const key = Array.isArray(point) ? point[0].key : point.key;
 
     return Array.isArray(colorScheme)
       ? getColor(colorScheme, data, 'key')(key.toString())
@@ -250,9 +252,7 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
       type
     } = this.props;
     const isMulti =
-      type === 'grouped' ||
-      type === 'stacked' ||
-      type === 'stackedNormalized';
+      type === 'grouped' || type === 'stacked' || type === 'stackedNormalized';
 
     return (
       <Fragment>

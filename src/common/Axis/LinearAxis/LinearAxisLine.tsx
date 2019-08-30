@@ -33,7 +33,13 @@ export class LinearAxisLine extends Component<
   };
 
   render() {
-    const { strokeColor, strokeGradient, scale, orientation, className } = this.props;
+    const {
+      strokeColor,
+      strokeGradient,
+      scale,
+      orientation,
+      className
+    } = this.props;
     const { id } = this.state;
     const [range0, range1] = scale.range();
 

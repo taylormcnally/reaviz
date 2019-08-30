@@ -67,9 +67,10 @@ export class Move extends Component<MoveProps> {
   checkThreshold() {
     const { threshold } = this.props;
 
-    return !this.started &&
-      ((Math.abs(this.deltaX) > threshold) ||
-        (Math.abs(this.deltaY) > threshold));
+    return (
+      !this.started &&
+      (Math.abs(this.deltaX) > threshold || Math.abs(this.deltaY) > threshold)
+    );
   }
 
   getTouchCoords(event) {
@@ -98,7 +99,7 @@ export class Move extends Component<MoveProps> {
     window.addEventListener('mouseup', this.onMouseUp);
   }
 
-  onMouseMove = (event) => {
+  onMouseMove = event => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -130,7 +131,7 @@ export class Move extends Component<MoveProps> {
     }
   };
 
-  onMouseUp = (event) => {
+  onMouseUp = event => {
     event.preventDefault();
     event.stopPropagation();
 

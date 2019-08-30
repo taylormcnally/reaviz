@@ -158,7 +158,12 @@ export class ChartContainer extends Component<
         width={this.props.width}
       >
         {height && width && (
-          <svg width={width} height={height} className={className} style={style}>
+          <svg
+            width={width}
+            height={height}
+            className={className}
+            style={style}
+          >
             <g transform={`translate(${translateX}, ${translateY})`}>
               {children(childProps)}
             </g>

@@ -62,7 +62,10 @@ function transformDataToStack(data: ChartNestedDataShape[]) {
 /**
  * Translates the stack data to a chart standard dataset.
  */
-function transformStackToData(stackData, direction = 'vertical'): ChartInternalNestedDataShape[] {
+function transformStackToData(
+  stackData,
+  direction = 'vertical'
+): ChartInternalNestedDataShape[] {
   const result: ChartInternalNestedDataShape[] = [];
   const isVertical = direction === 'vertical';
 

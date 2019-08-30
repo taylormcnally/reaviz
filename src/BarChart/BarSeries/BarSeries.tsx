@@ -20,7 +20,14 @@ export interface BarSeriesProps {
   xScale1: any;
   yScale: any;
   bar: JSX.Element;
-  type: 'standard' | 'grouped' | 'stacked' | 'stackedNormalized' | 'stackedDiverging' | 'marimekko' | 'waterfall';
+  type:
+    | 'standard'
+    | 'grouped'
+    | 'stacked'
+    | 'stackedNormalized'
+    | 'stackedDiverging'
+    | 'marimekko'
+    | 'waterfall';
   colorScheme: ((data, index: number) => string) | string[];
   animated: boolean;
   padding: number;
@@ -52,11 +59,13 @@ export class BarSeries extends Component<BarSeriesProps> {
   getIsMulti() {
     const { type } = this.props;
 
-    return type === 'grouped' ||
+    return (
+      type === 'grouped' ||
       type === 'stacked' ||
       type === 'marimekko' ||
       type === 'stackedNormalized' ||
-      type === 'stackedDiverging';
+      type === 'stackedDiverging'
+    );
   }
 
   /**

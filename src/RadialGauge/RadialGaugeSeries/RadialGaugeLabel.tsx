@@ -11,7 +11,7 @@ export interface RadialGaugeLabelProps {
   data: ChartShallowDataShape;
   offset: number;
   className?: any;
-  onClick: (e: { data, nativeEvent }) => void;
+  onClick: (e: { data; nativeEvent }) => void;
 }
 
 export class RadialGaugeLabel extends Component<RadialGaugeLabelProps> {

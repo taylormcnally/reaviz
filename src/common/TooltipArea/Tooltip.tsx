@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import bind from 'memoize-bind';
-import { Placement, ReferenceObject, ConnectedOverlay, TriggerTypes } from 'rdk';
+import {
+  Placement,
+  ReferenceObject,
+  ConnectedOverlay,
+  TriggerTypes
+} from 'rdk';
 import { isFunction } from 'lodash-es';
 import * as css from './Tooltip.module.scss';
 
@@ -107,11 +112,7 @@ export class Tooltip extends Component<TooltipProps, TooltipState> {
       return null;
     }
 
-    return (
-      <div className={cls}>
-        {children}
-      </div>
-    );
+    return <div className={cls}>{children}</div>;
   };
 
   render() {

@@ -6,8 +6,13 @@ export const sequentialScheme = ['#3ec4e8'];
 /**
  * Get a color given a range.
  */
-export const getColor = (colorScheme: string[], data: any[], attr = 'key', isMultiSeries = false) => {
-  if(isMultiSeries) {
+export const getColor = (
+  colorScheme: string[],
+  data: any[],
+  attr = 'key',
+  isMultiSeries = false
+) => {
+  if (isMultiSeries) {
     const maxIdx = maxIndex(data, d => d.data.length);
     const maxVal = data[maxIdx];
     data = maxVal.data;

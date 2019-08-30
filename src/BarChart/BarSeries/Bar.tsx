@@ -10,7 +10,10 @@ import * as css from './Bar.module.scss';
 import { PosedBar } from './PosedBar';
 import { CloneElement } from '../../common/utils/children';
 import { Mask, MaskProps } from '../../common/masks';
-import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
+import {
+  constructFunctionProps,
+  PropFunctionTypes
+} from '../../common/utils/functions';
 
 export type BarProps = {
   xScale: any;
@@ -89,7 +92,15 @@ export class Bar extends Component<BarProps, BarState> {
     };
   }
 
-  getKeyCoords(v, v0, v1, scale, sizeOverride: number, isCategorical: boolean, padding: number) {
+  getKeyCoords(
+    v,
+    v0,
+    v1,
+    scale,
+    sizeOverride: number,
+    isCategorical: boolean,
+    padding: number
+  ) {
     let offset;
     let size;
 
@@ -280,7 +291,16 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const { rounded, cursor, barCount, animated, layout, mask, id, data } = this.props;
+    const {
+      rounded,
+      cursor,
+      barCount,
+      animated,
+      layout,
+      mask,
+      id,
+      data
+    } = this.props;
     const maskPath = mask ? `url(#mask-${id})` : '';
     const fill = this.getFill(currentColorShade);
     const enterProps = coords;
@@ -300,11 +320,14 @@ export class Bar extends Component<BarProps, BarState> {
         onMouseLeave={bind(this.onMouseLeave, this)}
         onClick={bind(this.onMouseClick, this)}
         layout={layout}
-        className={classNames({
-          [css.rounded]: rounded,
-          [css.vertical]: isVertical,
-          [css.horizontal]: !isVertical
-        }, extras.className)}
+        className={classNames(
+          {
+            [css.rounded]: rounded,
+            [css.vertical]: isVertical,
+            [css.horizontal]: !isVertical
+          },
+          extras.className
+        )}
         enterProps={enterProps}
         exitProps={exitProps}
         index={index}

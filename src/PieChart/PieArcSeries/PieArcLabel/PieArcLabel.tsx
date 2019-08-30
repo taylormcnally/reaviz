@@ -15,7 +15,7 @@ export interface PieArcLabelProps {
 }
 
 const getTextAnchor = ({ startAngle, endAngle }) =>
-  ((startAngle + (endAngle - startAngle) / 2) < Math.PI ? 'start' : 'end');
+  startAngle + (endAngle - startAngle) / 2 < Math.PI ? 'start' : 'end';
 
 export class PieArcLabel extends PureComponent<PieArcLabelProps> {
   static defaultProps: Partial<PieArcLabelProps> = {
@@ -50,10 +50,7 @@ export class PieArcLabel extends PureComponent<PieArcLabelProps> {
       scale = 1;
     }
 
-    const outerPos = [
-      scale * innerLinePos[0],
-      scale * innerLinePos[1]
-    ];
+    const outerPos = [scale * innerLinePos[0], scale * innerLinePos[1]];
 
     return (
       <PosedArcLabelGroup>

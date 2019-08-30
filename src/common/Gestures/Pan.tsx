@@ -71,8 +71,12 @@ export class Pan extends Component<PanProps> {
 
   componentDidMount() {
     if (!this.props.disabled && this.childRef.current) {
-      this.childRef.current.addEventListener('mousedown', this.onMouseDown, { passive: false });
-      this.childRef.current.addEventListener('touchstart', this.onTouchStart, { passive: false });
+      this.childRef.current.addEventListener('mousedown', this.onMouseDown, {
+        passive: false
+      });
+      this.childRef.current.addEventListener('touchstart', this.onTouchStart, {
+        passive: false
+      });
     }
   }
 
@@ -83,7 +87,10 @@ export class Pan extends Component<PanProps> {
 
     if (this.childRef.current) {
       this.childRef.current.removeEventListener('mousedown', this.onMouseDown);
-      this.childRef.current.removeEventListener('touchstart', this.onTouchStart);
+      this.childRef.current.removeEventListener(
+        'touchstart',
+        this.onTouchStart
+      );
     }
   }
 
@@ -100,9 +107,10 @@ export class Pan extends Component<PanProps> {
 
   checkThreshold() {
     const { threshold } = this.props;
-    return !this.started &&
-      ((Math.abs(this.deltaX) > threshold) ||
-        (Math.abs(this.deltaY) > threshold));
+    return (
+      !this.started &&
+      (Math.abs(this.deltaX) > threshold || Math.abs(this.deltaY) > threshold)
+    );
   }
 
   stopDecay() {
@@ -137,7 +145,14 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanEnd(nativeEvent, source: 'mouse' | 'touch') {
-    const { width, height, matrix, constrain, onPanEnd, onPanMove } = this.props;
+    const {
+      width,
+      height,
+      matrix,
+      constrain,
+      onPanEnd,
+      onPanMove
+    } = this.props;
 
     if (this.observer && this.props.decay) {
       // Calculate the end matrix
@@ -148,28 +163,28 @@ export class Pan extends Component<PanProps> {
         from: this.observer.get(),
         velocity: this.observer.getVelocity()
       })
-      .pipe((res) => ({
-        x: constrain ? clamp(-endX, 0)(res.x) : res.x,
-        y: constrain ? clamp(-endY, 0)(res.y) : res.y
-      }))
-      .start({
-        update: ({ x, y }) => {
-          this.rqf = requestAnimationFrame(() => {
-            onPanMove({
-              source: 'touch',
-              nativeEvent,
-              x,
-              y
+        .pipe(res => ({
+          x: constrain ? clamp(-endX, 0)(res.x) : res.x,
+          y: constrain ? clamp(-endY, 0)(res.y) : res.y
+        }))
+        .start({
+          update: ({ x, y }) => {
+            this.rqf = requestAnimationFrame(() => {
+              onPanMove({
+                source: 'touch',
+                nativeEvent,
+                x,
+                y
+              });
             });
-          });
-        },
-        complete: () => {
-          onPanEnd({
-            nativeEvent,
-            source
-          });
-        }
-      });
+          },
+          complete: () => {
+            onPanEnd({
+              nativeEvent,
+              source
+            });
+          }
+        });
     } else {
       onPanEnd({
         nativeEvent,
@@ -181,12 +196,13 @@ export class Pan extends Component<PanProps> {
   pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
     const { scale, constrain, width, height, matrix } = this.props;
 
-    const newMatrix = smoothMatrix(transform(
-      matrix,
-      translate(x / scale, y / scale)
-    ), 100);
+    const newMatrix = smoothMatrix(
+      transform(matrix, translate(x / scale, y / scale)),
+      100
+    );
 
-    const shouldConstrain = constrain && constrainMatrix(height, width, newMatrix);
+    const shouldConstrain =
+      constrain && constrainMatrix(height, width, newMatrix);
     if (!shouldConstrain) {
       this.onPanMove(newMatrix.e, newMatrix.f, source, nativeEvent);
     }
@@ -210,7 +226,7 @@ export class Pan extends Component<PanProps> {
     // Always bind event so we cancel movement even if no action was taken
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
-  }
+  };
 
   onMouseMove = (event: MouseEvent) => {
     event.preventDefault();
@@ -269,7 +285,7 @@ export class Pan extends Component<PanProps> {
     // Always bind event so we cancel movement even if no action was taken
     window.addEventListener('touchmove', this.onTouchMove);
     window.addEventListener('touchend', this.onTouchEnd);
-  }
+  };
 
   onTouchMove = (event: TouchEvent) => {
     event.preventDefault();

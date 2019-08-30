@@ -84,11 +84,11 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
             <Bar
               gradient={null}
               rounded={false}
-              style={(data) => {
-                if(data.key === 'DLP') {
+              style={data => {
+                if (data.key === 'DLP') {
                   console.log('Style callback...', data);
                   return {
-                    'fill': 'blue'
+                    fill: 'blue'
                   };
                 }
               }}
@@ -259,11 +259,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       data={multiCategory}
       series={
         <StackedBarSeries
-          bar={
-            <Bar
-              width={10}
-            />
-          }
+          bar={<Bar width={10} />}
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
@@ -276,25 +272,12 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       width={400}
       height={250}
       data={binnedDateData}
-      gridlines={
-        <GridlineSeries
-          line={<Gridline direction="y" />}
-        />
-      }
+      gridlines={<GridlineSeries line={<Gridline direction="y" />} />}
       series={
         <StackedBarSeries
           type="stackedDiverging"
-          bar={
-            <Bar
-              rounded={false}
-              rangeLines={null}
-              gradient={null}
-            />
-          }
-          colorScheme={[
-            'rgba(244, 67, 54, .7)',
-            'rgba(76, 175, 80, .7)'
-          ]}
+          bar={<Bar rounded={false} rangeLines={null} gradient={null} />}
+          colorScheme={['rgba(244, 67, 54, .7)', 'rgba(76, 175, 80, .7)']}
         />
       }
       yAxis={
@@ -311,12 +294,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
         <LinearXAxis
           type="category"
           position="center"
-          tickSeries={
-            <LinearXAxisTickSeries
-              line={null}
-              label={null}
-            />
-          }
+          tickSeries={<LinearXAxisTickSeries line={null} label={null} />}
         />
       }
     />
@@ -532,38 +510,20 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       width={400}
       height={250}
       data={binnedDateData}
-      gridlines={
-        <GridlineSeries
-          line={<Gridline direction="x" />}
-        />
-      }
+      gridlines={<GridlineSeries line={<Gridline direction="x" />} />}
       series={
         <StackedBarSeries
           layout="horizontal"
           type="stackedDiverging"
-          bar={
-            <Bar
-              rounded={false}
-              rangeLines={null}
-              gradient={null}
-            />
-          }
-          colorScheme={[
-            'rgba(244, 67, 54, .7)',
-            'rgba(76, 175, 80, .7)'
-          ]}
+          bar={<Bar rounded={false} rangeLines={null} gradient={null} />}
+          colorScheme={['rgba(244, 67, 54, .7)', 'rgba(76, 175, 80, .7)']}
         />
       }
       yAxis={
         <LinearYAxis
           type="category"
           position="center"
-          tickSeries={
-            <LinearYAxisTickSeries
-              line={null}
-              label={null}
-            />
-          }
+          tickSeries={<LinearYAxisTickSeries line={null} label={null} />}
         />
       }
       xAxis={
@@ -606,8 +566,7 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
           layout="horizontal"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)
-          }
+            .colors(multiCategory.length)}
           bar={
             <Bar
               gradient={

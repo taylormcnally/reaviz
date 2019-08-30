@@ -24,8 +24,8 @@ export interface PieArcSeriesProps {
 }
 
 const factor = 1.2;
-const midAngle = (d) => d.startAngle + (d.endAngle - d.startAngle) / 2;
-const labelVisible = (arc) => arc.endAngle - arc.startAngle > Math.PI / 30;
+const midAngle = d => d.startAngle + (d.endAngle - d.startAngle) / 2;
+const labelVisible = arc => arc.endAngle - arc.startAngle > Math.PI / 30;
 
 export class PieArcSeries extends Component<PieArcSeriesProps> {
   static defaultProps: Partial<PieArcSeriesProps> = {
@@ -102,7 +102,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
   }
 
   innerArc(innerRadius: number, outerRadius: number) {
-    return (point) => {
+    return point => {
       const newOuter = this.calculateOuterRadius(outerRadius, point);
       return arc()
         .innerRadius(innerRadius)
@@ -128,7 +128,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
   }
 
   centroid(innerRadius: number, outerRadius: number) {
-    return (data) => {
+    return data => {
       const newOuter = this.calculateOuterRadius(outerRadius, data);
 
       return arc()

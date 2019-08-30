@@ -60,7 +60,15 @@ export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
   }
 
   render() {
-    const { color, animated, disabled, tooltip, onClick, onMouseEnter, onMouseLeave } = this.props;
+    const {
+      color,
+      animated,
+      disabled,
+      tooltip,
+      onClick,
+      onMouseEnter,
+      onMouseLeave
+    } = this.props;
     const data = this.getPaths();
 
     return (

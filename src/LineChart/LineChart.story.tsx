@@ -137,11 +137,11 @@ storiesOf('Charts/Line/Multi Series', module)
           line={
             <Line
               strokeWidth={3}
-              style={(data) => {
-                if(get(data, '[0].key') === 'Threat Intel') {
+              style={data => {
+                if (get(data, '[0].key') === 'Threat Intel') {
                   console.log('Style callback...', data);
                   return {
-                    'strokeDasharray': '5'
+                    strokeDasharray: '5'
                   };
                 }
               }}

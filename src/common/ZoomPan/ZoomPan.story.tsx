@@ -75,7 +75,9 @@ storiesOf('Charts/Zoom Pan', module)
     />
   ))
   .add('Generic Zoom Pan', () => <GenericZoomPanStory />)
-  .add('Generic Zoom Pan w/ Modifier', () => <GenericZoomPanStory modifier={true} />)
+  .add('Generic Zoom Pan w/ Modifier', () => (
+    <GenericZoomPanStory modifier={true} />
+  ))
   .add('Default Zoom', () => <DefaultZoomStory />);
 
 class GenericZoomPanStory extends Component<any, any> {
@@ -85,7 +87,7 @@ class GenericZoomPanStory extends Component<any, any> {
     y: 0
   };
 
-  onZoomPan = (event) => {
+  onZoomPan = event => {
     this.setState(event);
   };
 

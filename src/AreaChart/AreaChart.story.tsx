@@ -101,11 +101,7 @@ storiesOf('Charts/Area/Single Series', module)
     />
   ))
   .add('Non-Zero', () => (
-    <AreaChart
-      width={350}
-      height={250}
-      data={nonZeroDateData}
-    />
+    <AreaChart width={350} height={250} data={nonZeroDateData} />
   ))
   .add('Interval', () => (
     <AreaChart

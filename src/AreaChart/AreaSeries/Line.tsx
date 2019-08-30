@@ -9,7 +9,10 @@ import {
   ChartInternalShallowDataShape
 } from '../../common/data';
 import { calculateShowStroke } from '../../common/utils/stroke';
-import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
+import {
+  constructFunctionProps,
+  PropFunctionTypes
+} from '../../common/utils/functions';
 import { PosedLine } from './PosedLine';
 
 export type LineProps = {

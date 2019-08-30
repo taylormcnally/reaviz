@@ -41,7 +41,9 @@ export class RadialScatterPlot extends Component<RadialScatterPlotProps> {
       outerRadius: number,
       innerRadius: number
     ) => {
-      const data = buildShallowChartData(preData) as ChartInternalShallowDataShape[];
+      const data = buildShallowChartData(
+        preData
+      ) as ChartInternalShallowDataShape[];
 
       const yDomain = getYDomain({ data, scaled: false });
       const xDomain = getXDomain({ data });

@@ -19,9 +19,7 @@ export interface RadialPointSeriesProps {
   point: JSX.Element;
 }
 
-export class RadialPointSeries extends Component<
-  RadialPointSeriesProps
-> {
+export class RadialPointSeries extends Component<RadialPointSeriesProps> {
   static defaultProps: Partial<RadialPointSeriesProps> = {
     show: 'hover',
     point: <RadialScatterPoint />

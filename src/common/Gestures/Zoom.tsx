@@ -58,7 +58,9 @@ export class Zoom extends Component<ZoomGestureProps> {
     const ref = this.childRef.current;
     if (!disabled && ref) {
       if (!disableMouseWheel) {
-        ref.addEventListener('mousewheel', this.onMouseWheel, { passive: false });
+        ref.addEventListener('mousewheel', this.onMouseWheel, {
+          passive: false
+        });
       }
 
       ref.addEventListener('touchstart', this.onTouchStart, { passive: false });
@@ -121,8 +123,13 @@ export class Zoom extends Component<ZoomGestureProps> {
     return outside;
   }
 
-  onMouseWheel = (event) => {
-    const { disableMouseWheel, requireZoomModifier, matrix, onZoomEnd } = this.props;
+  onMouseWheel = event => {
+    const {
+      disableMouseWheel,
+      requireZoomModifier,
+      matrix,
+      onZoomEnd
+    } = this.props;
 
     if (disableMouseWheel) {
       return false;

@@ -46,9 +46,7 @@ export class TooltipTemplate extends PureComponent<TooltipTemplateProps> {
         {pagedValues.map((point, i) => (
           <Fragment key={i}>{this.renderValues(point, i)}</Fragment>
         ))}
-        {excessCount > 0 && (
-          <div>...{excessCount} more...</div>
-        )}
+        {excessCount > 0 && <div>...{excessCount} more...</div>}
       </Fragment>
     );
   }

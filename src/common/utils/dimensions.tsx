@@ -58,7 +58,7 @@ function parseMargins(margins?: Margins) {
     bottom,
     left
   };
-};
+}
 
 /**
  * Calculates the margins for the chart.

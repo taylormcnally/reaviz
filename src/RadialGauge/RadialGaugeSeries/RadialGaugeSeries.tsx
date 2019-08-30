@@ -100,8 +100,13 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
 
     const baselineLabelHeight = 20;
     const outerRadius =
-      (min([width - padding, height - baselineLabelHeight - padding]) as number) / 2 - 10;
-    const labelOffset = height / 2  - baselineLabelHeight;
+      (min([
+        width - padding,
+        height - baselineLabelHeight - padding
+      ]) as number) /
+        2 -
+      10;
+    const labelOffset = height / 2 - baselineLabelHeight;
 
     const x = xScale(index % columns);
     const y = yScale(Math.floor(index / columns));

@@ -90,9 +90,7 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
    * This equation will measure the length of the text in a external canvas
    * object and determine what the longest label is and rotate until they fit.
    */
-  getRotationAngle(
-    ticks: any[]
-  ): number {
+  getRotationAngle(ticks: any[]): number {
     if (!this.props.label) {
       return 0;
     }
@@ -152,11 +150,12 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
       const scaledTick = adjustedScale(tick);
       const position = this.getPosition(scaledTick);
       const text = ellipsize(fullText, 18);
-      const size = label ?
-        calculateSize(text, {
-          font: label.props.fontFamily,
-          fontSize: `${label.props.fontSize}px`
-        }) : {};
+      const size = label
+        ? calculateSize(text, {
+            font: label.props.fontFamily,
+            fontSize: `${label.props.fontSize}px`
+          })
+        : {};
 
       return {
         ...position,
@@ -181,10 +180,7 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
     return (
       <Fragment>
         {ticks.map((tick, i) => (
-          <g
-            key={i}
-            transform={`translate(${tick.x}, ${tick.y})`}
-          >
+          <g key={i} transform={`translate(${tick.x}, ${tick.y})`}>
             {line && (
               <CloneElement<LinearAxisTickLineProps>
                 element={line}

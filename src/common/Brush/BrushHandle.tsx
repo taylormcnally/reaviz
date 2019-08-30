@@ -14,7 +14,10 @@ interface BrushHandleState {
   isDragging: boolean;
 }
 
-export class BrushHandle extends PureComponent<BrushHandleProps, BrushHandleState> {
+export class BrushHandle extends PureComponent<
+  BrushHandleProps,
+  BrushHandleState
+> {
   state: BrushHandleState = {
     isDragging: false
   };

@@ -4,7 +4,12 @@ import { getGroupDomain, getDeepGroupDomain } from '../utils/domains';
 /**
  * Get the group scale aka x0.
  */
-export function getGroupScale({ dimension, padding, data, direction = 'vertical' }) {
+export function getGroupScale({
+  dimension,
+  padding,
+  data,
+  direction = 'vertical'
+}) {
   const domain = getGroupDomain(data, 'key');
   const spacing = domain.length / (dimension / padding + 1);
   const range = direction === 'vertical' ? [0, dimension] : [dimension, 0];

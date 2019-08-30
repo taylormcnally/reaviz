@@ -20,9 +20,7 @@ export interface LinearAxisTickLabelProps {
   className?: any;
 }
 
-export class LinearAxisTickLabel extends Component<
-  LinearAxisTickLabelProps
-> {
+export class LinearAxisTickLabel extends Component<LinearAxisTickLabelProps> {
   static defaultProps: Partial<LinearAxisTickLabelProps> = {
     fill: '#8F979F',
     fontSize: 11,
@@ -146,7 +144,14 @@ export class LinearAxisTickLabel extends Component<
   }
 
   render() {
-    const { fill, text, fullText, fontSize, fontFamily, className } = this.props;
+    const {
+      fill,
+      text,
+      fullText,
+      fontSize,
+      fontFamily,
+      className
+    } = this.props;
     const { x, y } = this.getOffset();
     const textPosition = this.getTextPosition();
 

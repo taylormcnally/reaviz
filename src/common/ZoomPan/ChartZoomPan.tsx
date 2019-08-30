@@ -36,7 +36,8 @@ export class ChartZoomPan extends Component<ChartZoomPanProps> {
 
   onZoomPan(event: ZoomPanEvent) {
     const { width, data, axisType, roundDomains, onZoomPan } = this.props;
-    const can = event.type === 'zoom' || (event.type === 'pan' && event.scale > 1);
+    const can =
+      event.type === 'zoom' || (event.type === 'pan' && event.scale > 1);
 
     if (can) {
       const scale: any = getXScale({

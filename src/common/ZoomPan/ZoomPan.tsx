@@ -1,8 +1,19 @@
 import React, { Component, createRef } from 'react';
 import bind from 'memoize-bind';
-import { Pan, PanMoveEvent, PanStartEvent, PanEndEvent, PanCancelEvent } from '../Gestures/Pan';
+import {
+  Pan,
+  PanMoveEvent,
+  PanStartEvent,
+  PanEndEvent,
+  PanCancelEvent
+} from '../Gestures/Pan';
 import { Zoom, ZoomEvent } from '../Gestures/Zoom';
-import { identity, fromObject, fromDefinition, transform } from 'transformation-matrix';
+import {
+  identity,
+  fromObject,
+  fromDefinition,
+  transform
+} from 'transformation-matrix';
 import { isEqual } from 'lodash-es';
 
 export interface ZoomPanEvent {
@@ -67,10 +78,12 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
 
   static getDerivedStateFromProps(props: ZoomPanProps, state: ZoomPanState) {
     // TODO: the types in the library don't seem to be correct...
-    const matrix = transform((fromDefinition as any)([
-      { type: 'translate', tx: props.x, ty: props.y },
-      { type: 'scale', sx: props.scale, sy: props.scale }
-    ]));
+    const matrix = transform(
+      (fromDefinition as any)([
+        { type: 'translate', tx: props.x, ty: props.y },
+        { type: 'scale', sx: props.scale, sy: props.scale }
+      ])
+    );
 
     if (!isEqual(matrix, state.matrix)) {
       return {

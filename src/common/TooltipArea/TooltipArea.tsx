@@ -46,10 +46,7 @@ interface TooltipDataShape {
   data?: ChartDataTypes | Array<ChartDataTypes | ChartInternalShallowDataShape>;
 }
 
-export class TooltipArea extends Component<
-  TooltipAreaProps,
-  TooltipAreaState
-> {
+export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
   static defaultProps: Partial<TooltipAreaProps> = {
     placement: 'top',
     isRadial: false,

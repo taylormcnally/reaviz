@@ -31,10 +31,7 @@ export function getYDomain({ scaled, data }): number[] {
     const posStart = -startY;
     const maxNum = Math.max(posStart, endY);
 
-    return [
-      -maxNum,
-      maxNum
-    ];
+    return [-maxNum, maxNum];
   }
 
   // Scaled start scale at non-zero
@@ -61,10 +58,7 @@ export function getXDomain({ data, scaled = false }): number[] {
       const posStart = -startX0;
       const maxNum = Math.max(posStart, endX0);
 
-      return [
-        -maxNum,
-        maxNum
-      ];
+      return [-maxNum, maxNum];
     }
 
     // If not scaled, return 0/max domains

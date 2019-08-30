@@ -5,6 +5,7 @@
 - [Fix] Fix stacked bar chart custom bar widths
 - [Fix] Fix bug with waterfall chart and colors
 - [Fix] Added RDK CSS to demos
+- [Chore] Add prettier/lint-staged and pretty the files
 
 # 2.7.1
 - [Fix] Revert transformation-matrix to `2.0.3` from `2.1.0` due to position issue

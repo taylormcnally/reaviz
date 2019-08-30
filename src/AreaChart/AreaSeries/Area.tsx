@@ -12,7 +12,10 @@ import {
 } from '../../common/data';
 import { PosedArea } from './PosedArea';
 import { CloneElement } from '../../common/utils/children';
-import { constructFunctionProps, PropFunctionTypes } from '../../common/utils/functions';
+import {
+  constructFunctionProps,
+  PropFunctionTypes
+} from '../../common/utils/functions';
 
 export type AreaProps = {
   id: string;
@@ -138,7 +141,6 @@ export class Area extends Component<AreaProps, {}> {
               id={`mask-pattern-${id}`}
               fill={stroke}
             />
-
           </Fragment>
         )}
         {gradient && (

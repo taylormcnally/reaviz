@@ -33,8 +33,7 @@ export class PieChart extends Component<PieChartProps, {}> {
   };
 
   getData = memoize((data: ChartDataShape[]) => {
-    const pieLayout = pie()
-      .value((d: any) => d.data);
+    const pieLayout = pie().value((d: any) => d.data);
 
     return pieLayout(data as any);
   });

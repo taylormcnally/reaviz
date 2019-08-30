@@ -116,22 +116,10 @@ export function buildShallowChartData(
     const isTuple = Array.isArray(point.data);
 
     const props = {
-      k0: normalizeValue(
-        isVertical ? 0 : point.key,
-        maxBigInteger
-      ),
-      k1: normalizeValue(
-      point.key,
-        maxBigInteger
-      ),
-      v0: normalizeValue(
-        isTuple ? point.data[0] : 0,
-        maxBigInteger
-      ),
-      v1: normalizeValue(
-        isTuple ? point.data[1] : point.data,
-        maxBigInteger
-      )
+      k0: normalizeValue(isVertical ? 0 : point.key, maxBigInteger),
+      k1: normalizeValue(point.key, maxBigInteger),
+      v0: normalizeValue(isTuple ? point.data[0] : 0, maxBigInteger),
+      v1: normalizeValue(isTuple ? point.data[1] : point.data, maxBigInteger)
     };
 
     const xProp = isVertical ? 'k' : 'v';

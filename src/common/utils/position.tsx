@@ -26,7 +26,7 @@ export function getClosestPoint(pos: number, scale, data, attr = 'x') {
   afterVal = afterVal - domain;
 
   return beforeVal < afterVal ? before : after;
-};
+}
 
 /**
  * Given an event, get the parent svg element;
@@ -58,7 +58,7 @@ export function getPositionForTarget({ target, clientX, clientY }) {
 
 /**
  * Gets the point from q given matrix.
-*/
+ */
 export function getPointFromMatrix(event, matrix) {
   const parent = getParentSVG(event);
 
@@ -73,16 +73,13 @@ export function getPointFromMatrix(event, matrix) {
 
   // Transforms the coordinate to world coordinate (in the SVG/DIV world)
   return applyToPoint(inverse(matrix), { x, y });
-};
+}
 
 /**
  * Get the start/end matrix.
  */
 export function getLimitMatrix(height: number, width: number, matrix) {
-  return applyToPoints(matrix, [
-    { x: 0, y: 0 },
-    { x: width, y: height }
-  ]);
+  return applyToPoints(matrix, [{ x: 0, y: 0 }, { x: width, y: height }]);
 }
 
 /**
@@ -106,14 +103,14 @@ export function constrainMatrix(height: number, width: number, matrix) {
  * Determine if scale factor is less than allowed.
  */
 function lessThanScaleFactorMin(value, scaleFactor: number) {
-  return value.scaleFactorMin && (value.d * (scaleFactor)) <= value.scaleFactorMin;
+  return value.scaleFactorMin && value.d * scaleFactor <= value.scaleFactorMin;
 }
 
 /**
  * Determine if scale factor is larger than allowed.
  */
-function moreThanScaleFactorMax (value, scaleFactor: number) {
-  return value.scaleFactorMax && (value.d * scaleFactor) >= value.scaleFactorMax;
+function moreThanScaleFactorMax(value, scaleFactor: number) {
+  return value.scaleFactorMax && value.d * scaleFactor >= value.scaleFactorMax;
 }
 
 /**

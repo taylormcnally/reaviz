@@ -156,9 +156,17 @@ export class AreaChart extends Component<AreaChartProps, AreaChartState> {
     const { zoomDomain, preventAnimation, isZoomed } = this.state;
 
     const seriesType = series.props.type;
-    const isMultiSeries = seriesType === 'stacked' || seriesType === 'stackedNormalized' || seriesType === 'grouped';
+    const isMultiSeries =
+      seriesType === 'stacked' ||
+      seriesType === 'stackedNormalized' ||
+      seriesType === 'grouped';
     const data = this.getData(this.props.data, seriesType);
-    const { xScale, yScale } = this.getScales(data, chartWidth, chartHeight, isMultiSeries);
+    const { xScale, yScale } = this.getScales(
+      data,
+      chartWidth,
+      chartHeight,
+      isMultiSeries
+    );
     const animated = preventAnimation === true ? false : series.props.animated;
 
     return (
