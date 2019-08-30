@@ -1,5 +1,10 @@
 # Master
+- [Feature] Diverging Stacked Bar Chart #82
+- [Fix] Horz stacked bar chart color getter
+- [Fix] Horz stacked bar chart demo tooltips
+- [Fix] Fix stacked bar chart custom bar widths
 - [Fix] Fix bug with waterfall chart and colors
+- [Fix] Added RDK CSS to demos
 
 # 2.7.1
 - [Fix] Revert transformation-matrix to `2.0.3` from `2.1.0` due to position issue
