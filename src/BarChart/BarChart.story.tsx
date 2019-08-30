@@ -13,7 +13,8 @@ import {
   medDateData,
   numberData,
   nonZeroCategoryData,
-  durationCategoryData
+  durationCategoryData,
+  binnedDateData
 } from '../../demo';
 import chroma from 'chroma-js';
 import { timeWeek, timeMonth } from 'd3-time';
@@ -23,7 +24,8 @@ import {
   Bar,
   StackedBarSeries,
   StackedNormalizedBarSeries,
-  MarimekkoBarSeries
+  MarimekkoBarSeries,
+  RangeLines
 } from './BarSeries';
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import {
@@ -31,9 +33,15 @@ import {
   LinearXAxisTickSeries,
   LinearYAxis,
   LinearYAxisTickSeries,
-  LinearXAxisTickLabel
+  LinearXAxisTickLabel,
+  LinearXAxisTickLine,
+  LinearAxisLine,
+  LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 import { Stripes } from '../common/masks';
+import { ChartTooltip, TooltipTemplate } from '../common/TooltipArea';
+import { formatValue } from '../common/utils';
+import { Gradient, GradientStop } from '../common/gradients';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
   .add(
@@ -244,6 +252,75 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       }
     />
   ))
+  .add('Stacked Custom Bar Width', () => (
+    <StackedBarChart
+      width={350}
+      height={350}
+      data={multiCategory}
+      series={
+        <StackedBarSeries
+          bar={
+            <Bar
+              width={10}
+            />
+          }
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+        />
+      }
+    />
+  ))
+  .add('Stacked Diverging', () => (
+    <StackedBarChart
+      width={400}
+      height={250}
+      data={binnedDateData}
+      gridlines={
+        <GridlineSeries
+          line={<Gridline direction="y" />}
+        />
+      }
+      series={
+        <StackedBarSeries
+          type="stackedDiverging"
+          bar={
+            <Bar
+              rounded={false}
+              rangeLines={null}
+              gradient={null}
+            />
+          }
+          colorScheme={[
+            'rgba(244, 67, 54, .7)',
+            'rgba(76, 175, 80, .7)'
+          ]}
+        />
+      }
+      yAxis={
+        <LinearYAxis
+          tickSeries={
+            <LinearYAxisTickSeries
+              line={null}
+              label={<LinearYAxisTickLabel padding={5} />}
+            />
+          }
+        />
+      }
+      xAxis={
+        <LinearXAxis
+          type="category"
+          position="center"
+          tickSeries={
+            <LinearXAxisTickSeries
+              line={null}
+              label={null}
+            />
+          }
+        />
+      }
+    />
+  ))
   .add('Stacked Normalized', () => (
     <StackedNormalizedBarChart
       width={350}
@@ -450,6 +527,58 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       }
     />
   ))
+  .add('Stacked Diverging', () => (
+    <StackedBarChart
+      width={400}
+      height={250}
+      data={binnedDateData}
+      gridlines={
+        <GridlineSeries
+          line={<Gridline direction="x" />}
+        />
+      }
+      series={
+        <StackedBarSeries
+          layout="horizontal"
+          type="stackedDiverging"
+          bar={
+            <Bar
+              rounded={false}
+              rangeLines={null}
+              gradient={null}
+            />
+          }
+          colorScheme={[
+            'rgba(244, 67, 54, .7)',
+            'rgba(76, 175, 80, .7)'
+          ]}
+        />
+      }
+      yAxis={
+        <LinearYAxis
+          type="category"
+          position="center"
+          tickSeries={
+            <LinearYAxisTickSeries
+              line={null}
+              label={null}
+            />
+          }
+        />
+      }
+      xAxis={
+        <LinearXAxis
+          type="value"
+          tickSeries={
+            <LinearXAxisTickSeries
+              line={null}
+              label={<LinearXAxisTickLabel padding={5} />}
+            />
+          }
+        />
+      }
+    />
+  ))
   .add('Stacked Normalized', () => (
     <StackedNormalizedBarChart
       width={500}
@@ -477,7 +606,34 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
           layout="horizontal"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
+            .colors(multiCategory.length)
+          }
+          bar={
+            <Bar
+              gradient={
+                <Gradient
+                  stops={[
+                    <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
+                    <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+                  ]}
+                />
+              }
+              rounded={false}
+              rangeLines={<RangeLines type="top" strokeWidth={3} />}
+              tooltip={
+                <ChartTooltip
+                  content={data => {
+                    const x = `${data.key} ∙ ${formatValue(data.y)}`;
+                    const y = `${formatValue(data.value)} ∙ ${formatValue(
+                      Math.floor((data.x1 - data.x0) * 100)
+                    )}%`;
+
+                    return <TooltipTemplate value={{ y, x }} />;
+                  }}
+                />
+              }
+            />
+          }
         />
       }
     />

@@ -29,13 +29,13 @@ export type BarProps = {
   groupIndex?: number;
   animated: boolean;
   isCategorical: boolean;
-  onClick: (event) => void;
-  onMouseEnter: (event) => void;
-  onMouseLeave: (event) => void;
   rangeLines: JSX.Element | null;
   mask: JSX.Element | null;
   tooltip: JSX.Element | null;
   layout: Direction;
+  onClick: (event) => void;
+  onMouseEnter: (event) => void;
+  onMouseLeave: (event) => void;
 } & PropFunctionTypes;
 
 interface BarState {
@@ -72,10 +72,6 @@ export class Bar extends Component<BarProps, BarState> {
   rect = createRef<SVGGElement>();
   state: BarState = {};
 
-  getXAttribute(): 'x' | 'x0' {
-    return this.props.isCategorical ? 'x' : 'x0';
-  }
-
   getExit({ x, y, width, height }: BarCoordinates) {
     const { yScale, layout, xScale } = this.props;
 
@@ -103,7 +99,13 @@ export class Bar extends Component<BarProps, BarState> {
         size = scale.bandwidth();
 
         if (sizeOverride) {
-          offset = offset + size / 2 - sizeOverride / 2;
+          if (offset) {
+            offset = offset + size / 2 - sizeOverride / 2;
+          } else {
+            // Stacked bar charts don't have offsets...
+            offset = size / 2 - sizeOverride / 2;
+          }
+
           size = sizeOverride;
         }
       } else {
@@ -259,10 +261,17 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   getTooltipData() {
-    const { data } = this.props;
+    const { data, isCategorical } = this.props;
 
-    const xAttr = this.getXAttribute();
+    const xAttr = isCategorical ? 'x' : 'x0';
     let x = data[xAttr]!;
+
+    // Stacked diverging negative numbers
+    // in horizontal layouts need to pull x0
+    if (data.x0 < 0) {
+      x = data.x0;
+    }
+
     if (data.key && data.key !== x) {
       x = `${data.key} ∙ ${x}`;
     }

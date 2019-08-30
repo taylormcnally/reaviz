@@ -7,7 +7,7 @@ import { buildBarStackData } from './barStack';
 export function buildMarimekkoData(
   data: ChartNestedDataShape[]
 ): ChartInternalNestedDataShape[] {
-  const result = buildBarStackData(data, true);
+  const result = buildBarStackData(data, 'expand');
   const sums = {};
 
   // Calculate the sum for each series and the total sum

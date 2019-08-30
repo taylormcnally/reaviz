@@ -22,22 +22,59 @@ export function extent(data: any[], attr: string): number[] {
  * Get the domain for the Y Axis.
  */
 export function getYDomain({ scaled, data }): number[] {
-  const minMax = extent(data, 'y1');
-  return scaled ? minMax : [0, minMax[1]];
+  const [startY, endY] = extent(data, 'y');
+  const [startY1, endY1] = extent(data, 'y1');
+
+  // If dealing w/ negative numbers, we should
+  // normalize the top and bottom values
+  if (startY < 0) {
+    const posStart = -startY;
+    const maxNum = Math.max(posStart, endY);
+
+    return [
+      -maxNum,
+      maxNum
+    ];
+  }
+
+  // Scaled start scale at non-zero
+  if (scaled) {
+    return [startY1, endY1];
+  }
+
+  // Start at 0 based
+  return [0, endY1];
 }
 
 /**
  * Get the domain for the X Axis.
  */
 export function getXDomain({ data, scaled = false }): number[] {
-  const [min, max] = extent(data, 'x');
+  const [startX, endX] = extent(data, 'x');
+  const [startX0, endX0] = extent(data, 'x0');
 
-  // For linear X based scales, we should set min to 0
-  if (isNumber(min) && isNumber(max) && !scaled) {
-    return [0, max];
+  // Histograms use dates for start/end
+  if (isNumber(startX) && isNumber(endX)) {
+    // If dealing w/ negative numbers, we should
+    // normalize the top and bottom values
+    if (startX0 < 0) {
+      const posStart = -startX0;
+      const maxNum = Math.max(posStart, endX0);
+
+      return [
+        -maxNum,
+        maxNum
+      ];
+    }
+
+    // If not scaled, return 0/max domains
+    if (!scaled) {
+      return [0, endX];
+    }
   }
 
-  return [min, max];
+  // Scaled start scale at non-zero
+  return [startX, endX];
 }
 
 /**

@@ -1,4 +1,4 @@
-import { stack, stackOffsetExpand } from 'd3-shape';
+import { stack, stackOffsetExpand, stackOffsetDiverging } from 'd3-shape';
 import { ChartNestedDataShape, ChartInternalNestedDataShape } from './types';
 import { getDeepGroupDomain } from '../utils/domains';
 import {
@@ -6,6 +6,8 @@ import {
   normalizeValue,
   normalizeValueForFormatting
 } from './bigInteger';
+
+export type StackTypes = 'default' | 'expand' | 'diverging';
 
 /**
  * Given a dataset like:
@@ -110,12 +112,19 @@ function transformStackToData(stackData, direction = 'vertical'): ChartInternalN
  */
 export function buildBarStackData(
   data: ChartNestedDataShape[],
-  normalized = false,
+  offset: StackTypes = 'default',
   direction = 'vertical'
 ) {
   const keys = getDeepGroupDomain(data, 'key');
   const stackData = transformDataToStack(data);
-  const stackFn = !normalized ? stack() : stack().offset(stackOffsetExpand);
+
+  let stackFn = stack();
+  if (offset === 'expand') {
+    stackFn = stackFn.offset(stackOffsetExpand);
+  } else if (offset === 'diverging') {
+    stackFn = stackFn.offset(stackOffsetDiverging);
+  }
+
   const result = stackFn.keys(keys)(stackData);
 
   return transformStackToData(result, direction);

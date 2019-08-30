@@ -20,7 +20,7 @@ export interface BarSeriesProps {
   xScale1: any;
   yScale: any;
   bar: JSX.Element;
-  type: 'standard' | 'grouped' | 'stacked' | 'stackedNormalized' | 'marimekko' | 'waterfall';
+  type: 'standard' | 'grouped' | 'stacked' | 'stackedNormalized' | 'stackedDiverging' | 'marimekko' | 'waterfall';
   colorScheme: ((data, index: number) => string) | string[];
   animated: boolean;
   padding: number;
@@ -49,6 +49,16 @@ export class BarSeries extends Component<BarSeriesProps> {
     layout: 'vertical'
   };
 
+  getIsMulti() {
+    const { type } = this.props;
+
+    return type === 'grouped' ||
+      type === 'stacked' ||
+      type === 'marimekko' ||
+      type === 'stackedNormalized' ||
+      type === 'stackedDiverging';
+  }
+
   /**
    * Get the translation for the bar group.
    */
@@ -71,9 +81,18 @@ export class BarSeries extends Component<BarSeriesProps> {
   }
 
   getColor(point, index) {
-    const { colorScheme, data, type } = this.props;
-    const isMulti = type !== 'standard' && type !== 'waterfall';
-    let key = isMulti ? 'x' : 'key';
+    const { colorScheme, data, layout } = this.props;
+    const isMulti = this.getIsMulti();
+
+    let key = 'key';
+    if (isMulti) {
+      if (layout === 'vertical') {
+        key = 'x';
+      } else {
+        key = 'y';
+      }
+    }
+
     // histograms...
     if (point[key] === undefined) {
       key = 'x0';
@@ -115,7 +134,7 @@ export class BarSeries extends Component<BarSeriesProps> {
     // Histograms dont have keys
     let key = barIndex.toString();
     if (data.key) {
-      key = `${data.key!.toString()}-${data.x!.toString()}`;
+      key = `${data.key!.toString()}-${data.value!.toString()}`;
     }
 
     return (
@@ -158,12 +177,8 @@ export class BarSeries extends Component<BarSeriesProps> {
   }
 
   render() {
-    const { data, type } = this.props;
-    const isMulti =
-      type === 'grouped' ||
-      type === 'stacked' ||
-      type === 'marimekko' ||
-      type === 'stackedNormalized';
+    const { data } = this.props;
+    const isMulti = this.getIsMulti();
 
     return (
       <Fragment>

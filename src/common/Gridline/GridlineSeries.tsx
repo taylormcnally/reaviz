@@ -16,7 +16,7 @@ export interface GridlineSeriesProps {
   stripe: JSX.Element | null;
 }
 
-export class GridlineSeries extends Component<GridlineSeriesProps, {}> {
+export class GridlineSeries extends Component<GridlineSeriesProps> {
   static defaultProps: Partial<GridlineSeriesProps> = {
     line: <Gridline />,
     stripe: null

@@ -17,7 +17,8 @@ import {
   buildWaterfall,
   ChartShallowDataShape,
   buildNestedChartData,
-  buildShallowChartData
+  buildShallowChartData,
+  StackTypes
 } from '../common/data';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
 import {
@@ -69,14 +70,24 @@ export class BarChart extends Component<BarChartProps> {
     const isVertical = this.getIsVertical();
     const isMarimekko = type === 'marimekko';
     const isGrouped = type === 'grouped';
-    const isStacked = type === 'stacked' || type === 'stackedNormalized';
+    const isStacked =
+      type === 'stacked' ||
+      type === 'stackedNormalized' ||
+      type === 'stackedDiverging';
     const isMultiSeries = isGrouped || isStacked;
 
     let data;
     if (isStacked) {
+      let distroType: StackTypes = 'default';
+      if (type === 'stackedNormalized') {
+        distroType = 'expand';
+      } else if (type === 'stackedDiverging') {
+        distroType = 'diverging';
+      }
+
       data = buildBarStackData(
         this.props.data as ChartNestedDataShape[],
-        type === 'stackedNormalized',
+        distroType,
         layout
       );
     } else if (type === 'waterfall') {
