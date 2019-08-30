@@ -1,4 +1,4 @@
-# Master
+# 2.8.0
 - [Feature] Diverging Stacked Bar Chart #82
 - [Fix] Horz stacked bar chart color getter
 - [Fix] Horz stacked bar chart demo tooltips
