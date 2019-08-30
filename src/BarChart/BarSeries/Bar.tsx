@@ -72,10 +72,6 @@ export class Bar extends Component<BarProps, BarState> {
   rect = createRef<SVGGElement>();
   state: BarState = {};
 
-  getXAttribute(): 'x' | 'x0' {
-    return this.props.isCategorical ? 'x' : 'x0';
-  }
-
   getExit({ x, y, width, height }: BarCoordinates) {
     const { yScale, layout, xScale } = this.props;
 
@@ -265,10 +261,17 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   getTooltipData() {
-    const { data } = this.props;
+    const { data, isCategorical } = this.props;
 
-    const xAttr = this.getXAttribute();
+    const xAttr = isCategorical ? 'x' : 'x0';
     let x = data[xAttr]!;
+
+    // Stacked diverging negative numbers
+    // in horizontal layouts need to pull x0
+    if (data.x0 < 0) {
+      x = data.x0;
+    }
+
     if (data.key && data.key !== x) {
       x = `${data.key} ∙ ${x}`;
     }

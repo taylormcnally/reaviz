@@ -81,9 +81,18 @@ export class BarSeries extends Component<BarSeriesProps> {
   }
 
   getColor(point, index) {
-    const { colorScheme, data, type } = this.props;
-    const isMulti = type !== 'standard' && type !== 'waterfall';
-    let key = isMulti ? 'x' : 'key';
+    const { colorScheme, data, layout } = this.props;
+    const isMulti = this.getIsMulti();
+
+    let key = 'key';
+    if (isMulti) {
+      if (layout === 'vertical') {
+        key = 'x';
+      } else {
+        key = 'y';
+      }
+    }
+
     // histograms...
     if (point[key] === undefined) {
       key = 'x0';
