@@ -49,6 +49,16 @@ export class BarSeries extends Component<BarSeriesProps> {
     layout: 'vertical'
   };
 
+  getIsMulti() {
+    const { type } = this.props;
+
+    return type === 'grouped' ||
+      type === 'stacked' ||
+      type === 'marimekko' ||
+      type === 'stackedNormalized' ||
+      type === 'stackedDiverging';
+  }
+
   /**
    * Get the translation for the bar group.
    */
@@ -115,7 +125,7 @@ export class BarSeries extends Component<BarSeriesProps> {
     // Histograms dont have keys
     let key = barIndex.toString();
     if (data.key) {
-      key = `${data.key!.toString()}-${data.x!.toString()}`;
+      key = `${data.key!.toString()}-${data.value!.toString()}`;
     }
 
     return (
@@ -158,12 +168,8 @@ export class BarSeries extends Component<BarSeriesProps> {
   }
 
   render() {
-    const { data, type } = this.props;
-    const isMulti =
-      type === 'grouped' ||
-      type === 'stacked' ||
-      type === 'marimekko' ||
-      type === 'stackedNormalized';
+    const { data } = this.props;
+    const isMulti = this.getIsMulti();
 
     return (
       <Fragment>

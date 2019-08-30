@@ -248,6 +248,25 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       }
     />
   ))
+  .add('Stacked Custom Bar Width', () => (
+    <StackedBarChart
+      width={350}
+      height={350}
+      data={multiCategory}
+      series={
+        <StackedBarSeries
+          bar={
+            <Bar
+              width={10}
+            />
+          }
+          colorScheme={chroma
+            .scale(['ACB7C9', '418AD7'])
+            .colors(multiCategory.length)}
+        />
+      }
+    />
+  ))
   .add('Stacked Diverging', () => (
     <StackedBarChart
       width={400}
@@ -500,6 +519,58 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
             .colors(multiCategory.length)}
+        />
+      }
+    />
+  ))
+  .add('Stacked Diverging', () => (
+    <StackedBarChart
+      width={400}
+      height={250}
+      data={binnedDateData}
+      gridlines={
+        <GridlineSeries
+          line={<Gridline direction="x" />}
+        />
+      }
+      series={
+        <StackedBarSeries
+          layout="horizontal"
+          type="stackedDiverging"
+          bar={
+            <Bar
+              rounded={false}
+              rangeLines={null}
+              gradient={null}
+            />
+          }
+          colorScheme={[
+            'rgba(244, 67, 54, .7)',
+            'rgba(76, 175, 80, .7)'
+          ]}
+        />
+      }
+      yAxis={
+        <LinearYAxis
+          type="category"
+          position="center"
+          tickSeries={
+            <LinearYAxisTickSeries
+              line={null}
+              label={null}
+            />
+          }
+        />
+      }
+      xAxis={
+        <LinearXAxis
+          type="value"
+          tickSeries={
+            <LinearXAxisTickSeries
+              line={null}
+              label={<LinearYAxisTickLabel padding={5} position="end" />}
+            />
+          }
         />
       }
     />

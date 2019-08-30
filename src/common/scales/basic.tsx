@@ -1,11 +1,7 @@
 import {
   scaleLinear,
   scaleTime,
-  scaleBand,
-  ScaleBand,
-  ScalePoint,
-  ScaleTime,
-  ScaleLinear
+  scaleBand
 } from 'd3-scale';
 import { getXDomain, getYDomain, getGroupDomain } from '../utils/domains';
 import {
@@ -37,7 +33,7 @@ export function getXScale({
   padding,
   scaled,
   isMultiSeries = false
-}: ScaleConfig): ScalePoint<any> | ScaleBand<any> | ScaleTime<any, any> {
+}: ScaleConfig) {
   let scale;
 
   if (type === 'time' || type === 'duration' || type === 'value') {
@@ -47,9 +43,8 @@ export function getXScale({
       scale = scaleLinear().rangeRound([0, width!]);
     }
 
-    domain = domain || getXDomain({ data, scaled });
-    scale = scale.domain(domain);
-  } else if (type === 'category') {
+    scale = scale.domain(domain || getXDomain({ data, scaled }));
+  } else {
     if (!domain) {
       if (isMultiSeries) {
         domain = getGroupDomain(data as ChartInternalNestedDataShape[], 'key');
@@ -79,8 +74,9 @@ export function getYScale({
   scaled,
   padding,
   isMultiSeries = false
-}: ScaleConfig): ScaleLinear<any, any> {
+}: ScaleConfig) {
   let scale;
+
   if (type === 'time' || type === 'value' || type === 'duration') {
     scale = scaleLinear()
       .range([height!, 0])

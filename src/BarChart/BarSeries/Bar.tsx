@@ -29,13 +29,13 @@ export type BarProps = {
   groupIndex?: number;
   animated: boolean;
   isCategorical: boolean;
-  onClick: (event) => void;
-  onMouseEnter: (event) => void;
-  onMouseLeave: (event) => void;
   rangeLines: JSX.Element | null;
   mask: JSX.Element | null;
   tooltip: JSX.Element | null;
   layout: Direction;
+  onClick: (event) => void;
+  onMouseEnter: (event) => void;
+  onMouseLeave: (event) => void;
 } & PropFunctionTypes;
 
 interface BarState {
@@ -103,7 +103,13 @@ export class Bar extends Component<BarProps, BarState> {
         size = scale.bandwidth();
 
         if (sizeOverride) {
-          offset = offset + size / 2 - sizeOverride / 2;
+          if (offset) {
+            offset = offset + size / 2 - sizeOverride / 2;
+          } else {
+            // Stacked bar charts don't have offsets...
+            offset = size / 2 - sizeOverride / 2;
+          }
+
           size = sizeOverride;
         }
       } else {
