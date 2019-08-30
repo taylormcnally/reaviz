@@ -24,7 +24,8 @@ import {
   Bar,
   StackedBarSeries,
   StackedNormalizedBarSeries,
-  MarimekkoBarSeries
+  MarimekkoBarSeries,
+  RangeLines
 } from './BarSeries';
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import {
@@ -38,6 +39,9 @@ import {
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 import { Stripes } from '../common/masks';
+import { ChartTooltip, TooltipTemplate } from '../common/TooltipArea';
+import { formatValue } from '../common/utils';
+import { Gradient, GradientStop } from '../common/gradients';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
   .add(
@@ -568,7 +572,7 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
           tickSeries={
             <LinearXAxisTickSeries
               line={null}
-              label={<LinearYAxisTickLabel padding={5} position="end" />}
+              label={<LinearXAxisTickLabel padding={5} />}
             />
           }
         />
@@ -602,7 +606,34 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
           layout="horizontal"
           colorScheme={chroma
             .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
+            .colors(multiCategory.length)
+          }
+          bar={
+            <Bar
+              gradient={
+                <Gradient
+                  stops={[
+                    <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
+                    <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+                  ]}
+                />
+              }
+              rounded={false}
+              rangeLines={<RangeLines type="top" strokeWidth={3} />}
+              tooltip={
+                <ChartTooltip
+                  content={data => {
+                    const x = `${data.key} ∙ ${formatValue(data.y)}`;
+                    const y = `${formatValue(data.value)} ∙ ${formatValue(
+                      Math.floor((data.x1 - data.x0) * 100)
+                    )}%`;
+
+                    return <TooltipTemplate value={{ y, x }} />;
+                  }}
+                />
+              }
+            />
+          }
         />
       }
     />
