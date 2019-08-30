@@ -45,7 +45,7 @@ export const durationCategoryData = [
   }
 ];
 
-export const nonZeroCategoryData = [
+export const nonZeroCategoryData: any = [
   {
     key: 'Phishing Attack',
     data: [5, 10]
