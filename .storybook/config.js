@@ -4,6 +4,7 @@ import { themes } from '@storybook/theming';
 import { withInfo } from '@storybook/addon-info';
 import centered from '@storybook/addon-centered/react';
 import ReavizLogo from './assets/reaviz.svg';
+import 'rdk/dist/index.css';
 
 addParameters({
   options: {
