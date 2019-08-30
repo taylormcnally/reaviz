@@ -22,8 +22,28 @@ export function extent(data: any[], attr: string): number[] {
  * Get the domain for the Y Axis.
  */
 export function getYDomain({ scaled, data }): number[] {
-  const minMax = extent(data, 'y1');
-  return scaled ? minMax : [0, minMax[1]];
+  const [startY, endY] = extent(data, 'y');
+  const [startY1, endY1] = extent(data, 'y1');
+
+  // If dealing w/ negative numbers, we should
+  // normalize the top and bottom values
+  if (startY < 0) {
+    const posStart = -startY;
+    const maxNum = Math.max(posStart, endY);
+
+    return [
+      -maxNum,
+      maxNum
+    ];
+  }
+
+  // Scaled start scale at non-zero
+  if (scaled) {
+    return [startY1, endY1];
+  }
+
+  // Start at 0 based
+  return [0, endY1];
 }
 
 /**

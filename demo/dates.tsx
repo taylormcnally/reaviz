@@ -47,7 +47,7 @@ export const binnedDateData = [
     data: [
       {
         key: 'Closed',
-        data: -10
+        data: -12
       },
       {
         key: 'Opened',

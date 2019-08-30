@@ -33,7 +33,9 @@ import {
   LinearYAxis,
   LinearYAxisTickSeries,
   LinearXAxisTickLabel,
-  LinearXAxisTickLine
+  LinearXAxisTickLine,
+  LinearAxisLine,
+  LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 import { Stripes } from '../common/masks';
 
@@ -251,6 +253,11 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       width={400}
       height={250}
       data={binnedDateData}
+      gridlines={
+        <GridlineSeries
+          line={<Gridline direction="y" />}
+        />
+      }
       series={
         <StackedBarSeries
           type="stackedDiverging"
@@ -267,14 +274,24 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
           ]}
         />
       }
+      yAxis={
+        <LinearYAxis
+          tickSeries={
+            <LinearYAxisTickSeries
+              line={null}
+              label={<LinearYAxisTickLabel padding={5} />}
+            />
+          }
+        />
+      }
       xAxis={
         <LinearXAxis
           type="category"
           position="center"
           tickSeries={
             <LinearXAxisTickSeries
-              line={<LinearXAxisTickLine position="center" />}
-              label={<LinearXAxisTickLabel padding={3} />}
+              line={null}
+              label={null}
             />
           }
         />
