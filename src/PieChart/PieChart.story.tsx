@@ -4,7 +4,7 @@ import chroma from 'chroma-js';
 
 import { PieChart } from './PieChart';
 import { categoryData, randomNumber, browserData } from '../../demo';
-import { PieArcSeries, PieArcLabel } from './PieArcSeries';
+import { PieArcSeries } from './PieArcSeries';
 
 storiesOf('Charts/Pie/Pie', module)
   .add('Simple', () => (
