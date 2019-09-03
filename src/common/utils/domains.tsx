@@ -21,7 +21,7 @@ export function extent(data: any[], attr: string): number[] {
 /**
  * Get the domain for the Y Axis.
  */
-export function getYDomain({ scaled, data }): number[] {
+export function getYDomain({ scaled = false, data }): number[] {
   const [startY, endY] = extent(data, 'y');
   const [startY1, endY1] = extent(data, 'y1');
 

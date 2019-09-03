@@ -1,33 +1,126 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import {
   ChartProps,
   ChartContainer,
   ChartContainerChildProps
 } from '../common/containers/ChartContainer';
-import { ChartDataShape } from '../common/data';
-// import { CloneElement } from '../common/utils/children';
+import { ChartNestedDataShape, buildNestedChartData } from '../common/data';
+import { CloneElement } from '../common/utils/children';
+import bind from 'memoize-bind';
+import {
+  isAxisVisible,
+  LinearAxisProps,
+  LinearXAxis,
+  LinearYAxis,
+  LinearYAxisTickSeries,
+  LinearXAxisTickSeries,
+  LinearYAxisTickLabel,
+  LinearXAxisTickLabel
+} from '../common/Axis';
+import { HeatmapSeries, HeatmapSeriesProps } from './HeatmapSeries';
+import { scaleBand } from 'd3-scale';
+import { uniqueBy } from '../common/utils/array';
 
 interface HeatmapProps extends ChartProps {
-  data: ChartDataShape[];
+  data: ChartNestedDataShape[];
   series: JSX.Element;
+  yAxis: JSX.Element;
+  xAxis: JSX.Element;
 }
 
 export class Heatmap extends Component<HeatmapProps> {
-  static defaultProps: HeatmapProps = {
+  static defaultProps: Partial<HeatmapProps> = {
     data: [],
     margins: 10,
-    series: <g></g>
+    series: <HeatmapSeries />,
+    yAxis: (
+      <LinearYAxis
+        type="category"
+        axisLine={null}
+        tickSeries={
+          <LinearYAxisTickSeries
+            line={null}
+            label={<LinearYAxisTickLabel padding={5} />}
+          />
+        }
+      />
+    ),
+    xAxis: (
+      <LinearXAxis
+        type="category"
+        axisLine={null}
+        tickSeries={
+          <LinearXAxisTickSeries
+            line={null}
+            label={<LinearXAxisTickLabel padding={5} />}
+          />
+        }
+      />
+    )
   };
 
-  renderChart(containerProps: ChartContainerChildProps) {
-    const { chartWidth, chartHeight } = containerProps;
+  getScalesData(chartHeight: number, chartWidth: number) {
+    const { xAxis, yAxis, series, data: prevData } = this.props;
 
-    return <g></g>;
+    const data = buildNestedChartData(prevData);
+
+    const xDomain = xAxis.props.domain || uniqueBy(data, d => d.key);
+    const xScale = scaleBand()
+      .rangeRound([0, chartWidth])
+      .domain(xDomain)
+      .paddingInner(series.props.padding);
+
+    const yDomain = yAxis.props.domain || uniqueBy(data, d => d.data, d => d.x);
+    const yScale = scaleBand()
+      .domain(yDomain)
+      .rangeRound([chartHeight, 0])
+      .paddingInner(series.props.padding);
+
+    return {
+      yScale,
+      xScale,
+      data
+    };
+  }
+
+  renderChart(containerProps: ChartContainerChildProps) {
+    const { chartWidth, chartHeight, updateAxes, id } = containerProps;
+    const { yAxis, xAxis, series } = this.props;
+    const { xScale, yScale, data } = this.getScalesData(
+      chartHeight,
+      chartWidth
+    );
+
+    return (
+      <Fragment>
+        <CloneElement<LinearAxisProps>
+          element={xAxis}
+          height={chartHeight}
+          width={chartWidth}
+          scale={xScale}
+          onDimensionsChange={bind(updateAxes, this, 'horizontal')}
+        />
+        <CloneElement<LinearAxisProps>
+          element={yAxis}
+          height={chartHeight}
+          width={chartWidth}
+          scale={yScale}
+          onDimensionsChange={bind(updateAxes, this, 'vertical')}
+        />
+        <CloneElement<HeatmapSeriesProps>
+          element={series}
+          id={`heat-series-${id}`}
+          data={data}
+          xScale={xScale}
+          yScale={yScale}
+        />
+      </Fragment>
+    );
   }
 
   render() {
-    const { id, width, height, margins, className } = this.props;
+    const { id, width, height, margins, className, xAxis, yAxis } = this.props;
 
     return (
       <ChartContainer
@@ -35,9 +128,8 @@ export class Heatmap extends Component<HeatmapProps> {
         width={width}
         height={height}
         margins={margins}
-        xAxisVisible={false}
-        yAxisVisible={false}
-        center={true}
+        xAxisVisible={isAxisVisible(xAxis.props)}
+        yAxisVisible={isAxisVisible(yAxis.props)}
         className={classNames(className)}
       >
         {props => this.renderChart(props)}
