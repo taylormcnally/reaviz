@@ -70,7 +70,7 @@
     "lodash-es": "^4.17.15",
     "memoize-bind": "^1.0.3",
     "moment": "^2.24.0",
-    "rdk": "^1.0.5",
+    "rdk": "^1.0.6",
     "react-countup": "^4.2.1",
     "react-pose": "^4.0.8",
     "react-sizeme": "^2.6.7",
