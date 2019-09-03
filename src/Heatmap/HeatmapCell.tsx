@@ -2,6 +2,7 @@ import React, { Component, Fragment, createRef } from 'react';
 import { ChartTooltip, ChartTooltipProps } from '../common/TooltipArea';
 import { CloneElement } from '../common/utils/children';
 import bind from 'memoize-bind';
+import { PosedCell } from './PosedCell';
 
 export interface HeatmapCellProps {
   x: number;
@@ -13,6 +14,8 @@ export interface HeatmapCellProps {
   tooltip: JSX.Element | null;
   fill: string;
   data: any;
+  animated: boolean;
+  cellIndex: number;
   onClick: (event) => void;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
@@ -79,15 +82,17 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
       onMouseEnter,
       onMouseLeave,
       onClick,
+      cellIndex,
       ...rest
     } = this.props;
     const { active } = this.state;
 
     return (
       <Fragment>
-        <rect
+        <PosedCell
           {...rest}
           ref={this.rect}
+          index={cellIndex}
           onMouseEnter={bind(this.onMouseEnter, this)}
           onMouseLeave={bind(this.onMouseLeave, this)}
           onClick={bind(this.onMouseClick, this)}
