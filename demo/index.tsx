@@ -5,3 +5,4 @@ export * from './numbers';
 export * from './sankey';
 export * from './signals';
 export * from './utils';
+export * from './heatmap';
