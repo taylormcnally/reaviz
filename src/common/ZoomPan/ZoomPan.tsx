@@ -213,7 +213,14 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
             onZoomEnd={bind(this.onZoomEnd, this)}
           >
             <g style={{ cursor }}>
-              {!disabled && <rect height={height} width={width} opacity={0} />}
+              {!disabled && (
+                <rect
+                  height={height}
+                  width={width}
+                  opacity={0}
+                  className="pan-container"
+                />
+              )}
               <g
                 style={{
                   pointerEvents: selection,
