@@ -1,3 +1,7 @@
+import { generateDate, randomNumber } from './utils';
+import { range } from 'd3-array';
+import moment from 'moment';
+
 export const heatmapSimpleData = [
   {
     key: 'Lateral Movement',
@@ -97,3 +101,8 @@ export const heatmapSimpleData = [
     ]
   }
 ];
+
+export const heatmapCalendarData = range(365).map(i => ({
+  key: moment().startOf('year').add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
