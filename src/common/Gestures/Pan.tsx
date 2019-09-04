@@ -17,6 +17,7 @@ interface PanProps {
   height: number;
   constrain: boolean;
   decay: boolean;
+  globalPanning: boolean;
   onPanStart: (event: PanStartEvent) => void;
   onPanMove: (event: PanMoveEvent) => void;
   onPanEnd: (event: PanEndEvent) => void;
@@ -53,6 +54,7 @@ export class Pan extends Component<PanProps> {
     scale: 1,
     threshold: 10,
     decay: true,
+    globalPanning: true,
     onPanStart: () => undefined,
     onPanMove: () => undefined,
     onPanEnd: () => undefined,
@@ -213,6 +215,11 @@ export class Pan extends Component<PanProps> {
   onMouseDown = (event: MouseEvent) => {
     // Ignore right click
     if (event.which === 3) {
+      return;
+    }
+
+    // If global panning is turned off, it will only pan on the container
+    if (!this.props.globalPanning && event.target !== this.childRef.current) {
       return;
     }
 

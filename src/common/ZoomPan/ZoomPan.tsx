@@ -38,6 +38,7 @@ export interface ZoomPanProps {
   zoomStep: number;
   constrain: boolean;
   decay: boolean;
+  globalPanning: boolean;
   disableMouseWheel?: boolean;
   requireZoomModifier?: boolean;
   onZoomPan: (event: ZoomPanEvent) => void;
@@ -69,6 +70,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     x: 0,
     y: 0,
     scale: 1,
+    globalPanning: true,
     onPanStart: () => undefined,
     onPanMove: () => undefined,
     onPanEnd: () => undefined,
@@ -169,7 +171,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       decay,
       zoomStep,
       onPanCancel,
-      requireZoomModifier
+      requireZoomModifier,
+      globalPanning
     } = this.props;
     const { isZooming, isPanning } = this.state;
     const cursor = pannable ? 'move' : 'auto';
@@ -188,6 +191,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         decay={decay}
         disabled={!pannable || disabled}
         ref={this.panRef}
+        globalPanning={globalPanning}
         onPanStart={bind(this.onPanStart, this)}
         onPanMove={bind(this.onPanMove, this)}
         onPanEnd={bind(this.onPanEnd, this)}
