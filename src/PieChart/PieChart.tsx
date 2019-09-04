@@ -17,7 +17,7 @@ interface PieChartProps extends ChartProps {
   series: JSX.Element;
 }
 
-export class PieChart extends Component<PieChartProps, {}> {
+export class PieChart extends Component<PieChartProps> {
   static defaultProps: PieChartProps = {
     disabled: false,
     data: [],
