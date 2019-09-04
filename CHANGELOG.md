@@ -1,3 +1,7 @@
+# 2.9.0
+- [Feature] Heatmaps
+- [Feature] Propogate `nativeEvent` in ZoomPan
+
 # 2.8.0
 - [Feature] Diverging Stacked Bar Chart #82
 - [Fix] Horz stacked bar chart color getter
