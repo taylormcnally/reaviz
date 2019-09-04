@@ -1,3 +1,6 @@
+# 2.9.1
+- [Feature] Add `globalPanning` to `Pan` and `ZoomPan` to disable panning on all elements
+
 # 2.9.0
 - [Feature] Heatmaps
 - [Feature] Propogate `nativeEvent` in ZoomPan
