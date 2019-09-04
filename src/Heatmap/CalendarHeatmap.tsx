@@ -13,6 +13,9 @@ import {
 import { group, range, sum } from 'd3-array';
 import { memoize } from 'lodash-es';
 import { HeatmapSeries } from './HeatmapSeries';
+import { HeatmapCell } from './HeatmapCell';
+import { ChartTooltip } from '../common/TooltipArea';
+import { formatValue } from '../common/utils/formatting';
 
 export interface CalendarHeatmapProps extends Omit<HeatmapProps, 'data'> {
   data: ChartShallowDataShape[];
@@ -20,13 +23,30 @@ export interface CalendarHeatmapProps extends Omit<HeatmapProps, 'data'> {
 
 export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
   static defaultProps: Partial<CalendarHeatmapProps> = {
-    series: <HeatmapSeries padding={0.3} />
+    series: (
+      <HeatmapSeries
+        padding={0.3}
+        cell={
+          <HeatmapCell
+            tooltip={
+              <ChartTooltip
+                content={d =>
+                  `${formatValue(d.metadata.meta.date)} ∙ ${formatValue(
+                    d.metadata.value
+                  )}`
+                }
+              />
+            }
+          />
+        }
+      />
+    )
   };
 
-  getDataDomains = memoize((data: ChartShallowDataShape[]) => {
+  getDataDomains = memoize((rawData: ChartShallowDataShape[]) => {
     const start = moment().startOf('year');
     const end = moment().endOf('year');
-    const dates = data
+    const dates = rawData
       .filter(
         d =>
           moment(d.key as Date).isAfter(start) &&
@@ -37,14 +57,20 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
         data: d.data
       }));
 
-    const newData = Array.from(
+    const data = Array.from(
       group(dates, d => parseInt(d.key.format('w')), d => d.key.format('ddd')),
       ([key, weekData]) => ({
         key,
         data: Array.from(weekData, ([nestedKey, nestedData]) => ({
           key: nestedKey,
           data: sum(nestedData, d => d.data)
-        }))
+        })),
+        meta: {
+          date: start
+            .clone()
+            .add(key, 'weeks')
+            .toDate()
+        }
       })
     );
 
@@ -52,7 +78,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
     const xDomain = range(52);
 
     return {
-      data: newData,
+      data,
       yDomain,
       xDomain
     };

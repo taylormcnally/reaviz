@@ -7,6 +7,10 @@ export const heatmapSimpleData = [
     key: 'Lateral Movement',
     data: [
       {
+        key: 'XML',
+        data: 0
+      },
+      {
         key: 'JSON',
         data: 120
       },
@@ -30,6 +34,10 @@ export const heatmapSimpleData = [
       {
         key: 'JSON',
         data: 34
+      },
+      {
+        key: 'HTTPS',
+        data: 0
       },
       {
         key: 'SSH',

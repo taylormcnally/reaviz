@@ -78,7 +78,8 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
 
     return {
       y: data.value,
-      x: `${data.key} ∙ ${data.x}`
+      x: `${data.key} ∙ ${data.x}`,
+      metadata: data
     };
   }
 
