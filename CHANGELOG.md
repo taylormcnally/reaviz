@@ -1,3 +1,6 @@
+# 2.9.2
+- [Fix] Fix wrong element selector for `globalPanning` determination
+
 # 2.9.1
 - [Feature] Add `globalPanning` to `Pan` and `ZoomPan` to disable panning on all elements
 
