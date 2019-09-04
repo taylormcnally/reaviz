@@ -46,6 +46,10 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
   getDataDomains = memoize((rawData: ChartShallowDataShape[]) => {
     const start = moment().startOf('year');
     const end = moment().endOf('year');
+
+    const yDomain = moment.weekdaysShort().reverse();
+    const xDomain = range(52);
+
     const dates = rawData
       .filter(
         d =>
@@ -66,6 +70,8 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
           data: sum(nestedData, d => d.data)
         })),
         meta: {
+          start: start.toDate(),
+          end: end.toDate(),
           date: start
             .clone()
             .add(key, 'weeks')
@@ -73,9 +79,6 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
         }
       })
     );
-
-    const yDomain = moment.weekdaysShort().reverse();
-    const xDomain = range(52);
 
     return {
       data,

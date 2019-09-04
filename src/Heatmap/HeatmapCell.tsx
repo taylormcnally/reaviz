@@ -30,6 +30,13 @@ interface HeatmapCellState {
   active?: boolean;
 }
 
+// Set padding modifier for the tooltips
+const modifiers = {
+  offset: {
+    offset: '0, 3px'
+  }
+};
+
 export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
   static defaultProps: Partial<HeatmapCellProps> = {
     rx: 2,
@@ -113,6 +120,7 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
           <CloneElement<ChartTooltipProps>
             element={tooltip}
             visible={!!active}
+            modifiers={tooltip.props.modifiers || modifiers}
             reference={this.rect}
             value={this.getTooltipData()}
           />
