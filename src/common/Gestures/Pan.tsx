@@ -222,7 +222,7 @@ export class Pan extends Component<PanProps> {
     if (
       !this.props.globalPanning &&
       event.target &&
-      (event.target as HTMLElement).classList.contains('pan-container')
+      !(event.target as HTMLElement).classList.contains('pan-container')
     ) {
       return;
     }
