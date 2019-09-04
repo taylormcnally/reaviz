@@ -219,7 +219,10 @@ export class Pan extends Component<PanProps> {
     }
 
     // If global panning is turned off, it will only pan on the container
-    if (!this.props.globalPanning && event.target !== this.childRef.current) {
+    if (
+      !this.props.globalPanning &&
+      event.srcElement !== this.childRef.current
+    ) {
       return;
     }
 
