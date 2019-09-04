@@ -1,4 +1,10 @@
-# 2.9.3/2.9.2
+# 2.9.4
+- [Fix] Fix wrong element selector for `globalPanning` determination
+
+# 2.9.3
+- [Fix] Fix wrong element selector for `globalPanning` determination
+
+# 2.9.2
 - [Fix] Fix wrong element selector for `globalPanning` determination
 
 # 2.9.1
