@@ -21,6 +21,7 @@ export interface ZoomPanEvent {
   x: number;
   y: number;
   type: 'zoom' | 'pan';
+  nativeEvent: any;
 }
 
 export interface ZoomPanProps {
@@ -114,7 +115,8 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       scale: this.props.scale,
       x: event.x,
       y: event.y,
-      type: 'pan'
+      type: 'pan',
+      nativeEvent: event.nativeEvent
     });
 
     this.props.onPanMove(event);
@@ -131,7 +133,10 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     }
 
     this.props.onZoomPan({
-      ...event,
+      x: event.x,
+      y: event.y,
+      scale: event.scale,
+      nativeEvent: event.nativeEvent,
       type: 'zoom'
     });
 
