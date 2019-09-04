@@ -14,16 +14,12 @@ import { group, range, sum } from 'd3-array';
 import { memoize } from 'lodash-es';
 import { HeatmapSeries } from './HeatmapSeries';
 
-export type CalendarHeatmapView = 'year' | 'month' | 'day';
-
 export interface CalendarHeatmapProps extends Omit<HeatmapProps, 'data'> {
   data: ChartShallowDataShape[];
-  view: CalendarHeatmapView;
 }
 
 export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
   static defaultProps: Partial<CalendarHeatmapProps> = {
-    view: 'year',
     series: <HeatmapSeries padding={0.3} />
   };
 
@@ -55,8 +51,6 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
     const yDomain = moment.weekdaysShort().reverse();
     const xDomain = range(52);
 
-    console.log('here', newData);
-
     return {
       data: newData,
       yDomain,
@@ -65,7 +59,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
   });
 
   render() {
-    const { data, view, ...rest } = this.props;
+    const { data, ...rest } = this.props;
     const { data: calData, yDomain, xDomain } = this.getDataDomains(data);
 
     return (

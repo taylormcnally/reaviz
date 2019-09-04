@@ -1,4 +1,4 @@
-import { generateDate, randomNumber } from './utils';
+import { randomNumber } from './utils';
 import { range } from 'd3-array';
 import moment from 'moment';
 
