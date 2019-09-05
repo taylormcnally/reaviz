@@ -49,8 +49,8 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
 
   getDataDomains = memoize((rawData: ChartShallowDataShape[]) => {
     // Build our x/y domains for days of week + number of weeks in year
-    const yDomain = range(7).reverse();
-    const xDomain = range(52);
+    const yDomain = range(6).reverse();
+    const xDomain = range(51);
 
     // Get the most recent date to get the range from
     // From the end date, lets find the start year of that
@@ -72,51 +72,36 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
         data: d.data
       }));
 
-    // Group the dates by:
-    //  - Week Number of Year - Example: 52
-    //  - Day of Week Short Name - Example: 4
-    //  - Sum of Values for that Day of Week - Example: 5
+    const firstDayOfYear = start.weekday();
+    const curDate = start.clone().subtract(firstDayOfYear, 'days');
     const rows = [];
-    for (const week of xDomain) {
+
+    for (let week = 0; week <= 51; week++) {
       const row = {
         key: week,
         data: []
       };
 
-      const weekDate = start.clone().add(week, 'weeks');
+      for (let day = 0; day <= 6; day++) {
+        const dayValue = dates.find(d => d.key.isSame(curDate));
 
-      for (const day of yDomain) {
-        const dayDate = weekDate.clone().add(day, 'days');
-        const dayNum = dayDate.day();
-        const dayValue = dates.find(d => d.key.isSame(dayDate));
+        row.data.push({
+          key: day,
+          data: dayValue ? dayValue.data : undefined,
+          meta: {
+            date: curDate.clone().toDate(),
+            start: start.toDate(),
+            end: end.toDate()
+          }
+        });
 
-        if (dayValue) {
-          row.data[dayNum] = {
-            key: dayNum,
-            data: dayValue ? dayValue.data : undefined,
-            meta: {
-              date: dayDate.toDate(),
-              start: start.toDate(),
-              end: end.toDate()
-            }
-          };
-        } else {
-          row.data[dayNum] = {
-            key: dayNum,
-            data: 0,
-            meta: {
-              date: dayDate.toDate(),
-              start: start.toDate(),
-              end: end.toDate()
-            }
-          };
-        }
+        curDate.add(1, 'day');
       }
 
       rows.push(row);
     }
 
-    console.log('here', rows);
+    console.log('raw', rows);
 
     return {
       data: rows,
