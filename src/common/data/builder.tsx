@@ -58,6 +58,7 @@ export function buildNestedChartData(
       if (idx === -1) {
         result.push({
           key,
+          meta: point.meta,
           data: []
         });
 
@@ -77,7 +78,7 @@ export function buildNestedChartData(
       result[idx].data.push({
         key,
         value: normalizeValueForFormatting(nestedPoint.data),
-        meta: point.meta,
+        meta: nestedPoint.meta,
         id: point.id,
         x,
         x0: isVertical ? x : 0,

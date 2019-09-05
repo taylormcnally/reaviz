@@ -10,7 +10,7 @@ import {
   LinearYAxisTickLabel,
   LinearXAxisTickLabel
 } from '../common/Axis';
-import { group, range, sum } from 'd3-array';
+import { range, max } from 'd3-array';
 import { memoize } from 'lodash-es';
 import { HeatmapSeries } from './HeatmapSeries';
 import { HeatmapCell } from './HeatmapCell';
@@ -19,10 +19,14 @@ import { formatValue } from '../common/utils/formatting';
 
 export interface CalendarHeatmapProps extends Omit<HeatmapProps, 'data'> {
   data: ChartShallowDataShape[];
+  height: number;
+  width: number;
 }
 
 export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
   static defaultProps: Partial<CalendarHeatmapProps> = {
+    height: 115,
+    width: 715,
     series: (
       <HeatmapSeries
         padding={0.3}
@@ -44,12 +48,19 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
   };
 
   getDataDomains = memoize((rawData: ChartShallowDataShape[]) => {
-    const start = moment().startOf('year');
-    const end = moment().endOf('year');
-
-    const yDomain = moment.weekdaysShort().reverse();
+    // Build our x/y domains for days of week + number of weeks in year
+    const yDomain = range(7).reverse();
     const xDomain = range(52);
 
+    // Get the most recent date to get the range from
+    // From the end date, lets find the start year of that
+    // From that start year, lets find the end year for our bounds
+    const endDate = max(rawData, d => d.key);
+    const start = moment(endDate).startOf('year');
+    const end = start.clone().endOf('year');
+
+    // Filter out dates that are not in the start/end ranges
+    // and turn them into something our chart can read
     const dates = rawData
       .filter(
         d =>
@@ -61,40 +72,68 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
         data: d.data
       }));
 
-    const data = Array.from(
-      group(dates, d => parseInt(d.key.format('w')), d => d.key.format('ddd')),
-      ([key, weekData]) => ({
-        key,
-        data: Array.from(weekData, ([nestedKey, nestedData]) => ({
-          key: nestedKey,
-          data: sum(nestedData, d => d.data)
-        })),
-        meta: {
-          start: start.toDate(),
-          end: end.toDate(),
-          date: start
-            .clone()
-            .add(key, 'weeks')
-            .toDate()
+    // Group the dates by:
+    //  - Week Number of Year - Example: 52
+    //  - Day of Week Short Name - Example: 4
+    //  - Sum of Values for that Day of Week - Example: 5
+    const rows = [];
+    for (const week of xDomain) {
+      const row = {
+        key: week,
+        data: []
+      };
+
+      const weekDate = start.clone().add(week, 'weeks');
+
+      for (const day of yDomain) {
+        const dayDate = weekDate.clone().add(day, 'days');
+        const dayNum = dayDate.day();
+        const dayValue = dates.find(d => d.key.isSame(dayDate));
+
+        if (dayValue) {
+          row.data[dayNum] = {
+            key: dayNum,
+            data: dayValue ? dayValue.data : undefined,
+            meta: {
+              date: dayDate.toDate(),
+              start: start.toDate(),
+              end: end.toDate()
+            }
+          };
+        } else {
+          row.data[dayNum] = {
+            key: dayNum,
+            data: 0,
+            meta: {
+              date: dayDate.toDate(),
+              start: start.toDate(),
+              end: end.toDate()
+            }
+          };
         }
-      })
-    );
+      }
+
+      rows.push(row);
+    }
+
+    console.log('here', rows);
 
     return {
-      data,
+      data: rows,
       yDomain,
       xDomain
     };
   });
 
   render() {
-    const { data, ...rest } = this.props;
-    const { data: calData, yDomain, xDomain } = this.getDataDomains(data);
+    const { data: rawData, ...rest } = this.props;
+    const { data, yDomain, xDomain } = this.getDataDomains(rawData);
+    const weekDays = moment.weekdaysShort();
 
     return (
       <Heatmap
         {...rest}
-        data={calData}
+        data={data}
         yAxis={
           <LinearYAxis
             type="category"
@@ -102,9 +141,11 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
             domain={yDomain}
             tickSeries={
               <LinearYAxisTickSeries
-                tickSize={22}
+                tickSize={20}
                 line={null}
-                label={<LinearYAxisTickLabel padding={5} />}
+                label={
+                  <LinearYAxisTickLabel padding={5} format={d => weekDays[d]} />
+                }
               />
             }
           />

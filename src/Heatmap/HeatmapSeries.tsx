@@ -42,38 +42,51 @@ export class HeatmapSeries extends Component<HeatmapSeriesProps> {
     };
   });
 
+  renderCell({ row, cell, rowIndex, cellIndex, valueScale, width, height }) {
+    const { xScale, yScale, id, animated, cell: cellElement } = this.props;
+
+    const x = xScale(row.key);
+    const y = yScale(cell.x);
+    const fill = valueScale(cell.value);
+
+    return (
+      <PoseSVGGElement key={`${id}-${rowIndex}-${cellIndex}`}>
+        <CloneElement<HeatmapCellProps>
+          element={cellElement}
+          animated={animated}
+          cellIndex={rowIndex + cellIndex}
+          x={x}
+          y={y}
+          fill={fill}
+          width={width}
+          height={height}
+          data={cell}
+        />
+      </PoseSVGGElement>
+    );
+  }
+
   render() {
-    const {
-      xScale,
-      yScale,
-      data,
-      id,
-      colorScheme,
-      animated,
-      cell
-    } = this.props;
+    const { xScale, yScale, data, colorScheme, animated } = this.props;
+
     const valueScale = this.getValueScale(data, colorScheme);
     const height = yScale.bandwidth();
     const width = xScale.bandwidth();
 
     return (
       <PoseGroup animateOnMount={animated}>
-        {data.map((pair, i) =>
-          pair.data.map((val, ii) => (
-            <PoseSVGGElement key={`${id}-${i}-${ii}`}>
-              <CloneElement<HeatmapCellProps>
-                element={cell}
-                animated={animated}
-                cellIndex={i + ii}
-                x={xScale(pair.key)}
-                y={yScale(val.x)}
-                fill={valueScale(val.value)}
-                width={width}
-                height={height}
-                data={val}
-              />
-            </PoseSVGGElement>
-          ))
+        {data.map((row, rowIndex) =>
+          row.data.map((cell, cellIndex) =>
+            this.renderCell({
+              height,
+              width,
+              valueScale,
+              row,
+              cell,
+              rowIndex,
+              cellIndex
+            })
+          )
         )}
       </PoseGroup>
     );

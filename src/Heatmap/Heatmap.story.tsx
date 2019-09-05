@@ -8,6 +8,4 @@ storiesOf('Charts/Heatmap', module)
   .add('Basic', () => (
     <Heatmap height={250} width={400} data={heatmapSimpleData} />
   ))
-  .add('Calendar', () => (
-    <CalendarHeatmap height={115} width={715} data={heatmapCalendarData} />
-  ));
+  .add('Calendar', () => <CalendarHeatmap data={heatmapCalendarData} />);
