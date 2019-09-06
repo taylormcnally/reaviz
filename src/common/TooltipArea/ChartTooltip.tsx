@@ -7,7 +7,7 @@ export interface ChartTooltipProps extends TooltipProps {
   content: any; // ((value, color?) => ReactNode) | JSX.Element;
   value: any;
   color: any;
-  metadata: any;
+  data: any;
 }
 
 export class ChartTooltip extends Component<ChartTooltipProps> {
@@ -16,14 +16,14 @@ export class ChartTooltip extends Component<ChartTooltipProps> {
   };
 
   renderContent() {
-    const { content, value, metadata, color } = this.props;
+    const { content, value, data, color } = this.props;
 
-    if (!value && !metadata) {
+    if (!value && !data) {
       return null;
     }
 
     return isFunction(content)
-      ? content(metadata || value, color)
+      ? content(data || value, color)
       : cloneElement(content, {
           ...content.props,
           value,
@@ -32,7 +32,7 @@ export class ChartTooltip extends Component<ChartTooltipProps> {
   }
 
   render() {
-    const { content, value, metadata, color, ...rest } = this.props;
+    const { content, value, data, color, ...rest } = this.props;
     return <Tooltip {...rest} content={this.renderContent.bind(this)} />;
   }
 }

@@ -388,7 +388,7 @@ export class Bar extends Component<BarProps, BarState> {
             color={color}
             value={this.getTooltipData()}
             placement={placement}
-            metadata={data}
+            data={data}
           />
         )}
         {mask && (

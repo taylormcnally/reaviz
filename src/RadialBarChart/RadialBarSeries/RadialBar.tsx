@@ -183,7 +183,6 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
             reference={this.ref}
             color={color}
             value={data}
-            metadata={data}
           />
         )}
         {gradient && (
