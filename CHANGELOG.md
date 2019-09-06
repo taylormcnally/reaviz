@@ -1,5 +1,5 @@
 # Master
-- [Feature] Calendar Heatmap
+- [Feature] Year/Month Calendar Heatmaps
 - [Fix] Fix `meta` for deep values not being passed correctly
 
 # 2.9.5
