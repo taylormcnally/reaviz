@@ -67,14 +67,14 @@ export class Heatmap extends Component<HeatmapProps> {
 
     const xDomain = xAxis.props.domain || uniqueBy(data, d => d.key);
     const xScale = scaleBand()
-      .rangeRound([0, chartWidth])
+      .range([0, chartWidth])
       .domain(xDomain)
       .paddingInner(series.props.padding);
 
     const yDomain = yAxis.props.domain || uniqueBy(data, d => d.data, d => d.x);
     const yScale = scaleBand()
       .domain(yDomain)
-      .rangeRound([chartHeight, 0])
+      .range([chartHeight, 0])
       .paddingInner(series.props.padding);
 
     return {

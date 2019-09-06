@@ -49,8 +49,8 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
 
   getDataDomains = memoize((rawData: ChartShallowDataShape[]) => {
     // Build our x/y domains for days of week + number of weeks in year
-    const yDomain = range(6).reverse();
-    const xDomain = range(51);
+    const yDomain = range(7).reverse();
+    const xDomain = range(53);
 
     // Get the most recent date to get the range from
     // From the end date, lets find the start year of that
@@ -76,7 +76,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
     const curDate = start.clone().subtract(firstDayOfYear, 'days');
     const rows = [];
 
-    for (let week = 0; week <= 51; week++) {
+    for (let week = 0; week <= 52; week++) {
       const row = {
         key: week,
         data: []
@@ -100,8 +100,6 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
 
       rows.push(row);
     }
-
-    console.log('raw', rows);
 
     return {
       data: rows,
@@ -146,6 +144,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
                 label={
                   <LinearXAxisTickLabel
                     padding={5}
+                    align="end"
                     format={d =>
                       moment()
                         .startOf('year')
