@@ -80,8 +80,6 @@ Additional features:
 - Legend
   - Discrete
   - Sequential
-- Tooltips
-- Animations Enter/Update/Exit
 - Axis
   - Linear
   - Radial
@@ -91,6 +89,11 @@ Additional features:
   - Pan
   - Zoom
   - Move
+- Tooltip
+  - Single Value
+  - Grouped Values
+- Linear/Area Series Symbols
+- Animations Enter/Update/Exit
 - Brush
 - Patterns
 - Gradients
