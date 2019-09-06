@@ -9,17 +9,9 @@
 - [Fix] Tweak tooltip offsets for heatmaps
 - [Fix] Fix `meta` for deep values not being passed correctly
 - [Fix] Update `LinearAxisProps`'s `domain` to accept n number of domains
+- [Chore] Bump depedencies
 
-# 2.9.5
-- [Fix] Fix wrong element selector for `globalPanning` determination
-
-# 2.9.4
-- [Fix] Fix wrong element selector for `globalPanning` determination
-
-# 2.9.3
-- [Fix] Fix wrong element selector for `globalPanning` determination
-
-# 2.9.2
+# 2.9.5 - 2.9.2
 - [Fix] Fix wrong element selector for `globalPanning` determination
 
 # 2.9.1
