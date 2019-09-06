@@ -1,42 +1,59 @@
-import React, { Component } from 'react';
-import css from './SequentialLegend.module.scss';
+import React, { PureComponent } from 'react';
 import classNames from 'classnames';
+import { ChartDataShape } from '../../../common/data';
+import chroma from 'chroma-js';
+import { uniqueBy } from '../../../common/utils/array';
+import { extent } from 'd3-array';
+import css from './SequentialLegend.module.scss';
+import { formatValue } from 'common/utils';
 
 export interface SequentialLegendProps {
   className?: any;
   style?: any;
   orientation?: 'horizontal' | 'vertical';
+  data: ChartDataShape[];
+  colorScheme: string[];
 }
 
-export class SequentialLegend extends Component<SequentialLegendProps> {
-  render() {
-    const { orientation } = this.props;
+export class SequentialLegend extends PureComponent<SequentialLegendProps> {
+  static defaultProps: Partial<SequentialLegendProps> = {
+    colorScheme: ['rgba(28, 107, 86, 0.5)', '#2da283'],
+    orientation: 'vertical'
+  };
 
-    /*
-      background: linear-gradient(
-        rgb(255, 111, 0) 0%,
-        rgb(255, 143, 0) 10%,
-        rgb(255, 160, 0) 20%,
-        rgb(255, 179, 0) 30%,
-        rgb(255, 193, 7) 40%,
-        rgb(255, 202, 40) 50%,
-        rgb(255, 213, 79) 60%,
-        rgb(255, 224, 130) 70%,
-        rgb(255, 236, 179) 80%,
-        rgb(255, 248, 225) 90%
-      );
-    */
+  render() {
+    const { orientation, className, style, colorScheme, data } = this.props;
+
+    // Generate the color gradient
+    const color = chroma
+      .scale(colorScheme)
+      .colors(10)
+      .reverse()
+      .map((c, i) => `${c} ${i * 10}%`)
+      .join(',');
+
+    // Get the extent from the data passed
+    const [end, start] = extent(uniqueBy(data, d => d.data, d => d.data));
+
+    // Get direction
+    const gradientDir = orientation === 'vertical' ? '' : 'to left,';
 
     return (
       <div
-        className={classNames(css.container, {
+        style={style}
+        className={classNames(css.container, className, {
           [css.vertical]: orientation === 'vertical',
           [css.horizontal]: orientation === 'horizontal'
         })}
       >
-        <div className={css.start}></div>
-        <div className={css.gradient}></div>
-        <div className={css.end}></div>
+        <div className={css.start}>{formatValue(start)}</div>
+        <div
+          className={css.gradient}
+          style={{
+            background: `linear-gradient(${gradientDir}${color})`
+          }}
+        />
+        <div className={css.end}>{formatValue(end)}</div>
       </div>
     );
   }

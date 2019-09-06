@@ -6,6 +6,7 @@
 - [Feature] Add ability to pass empty heatmap color
 - [Feature] Expose `cell` in `series` of heatmap
 - [Feature] Add ability to pass style/class callbacks to heatmap `cell`
+- [Feature] Add sequential legend
 - [Fix] Update domain ranges to `range` from `rangeRound` in heatmap
 - [Fix] Tweak tooltip offsets for heatmaps
 - [Fix] Fix `meta` for deep values not being passed correctly
