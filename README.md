@@ -72,7 +72,8 @@ Chart types include:
 - Map Chart
 - Heatmap
   - Standard
-  - Calendar
+  - Year Calendar
+  - Month Calendar
 
 Additional features:
 

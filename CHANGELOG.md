@@ -1,6 +1,14 @@
 # Master
-- [Feature] Year/Month Calendar Heatmaps
+- [Feature] Year Calendar Heatmaps
+- [Feature] Month Calendar Heatmaps
+- [Feature] Add ability to pass empty heatmap colors
+- [Feature] Add ability to pass empty heatmap color
+- [Feature] Expose `cell` in `series` of heatmap
+- [Feature] Add ability to pass style/class callbacks to heatmap `cell`
+- [Fix] Update domain ranges to `range` from `rangeRound` in heatmap
+- [Fix] Tweak tooltip offsets for heatmaps
 - [Fix] Fix `meta` for deep values not being passed correctly
+- [Fix] Update `LinearAxisProps`'s `domain` to accept n number of domains
 
 # 2.9.5
 - [Fix] Fix wrong element selector for `globalPanning` determination
