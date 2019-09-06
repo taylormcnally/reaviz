@@ -1,10 +1,14 @@
 import React, { Component, Fragment, createRef } from 'react';
-import { ChartTooltip, ChartTooltipProps } from '../common/TooltipArea';
-import { CloneElement } from '../common/utils/children';
+import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { CloneElement } from '../../common/utils/children';
 import bind from 'memoize-bind';
 import { PosedCell } from './PosedCell';
+import {
+  constructFunctionProps,
+  PropFunctionTypes
+} from '../../common/utils/functions';
 
-export interface HeatmapCellProps {
+export type HeatmapCellProps = {
   x: number;
   y: number;
   rx: number;
@@ -16,19 +20,28 @@ export interface HeatmapCellProps {
   data: any;
   animated: boolean;
   cellIndex: number;
+  cursor: string;
   onClick: (event) => void;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
-}
+} & PropFunctionTypes;
 
 interface HeatmapCellState {
   active?: boolean;
 }
 
+// Set padding modifier for the tooltips
+const modifiers = {
+  offset: {
+    offset: '0, 3px'
+  }
+};
+
 export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
   static defaultProps: Partial<HeatmapCellProps> = {
     rx: 2,
     ry: 2,
+    cursor: 'auto',
     tooltip: <ChartTooltip />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
@@ -72,7 +85,8 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
 
     return {
       y: data.value,
-      x: `${data.key} ∙ ${data.x}`
+      x: `${data.key} ∙ ${data.x}`,
+      metadata: data
     };
   }
 
@@ -83,9 +97,12 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
       onMouseLeave,
       onClick,
       cellIndex,
+      data,
+      cursor,
       ...rest
     } = this.props;
     const { active } = this.state;
+    const extras = constructFunctionProps(this.props, data);
 
     return (
       <Fragment>
@@ -93,6 +110,8 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
           {...rest}
           ref={this.rect}
           index={cellIndex}
+          style={{ ...extras.style, cursor }}
+          className={extras.className}
           onMouseEnter={bind(this.onMouseEnter, this)}
           onMouseLeave={bind(this.onMouseLeave, this)}
           onClick={bind(this.onMouseClick, this)}
@@ -101,6 +120,7 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
           <CloneElement<ChartTooltipProps>
             element={tooltip}
             visible={!!active}
+            modifiers={tooltip.props.modifiers || modifiers}
             reference={this.rect}
             value={this.getTooltipData()}
           />

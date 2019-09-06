@@ -13,7 +13,7 @@ export interface LinearAxisDimensionChanged {
 }
 
 export interface LinearAxisProps {
-  domain?: [ChartDataTypes, ChartDataTypes];
+  domain?: ChartDataTypes[];
   scaled?: boolean;
   roundDomains?: boolean;
   type: 'value' | 'time' | 'category' | 'duration';

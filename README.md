@@ -33,30 +33,70 @@ creating charts without sacrificing customization ability.
 
 Chart types include:
 
-- Linear (Vertical & Horizontal) & Radial Bar Chart
-- Linear & Radial Line Chart
-- Linear & Radial Area Chart
-- Linear & Radial Bubble Chart
-- Linear & Radial Scatter Plot
+- Bar Chart
+  - Single Series Vertical / Horizontal
+  - Multi Series Vertical / Horizontal
+  - Stacked Vertical / Horizontal
+  - Stacked Normalized Vertical / Horizontal
+  - Stacked Diverging Vertical / Horizontal
+  - Marimekko
+  - Radial
+  - Sparkline
+- Line Chart
+  - Single Series
+  - Multi Series
+  - Stacked
+  - Stacked Normalized
+  - Radial
+  - Sparklines
+- Area Chart
+  - Single Series
+  - Multi Series
+  - Stacked
+  - Stacked Normalized
+  - Radial
+  - Sparklines
+- Bubble Chart
+  - Linear
+  - Radial
+- Scatter Chart
+  - Linear
+  - Radial
 - Pie Chart
+  - Standard
+  - Exploded
+- Donut Chart
+- Sankey chart
 - Hive Plot
-- Sankey Chart
-- Map Chart
-- Sparklines
 - Radial Gauge Chart
+- Map Chart
+- Heatmap
+  - Standard
+  - Year Calendar
+  - Month Calendar
 
 Additional features:
 
-- Legend
+- Legends
 - Tooltips
 - Animations Enter/Update/Exit
-- Linear & Radial Axis
-- Brush
-- Patterns & Gradients Styles
-- Panning/Zooming
+- Axis
+  - Linear
+  - Radial
+  - Advanced Label Positioning
 - Gestures
-- Grid/Marklines
+  - Pinch
+  - Pan
+  - Zoom
+  - Move
+- Brush
+- Patterns
+- Gradients
+- Grid Lines
+- Mark Lines
 - BigInt Support
+- Auto Sizing
+- Range Lines
 
 ## 📦 Install
 

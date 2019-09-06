@@ -76,9 +76,9 @@ export class Bar extends Component<BarProps, BarState> {
   state: BarState = {};
 
   getExit({ x, y, width, height }: BarCoordinates) {
-    const { yScale, layout, xScale } = this.props;
+    const { yScale, xScale } = this.props;
 
-    const isVertical = layout === 'vertical';
+    const isVertical = this.getIsVertical();
     const newX = isVertical ? x : Math.min(...xScale.range());
     const newY = isVertical ? Math.max(...yScale.range()) : y;
     const newHeight = isVertical ? 0 : height;

@@ -1,7 +1,15 @@
+import { randomNumber } from './utils';
+import { range } from 'd3-array';
+import moment from 'moment';
+
 export const heatmapSimpleData = [
   {
     key: 'Lateral Movement',
     data: [
+      {
+        key: 'XML',
+        data: 0
+      },
       {
         key: 'JSON',
         data: 120
@@ -26,6 +34,10 @@ export const heatmapSimpleData = [
       {
         key: 'JSON',
         data: 34
+      },
+      {
+        key: 'HTTPS',
+        data: 0
       },
       {
         key: 'SSH',
@@ -97,3 +109,25 @@ export const heatmapSimpleData = [
     ]
   }
 ];
+
+const yearStart = moment().startOf('year');
+
+export const heatmapCalendarData = range(365).map(i => ({
+  key: yearStart.clone().add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
+
+export const janHeatMapData = range(31).map(i => ({
+  key: yearStart.clone().add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
+
+export const febHeatMapData = range(28).map(i => ({
+  key: yearStart.clone().add(1, 'month').add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
+
+export const marchHeatMapData = range(31).map(i => ({
+  key: yearStart.clone().add(2, 'month').add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
