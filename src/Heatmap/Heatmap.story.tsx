@@ -14,6 +14,11 @@ storiesOf('Charts/Heatmap', module)
   .add('Basic', () => (
     <Heatmap height={250} width={400} data={heatmapSimpleData} />
   ))
+  .add('Basic + Legend', () => (
+    <div style={{ display: 'flex' }}>
+      <Heatmap height={250} width={400} data={heatmapSimpleData} />
+    </div>
+  ))
   .add('Year Calendar', () => (
     <CalendarHeatmap height={115} width={715} data={heatmapCalendarData} />
   ))
