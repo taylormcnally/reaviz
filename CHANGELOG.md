@@ -1,3 +1,7 @@
+# Master
+- [Feature] Calendar Heatmap
+- [Fix] Fix `meta` for deep values not being passed correctly
+
 # 2.9.5
 - [Fix] Fix wrong element selector for `globalPanning` determination
 
