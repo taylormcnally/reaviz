@@ -77,7 +77,9 @@ Chart types include:
 
 Additional features:
 
-- Legends
+- Legend
+  - Discrete
+  - Sequential
 - Tooltips
 - Animations Enter/Update/Exit
 - Axis
