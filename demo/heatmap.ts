@@ -110,7 +110,24 @@ export const heatmapSimpleData = [
   }
 ];
 
+const yearStart = moment().startOf('year');
+
 export const heatmapCalendarData = range(365).map(i => ({
-  key: moment().startOf('year').add(i, 'days').toDate(),
+  key: yearStart.clone().add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
+
+export const janHeatMapData = range(31).map(i => ({
+  key: yearStart.clone().add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
+
+export const febHeatMapData = range(28).map(i => ({
+  key: yearStart.clone().add(1, 'month').add(i, 'days').toDate(),
+  data: randomNumber(0, 50)
+}));
+
+export const marchHeatMapData = range(31).map(i => ({
+  key: yearStart.clone().add(2, 'month').add(i, 'days').toDate(),
   data: randomNumber(0, 50)
 }));

@@ -2,10 +2,48 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Heatmap } from './Heatmap';
 import { CalendarHeatmap } from './CalendarHeatmap';
-import { heatmapSimpleData, heatmapCalendarData } from '../../demo';
+import {
+  heatmapSimpleData,
+  heatmapCalendarData,
+  janHeatMapData,
+  febHeatMapData,
+  marchHeatMapData
+} from '../../demo';
 
 storiesOf('Charts/Heatmap', module)
   .add('Basic', () => (
     <Heatmap height={250} width={400} data={heatmapSimpleData} />
   ))
-  .add('Calendar', () => <CalendarHeatmap data={heatmapCalendarData} />);
+  .add('Year Calendar', () => (
+    <CalendarHeatmap height={115} width={715} data={heatmapCalendarData} />
+  ))
+  .add('Month Calendar', () => (
+    <CalendarHeatmap
+      height={115}
+      width={100}
+      view="month"
+      data={janHeatMapData}
+    />
+  ))
+  .add('Multi Month Calendar', () => (
+    <div style={{ display: 'flex' }}>
+      <CalendarHeatmap
+        height={115}
+        width={100}
+        view="month"
+        data={janHeatMapData}
+      />
+      <CalendarHeatmap
+        height={115}
+        width={100}
+        view="month"
+        data={febHeatMapData}
+      />
+      <CalendarHeatmap
+        height={115}
+        width={100}
+        view="month"
+        data={marchHeatMapData}
+      />
+    </div>
+  ));

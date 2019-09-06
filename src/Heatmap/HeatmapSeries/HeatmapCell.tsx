@@ -1,12 +1,12 @@
 import React, { Component, Fragment, createRef } from 'react';
-import { ChartTooltip, ChartTooltipProps } from '../common/TooltipArea';
-import { CloneElement } from '../common/utils/children';
+import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { CloneElement } from '../../common/utils/children';
 import bind from 'memoize-bind';
 import { PosedCell } from './PosedCell';
 import {
   constructFunctionProps,
   PropFunctionTypes
-} from '../common/utils/functions';
+} from '../../common/utils/functions';
 
 export type HeatmapCellProps = {
   x: number;

@@ -1,5 +1,5 @@
 import posed from 'react-pose';
-import { transition } from '../common/utils/animations';
+import { transition } from '../../common/utils/animations';
 
 export const PosedCell = posed.rect({
   enter: {

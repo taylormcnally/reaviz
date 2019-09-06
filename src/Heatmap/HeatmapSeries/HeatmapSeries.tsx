@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { HeatmapCell, HeatmapCellProps } from './HeatmapCell';
 import { scaleQuantile } from 'd3-scale';
-import { uniqueBy } from '../common/utils/array';
+import { uniqueBy } from '../../common/utils/array';
 import { extent } from 'd3-array';
 import { PoseGroup } from 'react-pose';
-import { PoseSVGGElement } from 'common/utils/animations';
+import { PoseSVGGElement } from '../../common/utils/animations';
 import { memoize } from 'lodash-es';
-import { CloneElement } from '../common/utils/children';
+import { CloneElement } from '../../common/utils/children';
 
 export interface HeatmapSeriesProps {
   padding: number;
@@ -15,6 +15,7 @@ export interface HeatmapSeriesProps {
   xScale: any;
   yScale: any;
   colorScheme: any;
+  emptyColor: string;
   animated: boolean;
   cell: JSX.Element;
 }
@@ -23,17 +24,18 @@ export class HeatmapSeries extends Component<HeatmapSeriesProps> {
   static defaultProps: Partial<HeatmapSeriesProps> = {
     padding: 0.1,
     animated: true,
+    emptyColor: 'rgba(200,200,200,0.08)',
     colorScheme: ['rgba(28, 107, 86, 0.5)', '#2da283'],
     cell: <HeatmapCell />
   };
 
-  getValueScale = memoize((data, colorScheme) => {
+  getValueScale = memoize((data, colorScheme, emptyColor) => {
     const valueDomain = extent(uniqueBy(data, d => d.data, d => d.value));
 
     return point => {
       // For 0 values, lets show a placeholder fill
-      if (point === 0 || point === undefined || point === null) {
-        return 'rgba(200,200,200,0.08)';
+      if (point === undefined || point === null) {
+        return emptyColor;
       }
 
       return scaleQuantile<string>()
@@ -67,9 +69,16 @@ export class HeatmapSeries extends Component<HeatmapSeriesProps> {
   }
 
   render() {
-    const { xScale, yScale, data, colorScheme, animated } = this.props;
+    const {
+      xScale,
+      yScale,
+      data,
+      colorScheme,
+      animated,
+      emptyColor
+    } = this.props;
 
-    const valueScale = this.getValueScale(data, colorScheme);
+    const valueScale = this.getValueScale(data, colorScheme, emptyColor);
     const height = yScale.bandwidth();
     const width = xScale.bandwidth();
 
