@@ -9,10 +9,20 @@ import {
   febHeatMapData,
   marchHeatMapData
 } from '../../demo';
+import { SequentialLegend } from '../common/legends/SequentialLegend/SequentialLegend';
 
 storiesOf('Charts/Heatmap', module)
   .add('Basic', () => (
     <Heatmap height={250} width={400} data={heatmapSimpleData} />
+  ))
+  .add('Basic + Legend', () => (
+    <div style={{ display: 'flex', height: '250px' }}>
+      <Heatmap height={250} width={400} data={heatmapSimpleData} />
+      <SequentialLegend
+        data={heatmapSimpleData}
+        style={{ height: '165px', marginLeft: '10px' }}
+      />
+    </div>
   ))
   .add('Year Calendar', () => (
     <CalendarHeatmap height={115} width={715} data={heatmapCalendarData} />
