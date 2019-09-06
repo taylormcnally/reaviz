@@ -53,7 +53,7 @@ export const buildDataScales = (
       row.data.push({
         key: day,
         data: dayValue ? dayValue.data : undefined,
-        meta: {
+        metadata: {
           date: curDate.clone().toDate(),
           start: start.toDate(),
           end: end.toDate()

@@ -37,7 +37,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
             tooltip={
               <ChartTooltip
                 content={d =>
-                  `${formatValue(d.metadata.meta.date)} ∙ ${formatValue(
+                  `${formatValue(d.metadata.metadata.date)} ∙ ${formatValue(
                     d.metadata.value
                   )}`
                 }

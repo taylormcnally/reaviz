@@ -75,7 +75,7 @@ export const signalChartData = (() => {
   return signals.map(s => ({
     key: s.timestamp,
     data: s.severity,
-    meta: s,
+    metadata: s,
     id: s.id
   }));
 })();
@@ -85,7 +85,7 @@ export const largeSignalChartData = (() => {
     .map(i => ({
       key: generateDate(i / randomNumber(1, 3)),
       data: randomNumber(1, 10),
-      meta: {
+      metadata: {
         ...signals[randomNumber(0, signals.length - 1)]
       },
       id: `${new Date().getTime()}-${i}-${randomNumber(0, 500)}`
@@ -98,7 +98,7 @@ export const signalStageData = (() => {
     .map(i => ({
       key: generateDate(i / randomNumber(1, 3)),
       data: signals[randomNumber(0, signals.length - 1)].category,
-      meta: {
+      metadata: {
         ...signals[randomNumber(0, signals.length - 1)]
       },
       id: `${new Date().getTime()}-${i}-${randomNumber(0, 500)}`

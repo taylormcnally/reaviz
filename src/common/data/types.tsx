@@ -5,7 +5,7 @@ export type ChartInternalDataTypes = number | string | Date;
 export interface BaseChartDataShape<T> {
   key: ChartDataTypes;
   data: T;
-  meta?: any;
+  metadata?: any;
   id?: string;
 }
 
@@ -22,7 +22,7 @@ export type ChartDataShape = ChartNestedDataShape | ChartShallowDataShape;
 export interface ChartInternalNestedDataShape {
   key: ChartInternalDataTypes;
   data: ChartInternalShallowDataShape[];
-  meta?: any;
+  metadata?: any;
   id?: string;
 }
 
@@ -30,7 +30,7 @@ export interface ChartInternalShallowDataShape {
   id?: string;
   key?: ChartInternalDataTypes;
   value?: ChartInternalDataTypes;
-  meta?: any;
+  metadata?: any;
   x?: ChartInternalDataTypes;
   x0: ChartInternalDataTypes;
   x1?: ChartInternalDataTypes;

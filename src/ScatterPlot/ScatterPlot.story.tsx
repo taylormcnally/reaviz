@@ -139,7 +139,7 @@ storiesOf('Charts/Scatter Plot', module)
           point={
             <ScatterPoint
               color="rgba(174, 52, 255, .5)"
-              size={v => v.meta.severity + 5}
+              size={v => v.metadata.severity + 5}
             />
           }
         />
@@ -179,7 +179,7 @@ class BubbleChartLiveUpdate extends React.Component<any, any> {
                 <ScatterPoint
                   color="rgba(174, 52, 255, .5)"
                   size={v => {
-                    return v.meta.severity + 5;
+                    return v.metadata.severity + 5;
                   }}
                 />
               }

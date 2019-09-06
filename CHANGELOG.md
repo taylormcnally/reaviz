@@ -1,4 +1,5 @@
 # Master
+- [BREAKING] Update `meta` property on `ChartData` type to `metadata`
 - [Feature] Year Calendar Heatmaps
 - [Feature] Month Calendar Heatmaps
 - [Feature] Add ability to pass empty heatmap colors

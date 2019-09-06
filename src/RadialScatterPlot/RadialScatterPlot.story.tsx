@@ -98,7 +98,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
               point={
                 <RadialScatterPoint
                   fill={fill}
-                  size={v => v.meta.severity + 5}
+                  size={v => v.metadata.severity + 5}
                 />
               }
             />
@@ -154,7 +154,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
                 <RadialScatterPoint
                   fill={fill}
                   symbol={d => {
-                    const scale = d.meta.severity / 50;
+                    const scale = d.metadata.severity / 50;
                     const size = scale * 100;
                     return (
                       <g transform={`translate(-${size}, -${size})`}>

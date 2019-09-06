@@ -120,7 +120,7 @@ storiesOf('Charts/Brush', module)
         return {
           key: generateDate(i),
           data: 1,
-          meta: {
+          metadata: {
             severity: randomNumber(1, 10)
           }
         };
@@ -139,7 +139,7 @@ storiesOf('Charts/Brush', module)
               <ScatterPoint
                 tooltip={<TooltipArea disabled={true} />}
                 symbol={d => {
-                  const scale = d.meta.severity / 50;
+                  const scale = d.metadata.severity / 50;
                   const size = scale * 100;
                   return (
                     <g transform={`translate(-${size}, -${size})`}>
@@ -294,7 +294,7 @@ class ZoomBrushStory extends Component {
                   <ScatterPoint
                     tooltip={<Tooltip disabled={true} />}
                     size={d => {
-                      return d.meta.severity + 5;
+                      return d.metadata.severity + 5;
                     }}
                   />
                 }
