@@ -40,13 +40,13 @@ export const buildDataScales = (
   // Find the first day of the duration and subtract the delta
   const firstDayOfStart = start.weekday();
   const curDate = start.clone().subtract(firstDayOfStart, 'days');
-  const rows = [];
+  const rows = [] as any;
 
   // Build out the dataset for the n duration
   for (let week = 0; week < xDomainRange; week++) {
     const row = {
       key: week,
-      data: []
+      data: [] as any
     };
 
     for (let day = 0; day <= 6; day++) {

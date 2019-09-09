@@ -34,8 +34,6 @@ import {
   LinearYAxis,
   LinearYAxisTickSeries,
   LinearXAxisTickLabel,
-  LinearXAxisTickLine,
-  LinearAxisLine,
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 import { Stripes } from '../common/Mask';

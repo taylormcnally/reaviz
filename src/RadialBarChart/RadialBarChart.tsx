@@ -16,7 +16,7 @@ import {
 import { CloneElement } from '../common/utils/children';
 import { RadialAxis, RadialAxisProps } from '../common/Axis/RadialAxis';
 import { getRadialYScale } from '../common/scales';
-import { uniqueBy } from 'common';
+import { uniqueBy } from '../common/utils/array';
 
 export interface RadialBarChartProps extends ChartProps {
   data: ChartShallowDataShape[];
