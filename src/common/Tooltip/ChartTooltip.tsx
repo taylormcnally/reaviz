@@ -1,10 +1,10 @@
 import React, { Component, cloneElement } from 'react';
-import { Tooltip, TooltipProps } from '../../common/Tooltip';
+import { Tooltip, TooltipProps } from './Tooltip';
 import { TooltipTemplate } from './TooltipTemplate';
 import { isFunction } from 'lodash-es';
 
 export interface ChartTooltipProps extends TooltipProps {
-  content: any; // ((value, color?) => ReactNode) | JSX.Element;
+  content: any;
   value: any;
   color: any;
   data: any;
