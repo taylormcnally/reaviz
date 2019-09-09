@@ -14,8 +14,8 @@ import {
   LinearXAxis,
   LinearXAxisTickSeries
 } from '../common/Axis/LinearAxis';
-import { GradientStop, Gradient } from '../common/gradients';
-import { Stripes } from '../common/masks';
+import { GradientStop, Gradient } from '../common/Gradient';
+import { Stripes } from '../common/Mask';
 
 export interface AreaSparklineChartProps extends AreaChartProps {
   data: ChartShallowDataShape[];

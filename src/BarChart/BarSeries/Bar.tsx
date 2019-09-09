@@ -1,7 +1,7 @@
 import React, { Fragment, Component, createRef } from 'react';
 import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
-import { Gradient, GradientProps } from '../../common/gradients';
+import { Gradient, GradientProps } from '../../common/Gradient';
 import classNames from 'classnames';
 import { ChartInternalShallowDataShape, Direction } from '../../common/data';
 import { RangeLinesProps } from './RangeLines';
@@ -9,7 +9,7 @@ import bind from 'memoize-bind';
 import * as css from './Bar.module.scss';
 import { PosedBar } from './PosedBar';
 import { CloneElement } from '../../common/utils/children';
-import { Mask, MaskProps } from '../../common/masks';
+import { Mask, MaskProps } from '../../common/Mask';
 import {
   constructFunctionProps,
   PropFunctionTypes

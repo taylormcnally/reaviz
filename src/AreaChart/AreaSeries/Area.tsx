@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { area } from 'd3-shape';
-import { Gradient, GradientProps } from '../../common/gradients';
-import { Mask, MaskProps } from '../../common/masks';
+import { Gradient, GradientProps } from '../../common/Gradient';
+import { Mask, MaskProps } from '../../common/Mask';
 import {
   interpolate,
   InterpolationTypes

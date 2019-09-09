@@ -38,10 +38,10 @@ import {
   LinearAxisLine,
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
-import { Stripes } from '../common/masks';
+import { Stripes } from '../common/Mask';
 import { ChartTooltip, TooltipTemplate } from '../common/Tooltip';
 import { formatValue } from '../common/utils';
-import { Gradient, GradientStop } from '../common/gradients';
+import { Gradient, GradientStop } from '../common/Gradient';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
   .add(

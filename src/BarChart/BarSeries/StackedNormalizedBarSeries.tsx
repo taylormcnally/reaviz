@@ -4,7 +4,7 @@ import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
 import { ChartTooltip, TooltipTemplate } from '../../common/Tooltip';
 import { formatValue } from '../../common/utils/formatting';
-import { Gradient, GradientStop } from '../../common/gradients';
+import { Gradient, GradientStop } from '../../common/Gradient';
 
 export class StackedNormalizedBarSeries extends Component<BarSeriesProps, {}> {
   static defaultProps: Partial<BarSeriesProps> = {

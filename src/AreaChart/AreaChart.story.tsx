@@ -28,8 +28,8 @@ import { GridlineSeries, Gridline } from '../common/Gridline';
 import { LinearXAxis, LinearXAxisTickSeries } from '../common/Axis/LinearAxis';
 import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
-import { Gradient, GradientStop } from '../common/gradients';
-import { Stripes } from '../common/masks';
+import { Gradient, GradientStop } from '../common/Gradient';
+import { Stripes } from '../common/Mask';
 
 storiesOf('Charts/Area/Single Series', module)
   .add(
