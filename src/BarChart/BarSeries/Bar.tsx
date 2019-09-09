@@ -1,6 +1,6 @@
 import React, { Fragment, Component, createRef } from 'react';
 import chroma from 'chroma-js';
-import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { Gradient, GradientProps } from '../../common/gradients';
 import classNames from 'classnames';
 import { ChartInternalShallowDataShape, Direction } from '../../common/data';

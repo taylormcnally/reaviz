@@ -6,7 +6,7 @@ import bind from 'memoize-bind';
 import { PosedRadialBar } from './PosedRadialBar';
 import chroma from 'chroma-js';
 import { CloneElement } from '../../common/utils/children';
-import { ChartTooltipProps, ChartTooltip } from '../../common/TooltipArea';
+import { ChartTooltipProps, ChartTooltip } from '../../common/Tooltip';
 import { path } from 'd3-path';
 
 export interface RadialBarProps {

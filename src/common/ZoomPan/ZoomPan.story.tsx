@@ -5,7 +5,7 @@ import { LineChart, LineSeries } from '../../LineChart';
 import { ChartZoomPan, ZoomPan } from '../ZoomPan';
 import { ScatterPlot, ScatterSeries, ScatterPoint } from '../../ScatterPlot';
 import { AreaChart, AreaSeries } from '../../AreaChart';
-import { TooltipArea } from '../TooltipArea';
+import { TooltipArea } from '../Tooltip';
 import {
   LinearXAxis,
   LinearXAxisTickSeries,

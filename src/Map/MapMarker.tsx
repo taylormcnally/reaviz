@@ -1,6 +1,6 @@
 import React, { Component, createRef, Fragment } from 'react';
 import posed from 'react-pose';
-import { Tooltip } from '../common/TooltipArea';
+import { Tooltip } from '../common/Tooltip';
 import bind from 'memoize-bind';
 import * as css from './MapMarker.module.scss';
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BarSeriesProps, BarSeries } from './BarSeries';
 import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
-import { ChartTooltip, TooltipTemplate } from '../../common/TooltipArea';
+import { ChartTooltip, TooltipTemplate } from '../../common/Tooltip';
 import { formatValue } from '../../common/utils/formatting';
 import { Gradient, GradientStop } from '../../common/gradients';
 

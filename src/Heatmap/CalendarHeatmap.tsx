@@ -12,7 +12,7 @@ import {
 } from '../common/Axis';
 import { memoize } from 'lodash-es';
 import { HeatmapSeries, HeatmapCell } from './HeatmapSeries';
-import { ChartTooltip } from '../common/TooltipArea';
+import { ChartTooltip } from '../common/Tooltip';
 import { formatValue } from '../common/utils/formatting';
 import { buildDataScales, CalendarView } from './calendarUtils';
 

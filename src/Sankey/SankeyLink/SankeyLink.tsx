@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import posed from 'react-pose';
 import { CloneElement } from '../../common/utils/children';
 import { formatValue } from '../../common/utils/formatting';
-import { Tooltip, TooltipProps } from '../../common/TooltipArea';
+import { Tooltip, TooltipProps } from '../../common/Tooltip';
 import { transition } from '../../common/utils/animations';
 import { NodeExtra, Node, Link, DEFAULT_COLOR } from '../utils';
 import bind from 'memoize-bind';

@@ -1,7 +1,7 @@
 import React, { Component, Fragment, ReactNode, createRef } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import bind from 'memoize-bind';
-import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { PosedCircle } from './PosedCircle';
 import { PosedGroupTransform } from '../../common/utils/animations';
 import classNames from 'classnames';

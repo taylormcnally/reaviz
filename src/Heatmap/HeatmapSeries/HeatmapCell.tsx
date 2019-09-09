@@ -1,5 +1,5 @@
 import React, { Component, Fragment, createRef } from 'react';
-import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { CloneElement } from '../../common/utils/children';
 import bind from 'memoize-bind';
 import { PosedCell } from './PosedCell';

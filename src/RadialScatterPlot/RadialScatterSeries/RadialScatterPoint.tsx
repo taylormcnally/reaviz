@@ -4,7 +4,7 @@ import { radialLine } from 'd3-shape';
 import { PosedGroupTransform } from '../../common/utils/animations';
 import bind from 'memoize-bind';
 import classNames from 'classnames';
-import { ChartTooltip, ChartTooltipProps } from '../../common/TooltipArea';
+import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { CloneElement } from '../../common/utils/children';
 import * as css from './RadialScatterPoint.module.scss';
 import { isFunction } from 'lodash-es';

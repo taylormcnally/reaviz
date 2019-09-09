@@ -5,7 +5,7 @@ import {
   TooltipTemplate,
   TooltipArea,
   ChartTooltip
-} from '../../common/TooltipArea';
+} from '../../common/Tooltip';
 import { CloneElement } from '../../common/utils/children';
 import { PointSeriesProps } from './PointSeries';
 import { ScatterPointProps } from '../../ScatterPlot';

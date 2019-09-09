@@ -4,7 +4,7 @@ import posed from 'react-pose';
 import { ChartInternalDataTypes } from '../../common/data';
 import { CloneElement } from '../../common/utils/children';
 import { formatValue } from '../../common/utils/formatting';
-import { Tooltip, TooltipProps } from '../../common/TooltipArea';
+import { Tooltip, TooltipProps } from '../../common/Tooltip';
 import { SankeyLabel, SankeyLabelProps } from '../SankeyLabel';
 import { Node, DEFAULT_COLOR } from '../utils';
 import bind from 'memoize-bind';

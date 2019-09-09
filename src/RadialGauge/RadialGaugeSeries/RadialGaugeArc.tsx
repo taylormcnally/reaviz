@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { arc } from 'd3-shape';
 import { PieArc } from '../../PieChart';
 import { ChartShallowDataShape } from '../../common/data';
-import { ChartTooltip } from '../../common/TooltipArea';
+import { ChartTooltip } from '../../common/Tooltip';
 
 export interface RadialGaugeArcProps {
   data?: ChartShallowDataShape;

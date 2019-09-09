@@ -14,7 +14,7 @@ import {
   TooltipArea,
   TooltipAreaProps,
   TooltipAreaEvent
-} from '../../common/TooltipArea';
+} from '../../common/Tooltip';
 import { Line, LineProps } from './Line';
 import { InterpolationTypes } from '../../common/utils/interpolation';
 import { getColor, sequentialScheme } from '../../common/utils/color';

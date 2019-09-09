@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import bind from 'memoize-bind';
 import { scaleOrdinal, scaleLinear, scalePoint } from 'd3-scale';
 import { range } from 'd3-array';
-import { Tooltip } from '../common/TooltipArea';
+import { Tooltip } from '../common/Tooltip';
 import { Placement } from 'rdk';
 import { ResizeContainer } from '../common/containers/ResizeContainer';
 import { HiveNode } from './HiveNode';

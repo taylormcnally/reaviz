@@ -2,7 +2,7 @@ import React, { Component, Fragment, createRef } from 'react';
 import { PosedArc } from './PosedArc';
 import bind from 'memoize-bind';
 import chroma from 'chroma-js';
-import { ChartTooltip, ChartTooltipProps } from '../../../common/TooltipArea';
+import { ChartTooltip, ChartTooltipProps } from '../../../common/Tooltip';
 import { CloneElement } from '../../../common/utils/children';
 
 export interface PieArcProps {

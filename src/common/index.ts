@@ -8,6 +8,6 @@ export * from './Gridline';
 export * from './MarkLine';
 export * from './gradients';
 export * from './masks';
-export * from './TooltipArea';
+export * from './Tooltip';
 export * from './utils';
 export * from './ZoomPan';

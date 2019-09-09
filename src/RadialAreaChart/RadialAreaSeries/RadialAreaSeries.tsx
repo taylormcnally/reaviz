@@ -12,7 +12,7 @@ import {
   TooltipAreaProps,
   TooltipArea,
   TooltipAreaEvent
-} from '../../common/TooltipArea';
+} from '../../common/Tooltip';
 import bind from 'memoize-bind';
 
 export interface RadialAreaSeriesProps {

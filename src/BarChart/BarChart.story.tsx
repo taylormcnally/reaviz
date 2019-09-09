@@ -39,7 +39,7 @@ import {
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 import { Stripes } from '../common/masks';
-import { ChartTooltip, TooltipTemplate } from '../common/TooltipArea';
+import { ChartTooltip, TooltipTemplate } from '../common/Tooltip';
 import { formatValue } from '../common/utils';
 import { Gradient, GradientStop } from '../common/gradients';
 
