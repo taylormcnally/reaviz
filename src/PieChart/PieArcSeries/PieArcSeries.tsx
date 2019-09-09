@@ -18,7 +18,7 @@ export interface PieArcSeriesProps {
   explode: boolean;
   height: number;
   width: number;
-  label?: JSX.Element;
+  label?: JSX.Element | null;
   arc: JSX.Element;
   colorScheme: ((data, index: number) => string) | string[];
 }
