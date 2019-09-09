@@ -12,6 +12,7 @@
 - [Fix] Fix `meta` for deep values not being passed correctly
 - [Fix] Update `LinearAxisProps`'s `domain` to accept n number of domains
 - [Chore] Bump depedencies
+- [Chore] Rename all the files that are `tsx` but don't need to be to `ts`
 
 # 2.9.5 - 2.9.2
 - [Fix] Fix wrong element selector for `globalPanning` determination
