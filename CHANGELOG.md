@@ -1,4 +1,4 @@
-# Master
+# 3.0.0
 - [BREAKING] Update `meta` property on `ChartData` type to `metadata`
 - [BREAKING] Update `TooltipArea` namespace to just `Tooltip`
 - [BREAKING] Remove internal `getGroupDomain` and `getDeepGroupDomain` in favor of `uniqueBy`
