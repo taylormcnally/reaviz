@@ -1,3 +1,8 @@
+# 3.0.1
+- [Fix] Fix `transparent` throwing hover error
+- [Fix] Fix calendar heatmap not working when start date is not start of year
+- [Fix] Don't show tooltip for transparent heatmap cells
+
 # 3.0.0
 - [BREAKING] Update `meta` property on `ChartData` type to `metadata`
 - [BREAKING] Update `TooltipArea` namespace to just `Tooltip`

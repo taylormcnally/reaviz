@@ -1,4 +1,4 @@
-import { range, max } from 'd3-array';
+import { range, min } from 'd3-array';
 import moment from 'moment';
 import { ChartShallowDataShape } from '../common/data';
 
@@ -11,9 +11,11 @@ export const buildDataScales = (
   // Get the most recent date to get the range from
   // From the end date, lets find the start year/month of that
   // From that start year/month, lets find the end year/month for our bounds
-  const endDate = max(rawData, d => d.key);
-  const start = moment(endDate).startOf(view);
-  const end = start.clone().endOf(view);
+  const startDate = min(rawData, d => d.key);
+  const start = moment(startDate).startOf('month');
+  const endDomain = view === 'year' ? 53 : 5;
+  const end = start.clone().add(endDomain, 'weeks');
+  // .endOf(view);
 
   // Base on the view type, swap out some ranges
   const xDomainRange = view === 'year' ? 53 : 5;

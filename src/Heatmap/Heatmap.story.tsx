@@ -7,7 +7,8 @@ import {
   heatmapCalendarData,
   janHeatMapData,
   febHeatMapData,
-  marchHeatMapData
+  marchHeatMapData,
+  heatmapCalendarOffsetData
 } from '../../demo';
 import { SequentialLegend } from '../common/legends/SequentialLegend/SequentialLegend';
 
@@ -26,6 +27,13 @@ storiesOf('Charts/Heatmap', module)
   ))
   .add('Year Calendar', () => (
     <CalendarHeatmap height={115} width={715} data={heatmapCalendarData} />
+  ))
+  .add('Year Calendar w/ March Start', () => (
+    <CalendarHeatmap
+      height={115}
+      width={715}
+      data={heatmapCalendarOffsetData}
+    />
   ))
   .add('Month Calendar', () => (
     <CalendarHeatmap

@@ -108,7 +108,8 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
     const { active } = this.state;
 
     const extras = constructFunctionProps(this.props, data);
-    const stroke = active ? chroma(fill).brighten(1) : 'fill';
+    const isTransparent = fill === 'transparent';
+    const stroke = active && !isTransparent ? chroma(fill).brighten(1) : fill;
 
     return (
       <Fragment>
@@ -124,7 +125,7 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
           onMouseLeave={bind(this.onMouseLeave, this)}
           onClick={bind(this.onMouseClick, this)}
         />
-        {tooltip && !tooltip.props.disabled && (
+        {tooltip && !tooltip.props.disabled && !isTransparent && (
           <CloneElement<ChartTooltipProps>
             element={tooltip}
             visible={!!active}
