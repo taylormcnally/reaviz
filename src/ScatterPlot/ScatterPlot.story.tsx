@@ -21,7 +21,7 @@ import {
 } from '../common/Axis/LinearAxis';
 import { symbolStar, symbol } from 'd3-shape';
 
-storiesOf('Charts/Scatter Plot', module)
+storiesOf('Charts/Scatter Plot/Linear', module)
   .add(
     'Simple',
     () => {
