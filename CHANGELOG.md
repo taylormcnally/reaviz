@@ -1,3 +1,6 @@
+# 3.0.2
+- [Fix] Various code style and lint fixes
+
 # 3.0.1
 - [Fix] Fix `transparent` throwing hover error
 - [Fix] Fix calendar heatmap not working when start date is not start of year
