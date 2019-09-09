@@ -62,7 +62,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
     );
 
     // For month, only pass 1 tick value
-    const xTickValues = view === 'year' ? null : [1];
+    const xTickValues = view === 'year' ? undefined : [1];
 
     // Get the yAxis label formatting based on view type
     const yAxisLabelFormat = view === 'year' ? d => weekDays[d] : () => null;

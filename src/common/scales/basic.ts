@@ -53,7 +53,7 @@ export function getXScale({
     scale = scaleBand()
       .rangeRound([0, width!])
       .padding(padding || 0)
-      .domain(domain);
+      .domain(domain as ReadonlyArray<any>);
   }
 
   return roundDomains ? scale.nice() : scale;
@@ -90,7 +90,7 @@ export function getYScale({
     scale = scaleBand()
       .rangeRound([height!, 0])
       .padding(padding || 0)
-      .domain(domain);
+      .domain(domain as ReadonlyArray<any>);
   }
 
   return roundDomains ? scale.nice() : scale;

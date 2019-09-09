@@ -53,7 +53,16 @@ storiesOf('Charts/Pie/Pie', module)
   .add('Live Updating', () => <LiveUpdatingStory />)
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
-      <PieChart data={categoryData} />
+      <PieChart
+        data={categoryData}
+        series={
+          <PieArcSeries
+            colorScheme={chroma
+              .scale(['#4dd0e1', '#1976d2'])
+              .colors(categoryData.length)}
+          />
+        }
+      />
     </div>
   ));
 
@@ -107,7 +116,7 @@ storiesOf('Charts/Pie/Donut', module)
           series={
             <PieArcSeries
               doughnut={true}
-              label={null}
+              label={undefined}
               colorScheme={chroma
                 .scale(['#4dd0e1', '#1976d2'])
                 .colors(categoryData.length)}
@@ -115,9 +124,9 @@ storiesOf('Charts/Pie/Donut', module)
           }
         />
       </div>
-      <h1 style={{ margin: '0 5px', padding: 0, color: 'white' }}>
+      <h2 style={{ margin: '0 5px', padding: 0, color: 'white' }}>
         {categoryData.length} Attacks
-      </h1>
+      </h2>
     </div>
   ));
 
