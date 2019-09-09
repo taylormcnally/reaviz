@@ -7,6 +7,9 @@ import {
   constructFunctionProps,
   PropFunctionTypes
 } from '../../common/utils/functions';
+import chroma from 'chroma-js';
+import css from './HeatmapCell.module.scss';
+import classNames from 'classnames';
 
 export type HeatmapCellProps = {
   x: number;
@@ -99,19 +102,24 @@ export class HeatmapCell extends Component<HeatmapCellProps, HeatmapCellState> {
       cellIndex,
       data,
       cursor,
+      fill,
       ...rest
     } = this.props;
     const { active } = this.state;
+
     const extras = constructFunctionProps(this.props, data);
+    const stroke = active ? chroma(fill).brighten(1) : 'fill';
 
     return (
       <Fragment>
         <PosedCell
           {...rest}
+          fill={fill}
+          stroke={stroke}
           ref={this.rect}
           index={cellIndex}
           style={{ ...extras.style, cursor }}
-          className={extras.className}
+          className={classNames(css.cell, extras.className)}
           onMouseEnter={bind(this.onMouseEnter, this)}
           onMouseLeave={bind(this.onMouseLeave, this)}
           onClick={bind(this.onMouseClick, this)}
