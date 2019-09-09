@@ -33,7 +33,9 @@ export class SequentialLegend extends PureComponent<SequentialLegendProps> {
       .join(',');
 
     // Get the extent from the data passed
-    const [end, start] = extent(uniqueBy(data, d => d.data, d => d.data));
+    const [end, start] = extent(
+      uniqueBy<ChartDataShape>(data, d => d.data, d => d.data)
+    );
 
     // Get direction
     const gradientDir = orientation === 'vertical' ? '' : 'to left,';

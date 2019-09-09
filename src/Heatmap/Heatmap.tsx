@@ -5,7 +5,11 @@ import {
   ChartContainer,
   ChartContainerChildProps
 } from '../common/containers/ChartContainer';
-import { ChartNestedDataShape, buildNestedChartData } from '../common/data';
+import {
+  ChartNestedDataShape,
+  buildNestedChartData,
+  ChartInternalNestedDataShape
+} from '../common/data';
 import { CloneElement } from '../common/utils/children';
 import bind from 'memoize-bind';
 import {
@@ -65,13 +69,17 @@ export class Heatmap extends Component<HeatmapProps> {
 
     const data = buildNestedChartData(prevData);
 
-    const xDomain = xAxis.props.domain || uniqueBy(data, d => d.key);
+    const xDomain =
+      xAxis.props.domain ||
+      uniqueBy<ChartInternalNestedDataShape>(data, d => d.key);
     const xScale = scaleBand()
       .range([0, chartWidth])
       .domain(xDomain)
       .paddingInner(series.props.padding);
 
-    const yDomain = yAxis.props.domain || uniqueBy(data, d => d.data, d => d.x);
+    const yDomain =
+      yAxis.props.domain ||
+      uniqueBy<ChartInternalNestedDataShape>(data, d => d.data, d => d.x);
     const yScale = scaleBand()
       .domain(yDomain)
       .range([chartHeight, 0])

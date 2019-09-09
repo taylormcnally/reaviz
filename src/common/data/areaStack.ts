@@ -5,12 +5,13 @@ import {
   ChartInternalNestedDataShape,
   ChartInternalShallowDataShape
 } from './types';
-import { getGroupDomain } from '../utils/domains';
 import {
   getMaxBigIntegerForNested,
   normalizeValue,
   normalizeValueForFormatting
 } from './bigInteger';
+import { uniqueBy } from '../../common/utils/array';
+
 /**
  * Given a dataset like:
  *
@@ -100,7 +101,7 @@ export function buildStackData(
   data: ChartNestedDataShape[],
   normalized = false
 ): ChartInternalDataShape[] {
-  const keys = getGroupDomain(data, 'key');
+  const keys = uniqueBy<ChartNestedDataShape>(data, d => d.key);
   const stackData = transformDataToStack(data);
   const stackFn = !normalized ? stack() : stack().offset(stackOffsetExpand);
 

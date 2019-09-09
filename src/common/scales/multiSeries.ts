@@ -1,5 +1,5 @@
 import { scaleBand } from 'd3-scale';
-import { getGroupDomain, getDeepGroupDomain } from '../utils/domains';
+import { uniqueBy } from '../utils/array';
 
 /**
  * Get the group scale aka x0.
@@ -10,7 +10,7 @@ export function getGroupScale({
   data,
   direction = 'vertical'
 }) {
-  const domain = getGroupDomain(data, 'key');
+  const domain = uniqueBy(data, d => d.key);
   const spacing = domain.length / (dimension / padding + 1);
   const range = direction === 'vertical' ? [0, dimension] : [dimension, 0];
 
@@ -26,7 +26,7 @@ export function getGroupScale({
  */
 export function getInnerScale({ groupScale, padding, data, prop = 'x' }) {
   const dimension = groupScale.bandwidth();
-  const domain = getDeepGroupDomain(data, prop);
+  const domain = uniqueBy(data, d => d.data, d => d[prop]);
   const spacing = domain.length / (dimension / padding + 1);
 
   return scaleBand()

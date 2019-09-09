@@ -11,7 +11,7 @@ import { CloneElement } from '../../common/utils/children';
 export interface HeatmapSeriesProps {
   padding: number;
   id: string;
-  data: any;
+  data: any[];
   xScale: any;
   yScale: any;
   colorScheme: any;

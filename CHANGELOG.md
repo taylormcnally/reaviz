@@ -1,6 +1,7 @@
 # Master
 - [BREAKING] Update `meta` property on `ChartData` type to `metadata`
 - [BREAKING] Update `TooltipArea` namespace to just `Tooltip`
+- [BREAKING] Remove internal `getGroupDomain` and `getDeepGroupDomain` in favor of `uniqueBy`
 - [Feature] Year Calendar Heatmaps
 - [Feature] Month Calendar Heatmaps
 - [Feature] Add ability to pass empty heatmap colors

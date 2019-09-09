@@ -1,6 +1,6 @@
 import { scaleLinear } from 'd3-scale';
-import { getGroupDomain } from '../utils/domains';
 import { ChartInternalNestedDataShape } from '../data';
+import { uniqueBy } from '../utils/array';
 
 interface MariemkoScaleData {
   data: ChartInternalNestedDataShape[];
@@ -26,7 +26,7 @@ export function getMarimekkoGroupScale({
   valueScale,
   padding
 }: MariemkoScaleData) {
-  const domain = getGroupDomain(data, 'key');
+  const domain = uniqueBy<ChartInternalNestedDataShape>(data, d => d.key);
   const barCount = data.length;
   const widthMinusPadding = width - padding * (barCount - 1);
   const xMultiplier = widthMinusPadding / width;

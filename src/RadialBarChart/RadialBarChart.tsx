@@ -5,7 +5,7 @@ import {
   buildShallowChartData
 } from '../common/data';
 import { scaleBand } from 'd3-scale';
-import { getYDomain, getGroupDomain } from '../common/utils/domains';
+import { getYDomain } from '../common/utils/domains';
 import { RadialBarSeries, RadialBarSeriesProps } from './RadialBarSeries';
 import { memoize } from 'lodash-es';
 import {
@@ -16,6 +16,7 @@ import {
 import { CloneElement } from '../common/utils/children';
 import { RadialAxis, RadialAxisProps } from '../common/Axis/RadialAxis';
 import { getRadialYScale } from '../common/scales';
+import { uniqueBy } from 'common';
 
 export interface RadialBarChartProps extends ChartProps {
   data: ChartShallowDataShape[];
@@ -41,10 +42,7 @@ export class RadialBarChart extends Component<RadialBarChartProps> {
       const data = buildShallowChartData(
         preData
       ) as ChartInternalShallowDataShape[];
-      const xDomain = getGroupDomain(
-        data as ChartInternalShallowDataShape[],
-        'x'
-      );
+      const xDomain = uniqueBy<ChartInternalShallowDataShape>(data, d => d.x);
       const yDomain = getYDomain({ data, scaled: false });
 
       const xScale = scaleBand()

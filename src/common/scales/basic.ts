@@ -1,9 +1,10 @@
 import { scaleLinear, scaleTime, scaleBand } from 'd3-scale';
-import { getXDomain, getYDomain, getGroupDomain } from '../utils/domains';
+import { getXDomain, getYDomain } from '../utils/domains';
 import {
   ChartInternalShallowDataShape,
   ChartInternalNestedDataShape
 } from '../data';
+import { uniqueBy } from '../utils/array';
 
 interface ScaleConfig {
   type: 'category' | 'value' | 'time' | 'duration';
@@ -43,9 +44,9 @@ export function getXScale({
   } else {
     if (!domain) {
       if (isMultiSeries) {
-        domain = getGroupDomain(data as ChartInternalNestedDataShape[], 'key');
+        domain = uniqueBy<ChartInternalShallowDataShape>(data, d => d.key);
       } else {
-        domain = getGroupDomain(data as ChartInternalShallowDataShape[], 'x');
+        domain = uniqueBy<ChartInternalShallowDataShape>(data, d => d.x);
       }
     }
 
@@ -80,9 +81,9 @@ export function getYScale({
   } else {
     if (!domain) {
       if (isMultiSeries) {
-        domain = getGroupDomain(data as ChartInternalNestedDataShape[], 'key');
+        domain = uniqueBy<ChartInternalNestedDataShape>(data as [], d => d.key);
       } else {
-        domain = getGroupDomain(data as ChartInternalShallowDataShape[], 'y');
+        domain = uniqueBy<ChartInternalShallowDataShape>(data, d => d.y);
       }
     }
 
