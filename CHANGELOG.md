@@ -1,3 +1,6 @@
+# 3.0.3
+- [Fix] Improve some types
+
 # 3.0.2
 - [Fix] Various code style and lint fixes
 
