@@ -116,7 +116,7 @@ storiesOf('Charts/Pie/Donut', module)
           series={
             <PieArcSeries
               doughnut={true}
-              label={undefined}
+              label={null}
               colorScheme={chroma
                 .scale(['#4dd0e1', '#1976d2'])
                 .colors(categoryData.length)}
