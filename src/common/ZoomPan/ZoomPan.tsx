@@ -14,7 +14,7 @@ import {
   fromDefinition,
   transform
 } from 'transformation-matrix';
-import { isEqual } from 'lodash-es';
+import isEqual from 'is-equal';
 
 export interface ZoomPanEvent {
   scale: number;

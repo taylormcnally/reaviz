@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { CloneElement } from '../../common/utils/children';
 import * as css from './RadialScatterPoint.module.scss';
-import { isFunction } from 'lodash-es';
 
 export interface RadialScatterPointProps {
   data: ChartInternalShallowDataShape;
@@ -115,7 +114,7 @@ export class RadialScatterPoint extends Component<
     } = this.props;
     const { hovered } = this.state;
 
-    const fill = isFunction(color) ? color(data, index) : color;
+    const fill = typeof color === 'function' ? color(data, index) : color;
     const transform = this.getTranslate(data);
     const sizeVal = typeof size === 'function' ? size(data) : size;
 

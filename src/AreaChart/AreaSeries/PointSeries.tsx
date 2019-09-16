@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { isEqual } from 'lodash-es';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils';
 import {
@@ -8,6 +7,7 @@ import {
   ScatterPointProps
 } from '../../ScatterPlot';
 import * as css from './PointSeries.module.scss';
+import isEqual from 'is-equal';
 
 export interface PointSeriesProps {
   animated: boolean;

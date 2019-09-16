@@ -5,8 +5,8 @@ import { uniqueBy } from '../../common/utils/array';
 import { extent } from 'd3-array';
 import { PoseGroup } from 'react-pose';
 import { PoseSVGGElement } from '../../common/utils/animations';
-import { memoize } from 'lodash-es';
 import { CloneElement } from '../../common/utils/children';
+import memoize from 'memoize-one';
 
 export interface HeatmapSeriesProps {
   padding: number;

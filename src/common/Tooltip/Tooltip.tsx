@@ -7,7 +7,6 @@ import {
   ConnectedOverlay,
   TriggerTypes
 } from 'rdk';
-import { isFunction } from 'lodash-es';
 import * as css from './Tooltip.module.scss';
 
 const tooltips: Tooltip[] = [];
@@ -106,7 +105,7 @@ export class Tooltip extends Component<TooltipProps, TooltipState> {
       [css.inactive]: animationState === 'exited'
     });
 
-    const children = isFunction(content) ? content() : content;
+    const children = typeof content === 'function' ? content() : content;
 
     if (!children) {
       return null;

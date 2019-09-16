@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { hiveLayout } from './hiveLayout';
 import { Link } from '../types';
-import { isString } from 'lodash-es';
 import * as css from './HiveLink.module.scss';
 
 interface HiveLinkProps {
@@ -29,6 +28,7 @@ export class HiveLink extends Component<HiveLinkProps, {}> {
   render() {
     const { link, color, active, onMouseOver, onMouseOut } = this.props;
     const { angle, radius } = this.prepareData();
+    const stroke = typeof color === 'string' ? color : color(link.source.x);
 
     return (
       <path
@@ -36,7 +36,7 @@ export class HiveLink extends Component<HiveLinkProps, {}> {
           [css.inactive]: !active
         })}
         d={`${angle(link)} ${radius(link)}`}
-        stroke={isString(color) ? color : color(link.source.x)}
+        stroke={stroke}
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
       />

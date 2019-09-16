@@ -4,7 +4,6 @@ import { timeDay } from 'd3-time';
 import React, { Fragment } from 'react';
 import moment from 'moment';
 import { object, color, number, select } from '@storybook/addon-knobs';
-import { get } from 'lodash-es';
 
 import {
   multiDateData,
@@ -138,7 +137,12 @@ storiesOf('Charts/Line/Multi Series', module)
             <Line
               strokeWidth={3}
               style={data => {
-                if (get(data, '[0].key') === 'Threat Intel') {
+                if (
+                  data &&
+                  data.length &&
+                  data[0] &&
+                  data[0].key === 'Threat Intel'
+                ) {
                   console.log('Style callback...', data);
                   return {
                     strokeDasharray: '5'

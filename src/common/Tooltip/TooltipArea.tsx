@@ -9,10 +9,10 @@ import {
 } from '../data';
 import { getPositionForTarget, getClosestPoint } from '../utils/position';
 import bind from 'memoize-bind';
-import { isEqual } from 'lodash-es';
 import { CloneElement } from '../utils/children';
 import { ChartTooltip, ChartTooltipProps } from './ChartTooltip';
 import { arc } from 'd3-shape';
+import isEqual from 'is-equal';
 
 export interface TooltipAreaProps {
   placement: Placement;

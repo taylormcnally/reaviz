@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { isEqual } from 'lodash-es';
 import {
   RadialScatterSeries,
   RadialScatterPoint,
@@ -7,6 +6,7 @@ import {
 } from '../../RadialScatterPlot';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils';
+import isEqual from 'is-equal';
 
 export interface RadialPointSeriesProps {
   animated: boolean;

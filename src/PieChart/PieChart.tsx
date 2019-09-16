@@ -7,9 +7,9 @@ import {
 import { ChartDataShape } from '../common/data';
 import classNames from 'classnames';
 import { pie } from 'd3-shape';
-import { memoize } from 'lodash-es';
 import { PieArcSeries, PieArcSeriesProps } from './PieArcSeries';
 import { CloneElement } from '../common/utils/children';
+import memoize from 'memoize-one';
 
 interface PieChartProps extends ChartProps {
   data: ChartDataShape[];

@@ -1,6 +1,6 @@
 import { cloneElement, PureComponent } from 'react';
-import { isFunction, memoize } from 'lodash-es';
 import classNames from 'classnames';
+import memoize from 'memoize-one';
 
 interface CloneElementProps {
   element: any | null;
@@ -21,7 +21,7 @@ export class CloneElement<T = any> extends PureComponent<
       const prop = props[key];
       const childProp = childProps[key];
 
-      if (isFunction(prop) && isFunction(childProp)) {
+      if (typeof prop === 'function' && typeof childProp === 'function') {
         acc[key] = args => {
           prop(args);
           childProp(args);

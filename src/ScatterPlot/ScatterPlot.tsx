@@ -24,8 +24,8 @@ import {
   ChartContainer,
   ChartContainerChildProps
 } from '../common/containers/ChartContainer';
-import { memoize } from 'lodash-es';
 import { CloneElement } from '../common/utils/children';
+import memoize from 'memoize-one';
 
 interface ScatterPlotProps extends ChartProps {
   data: ChartShallowDataShape[];

@@ -1,4 +1,3 @@
-import { isFunction } from 'lodash-es';
 import classNames from 'classnames';
 
 export type PropFunctionTypes = {
@@ -7,7 +6,7 @@ export type PropFunctionTypes = {
 };
 
 export const functionProps = (prop: string, val: any, data: any) => {
-  if (isFunction(val)) {
+  if (typeof val === 'function') {
     return val(data);
   } else if (prop === 'className') {
     return classNames(val);

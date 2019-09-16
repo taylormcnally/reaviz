@@ -1,5 +1,4 @@
 import { min, max } from 'd3-array';
-import { isNumber } from 'lodash-es';
 
 /**
  * Gets the min/max values handling nested arrays.
@@ -51,7 +50,7 @@ export function getXDomain({ data, scaled = false }): number[] {
   const [startX0, endX0] = extent(data, 'x0');
 
   // Histograms use dates for start/end
-  if (isNumber(startX) && isNumber(endX)) {
+  if (typeof startX === 'number' && typeof endX === 'number') {
     // If dealing w/ negative numbers, we should
     // normalize the top and bottom values
     if (startX0 < 0) {

@@ -28,8 +28,8 @@ import {
   ChartContainer,
   ChartProps
 } from '../common/containers/ChartContainer';
-import { memoize } from 'lodash-es';
 import { CloneElement } from '../common/utils/children';
+import memoize from 'memoize-one';
 
 export interface AreaChartProps extends ChartProps {
   data: ChartDataShape[];

@@ -6,7 +6,6 @@ import {
 } from '../common/data';
 import { scaleTime } from 'd3-scale';
 import { getYDomain, getXDomain } from '../common/utils/domains';
-import { memoize } from 'lodash-es';
 import {
   ChartProps,
   ChartContainer,
@@ -16,6 +15,7 @@ import { CloneElement } from '../common/utils/children';
 import { RadialAreaSeries, RadialAreaSeriesProps } from './RadialAreaSeries';
 import { RadialAxis, RadialAxisProps } from '../common/Axis/RadialAxis';
 import { getRadialYScale } from '../common/scales/radial';
+import memoize from 'memoize-one';
 
 export interface RadialAreaChartProps extends ChartProps {
   data: ChartShallowDataShape[];

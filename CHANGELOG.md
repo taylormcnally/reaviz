@@ -1,3 +1,6 @@
+# 3.0.9
+- [Chore] Shed lodash depedency
+
 # 3.0.8
 - [Chore] Add CJS and UMD build targets
 

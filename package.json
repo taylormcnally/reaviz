@@ -1,6 +1,6 @@
 {
   "name": "reaviz",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook -p 9010",
@@ -71,8 +71,9 @@
     "d3-time": "^1.0.11",
     "ellipsize": "^0.1.0",
     "human-format": "^0.10.1",
-    "lodash-es": "^4.17.15",
+    "is-equal": "^1.5.5",
     "memoize-bind": "^1.0.3",
+    "memoize-one": "^5.1.1",
     "moment": "^2.24.0",
     "rdk": "^1.0.7",
     "react-countup": "^4.2.2",

@@ -1,5 +1,4 @@
 import { ChartInternalDataTypes } from '../data';
-import { isNumber, isDate } from 'lodash-es';
 
 // https://stackoverflow.com/questions/673905/best-way-to-determine-users-locale-within-browser
 const getNavigatorLanguage = () => {
@@ -35,9 +34,9 @@ const options = {
  */
 export function formatValue(value: ChartInternalDataTypes): string {
   if (value !== undefined) {
-    if (isDate(value)) {
+    if (value instanceof Date) {
       return (value as Date).toLocaleDateString(locale, options);
-    } else if (isNumber(value)) {
+    } else if (typeof value === 'number') {
       return value.toLocaleString();
     }
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { isNumber } from 'lodash-es';
 
 export interface LinearAxisTickLabelProps {
   text: string;
@@ -69,12 +68,13 @@ export class LinearAxisTickLabel extends Component<LinearAxisTickLabelProps> {
   getOffset() {
     const { padding, position, rotation, orientation } = this.props;
 
-    const adjustedPadding = isNumber(padding)
-      ? {
-          fromAxis: padding as number,
-          alongAxis: padding as number
-        }
-      : (padding as { fromAxis: number; alongAxis: number });
+    const adjustedPadding =
+      typeof padding === 'number'
+        ? {
+            fromAxis: padding as number,
+            alongAxis: padding as number
+          }
+        : (padding as { fromAxis: number; alongAxis: number });
 
     const spacing = this.getTickLineSpacing();
     const offset1 =

@@ -1,7 +1,6 @@
 import React, { Component, cloneElement } from 'react';
 import { Tooltip, TooltipProps } from './Tooltip';
 import { TooltipTemplate } from './TooltipTemplate';
-import { isFunction } from 'lodash-es';
 
 export interface ChartTooltipProps extends TooltipProps {
   content: any;
@@ -22,7 +21,7 @@ export class ChartTooltip extends Component<ChartTooltipProps> {
       return null;
     }
 
-    return isFunction(content)
+    return typeof content === 'function'
       ? content(data || value, color)
       : cloneElement(content, {
           ...content.props,
