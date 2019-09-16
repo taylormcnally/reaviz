@@ -3,7 +3,7 @@ import { isNumber, isDate } from 'lodash-es';
 
 // https://stackoverflow.com/questions/673905/best-way-to-determine-users-locale-within-browser
 const getNavigatorLanguage = () => {
-  if (!navigator) {
+  if (!window || !window.navigator) {
     return 'en';
   }
 
