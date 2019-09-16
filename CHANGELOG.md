@@ -1,4 +1,4 @@
-# 3.0.4 - 3.0.5
+# 3.0.4 - 3.0.6
 - [Fix] Fix navigator reference for NextJS 
 
 # 3.0.3
