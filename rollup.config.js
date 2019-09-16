@@ -4,6 +4,7 @@ import typescript from 'rollup-plugin-typescript2';
 import external from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss-modules';
 import autoprefixer from 'autoprefixer';
+import commonjs from 'rollup-plugin-commonjs';
 import pkg from './package.json';
 
 export default [
@@ -11,10 +12,19 @@ export default [
     input: pkg.source,
     output: [
       {
+        file: pkg.browser,
+        format: 'umd',
+        name: 'reaviz',
+      },
+      {
         file: pkg.main,
-        format: 'esm',
-        sourcemap: true
-      }
+        format: 'cjs',
+        name: 'reaviz',
+      },
+      {
+        file: pkg.module,
+        format: 'es',
+      },
     ],
     plugins: [
       external({
@@ -37,6 +47,7 @@ export default [
         ]
       }),
       resolve(),
+      commonjs(),
       sourceMaps()
     ]
   }

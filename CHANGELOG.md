@@ -1,3 +1,6 @@
+# 3.0.8
+- [Chore] Add CJS and UMD build targets
+
 # 3.0.7
 - [Fix] Fix overlapping gridlines with axis lines
 - [Fix] Fix document reference for NextJS 

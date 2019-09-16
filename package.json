@@ -1,6 +1,6 @@
 {
   "name": "reaviz",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook -p 9010",
@@ -11,9 +11,10 @@
     "prettier": "prettier --loglevel warn --write 'src/**/*.{ts,tsx,js,jsx}'"
   },
   "source": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "jsnext:main": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.js",
+  "style": "dist/index.css",
   "typings": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -128,6 +129,7 @@
     "react-dom": "^16.9.0",
     "react-testing-library": "^7.0.1",
     "rollup": "^1.20.3",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^2.0.3",
