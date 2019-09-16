@@ -1,3 +1,6 @@
+# 3.0.10
+- [Chore] Bump RDK
+
 # 3.0.9
 - [Chore] Shed lodash depedency
 
