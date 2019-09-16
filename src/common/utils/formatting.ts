@@ -2,13 +2,23 @@ import { ChartInternalDataTypes } from '../data';
 import { isNumber, isDate } from 'lodash-es';
 
 // https://stackoverflow.com/questions/673905/best-way-to-determine-users-locale-within-browser
-const getNavigatorLanguage = () =>
-  navigator.languages && navigator.languages.length
-    ? navigator.languages[0]
-    : (navigator as any).userLanguage ||
-      navigator.language ||
-      (navigator as any).browserLanguage ||
-      'en';
+const getNavigatorLanguage = () => {
+  if (!navigator) {
+    return 'en';
+  }
+
+  if (navigator.languages && navigator.languages.length) {
+    return navigator.languages[0];
+  }
+
+  if (
+    (navigator as any).userLanguage ||
+    navigator.language ||
+    (navigator as any).browserLanguage
+  ) {
+    return 'en';
+  }
+};
 
 const locale = getNavigatorLanguage();
 

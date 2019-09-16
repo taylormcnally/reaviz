@@ -1,3 +1,6 @@
+# 3.0.4
+- [Fix] Fix navigator reference for NextJS 
+
 # 3.0.3
 - [Fix] Improve some types
 
