@@ -69,6 +69,19 @@ export class GridlineSeries extends Component<GridlineSeriesProps> {
     return direction === 'all' || direction === 'x';
   }
 
+  getSkipIndex(direction: 'x' | 'y') {
+    const { yAxis, xAxis } = this.props;
+
+    if (
+      (direction === 'x' && yAxis.axisLine !== null) ||
+      (direction === 'y' && xAxis.axisLine !== null)
+    ) {
+      return 0;
+    }
+
+    return null;
+  }
+
   renderGroup(
     element: JSX.Element,
     grid,
@@ -77,18 +90,23 @@ export class GridlineSeries extends Component<GridlineSeriesProps> {
     type: 'line' | 'stripe'
   ) {
     const { height, width } = this.props;
+    const skipIdx = this.getSkipIndex(direction);
 
     return grid.map((point, index) => (
-      <CloneElement<GridlineProps | GridStripeProps>
-        element={element}
-        index={index}
-        key={`${type}-${direction}-${index}`}
-        scale={scale}
-        data={point}
-        height={height}
-        width={width}
-        direction={direction}
-      />
+      <Fragment>
+        {index !== skipIdx && (
+          <CloneElement<GridlineProps | GridStripeProps>
+            element={element}
+            index={index}
+            key={`${type}-${direction}-${index}`}
+            scale={scale}
+            data={point}
+            height={height}
+            width={width}
+            direction={direction}
+          />
+        )}
+      </Fragment>
     ));
   }
 
