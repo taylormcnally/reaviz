@@ -14,7 +14,7 @@ import { CloneElement } from '../../utils/children';
 import { LinearAxisProps } from './LinearAxis';
 import ellipsize from 'ellipsize';
 import { max } from 'd3-array';
-import calculateSize from 'calculate-size';
+import { calculateDimensions } from '../../utils/size';
 
 export interface LinearAxisTickSeriesProps {
   height: number;
@@ -151,10 +151,11 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
       const position = this.getPosition(scaledTick);
       const text = ellipsize(fullText, 18);
       const size = label
-        ? calculateSize(text, {
-            font: label.props.fontFamily,
-            fontSize: `${label.props.fontSize}px`
-          })
+        ? calculateDimensions(
+            text,
+            label.props.fontFamily,
+            label.props.fontSize
+          )
         : {};
 
       return {
