@@ -1,3 +1,7 @@
+# 3.0.7
+- [Fix] Fix overlapping gridlines with axis lines
+- [Fix] Fix document reference for NextJS 
+
 # 3.0.4 - 3.0.6
 - [Fix] Fix navigator reference for NextJS 
 
