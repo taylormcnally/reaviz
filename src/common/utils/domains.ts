@@ -26,7 +26,7 @@ export function getYDomain({ scaled = false, data }): number[] {
 
   // If dealing w/ negative numbers, we should
   // normalize the top and bottom values
-  if (startY < 0) {
+  if (startY <= 0) {
     const posStart = -startY;
     const maxNum = Math.max(posStart, endY);
 
