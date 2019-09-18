@@ -1,4 +1,8 @@
-# 3.0.10 - 3.0.11
+# 3.0.11
+- [Fix] Fix diverging bar chart 0 bug
+- [Chore] Bump RDK
+
+# 3.0.10
 - [Chore] Bump RDK
 
 # 3.0.9
