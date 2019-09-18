@@ -40,7 +40,7 @@ export class Map extends Component<MapProps, MapState> {
   state: MapState = {};
 
   componentDidMount() {
-    import('world-atlas/world/110m.json').then(geojson => {
+    import('world-atlas/countries-110m.json').then(geojson => {
       // Using 'countries' is less performant than 'land' but we want to be able
       // to filter and disect on specific shapes
       const worldData = feature(geojson, geojson.objects.countries);
