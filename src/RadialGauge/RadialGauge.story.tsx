@@ -53,7 +53,7 @@ storiesOf('Charts/Radial Gauge', module)
         '#9FA9B1'
       ]);
       const data = object('Data', categoryData);
-      const maxValue = max(data, () => data.data as number);
+      const maxValue = max(data, (d) => d.data as number);
 
       return (
         <RadialGauge

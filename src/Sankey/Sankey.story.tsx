@@ -132,8 +132,7 @@ storiesOf('Charts/Sankey', module)
           Right: 'right',
           Justified: 'justify'
         },
-        'left',
-        1
+        'left'
       );
 
       return (
