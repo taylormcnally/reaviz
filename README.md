@@ -102,6 +102,7 @@ Additional features:
 - BigInt Support
 - Auto Sizing
 - Range Lines
+- SSR
 
 ## 📦 Install
 
