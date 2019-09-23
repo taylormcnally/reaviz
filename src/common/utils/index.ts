@@ -1,4 +1,3 @@
-export * from './animations';
 export * from './bigint';
 export * from './children';
 export * from './color';

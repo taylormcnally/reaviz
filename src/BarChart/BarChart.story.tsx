@@ -69,7 +69,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('Custom Style', () => (
     <BarChart
@@ -362,7 +362,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('Large Dataset', () => (
     <BarChart

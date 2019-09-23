@@ -6,14 +6,15 @@ import classNames from 'classnames';
 import { ChartInternalShallowDataShape, Direction } from '../../common/data';
 import { RangeLinesProps } from './RangeLines';
 import bind from 'memoize-bind';
-import * as css from './Bar.module.scss';
-import { PosedBar } from './PosedBar';
+import css from './Bar.module.scss';
 import { CloneElement } from '../../common/utils/children';
 import { Mask, MaskProps } from '../../common/Mask';
 import {
   constructFunctionProps,
   PropFunctionTypes
 } from '../../common/utils/functions';
+import { motion } from 'framer-motion';
+import { DEFAULT_TRANSITION } from '../../common/Motion';
 
 export type BarProps = {
   xScale: any;
@@ -290,50 +291,61 @@ export class Bar extends Component<BarProps, BarState> {
     return { y: data.y, x };
   }
 
+  getTransition(index: number) {
+    const { animated, barCount, layout } = this.props;
+
+    if (animated) {
+      let delay = 0;
+      if (layout === 'vertical') {
+        delay = (index / barCount) * 0.5;
+      } else {
+        delay = ((barCount - index) / barCount) * 0.5;
+      }
+
+      return {
+        ...DEFAULT_TRANSITION,
+        delay: delay
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
+  }
+
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const {
-      rounded,
-      cursor,
-      barCount,
-      animated,
-      layout,
-      mask,
-      id,
-      data
-    } = this.props;
+    const { rounded, cursor, mask, id, data } = this.props;
     const maskPath = mask ? `url(#mask-${id})` : '';
     const fill = this.getFill(currentColorShade);
-    const enterProps = coords;
-    const exitProps = this.getExit(coords);
+    const initialExit = this.getExit(coords);
     const isVertical = this.getIsVertical();
     const extras = constructFunctionProps(this.props, data);
+    const transition = this.getTransition(index);
 
     return (
-      <PosedBar
-        pose="enter"
-        poseKey={`${coords.x}-${coords.y}-${coords.height}-${coords.width}`}
-        ref={this.rect}
-        style={{ ...extras.style, cursor }}
-        fill={fill}
-        mask={maskPath}
-        onMouseEnter={bind(this.onMouseEnter, this)}
-        onMouseLeave={bind(this.onMouseLeave, this)}
-        onClick={bind(this.onMouseClick, this)}
-        layout={layout}
-        className={classNames(
-          {
-            [css.rounded]: rounded,
-            [css.vertical]: isVertical,
-            [css.horizontal]: !isVertical
-          },
-          extras.className
-        )}
-        enterProps={enterProps}
-        exitProps={exitProps}
-        index={index}
-        barCount={barCount}
-        animated={animated}
-      />
+      <g ref={this.rect}>
+        <motion.rect
+          className={classNames(
+            {
+              [css.rounded]: rounded,
+              [css.vertical]: isVertical,
+              [css.horizontal]: !isVertical
+            },
+            extras.className
+          )}
+          style={{ ...extras.style, cursor }}
+          fill={fill}
+          mask={maskPath}
+          initial={initialExit}
+          animate={coords}
+          exit={initialExit}
+          transition={transition}
+          onMouseEnter={bind(this.onMouseEnter, this)}
+          onMouseLeave={bind(this.onMouseLeave, this)}
+          onClick={bind(this.onMouseClick, this)}
+        />
+      </g>
     );
   }
 

@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { HeatmapCell, HeatmapCellProps } from './HeatmapCell';
 import { scaleQuantile } from 'd3-scale';
 import { uniqueBy } from '../../common/utils/array';
-import { extent } from 'd3-array';
-import { PoseGroup } from 'react-pose';
-import { PoseSVGGElement } from '../../common/utils/animations';
+import { extent, sum } from 'd3-array';
 import { CloneElement } from '../../common/utils/children';
 import memoize from 'memoize-one';
 
@@ -44,7 +42,16 @@ export class HeatmapSeries extends Component<HeatmapSeriesProps> {
     };
   });
 
-  renderCell({ row, cell, rowIndex, cellIndex, valueScale, width, height }) {
+  renderCell({
+    row,
+    cell,
+    rowIndex,
+    cellIndex,
+    valueScale,
+    width,
+    height,
+    cellCount
+  }) {
     const { xScale, yScale, id, animated, cell: cellElement } = this.props;
 
     const x = xScale(row.key);
@@ -52,44 +59,39 @@ export class HeatmapSeries extends Component<HeatmapSeriesProps> {
     const fill = valueScale(cell.value);
 
     return (
-      <PoseSVGGElement key={`${id}-${rowIndex}-${cellIndex}`}>
-        <CloneElement<HeatmapCellProps>
-          element={cellElement}
-          animated={animated}
-          cellIndex={rowIndex + cellIndex}
-          x={x}
-          y={y}
-          fill={fill}
-          width={width}
-          height={height}
-          data={cell}
-        />
-      </PoseSVGGElement>
+      <CloneElement<HeatmapCellProps>
+        key={`${id}-${rowIndex}-${cellIndex}`}
+        element={cellElement}
+        animated={animated}
+        cellIndex={rowIndex + cellIndex}
+        cellCount={cellCount}
+        x={x}
+        y={y}
+        fill={fill}
+        width={width}
+        height={height}
+        data={cell}
+      />
     );
   }
 
   render() {
-    const {
-      xScale,
-      yScale,
-      data,
-      colorScheme,
-      animated,
-      emptyColor
-    } = this.props;
+    const { xScale, yScale, data, colorScheme, emptyColor } = this.props;
 
     const valueScale = this.getValueScale(data, colorScheme, emptyColor);
     const height = yScale.bandwidth();
     const width = xScale.bandwidth();
+    const cellCount = sum([...yScale.domain(), ...xScale.domain()]);
 
     return (
-      <PoseGroup animateOnMount={animated}>
+      <Fragment>
         {data.map((row, rowIndex) =>
           row.data.map((cell, cellIndex) =>
             this.renderCell({
               height,
               width,
               valueScale,
+              cellCount,
               row,
               cell,
               rowIndex,
@@ -97,7 +99,7 @@ export class HeatmapSeries extends Component<HeatmapSeriesProps> {
             })
           )
         )}
-      </PoseGroup>
+      </Fragment>
     );
   }
 }

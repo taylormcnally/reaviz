@@ -5,8 +5,6 @@ import {
   RadialScatterPointProps
 } from './RadialScatterPoint';
 import { CloneElement } from '../../common/utils/children';
-import { PoseSVGGElement } from '../../common/utils/animations';
-import { PoseGroup } from 'react-pose';
 import bind from 'memoize-bind';
 
 export interface RadialScatterSeriesProps {
@@ -77,29 +75,24 @@ export class RadialScatterSeries extends Component<
     }
 
     return (
-      <PoseSVGGElement key={key}>
-        <CloneElement<RadialScatterPointProps>
-          element={point}
-          data={data}
-          index={index}
-          active={active}
-          xScale={xScale}
-          yScale={yScale}
-          animated={animated}
-          onMouseEnter={bind(this.onMouseEnter, this)}
-          onMouseLeave={bind(this.onMouseLeave, this)}
-        />
-      </PoseSVGGElement>
+      <CloneElement<RadialScatterPointProps>
+        element={point}
+        key={key}
+        data={data}
+        index={index}
+        active={active}
+        xScale={xScale}
+        yScale={yScale}
+        animated={animated}
+        onMouseEnter={bind(this.onMouseEnter, this)}
+        onMouseLeave={bind(this.onMouseLeave, this)}
+      />
     );
   }
 
   render() {
-    const { data, animated } = this.props;
+    const { data } = this.props;
 
-    return (
-      <PoseGroup animateOnMount={animated}>
-        {data.map((d, i) => this.renderPoint(d, i))}
-      </PoseGroup>
-    );
+    return <Fragment>{data.map((d, i) => this.renderPoint(d, i))}</Fragment>;
   }
 }

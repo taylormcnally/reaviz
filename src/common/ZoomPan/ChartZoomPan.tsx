@@ -23,7 +23,6 @@ export interface ChartZoomPanProps {
   disabled?: boolean;
   maxZoom: number;
   zoomStep: number;
-  decay: boolean;
   disableMouseWheel?: boolean;
   requireZoomModifier?: boolean;
   onZoomPan?: (event: ZoomPanChangeEvent) => void;

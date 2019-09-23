@@ -7,8 +7,6 @@ import {
   ChartInternalNestedDataShape,
   ChartInternalShallowDataShape
 } from '../../common/data';
-import { PoseGroup } from 'react-pose';
-import { PoseSVGGElement } from '../../common/utils/animations';
 import { CloneElement } from '../../common/utils/children';
 import {
   TooltipArea,
@@ -144,20 +142,21 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
     const {
       xScale,
       yScale,
-      animated,
-      area,
       symbols,
       id,
       height,
-      width
+      width,
+      animated,
+      area
     } = this.props;
     const { activeValues } = this.state;
 
-    // Animations are only valid for Area
-    const isAnimated = area !== undefined && animated;
     const visible = symbols !== null;
     const activeSymbols =
       (symbols && symbols.props.activeValues) || activeValues;
+
+    // Animations are only valid for Area
+    const isAnimated = area !== undefined && animated && !activeSymbols;
 
     return (
       <Fragment>
@@ -198,43 +197,33 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
   }
 
   renderSingleSeries(data: ChartInternalShallowDataShape[]) {
-    const { animated } = this.props;
-
     return (
-      <PoseGroup animateOnMount={animated}>
-        <PoseSVGGElement key="group">
-          {this.renderArea(data)}
-          {this.renderMarkLine()}
-          {this.renderSymbols(data)}
-        </PoseSVGGElement>
-      </PoseGroup>
+      <Fragment>
+        {this.renderArea(data)}
+        {this.renderMarkLine()}
+        {this.renderSymbols(data)}
+      </Fragment>
     );
   }
 
   renderMultiSeries(data: ChartInternalNestedDataShape[]) {
-    const { animated } = this.props;
-
     return (
       <Fragment>
-        <PoseGroup animateOnMount={animated}>
-          {data
-            .map((point, index) => (
-              <PoseSVGGElement key={`${point.key!.toString()}`}>
-                {this.renderArea(point.data, index)}
-              </PoseSVGGElement>
-            ))
-            .reverse()}
-        </PoseGroup>
+        {data
+          .map((point, index) => (
+            <Fragment key={`${point.key!.toString()}`}>
+              {this.renderArea(point.data, index)}
+            </Fragment>
+          ))
+          .reverse()}
         {this.renderMarkLine()}
-        <PoseGroup animateOnMount={animated}>
-          {data
-            .map((point, index) => (
-              <PoseSVGGElement key={`${point.key!.toString()}`}>
-                {this.renderSymbols(point.data, index)}
-              </PoseSVGGElement>
-            ))
-            .reverse()}
-        </PoseGroup>
+        {data
+          .map((point, index) => (
+            <Fragment key={`${point.key!.toString()}`}>
+              {this.renderSymbols(point.data, index)}
+            </Fragment>
+          ))
+          .reverse()}
       </Fragment>
     );
   }

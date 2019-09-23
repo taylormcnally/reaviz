@@ -37,7 +37,6 @@ export interface ZoomPanProps {
   minZoom: number;
   zoomStep: number;
   constrain: boolean;
-  decay: boolean;
   globalPanning: boolean;
   disableMouseWheel?: boolean;
   requireZoomModifier?: boolean;
@@ -64,7 +63,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     pannable: true,
     zoomable: true,
     constrain: true,
-    decay: true,
     height: 0,
     width: 0,
     x: 0,
@@ -97,6 +95,7 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
     return null;
   }
 
+  zoomRef = createRef<Zoom>();
   panRef = createRef<Pan>();
   state: ZoomPanState = {
     isZooming: false,
@@ -130,10 +129,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
   }
 
   onZoom(event: ZoomEvent) {
-    if (this.panRef.current) {
-      this.panRef.current.stopDecay();
-    }
-
     this.props.onZoomPan({
       x: event.x,
       y: event.y,
@@ -168,7 +163,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
       y,
       disableMouseWheel,
       constrain,
-      decay,
       zoomStep,
       onPanCancel,
       requireZoomModifier,
@@ -188,7 +182,6 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         constrain={constrain}
         height={height}
         width={width}
-        decay={decay}
         disabled={!pannable || disabled}
         ref={this.panRef}
         globalPanning={globalPanning}
@@ -197,41 +190,39 @@ export class ZoomPan extends Component<ZoomPanProps, ZoomPanState> {
         onPanEnd={bind(this.onPanEnd, this)}
         onPanCancel={onPanCancel}
       >
-        <g>
-          <Zoom
-            disabled={!zoomable || disabled}
-            scaleFactor={zoomStep}
-            disableMouseWheel={disableMouseWheel}
-            maxZoom={maxZoom}
-            minZoom={minZoom}
-            scale={scale}
-            x={x}
-            y={y}
-            requireZoomModifier={requireZoomModifier}
-            matrix={matrix}
-            onZoom={bind(this.onZoom, this)}
-            onZoomEnd={bind(this.onZoomEnd, this)}
+        <Zoom
+          ref={this.zoomRef}
+          disabled={!zoomable || disabled}
+          scaleFactor={zoomStep}
+          disableMouseWheel={disableMouseWheel}
+          maxZoom={maxZoom}
+          minZoom={minZoom}
+          scale={scale}
+          x={x}
+          y={y}
+          style={{ cursor }}
+          requireZoomModifier={requireZoomModifier}
+          matrix={matrix}
+          onZoom={bind(this.onZoom, this)}
+          onZoomEnd={bind(this.onZoomEnd, this)}
+        >
+          {!disabled && (
+            <rect
+              height={height}
+              width={width}
+              opacity={0}
+              className="pan-container"
+            />
+          )}
+          <g
+            style={{
+              pointerEvents: selection,
+              userSelect: selection
+            }}
           >
-            <g style={{ cursor }}>
-              {!disabled && (
-                <rect
-                  height={height}
-                  width={width}
-                  opacity={0}
-                  className="pan-container"
-                />
-              )}
-              <g
-                style={{
-                  pointerEvents: selection,
-                  userSelect: selection
-                }}
-              >
-                {children}
-              </g>
-            </g>
-          </Zoom>
-        </g>
+            {children}
+          </g>
+        </Zoom>
       </Pan>
     );
   }

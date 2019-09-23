@@ -1,32 +1,14 @@
 import React, { Component, Fragment, createRef } from 'react';
+import bind from 'memoize-bind';
 import classNames from 'classnames';
-import posed from 'react-pose';
+import { motion } from 'framer-motion';
 import { ChartInternalDataTypes } from '../../common/data';
 import { CloneElement } from '../../common/utils/children';
 import { formatValue } from '../../common/utils/formatting';
 import { Tooltip, TooltipProps } from '../../common/Tooltip';
 import { SankeyLabel, SankeyLabelProps } from '../SankeyLabel';
 import { Node, DEFAULT_COLOR } from '../utils';
-import bind from 'memoize-bind';
-import * as css from './SankeyNode.module.scss';
-import { transition } from '../../common/utils/animations';
-
-export const PosedNode = posed.rect({
-  enter: {
-    opacity: 1,
-    transition: {
-      ...transition,
-      opacity: {
-        type: 'tween',
-        ease: 'linear',
-        duration: 150
-      }
-    }
-  },
-  exit: {
-    opacity: 0
-  }
-});
+import css from './SankeyNode.module.scss';
 
 export interface SankeyNodeProps extends Node {
   active: boolean;
@@ -119,7 +101,6 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
   renderNode() {
     const {
       active,
-      animated,
       className,
       color,
       disabled,
@@ -137,23 +118,34 @@ export class SankeyNode extends Component<SankeyNodeProps, SankeyNodeState> {
     const nodeHeight = y1 && y0 && y1 - y0 > 0 ? y1 - y0 : 0;
 
     return (
-      <PosedNode
-        pose="enter"
-        poseKey={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
-        animated={animated}
-        className={classNames(css.node, className)}
-        fillOpacity={opacity(active, disabled)}
-        style={style}
-        ref={this.rect}
-        x={x0}
-        y={y0}
-        width={nodeWidth}
-        height={nodeHeight}
-        fill={color}
-        onClick={onClick}
-        onMouseEnter={bind(this.onMouseEnter, this)}
-        onMouseLeave={bind(this.onMouseLeave, this)}
-      />
+      <g ref={this.rect}>
+        <motion.rect
+          key={`sankey-node-${x0}-${x1}-${y0}-${y1}-${index}`}
+          className={classNames(css.node, className)}
+          fillOpacity={opacity(active, disabled)}
+          style={style}
+          x={x0}
+          y={y0}
+          width={nodeWidth}
+          height={nodeHeight}
+          fill={color}
+          initial={{
+            opacity: 0
+          }}
+          animate={{
+            opacity: 1
+          }}
+          exit={{
+            opacity: 0
+          }}
+          transition={{
+            duration: 0.1
+          }}
+          onClick={onClick}
+          onMouseEnter={bind(this.onMouseEnter, this)}
+          onMouseLeave={bind(this.onMouseLeave, this)}
+        />
+      </g>
     );
   }
 

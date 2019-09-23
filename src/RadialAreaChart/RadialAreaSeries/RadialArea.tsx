@@ -3,8 +3,8 @@ import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialArea, curveCardinalClosed, curveLinear } from 'd3-shape';
 import { RadialGradient, RadialGradientProps } from '../../common/Gradient';
 import { CloneElement } from '../../common/utils';
-import { PosedRadialArea } from './PosedRadialArea';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';
+import { MotionPath, DEFAULT_TRANSITION } from '../../common/Motion';
 
 export interface RadialAreaProps {
   data: ChartInternalShallowDataShape[];
@@ -49,25 +49,43 @@ export class RadialArea extends Component<RadialAreaProps> {
     return radialFn(data as any);
   }
 
+  getTransition() {
+    const { animated } = this.props;
+
+    if (animated) {
+      return {
+        ...DEFAULT_TRANSITION
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
+  }
+
   renderArea(fill: string) {
-    const { data, className, animated, yScale } = this.props;
-    const enterProps = {
-      d: this.getPath(data)
+    const { data, className, yScale } = this.props;
+    const transition = this.getTransition();
+    const enter = {
+      d: this.getPath(data),
+      opacity: 1
     };
 
     const [yStart] = yScale.domain();
-    const exitProps = {
-      d: this.getPath(data.map(d => ({ ...d, y: yStart })))
+    const exit = {
+      d: this.getPath(data.map(d => ({ ...d, y: yStart }))),
+      opacity: 0
     };
 
     return (
-      <PosedRadialArea
-        pose="enter"
-        poseKey={enterProps.d}
-        animated={animated}
+      <MotionPath
+        custom={{
+          enter,
+          exit
+        }}
+        transition={transition}
         pointerEvents="none"
-        enterProps={enterProps}
-        exitProps={exitProps}
         className={className}
         fill={this.getFill(fill)}
       />

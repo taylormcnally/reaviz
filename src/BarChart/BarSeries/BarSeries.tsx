@@ -6,8 +6,6 @@ import {
   ChartInternalShallowDataShape,
   Direction
 } from '../../common/data';
-import { PoseGroup } from 'react-pose';
-import { PoseSVGGElement } from '../../common/utils/animations';
 import { sequentialScheme, getColor } from '../../common/utils/color';
 import { CloneElement } from '../../common/utils/children';
 import { ThresholdCountGenerator, ThresholdArrayGenerator } from 'd3-array';
@@ -147,7 +145,7 @@ export class BarSeries extends Component<BarSeriesProps> {
     }
 
     return (
-      <PoseSVGGElement key={key}>
+      <Fragment key={key}>
         <CloneElement<BarProps>
           element={bar}
           id={`${id}-bar-${groupIndex}-${barIndex}`}
@@ -164,7 +162,7 @@ export class BarSeries extends Component<BarSeriesProps> {
           color={this.getColor.bind(this)}
           layout={layout}
         />
-      </PoseSVGGElement>
+      </Fragment>
     );
   }
 
@@ -177,11 +175,11 @@ export class BarSeries extends Component<BarSeriesProps> {
     groupIndex?: number
   ) {
     return (
-      <PoseGroup animateOnMount={this.props.animated}>
+      <Fragment>
         {data.map((barData, barIndex) =>
           this.renderBar(barData, barIndex, barCount, groupIndex)
         )}
-      </PoseGroup>
+      </Fragment>
     );
   }
 

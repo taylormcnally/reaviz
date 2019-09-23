@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import * as css from './MarkLine.module.scss';
+import css from './MarkLine.module.scss';
 
 export interface MarkLineProps {
   height: number;

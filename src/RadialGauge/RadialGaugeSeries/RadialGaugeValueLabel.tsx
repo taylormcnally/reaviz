@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ChartShallowDataShape } from '../../common/data';
 import CountUp from 'react-countup';
 import classNames from 'classnames';
-import * as css from './RadialGaugeValueLabel.module.scss';
+import css from './RadialGaugeValueLabel.module.scss';
 
 export interface RadialGaugeValueLabelProps {
   data: ChartShallowDataShape;

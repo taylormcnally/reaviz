@@ -66,7 +66,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add(
     'Bubble',
@@ -121,7 +121,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add(
     'Symbols',
@@ -192,7 +192,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('Resizable', () => (
     <div style={{ width: '50vw', height: '75vh', border: 'solid 1px red' }}>

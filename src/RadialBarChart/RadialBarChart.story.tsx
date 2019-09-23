@@ -64,7 +64,7 @@ storiesOf('Charts/Bar/Radial', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('Resizable', () => (
     <div style={{ width: '50vw', height: '75vh', border: 'solid 1px red' }}>

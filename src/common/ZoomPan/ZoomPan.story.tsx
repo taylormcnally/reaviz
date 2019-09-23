@@ -18,7 +18,7 @@ storiesOf('Charts/Zoom Pan', module)
       width={450}
       height={300}
       data={largeDateData}
-      zoomPan={<ChartZoomPan disabled={false} />}
+      zoomPan={<ChartZoomPan />}
       series={
         <LineSeries tooltip={<TooltipArea disabled={true} />} markLine={null} />
       }
@@ -39,7 +39,7 @@ storiesOf('Charts/Zoom Pan', module)
       width={350}
       height={250}
       data={largeDateData}
-      zoomPan={<ChartZoomPan disabled={false} />}
+      zoomPan={<ChartZoomPan />}
       series={
         <AreaSeries tooltip={<TooltipArea disabled={true} />} markLine={null} />
       }
@@ -61,7 +61,7 @@ storiesOf('Charts/Zoom Pan', module)
       width={750}
       data={largeSignalChartData}
       margins={20}
-      zoomPan={<ChartZoomPan disabled={false} />}
+      zoomPan={<ChartZoomPan />}
       series={
         <ScatterSeries
           point={
@@ -142,11 +142,7 @@ class DefaultZoomStory extends Component<{}, { domain: [any, any] }> {
         height={300}
         data={largeDateData}
         zoomPan={
-          <ChartZoomPan
-            disabled={false}
-            domain={zoomDomain}
-            onZoomPan={this.onZoomPan}
-          />
+          <ChartZoomPan domain={zoomDomain} onZoomPan={this.onZoomPan} />
         }
         series={
           <LineSeries

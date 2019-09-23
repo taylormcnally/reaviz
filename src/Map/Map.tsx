@@ -7,26 +7,10 @@ import {
   ChartContainerChildProps
 } from '../common/containers/ChartContainer';
 import classNames from 'classnames';
-import * as css from './Map.module.scss';
 import { CloneElement } from '../common/utils/children';
-import posed, { PoseGroup } from 'react-pose';
 import { MapMarkerProps } from './MapMarker';
-
-export const PosedSVGG = posed.g({
-  enter: {
-    opacity: 1,
-    transition: {
-      opacity: {
-        type: 'tween',
-        ease: 'linear',
-        duration: 500
-      }
-    }
-  },
-  exit: {
-    opacity: 0
-  }
-});
+import { motion } from 'framer-motion';
+import css from './Map.module.scss';
 
 interface MapProps extends ChartProps {
   markers?: JSX.Element[];
@@ -100,19 +84,24 @@ export class Map extends Component<MapProps, MapState> {
     const path = geoPath().projection(projection);
 
     return (
-      <PoseGroup animateOnMount={true}>
-        <PosedSVGG key="countries">
-          {worldData.features.map((point, index) =>
-            this.renderCountry(point, index, path)
-          )}
-          {markers &&
-            markers.map((marker, index) => (
-              <Fragment key={`marker-${index}`}>
-                {this.renderMarker(marker, index, projection)}
-              </Fragment>
-            ))}
-        </PosedSVGG>
-      </PoseGroup>
+      <motion.g
+        initial={{
+          opacity: 0
+        }}
+        animate={{
+          opacity: 1
+        }}
+      >
+        {worldData.features.map((point, index) =>
+          this.renderCountry(point, index, path)
+        )}
+        {markers &&
+          markers.map((marker, index) => (
+            <Fragment key={`marker-${index}`}>
+              {this.renderMarker(marker, index, projection)}
+            </Fragment>
+          ))}
+      </motion.g>
     );
   }
 

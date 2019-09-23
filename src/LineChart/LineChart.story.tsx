@@ -60,7 +60,7 @@ storiesOf('Charts/Line/Single Series', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('No Animation', () => (
     <LineChart

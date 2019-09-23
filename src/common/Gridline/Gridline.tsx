@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import * as css from './Gridline.module.scss';
+import css from './Gridline.module.scss';
 
 export interface GridlineProps {
   height: number;

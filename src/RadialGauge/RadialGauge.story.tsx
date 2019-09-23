@@ -37,7 +37,7 @@ storiesOf('Charts/Radial Gauge', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add(
     'Multi',
@@ -53,7 +53,7 @@ storiesOf('Charts/Radial Gauge', module)
         '#9FA9B1'
       ]);
       const data = object('Data', categoryData);
-      const maxValue = max(data, (d) => d.data as number);
+      const maxValue = max(data, d => d.data as number);
 
       return (
         <RadialGauge
@@ -68,7 +68,7 @@ storiesOf('Charts/Radial Gauge', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('Multi-line', () => (
     <RadialGauge data={categoryData} width={350} height={450} />

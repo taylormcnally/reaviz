@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import { formatValue } from '../utils/formatting';
 import { ChartInternalDataTypes } from '../data';
-import * as css from './TooltipTemplate.module.scss';
+import css from './TooltipTemplate.module.scss';
 
 interface SingleTooltipValue {
   key?: ChartInternalDataTypes;

@@ -42,7 +42,7 @@ storiesOf('Charts/Scatter Plot/Linear', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('Categorical Axis', () => (
     <ScatterPlot

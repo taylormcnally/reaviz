@@ -1,4 +1,4 @@
-import { Component, createRef, Children, cloneElement } from 'react';
+import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 import {
   getPointFromMatrix,
@@ -23,6 +23,7 @@ interface ZoomGestureProps {
   matrix: any;
   x: number;
   y: number;
+  style?: any;
   disableMouseWheel?: boolean;
   requireZoomModifier?: boolean;
   onZoom: (event: ZoomEvent) => void;
@@ -205,11 +206,11 @@ export class Zoom extends Component<ZoomGestureProps> {
   };
 
   render() {
-    return Children.map(this.props.children, (child: any) =>
-      cloneElement(child, {
-        ...child.props,
-        ref: this.childRef
-      })
+    const { style, children } = this.props;
+    return (
+      <g ref={this.childRef} style={style}>
+        {children}
+      </g>
     );
   }
 }

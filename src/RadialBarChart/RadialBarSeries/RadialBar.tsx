@@ -3,11 +3,12 @@ import { ChartInternalShallowDataShape } from '../../common/data';
 import { arc } from 'd3-shape';
 import { Gradient } from '../../common/Gradient';
 import bind from 'memoize-bind';
-import { PosedRadialBar } from './PosedRadialBar';
 import chroma from 'chroma-js';
 import { CloneElement } from '../../common/utils/children';
 import { ChartTooltipProps, ChartTooltip } from '../../common/Tooltip';
 import { path } from 'd3-path';
+import { DEFAULT_TRANSITION } from '../../common/Motion';
+import { MotionBar } from './MotionBar';
 
 export interface RadialBarProps {
   data: ChartInternalShallowDataShape;
@@ -128,10 +129,27 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
     }
   }
 
+  getTransition() {
+    const { animated, barCount, index } = this.props;
+
+    if (animated) {
+      return {
+        ...DEFAULT_TRANSITION,
+        delay: (index / barCount) * 0.5
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
+  }
+
   renderBar(color: string) {
-    const { className, data, animated, barCount, index, yScale } = this.props;
+    const { className, data, yScale } = this.props;
 
     const fill = this.getFill(color);
+    const transition = this.getTransition();
 
     // Track previous props
     const previousEnter = this.previousEnter
@@ -140,29 +158,28 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
     this.previousEnter = { ...data };
 
     const [yStart] = yScale.domain();
-    const exitProps = {
+    const exit = {
       ...data,
       y: yStart
     };
 
     return (
-      <PosedRadialBar
-        pose="enter"
-        poseKey={`${data.x}-${data.y}-${index}`}
-        ref={this.ref}
-        animated={animated}
-        enterProps={data}
-        previousEnter={previousEnter}
-        exitProps={exitProps}
-        getArc={this.getArc.bind(this)}
-        barCount={barCount}
-        index={index}
-        fill={fill}
-        className={className}
-        onMouseEnter={bind(this.onMouseEnter, this)}
-        onMouseLeave={bind(this.onMouseLeave, this)}
-        onClick={bind(this.onMouseClick, this)}
-      />
+      <g ref={this.ref}>
+        <MotionBar
+          arc={this.getArc.bind(this)}
+          custom={{
+            enter: data,
+            exit,
+            previousEnter
+          }}
+          transition={transition}
+          fill={fill}
+          className={className}
+          onMouseEnter={bind(this.onMouseEnter, this)}
+          onMouseLeave={bind(this.onMouseLeave, this)}
+          onClick={bind(this.onMouseClick, this)}
+        />
+      </g>
     );
   }
 

@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import { PoseGroup } from 'react-pose';
-import { PoseSVGGElement } from '../../common/utils/animations';
+import React, { Component, Fragment } from 'react';
 import { PieArc, PieArcProps } from './PieArc';
 import { arc } from 'd3-shape';
 import { PieArcLabel, PieArcLabelProps } from './PieArcLabel';
@@ -154,9 +152,9 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
     const centroid = this.centroid(innerRadius, outerRadius);
 
     return (
-      <PoseGroup animateOnMount={animated}>
+      <Fragment>
         {data.map((arcData: any, index: number) => (
-          <PoseSVGGElement key={arcData.data.key.toString()}>
+          <Fragment key={arcData.data.key.toString()}>
             {label && labelVisible(arcData) && (
               <CloneElement<PieArcLabelProps>
                 element={label}
@@ -172,9 +170,9 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
               innerArc={innerArc}
               color={this.getColor(arcData, index)}
             />
-          </PoseSVGGElement>
+          </Fragment>
         ))}
-      </PoseGroup>
+      </Fragment>
     );
   }
 }

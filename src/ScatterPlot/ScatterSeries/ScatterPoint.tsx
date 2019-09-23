@@ -2,15 +2,15 @@ import React, { Component, Fragment, ReactNode, createRef } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import bind from 'memoize-bind';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
-import { PosedCircle } from './PosedCircle';
-import { PosedGroupTransform } from '../../common/utils/animations';
 import classNames from 'classnames';
-import * as css from './ScatterPoint.module.scss';
 import { CloneElement } from '../../common/utils/children';
 import {
   constructFunctionProps,
   PropFunctionTypes
 } from '../../common/utils/functions';
+import css from './ScatterPoint.module.scss';
+import { motion } from 'framer-motion';
+import { DEFAULT_TRANSITION } from '../../common/Motion';
 
 export type ScatterPointProps = {
   symbol: (data: ChartInternalShallowDataShape) => ReactNode;
@@ -82,106 +82,100 @@ export class ScatterPoint extends Component<
     return cy;
   }
 
-  getCircleEnter() {
+  getEnter() {
     const { xScale, data } = this.props;
-
     return {
-      cy: this.getYPosition(),
-      cx: xScale(data.x)
+      x: xScale(data.x),
+      y: this.getYPosition()
     };
   }
 
-  getCircleExit() {
+  getExit() {
     const { xScale, data, yScale } = this.props;
     const [yStartDomain] = yScale.domain();
-    const yPos = yScale(yStartDomain);
 
     return {
-      cy: yPos,
-      cx: xScale(data.x)
+      y: yScale(yStartDomain),
+      x: xScale(data.x)
     };
   }
 
-  getSymbolEnter() {
-    const { data, xScale } = this.props;
+  getTransition() {
+    const { animated, index } = this.props;
 
-    const y = this.getYPosition();
-    const x = xScale(data.x);
-    const transform = `translate(${x}, ${y})`;
-
-    return {
-      transform,
-      x,
-      y
-    };
-  }
-
-  getSymbolExit() {
-    const { data, xScale, yScale } = this.props;
-
-    const x = xScale(data.x);
-    const [yStartDomain] = yScale.domain();
-    const yPos = yScale(yStartDomain);
-
-    const transform = `translate(${x}, ${yPos})`;
-
-    return {
-      transform
-    };
+    if (animated) {
+      return {
+        ...DEFAULT_TRANSITION,
+        delay: index * 0.005
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
   }
 
   renderCircle() {
-    const {
-      data,
-      animated,
-      index,
-      size,
-      color,
-      cursor,
-      className
-    } = this.props;
+    const { data, index, size, color, cursor } = this.props;
     const fill = typeof color === 'function' ? color(data, index) : color;
-    const sizeVal = typeof size === 'function' ? size(data) : size;
-    const enterProps = this.getCircleEnter();
-    const exitProps = this.getCircleExit();
+    const r = typeof size === 'function' ? size(data) : size;
+    const enter = this.getEnter();
+    const exit = this.getExit();
     const extras = constructFunctionProps(this.props, data);
+    const transition = this.getTransition();
+    const initial = {
+      cx: exit.x,
+      cy: exit.y,
+      opacity: 0
+    };
 
     return (
-      <PosedCircle
-        {...extras}
-        pose="enter"
-        poseKey={`${enterProps.cy}-${enterProps.cx}`}
-        enterProps={enterProps}
-        exitProps={exitProps}
-        r={sizeVal}
-        index={index}
-        animated={animated}
-        cursor={cursor}
+      <motion.circle
+        className={extras.className}
+        style={{ ...extras.style, cursor }}
+        initial={initial}
+        animate={{
+          cx: enter.x,
+          cy: enter.y,
+          opacity: 1
+        }}
+        exit={initial}
         fill={fill}
-        className={className}
+        r={r}
+        transition={transition}
       />
     );
   }
 
   renderSymbol() {
-    const { data, animated, index, symbol } = this.props;
-    const enterProps = this.getSymbolEnter();
-    const exitProps = this.getSymbolExit();
+    const { data, symbol } = this.props;
+    const enter = this.getEnter();
+    const exit = this.getExit();
     const renderedSymbol = symbol(data);
     const extras = constructFunctionProps(this.props, data);
+    const transition = this.getTransition();
+
+    const initial = {
+      translateX: exit.x,
+      translateY: exit.y,
+      opacity: 0
+    };
 
     return (
-      <PosedGroupTransform
+      <motion.g
         {...extras}
-        pose="enter"
-        poseKey={`${enterProps.y}-${enterProps.x}`}
-        enterProps={enterProps}
-        exitProps={exitProps}
-        animated={animated}
-        index={index}
+        initial={initial}
+        animate={{
+          translateX: enter.x,
+          translateY: enter.y,
+          opacity: 1
+        }}
+        exit={initial}
+        transition={transition}
       >
         {renderedSymbol}
-      </PosedGroupTransform>
+      </motion.g>
     );
   }
 

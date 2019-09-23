@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { RadialBar, RadialBarProps } from './RadialBar';
 import { sequentialScheme, getColor } from '../../common/utils/color';
 import { CloneElement } from '../../common/utils/children';
-import { PoseSVGGElement } from '../../common/utils/animations';
-import { PoseGroup } from 'react-pose';
 
 export interface RadialBarSeriesProps {
   data: ChartInternalShallowDataShape[];
@@ -37,7 +35,7 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
     const { innerRadius, xScale, yScale, bar, id, data, animated } = this.props;
 
     return (
-      <PoseSVGGElement key={index}>
+      <Fragment key={index}>
         <CloneElement<RadialBarProps>
           element={bar}
           id={`radialbar-${id}-${index}`}
@@ -50,17 +48,13 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
           barCount={data.length}
           animated={animated}
         />
-      </PoseSVGGElement>
+      </Fragment>
     );
   }
 
   render() {
-    const { data, animated } = this.props;
+    const { data } = this.props;
 
-    return (
-      <PoseGroup animateOnMount={animated}>
-        {data.map((d, i) => this.renderBar(d, i))}
-      </PoseGroup>
-    );
+    return <Fragment>{data.map((d, i) => this.renderBar(d, i))}</Fragment>;
   }
 }

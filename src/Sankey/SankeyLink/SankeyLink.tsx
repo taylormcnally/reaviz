@@ -1,26 +1,13 @@
 import React, { Component, Fragment, createRef } from 'react';
+import bind from 'memoize-bind';
 import classNames from 'classnames';
-import posed from 'react-pose';
+import { motion } from 'framer-motion';
+import { sankeyLinkHorizontal } from 'd3-sankey';
 import { CloneElement } from '../../common/utils/children';
 import { formatValue } from '../../common/utils/formatting';
 import { Tooltip, TooltipProps } from '../../common/Tooltip';
-import { transition } from '../../common/utils/animations';
 import { NodeExtra, Node, Link, DEFAULT_COLOR } from '../utils';
-import bind from 'memoize-bind';
-import { sankeyLinkHorizontal } from 'd3-sankey';
-import * as css from './SankeyLink.module.scss';
-
-export const PosedLink = posed.path({
-  enter: {
-    d: ({ enterProps }) => enterProps.d,
-    strokeWidth: ({ enterProps }) => enterProps.strokeWidth,
-    transition
-  },
-  exit: {
-    strokeWidth: ({ exitProps }) => exitProps.strokeWidth,
-    d: ({ exitProps }) => exitProps.d
-  }
-});
+import css from './SankeyLink.module.scss';
 
 export interface SankeyLinkProps extends Link {
   active: boolean;
@@ -105,7 +92,6 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
   renderLink() {
     const {
       active,
-      animated,
       className,
       disabled,
       index,
@@ -114,23 +100,36 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
       onClick
     } = this.props;
     const enterProps = this.getEnter();
+    const exitProps = this.getExit();
 
     return (
-      <PosedLink
-        pose="enter"
-        poseKey={`sankey-link-${enterProps.d}-${index}`}
-        animated={animated}
-        className={classNames(css.link, className)}
-        style={style}
-        ref={this.link}
-        enterProps={enterProps}
-        exitProps={this.getExit()}
-        stroke={this.getStroke()}
-        strokeOpacity={opacity(active, disabled)}
-        onClick={onClick}
-        onMouseEnter={bind(this.onMouseEnter, this)}
-        onMouseLeave={bind(this.onMouseLeave, this)}
-      />
+      <g ref={this.link}>
+        <motion.path
+          key={`sankey-link-${enterProps.d}-${index}`}
+          className={classNames(css.link, className)}
+          style={style}
+          initial={{
+            d: exitProps.d,
+            strokeWidth: exitProps.strokeWidth
+          }}
+          animate={{
+            d: enterProps.d,
+            strokeWidth: enterProps.strokeWidth
+          }}
+          exit={{
+            d: exitProps.d,
+            strokeWidth: exitProps.strokeWidth
+          }}
+          transition={{
+            duration: 0.5
+          }}
+          stroke={this.getStroke()}
+          strokeOpacity={opacity(active, disabled)}
+          onClick={onClick}
+          onMouseEnter={bind(this.onMouseEnter, this)}
+          onMouseLeave={bind(this.onMouseLeave, this)}
+        />
+      </g>
     );
   }
 

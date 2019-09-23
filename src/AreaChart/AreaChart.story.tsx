@@ -66,7 +66,7 @@ storiesOf('Charts/Area/Single Series', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   )
   .add('Masks', () => (
     <AreaChart

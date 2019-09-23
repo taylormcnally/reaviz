@@ -1,8 +1,8 @@
 import React, { Component, createRef, Fragment } from 'react';
-import posed from 'react-pose';
 import { Tooltip } from '../common/Tooltip';
 import bind from 'memoize-bind';
-import * as css from './MapMarker.module.scss';
+import css from './MapMarker.module.scss';
+import { motion } from 'framer-motion';
 
 export interface MapMarkerProps {
   coordinates: [number, number];
@@ -17,25 +17,6 @@ export interface MapMarkerProps {
 interface MapMarkerState {
   active?: boolean;
 }
-
-export const PosedCircle = posed.circle({
-  enter: {
-    opacity: 1,
-    scale: 1,
-    delay: ({ index }) => index * 500,
-    transition: {
-      opacity: {
-        type: 'tween',
-        ease: 'linear',
-        duration: 1000
-      }
-    }
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.2
-  }
-});
 
 // Set padding modifier for the tooltips
 const modifiers = {
@@ -62,15 +43,25 @@ export class MapMarker extends Component<MapMarkerProps, MapMarkerState> {
   }
 
   render() {
-    const { cx, cy, index, tooltip, size, onClick } = this.props;
+    const { cx, cy, tooltip, size, index, onClick } = this.props;
     const { active } = this.state;
 
     return (
       <Fragment>
-        <PosedCircle
+        <motion.circle
+          initial={{
+            opacity: 0,
+            scale: 0.02
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1
+          }}
+          transition={{
+            delay: index * 0.3
+          }}
           ref={this.ref}
           className={css.marker}
-          index={index}
           cx={cx}
           cy={cy}
           r={size}

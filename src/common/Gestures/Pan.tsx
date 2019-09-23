@@ -1,9 +1,7 @@
-import { Component, createRef, Children, cloneElement } from 'react';
+import React, { Component, createRef } from 'react';
 import { toggleTextSelection } from '../utils/selection';
 import { smoothMatrix, transform, translate } from 'transformation-matrix';
 import { constrainMatrix } from '../utils/position';
-import { value, decay, ValueReaction, ColdSubscription } from 'popmotion';
-import { clamp } from '@popmotion/popcorn';
 
 interface PanProps {
   disabled: boolean;
@@ -16,7 +14,6 @@ interface PanProps {
   width: number;
   height: number;
   constrain: boolean;
-  decay: boolean;
   globalPanning: boolean;
   onPanStart: (event: PanStartEvent) => void;
   onPanMove: (event: PanMoveEvent) => void;
@@ -53,7 +50,6 @@ export class Pan extends Component<PanProps> {
     disabled: false,
     scale: 1,
     threshold: 10,
-    decay: true,
     globalPanning: true,
     onPanStart: () => undefined,
     onPanMove: () => undefined,
@@ -66,13 +62,10 @@ export class Pan extends Component<PanProps> {
   started: boolean = false;
   deltaX: number = 0;
   deltaY: number = 0;
-  observer?: ValueReaction;
-  decay?: ColdSubscription;
   childRef = createRef<SVGGElement>();
-  rqf: any;
 
   componentDidMount() {
-    if (!this.props.disabled && this.childRef.current) {
+    if (this.childRef.current) {
       this.childRef.current.addEventListener('mousedown', this.onMouseDown, {
         passive: false
       });
@@ -83,9 +76,7 @@ export class Pan extends Component<PanProps> {
   }
 
   componentWillUnmount() {
-    this.stopDecay();
     this.disposeHandlers();
-    cancelAnimationFrame(this.rqf);
 
     if (this.childRef.current) {
       this.childRef.current.removeEventListener('mousedown', this.onMouseDown);
@@ -115,20 +106,7 @@ export class Pan extends Component<PanProps> {
     );
   }
 
-  stopDecay() {
-    if (this.decay && this.decay.stop) {
-      this.decay.stop();
-    }
-
-    if (this.observer) {
-      this.observer.complete();
-    }
-  }
-
   onPanStart(nativeEvent, source: 'mouse' | 'touch') {
-    const { x, y } = this.props;
-    this.observer = value({ x, y });
-
     this.props.onPanStart({
       nativeEvent,
       source
@@ -136,8 +114,6 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanMove(x: number, y: number, source: 'mouse' | 'touch', nativeEvent) {
-    this.observer && this.observer.update({ x, y });
-
     this.props.onPanMove({
       source,
       nativeEvent,
@@ -147,52 +123,12 @@ export class Pan extends Component<PanProps> {
   }
 
   onPanEnd(nativeEvent, source: 'mouse' | 'touch') {
-    const {
-      width,
-      height,
-      matrix,
-      constrain,
-      onPanEnd,
-      onPanMove
-    } = this.props;
+    const { onPanEnd } = this.props;
 
-    if (this.observer && this.props.decay) {
-      // Calculate the end matrix
-      const endX = width * matrix.a - width;
-      const endY = height * matrix.a - height;
-
-      this.decay = decay({
-        from: this.observer.get(),
-        velocity: this.observer.getVelocity()
-      })
-        .pipe(res => ({
-          x: constrain ? clamp(-endX, 0)(res.x) : res.x,
-          y: constrain ? clamp(-endY, 0)(res.y) : res.y
-        }))
-        .start({
-          update: ({ x, y }) => {
-            this.rqf = requestAnimationFrame(() => {
-              onPanMove({
-                source: 'touch',
-                nativeEvent,
-                x,
-                y
-              });
-            });
-          },
-          complete: () => {
-            onPanEnd({
-              nativeEvent,
-              source
-            });
-          }
-        });
-    } else {
-      onPanEnd({
-        nativeEvent,
-        source
-      });
-    }
+    onPanEnd({
+      nativeEvent,
+      source
+    });
   }
 
   pan(x: number, y: number, nativeEvent, source: 'mouse' | 'touch') {
@@ -213,6 +149,11 @@ export class Pan extends Component<PanProps> {
   }
 
   onMouseDown = (event: MouseEvent) => {
+    // Stop at disabled
+    if (this.props.disabled) {
+      return;
+    }
+
     // Ignore right click
     if (event.which === 3) {
       return;
@@ -230,7 +171,6 @@ export class Pan extends Component<PanProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    this.stopDecay();
     toggleTextSelection(false);
     this.started = false;
 
@@ -279,6 +219,12 @@ export class Pan extends Component<PanProps> {
   };
 
   onTouchStart = (event: TouchEvent) => {
+    // Stop at disabled
+    if (this.props.disabled) {
+      return;
+    }
+
+    // Reqquire more than one touch
     if (event.touches.length !== 1) {
       return;
     }
@@ -286,7 +232,6 @@ export class Pan extends Component<PanProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    this.stopDecay();
     toggleTextSelection(false);
     this.started = false;
 
@@ -346,11 +291,6 @@ export class Pan extends Component<PanProps> {
   };
 
   render() {
-    return Children.map(this.props.children, (child: any) =>
-      cloneElement(child, {
-        ...child.props,
-        ref: this.childRef
-      })
-    );
+    return <g ref={this.childRef}>{this.props.children}</g>;
   }
 }

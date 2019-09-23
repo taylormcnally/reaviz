@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ChartInternalShallowDataShape, Direction } from '../../common/data';
-import { PosedRangeLine } from './PosedRangeLines';
+import { motion } from 'framer-motion';
+import { DEFAULT_TRANSITION } from '../../common/Motion';
 
 export interface RangeLinesProps {
   height: number;
@@ -52,7 +53,8 @@ export class RangeLines extends Component<RangeLinesProps> {
 
     return {
       x: newX,
-      y: newY
+      y: newY,
+      opacity: 1
     };
   }
 
@@ -81,7 +83,8 @@ export class RangeLines extends Component<RangeLinesProps> {
 
     return {
       y: newY,
-      x: newX
+      x: newX,
+      opacity: 0
     };
   }
 
@@ -102,26 +105,41 @@ export class RangeLines extends Component<RangeLinesProps> {
     };
   }
 
+  getDelay() {
+    const { animated, index, barCount, layout } = this.props;
+
+    let delay = 0;
+    if (animated) {
+      if (layout === 'vertical') {
+        return (index / barCount) * 0.5;
+      } else {
+        return ((barCount - index) / barCount) * 0.5;
+      }
+    }
+
+    return delay;
+  }
+
   render() {
-    const { color, data, animated, index, barCount, layout } = this.props;
+    const { color } = this.props;
     const rangeLineHeight = this.getLineHeight();
     const enterProps = this.getEnter(rangeLineHeight);
     const exitProps = this.getExit(rangeLineHeight);
     const { height, width } = this.getHeightWidth(rangeLineHeight);
+    const delay = this.getDelay();
 
     return (
-      <PosedRangeLine
-        pose="enter"
-        poseKey={data}
+      <motion.rect
         fill={color}
-        layout={layout}
-        enterProps={enterProps}
-        exitProps={exitProps}
-        height={height}
-        barCount={barCount}
         width={width}
-        index={index}
-        animated={animated}
+        height={height}
+        initial={exitProps}
+        animate={enterProps}
+        exit={exitProps}
+        transition={{
+          ...DEFAULT_TRANSITION,
+          delay
+        }}
       />
     );
   }

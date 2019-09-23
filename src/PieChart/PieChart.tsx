@@ -32,8 +32,13 @@ export class PieChart extends Component<PieChartProps> {
     )
   };
 
-  getData = memoize((data: ChartDataShape[]) => {
+  getData = memoize((data: ChartDataShape[], explode: boolean) => {
     const pieLayout = pie().value((d: any) => d.data);
+
+    // Explode sort doesn't work right...
+    if (!explode) {
+      pieLayout.sort(null);
+    }
 
     return pieLayout(data as any);
   });
@@ -41,7 +46,7 @@ export class PieChart extends Component<PieChartProps> {
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartWidth, chartHeight } = containerProps;
     const { series } = this.props;
-    const data = this.getData(this.props.data);
+    const data = this.getData(this.props.data, this.props.series.props.explode);
 
     return (
       <CloneElement<PieArcSeriesProps>

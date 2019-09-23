@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
-import { PoseGroup } from 'react-pose';
-import { PoseSVGGElement } from '../../common/utils/animations';
 import { CloneElement } from '../../common/utils/children';
 import { ScatterPoint, ScatterPointProps } from './ScatterPoint';
 
@@ -47,20 +45,19 @@ export class ScatterSeries extends Component<ScatterSeriesProps, {}> {
     }
 
     return (
-      <PoseSVGGElement key={key}>
-        <CloneElement<ScatterPointProps>
-          element={point}
-          {...rest}
-          data={pointData}
-          index={index}
-          active={active}
-        />
-      </PoseSVGGElement>
+      <CloneElement<ScatterPointProps>
+        element={point}
+        key={key}
+        {...rest}
+        data={pointData}
+        index={index}
+        active={active}
+      />
     );
   }
 
   render() {
-    const { data, height, width, id, isZoomed, animated } = this.props;
+    const { data, height, width, id, isZoomed } = this.props;
 
     return (
       <Fragment>
@@ -75,9 +72,7 @@ export class ScatterSeries extends Component<ScatterSeriesProps, {}> {
           </clipPath>
         </defs>
         <g clipPath={`url(#${id}-path)`}>
-          <PoseGroup animateOnMount={animated}>
-            {data.map((data, index) => this.renderPoint(data, index))}
-          </PoseGroup>
+          {data.map((data, index) => this.renderPoint(data, index))}
         </g>
       </Fragment>
     );

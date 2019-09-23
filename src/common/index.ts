@@ -11,3 +11,4 @@ export * from './Mask';
 export * from './Tooltip';
 export * from './utils';
 export * from './ZoomPan';
+export * from './Motion';

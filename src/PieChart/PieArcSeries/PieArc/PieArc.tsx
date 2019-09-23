@@ -1,9 +1,10 @@
-import React, { Component, Fragment, createRef } from 'react';
-import { PosedArc } from './PosedArc';
+import React, { Component, createRef } from 'react';
 import bind from 'memoize-bind';
 import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../../common/Tooltip';
 import { CloneElement } from '../../../common/utils/children';
+import { DEFAULT_TRANSITION } from 'common';
+import { MotionArc } from './MotionArc';
 
 export interface PieArcProps {
   data: any;
@@ -87,12 +88,27 @@ export class PieArc extends Component<PieArcProps, PieArcState> {
     }
   }
 
+  getTransition() {
+    const { animated } = this.props;
+
+    if (animated) {
+      return {
+        ...DEFAULT_TRANSITION
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
+  }
+
   render() {
-    const { animated, color, data, tooltip, cursor, innerArc } = this.props;
+    const { color, data, tooltip, cursor, innerArc } = this.props;
     const { active } = this.state;
-    const exitProps = this.getExitProps();
-    const key = innerArc(data);
+    const exit = this.getExitProps();
     const fill = active ? chroma(color).brighten(0.5) : color;
+    const transition = this.getTransition();
 
     // Cache the previous for transition use later
     const previousEnter = this.previousEnter
@@ -101,21 +117,20 @@ export class PieArc extends Component<PieArcProps, PieArcState> {
     this.previousEnter = { ...data };
 
     return (
-      <Fragment>
-        <PosedArc
-          pose="enter"
-          poseKey={key}
+      <g ref={this.arc}>
+        <MotionArc
           style={{ cursor }}
-          ref={this.arc}
-          animated={animated}
-          previousEnter={previousEnter}
+          fill={fill}
+          arc={innerArc}
+          custom={{
+            enter: data,
+            exit,
+            previousEnter
+          }}
+          transition={transition}
           onMouseEnter={bind(this.onMouseEnter, this)}
           onMouseLeave={bind(this.onMouseLeave, this)}
           onClick={bind(this.onMouseClick, this)}
-          arc={innerArc}
-          enterProps={data}
-          exitProps={exitProps}
-          fill={fill}
         />
         {tooltip && !tooltip.props.disabled && (
           <CloneElement<ChartTooltipProps>
@@ -125,7 +140,7 @@ export class PieArc extends Component<PieArcProps, PieArcState> {
             value={{ y: data.data.data, x: data.data.key }}
           />
         )}
-      </Fragment>
+      </g>
     );
   }
 }

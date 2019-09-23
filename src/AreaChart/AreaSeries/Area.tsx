@@ -10,12 +10,12 @@ import {
   ChartInternalDataShape,
   ChartInternalShallowDataShape
 } from '../../common/data';
-import { PosedArea } from './PosedArea';
 import { CloneElement } from '../../common/utils/children';
 import {
   constructFunctionProps,
   PropFunctionTypes
 } from '../../common/utils/functions';
+import { MotionPath, DEFAULT_TRANSITION } from '../../common/Motion';
 
 export type AreaProps = {
   id: string;
@@ -101,26 +101,42 @@ export class Area extends Component<AreaProps, {}> {
     }
   }
 
+  getTransition() {
+    const { animated, index } = this.props;
+
+    if (animated) {
+      return {
+        ...DEFAULT_TRANSITION,
+        delay: index * 0.05
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
+  }
+
   renderArea(coords: ChartInternalShallowDataShape[]) {
-    const { mask, index, id, animated, data } = this.props;
+    const { mask, id, data } = this.props;
     const fill = this.getFill();
     const maskPath = mask ? `url(#mask-${id})` : '';
-    const enterProps = this.getAreaEnter(coords);
-    const exitProps = this.getAreaExit();
+    const enter = this.getAreaEnter(coords);
+    const exit = this.getAreaExit();
     const extras = constructFunctionProps(this.props, data);
+    const transition = this.getTransition();
 
     return (
-      <PosedArea
+      <MotionPath
         {...extras}
-        pose="enter"
-        poseKey={enterProps.d}
-        animated={animated}
         pointerEvents="none"
         mask={maskPath}
-        index={index}
         fill={fill}
-        enterProps={enterProps}
-        exitProps={exitProps}
+        transition={transition}
+        custom={{
+          enter,
+          exit
+        }}
       />
     );
   }

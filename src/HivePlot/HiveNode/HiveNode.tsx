@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Node } from '../types';
-import * as css from './HiveNode.module.scss';
+import css from './HiveNode.module.scss';
 import { getDegrees } from '../../common/utils/math';
 
 interface HiveNodeProps {

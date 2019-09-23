@@ -13,7 +13,7 @@ import {
   constructFunctionProps,
   PropFunctionTypes
 } from '../../common/utils/functions';
-import { PosedLine } from './PosedLine';
+import { MotionPath, DEFAULT_TRANSITION } from '../../common/Motion';
 
 export type LineProps = {
   data: ChartInternalDataShape[];
@@ -29,13 +29,26 @@ export type LineProps = {
   hasArea: boolean;
 } & PropFunctionTypes;
 
-export class Line extends PureComponent<LineProps> {
+interface LineState {
+  mounted?: boolean;
+}
+
+export class Line extends PureComponent<LineProps, LineState> {
   static defaultProps: Partial<LineProps> = {
     showZeroStroke: true,
     strokeWidth: 3
   };
 
+  state: LineState = {};
   ghostPathRef = createRef<SVGPathElement>();
+
+  componentDidMount() {
+    if (this.ghostPathRef.current) {
+      this.setState({
+        mounted: true
+      });
+    }
+  }
 
   getLinePath(data: ChartInternalShallowDataShape[]) {
     const { showZeroStroke, interpolation } = this.props;
@@ -62,15 +75,26 @@ export class Line extends PureComponent<LineProps> {
   }
 
   getLineEnter(coords: ChartInternalShallowDataShape[]) {
+    const { hasArea } = this.props;
+    const { mounted } = this.state;
     const linePath = this.getLinePath(coords);
 
+    let strokeDasharray = '';
+    if (!hasArea && mounted) {
+      const ghostPath = this.ghostPathRef.current.getTotalLength();
+      strokeDasharray = `${ghostPath} ${ghostPath}`;
+    }
+
     return {
-      d: linePath === null ? undefined : linePath
+      d: linePath === null ? undefined : linePath,
+      strokeDashoffset: 0,
+      strokeDasharray: strokeDasharray
     };
   }
 
   getLineExit() {
     const { hasArea, yScale, xScale, data } = this.props;
+    const { mounted } = this.state;
 
     let coords;
     if (hasArea) {
@@ -88,42 +112,72 @@ export class Line extends PureComponent<LineProps> {
 
     const linePath = this.getLinePath(coords);
 
+    let strokeDasharray = '';
+    let strokeDashoffset = 0;
+    if (!hasArea && mounted) {
+      const ghostPath = this.ghostPathRef.current.getTotalLength();
+      strokeDasharray = `${ghostPath} ${ghostPath}`;
+      strokeDashoffset = ghostPath;
+    }
+
     return {
-      d: linePath === null ? undefined : linePath
+      d: linePath === null ? undefined : linePath,
+      strokeDasharray,
+      strokeDashoffset
     };
   }
 
+  getTransition() {
+    const { animated, index } = this.props;
+
+    if (animated) {
+      return {
+        ...DEFAULT_TRANSITION,
+        delay: index * 0.05
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
+  }
+
   render() {
-    const { data, color, index, animated, strokeWidth, hasArea } = this.props;
+    const { data, color, index, strokeWidth, hasArea } = this.props;
+    const { mounted } = this.state;
     const coords = this.getCoords();
     const stroke = color(data, index);
-    const enterProps = this.getLineEnter(coords);
-    const exitProps = this.getLineExit();
+    const enter = this.getLineEnter(coords);
+    const exit = this.getLineExit();
     const extras = constructFunctionProps(this.props, data);
+    const transition = this.getTransition();
+    const showLine = hasArea || mounted;
 
     return (
       <Fragment>
-        <PosedLine
-          {...extras}
-          pose="enter"
-          poseKey={enterProps.d}
-          pointerEvents="none"
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-          fill="none"
-          enterProps={enterProps}
-          exitProps={exitProps}
-          index={index}
-          areaShown={hasArea}
-          ghostPathRef={this.ghostPathRef}
-          animated={animated}
-        />
-        <path
-          opacity="0"
-          d={enterProps.d}
-          ref={this.ghostPathRef}
-          pointerEvents="none"
-        />
+        {showLine && (
+          <MotionPath
+            {...extras}
+            pointerEvents="none"
+            stroke={stroke}
+            strokeWidth={strokeWidth}
+            fill="none"
+            transition={transition}
+            custom={{
+              enter,
+              exit
+            }}
+          />
+        )}
+        {!hasArea && (
+          <path
+            opacity="0"
+            d={enter.d}
+            ref={this.ghostPathRef}
+            pointerEvents="none"
+          />
+        )}
       </Fragment>
     );
   }

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import bind from 'memoize-bind';
 import { CloneElement } from '../../utils/children';
 import { DiscreteLegendEntryProps } from './DiscreteLegendEntry';
-import * as css from './DiscreteLegend.module.scss';
+import css from './DiscreteLegend.module.scss';
 
 export interface DiscreteLegendProps {
   className?: any;

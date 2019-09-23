@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { sequentialScheme, getColor } from '../../common/utils/color';
 import { CloneElement } from '../../common/utils/children';
-import { PoseSVGGElement } from '../../common/utils/animations';
-import { PoseGroup } from 'react-pose';
 import { RadialAreaProps, RadialArea } from './RadialArea';
 import { RadialLine, RadialLineProps } from './RadialLine';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';
@@ -126,7 +124,9 @@ export class RadialAreaSeries extends Component<
     const { activeValues } = this.state;
 
     // Animations are only valid for Area
-    const isAnimated = area !== undefined && animated;
+    const activeSymbols =
+      (symbols && symbols.props.activeValues) || activeValues;
+    const isAnimated = area !== undefined && animated && !activeSymbols;
 
     return (
       <CloneElement<RadialPointSeriesProps>
@@ -145,7 +145,6 @@ export class RadialAreaSeries extends Component<
     const {
       area,
       line,
-      animated,
       symbols,
       tooltip,
       xScale,
@@ -158,29 +157,25 @@ export class RadialAreaSeries extends Component<
     } = this.props;
 
     return (
-      <PoseGroup animateOnMount={animated}>
-        <PoseSVGGElement key="1">
-          <CloneElement<TooltipAreaProps>
-            element={tooltip}
-            xScale={xScale}
-            yScale={yScale}
-            data={data}
-            height={height}
-            width={width}
-            isRadial={true}
-            innerRadius={innerRadius}
-            color={this.getColor.bind(this)}
-            onValueEnter={bind(this.onValueEnter, this)}
-            onValueLeave={bind(this.onValueLeave, this)}
-          >
-            <g clipPath={`url(#${id}-path)`}>
-              {area && this.renderArea()}
-              {line && this.renderLine()}
-              {symbols && this.renderSymbols()}
-            </g>
-          </CloneElement>
-        </PoseSVGGElement>
-      </PoseGroup>
+      <CloneElement<TooltipAreaProps>
+        element={tooltip}
+        xScale={xScale}
+        yScale={yScale}
+        data={data}
+        height={height}
+        width={width}
+        isRadial={true}
+        innerRadius={innerRadius}
+        color={this.getColor.bind(this)}
+        onValueEnter={bind(this.onValueEnter, this)}
+        onValueLeave={bind(this.onValueLeave, this)}
+      >
+        <g clipPath={`url(#${id}-path)`}>
+          {area && this.renderArea()}
+          {line && this.renderLine()}
+          {symbols && this.renderSymbols()}
+        </g>
+      </CloneElement>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import * as css from './GridStripe.module.scss';
+import css from './GridStripe.module.scss';
 
 export interface GridStripeProps {
   height: number;

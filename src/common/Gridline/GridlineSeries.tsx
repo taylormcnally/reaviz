@@ -93,12 +93,11 @@ export class GridlineSeries extends Component<GridlineSeriesProps> {
     const skipIdx = this.getSkipIndex(direction);
 
     return grid.map((point, index) => (
-      <Fragment>
+      <Fragment key={`${type}-${direction}-${index}`}>
         {index !== skipIdx && (
           <CloneElement<GridlineProps | GridStripeProps>
             element={element}
             index={index}
-            key={`${type}-${direction}-${index}`}
             scale={scale}
             data={point}
             height={height}

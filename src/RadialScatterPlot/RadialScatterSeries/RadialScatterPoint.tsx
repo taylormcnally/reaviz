@@ -1,12 +1,13 @@
 import React, { Component, ReactNode, createRef, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialLine } from 'd3-shape';
-import { PosedGroupTransform } from '../../common/utils/animations';
 import bind from 'memoize-bind';
 import classNames from 'classnames';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { CloneElement } from '../../common/utils/children';
-import * as css from './RadialScatterPoint.module.scss';
+import css from './RadialScatterPoint.module.scss';
+import { motion } from 'framer-motion';
+import { DEFAULT_TRANSITION } from '../../common/Motion';
 
 export interface RadialScatterPointProps {
   data: ChartInternalShallowDataShape;
@@ -90,13 +91,33 @@ export class RadialScatterPoint extends Component<
     // Ref: https://bit.ly/2CnZcPl
     const path = fn([data] as any);
 
-    let transform;
     if (path) {
-      const coords = path.slice(1).slice(0, -1);
-      transform = `translate(${coords})`;
-    }
+      const [translateX, translateY] = path
+        .slice(1)
+        .slice(0, -1)
+        .split(',');
 
-    return transform;
+      return {
+        translateX: parseFloat(translateX),
+        translateY: parseFloat(translateY)
+      };
+    }
+  }
+
+  getTransition() {
+    const { animated, index } = this.props;
+
+    if (animated) {
+      return {
+        ...DEFAULT_TRANSITION,
+        delay: index * 0.005
+      };
+    } else {
+      return {
+        type: false,
+        delay: 0
+      };
+    }
   }
 
   render() {
@@ -105,7 +126,6 @@ export class RadialScatterPoint extends Component<
       data,
       color,
       index,
-      animated,
       symbol,
       active,
       tooltip,
@@ -117,19 +137,18 @@ export class RadialScatterPoint extends Component<
     const fill = typeof color === 'function' ? color(data, index) : color;
     const transform = this.getTranslate(data);
     const sizeVal = typeof size === 'function' ? size(data) : size;
+    const transition = this.getTransition();
 
     const [yStart] = yScale.domain();
     const exitTransform = this.getTranslate({ ...data, y: yStart });
 
     return (
       <Fragment>
-        <PosedGroupTransform
-          pose="enter"
-          poseKey={transform}
-          enterProps={{ transform }}
-          exitProps={{ transform: exitTransform }}
-          index={index}
-          animated={animated}
+        <motion.g
+          initial={{ ...exitTransform, opacity: 0 }}
+          animate={{ ...transform, opacity: 1 }}
+          exit={{ ...exitTransform, opacity: 0 }}
+          transition={transition}
           ref={this.ref}
           onMouseEnter={bind(this.onMouseEnter, this)}
           onMouseLeave={bind(this.onMouseLeave, this)}
@@ -140,7 +159,7 @@ export class RadialScatterPoint extends Component<
         >
           {symbol && symbol(data)}
           {!symbol && <circle r={sizeVal} fill={fill} />}
-        </PosedGroupTransform>
+        </motion.g>
         {tooltip && (
           <CloneElement<ChartTooltipProps>
             element={tooltip}

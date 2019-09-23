@@ -150,5 +150,5 @@ storiesOf('Charts/Sankey', module)
         />
       );
     },
-    { options: { showAddonPanel: true } }
+    { options: { showPanel: true } }
   );

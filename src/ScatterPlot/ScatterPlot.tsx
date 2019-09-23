@@ -17,7 +17,7 @@ import { getYScale, getXScale } from '../common/scales';
 import { ScatterSeries, ScatterSeriesProps } from './ScatterSeries';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
 import { ZoomPanChangeEvent, ChartZoomPanProps } from '../common/ZoomPan';
-import * as css from './ScatterPlot.module.scss';
+import css from './ScatterPlot.module.scss';
 import { ChartBrushProps } from '../common/Brush';
 import {
   ChartProps,

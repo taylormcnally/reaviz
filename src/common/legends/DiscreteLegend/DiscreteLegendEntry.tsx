@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import * as css from './DiscreteLegendEntry.module.scss';
+import css from './DiscreteLegendEntry.module.scss';
 import classNames from 'classnames';
 import {
   DiscreteLegendSymbol,

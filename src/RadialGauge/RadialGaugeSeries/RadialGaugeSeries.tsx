@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ChartShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils/children';
 import { RadialGaugeArcProps, RadialGaugeArc } from './RadialGaugeArc';
-import { PoseGroup } from 'react-pose';
-import { PoseSVGGElement } from '../../common/utils/animations';
 import { RadialGaugeLabel, RadialGaugeLabelProps } from './RadialGaugeLabel';
 import { RadialGaugeValueLabel } from './RadialGaugeValueLabel';
 import { getColor } from '../../common/utils/color';
@@ -115,9 +113,9 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     const yOffset = y + (height - baselineLabelHeight) / 2;
 
     return (
-      <PoseSVGGElement
-        key={data.key.toString()}
+      <g
         transform={`translate(${xOffset}, ${yOffset})`}
+        key={data.key.toLocaleString()}
       >
         {outerArc && (
           <CloneElement<RadialGaugeArcProps>
@@ -148,20 +146,20 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
             offset={labelOffset}
           />
         )}
-      </PoseSVGGElement>
+      </g>
     );
   }
 
   render() {
-    const { data, innerArc } = this.props;
+    const { data } = this.props;
     const { columns, width, height, xScale, yScale } = this.getWidths();
 
     return (
-      <PoseGroup animateOnMount={innerArc.props.animated}>
+      <Fragment>
         {data.map((d, i) =>
           this.renderGauge(d, i, columns, height, width, xScale, yScale)
         )}
-      </PoseGroup>
+      </Fragment>
     );
   }
 }

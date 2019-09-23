@@ -7,7 +7,7 @@ import {
   ConnectedOverlay,
   TriggerTypes
 } from 'rdk';
-import * as css from './Tooltip.module.scss';
+import css from './Tooltip.module.scss';
 
 const tooltips: Tooltip[] = [];
 

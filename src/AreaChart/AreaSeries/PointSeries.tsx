@@ -6,7 +6,7 @@ import {
   ScatterSeries,
   ScatterPointProps
 } from '../../ScatterPlot';
-import * as css from './PointSeries.module.scss';
+import css from './PointSeries.module.scss';
 import isEqual from 'is-equal';
 
 export interface PointSeriesProps {

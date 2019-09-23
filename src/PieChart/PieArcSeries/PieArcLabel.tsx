@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import { formatValue } from '../../../common/utils/formatting';
-import { PosedArcLabelGroup } from './PosedArcLabelGroup';
+import { formatValue } from '../../common/utils/formatting';
+import { motion } from 'framer-motion';
 
 export interface PieArcLabelProps {
   data: any;
@@ -53,7 +53,14 @@ export class PieArcLabel extends PureComponent<PieArcLabelProps> {
     const outerPos = [scale * innerLinePos[0], scale * innerLinePos[1]];
 
     return (
-      <PosedArcLabelGroup>
+      <motion.g
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{
+          duration: 0.1
+        }}
+      >
         <title>{text}</title>
         <text
           dy={padding}
@@ -73,7 +80,7 @@ export class PieArcLabel extends PureComponent<PieArcLabelProps> {
           stroke={lineStroke}
           points={`${innerLinePos},${outerPos},${posX} ${posY}`}
         />
-      </PosedArcLabelGroup>
+      </motion.g>
     );
   }
 }

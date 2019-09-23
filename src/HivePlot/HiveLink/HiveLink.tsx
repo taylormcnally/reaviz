@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { hiveLayout } from './hiveLayout';
 import { Link } from '../types';
-import * as css from './HiveLink.module.scss';
+import css from './HiveLink.module.scss';
 
 interface HiveLinkProps {
   angle: (...args: any[]) => any;

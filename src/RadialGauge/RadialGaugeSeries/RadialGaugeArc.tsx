@@ -23,7 +23,7 @@ export class RadialGaugeArc extends Component<RadialGaugeArcProps> {
   static defaultProps: Partial<RadialGaugeArcProps> = {
     width: 5,
     color: '#353d44',
-    animated: false,
+    animated: true,
     disabled: false,
     onClick: () => undefined,
     onMouseEnter: () => undefined,

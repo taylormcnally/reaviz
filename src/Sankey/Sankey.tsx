@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { PoseGroup } from 'react-pose';
 import {
   sankey,
   sankeyLeft,
@@ -18,7 +17,6 @@ import { getColor } from '../common/utils/color';
 import { SankeyNodeProps } from './SankeyNode';
 import { SankeyLinkProps } from './SankeyLink';
 import { Node, Link } from './utils';
-import { PoseSVGGElement } from '../common/utils/animations';
 import bind from 'memoize-bind';
 
 const JUSTIFICATION = {
@@ -207,12 +205,10 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
 
     return (
       containerProps.chartSized && (
-        <PoseGroup animateOnMount={this.props.animated}>
-          <PoseSVGGElement key="group">
-            {links.map((link, index) => this.renderLink(link as Link, index))}
-            {this.renderNodes(nodes as Node[], chartWidth)}
-          </PoseSVGGElement>
-        </PoseGroup>
+        <Fragment key="group">
+          {links.map((link, index) => this.renderLink(link as Link, index))}
+          {this.renderNodes(nodes as Node[], chartWidth)}
+        </Fragment>
       )
     );
   }

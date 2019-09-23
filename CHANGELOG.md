@@ -1,3 +1,9 @@
+# 4.0.0
+- [BREAKING] Migrate from `react-pose` to `framer-motion`
+- [BREAKING] Remove `decay` due to buggy behaviors
+- [Fix] Fix update causing pie slices to resort
+- [Fix] Fix for panning not working when not initial enabled
+
 # 3.0.11
 - [Fix] Fix diverging bar chart 0 bug
 - [Chore] Bump RDK

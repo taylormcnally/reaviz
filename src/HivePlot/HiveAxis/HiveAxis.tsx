@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { getDegrees } from '../../common/utils/math';
-import * as css from './HiveAxis.module.scss';
+import css from './HiveAxis.module.scss';
 
 interface HiveAxisProps {
   angle: (...args: any[]) => any;
