@@ -1,3 +1,6 @@
+# Master
+- [Chore] Minor TypeScript strict fixes
+
 # 4.0.0
 - [BREAKING] Migrate from `react-pose` to `framer-motion`
 - [BREAKING] Remove `decay` due to buggy behaviors
