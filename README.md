@@ -42,6 +42,7 @@ Chart types include:
   - Marimekko
   - Radial
   - Sparkline
+  - Waterfall
 - Line Chart
   - Single Series
   - Multi Series
@@ -92,7 +93,7 @@ Additional features:
 - Tooltip
   - Single Value
   - Grouped Values
-- Linear/Area Series Symbols
+- Line/Area Series Symbols
 - Animations Enter/Update/Exit
 - Brush
 - Patterns
