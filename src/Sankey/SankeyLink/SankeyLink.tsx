@@ -58,14 +58,14 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
 
   getEnter() {
     const path = sankeyLinkHorizontal();
-    const d = path(this.getLink());
+    const d = path(this.getLink()) as string;
     const strokeWidth = Math.max(1, this.props.width);
     return { d, strokeWidth };
   }
 
   getExit() {
     const path = sankeyLinkHorizontal();
-    const d = path({ ...this.getLink(), width: 0 });
+    const d = path({ ...this.getLink(), width: 0 }) as string;
     return { d, strokeWidth: 0 };
   }
 
@@ -108,18 +108,9 @@ export class SankeyLink extends Component<SankeyLinkProps, SankeyLinkState> {
           key={`sankey-link-${enterProps.d}-${index}`}
           className={classNames(css.link, className)}
           style={style}
-          initial={{
-            d: exitProps.d,
-            strokeWidth: exitProps.strokeWidth
-          }}
-          animate={{
-            d: enterProps.d,
-            strokeWidth: enterProps.strokeWidth
-          }}
-          exit={{
-            d: exitProps.d,
-            strokeWidth: exitProps.strokeWidth
-          }}
+          initial={exitProps}
+          animate={enterProps}
+          exit={exitProps}
           transition={{
             duration: 0.5
           }}

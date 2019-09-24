@@ -3,7 +3,7 @@ import bind from 'memoize-bind';
 import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../../common/Tooltip';
 import { CloneElement } from '../../../common/utils/children';
-import { DEFAULT_TRANSITION } from 'common';
+import { DEFAULT_TRANSITION } from '../../../common/Motion';
 import { MotionArc } from './MotionArc';
 
 export interface PieArcProps {

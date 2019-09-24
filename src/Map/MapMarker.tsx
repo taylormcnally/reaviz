@@ -6,10 +6,10 @@ import { motion } from 'framer-motion';
 
 export interface MapMarkerProps {
   coordinates: [number, number];
+  index: number;
   cy?: number;
   cx?: number;
   size?: number;
-  index?: number;
   tooltip?: any;
   onClick?: () => void;
 }

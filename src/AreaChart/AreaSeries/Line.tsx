@@ -81,7 +81,7 @@ export class Line extends PureComponent<LineProps, LineState> {
 
     let strokeDasharray = '';
     if (!hasArea && mounted) {
-      const ghostPath = this.ghostPathRef.current.getTotalLength();
+      const ghostPath = this.ghostPathRef.current!.getTotalLength();
       strokeDasharray = `${ghostPath} ${ghostPath}`;
     }
 
@@ -115,7 +115,7 @@ export class Line extends PureComponent<LineProps, LineState> {
     let strokeDasharray = '';
     let strokeDashoffset = 0;
     if (!hasArea && mounted) {
-      const ghostPath = this.ghostPathRef.current.getTotalLength();
+      const ghostPath = this.ghostPathRef.current!.getTotalLength();
       strokeDasharray = `${ghostPath} ${ghostPath}`;
       strokeDashoffset = ghostPath;
     }
