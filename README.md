@@ -3,15 +3,20 @@
   <br />
   Data visualization library for React based on D3js
   <br /><br />
-  
   <a href="https://circleci.com/gh/jask-oss/reaviz">
     <img src="https://circleci.com/gh/jask-oss/reaviz.svg?style=svg" />
   </a>
   <a href="https://npm.im/reaviz">
     <img src="https://img.shields.io/npm/v/reaviz.svg" />
   </a>
+  <a href="https://npm.im/reaviz">
+    <img src="https://badgen.net/npm/dw/reaviz" />
+  </a>
   <a href="https://github.com/jask-oss/reaviz/blob/master/LICENSE">
     <img src="https://badgen.now.sh/badge/license/apache2" />
+  </a>
+  <a href="https://bundlephobia.com/result?p=reaviz">
+    <img src="https://badgen.net/bundlephobia/minzip/reaviz">
   </a>
 </p>
 

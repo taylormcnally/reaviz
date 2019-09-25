@@ -1,4 +1,6 @@
-# Master
+# 4.0.1
+- [Fix] Fix memory leaks in spring handlers
+- [Fix] Fix line chart behind one change
 - [Chore] Minor TypeScript strict fixes
 
 # 4.0.0
