@@ -30,7 +30,7 @@ export type LineProps = {
 } & PropFunctionTypes;
 
 interface LineState {
-  mounted?: boolean;
+  pathLength?: number;
 }
 
 export class Line extends PureComponent<LineProps, LineState> {
@@ -45,7 +45,19 @@ export class Line extends PureComponent<LineProps, LineState> {
   componentDidMount() {
     if (this.ghostPathRef.current) {
       this.setState({
-        mounted: true
+        pathLength: this.ghostPathRef.current!.getTotalLength()
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps: LineProps) {
+    if (
+      this.ghostPathRef.current &&
+      (prevProps.data !== this.props.data ||
+        prevProps.width !== this.props.width)
+    ) {
+      this.setState({
+        pathLength: this.ghostPathRef.current!.getTotalLength()
       });
     }
   }
@@ -76,13 +88,12 @@ export class Line extends PureComponent<LineProps, LineState> {
 
   getLineEnter(coords: ChartInternalShallowDataShape[]) {
     const { hasArea } = this.props;
-    const { mounted } = this.state;
+    const { pathLength } = this.state;
     const linePath = this.getLinePath(coords);
 
     let strokeDasharray = '';
-    if (!hasArea && mounted) {
-      const ghostPath = this.ghostPathRef.current!.getTotalLength();
-      strokeDasharray = `${ghostPath} ${ghostPath}`;
+    if (!hasArea && pathLength !== undefined) {
+      strokeDasharray = `${pathLength} ${pathLength}`;
     }
 
     return {
@@ -94,7 +105,7 @@ export class Line extends PureComponent<LineProps, LineState> {
 
   getLineExit() {
     const { hasArea, yScale, xScale, data } = this.props;
-    const { mounted } = this.state;
+    const { pathLength } = this.state;
 
     let coords;
     if (hasArea) {
@@ -114,10 +125,9 @@ export class Line extends PureComponent<LineProps, LineState> {
 
     let strokeDasharray = '';
     let strokeDashoffset = 0;
-    if (!hasArea && mounted) {
-      const ghostPath = this.ghostPathRef.current!.getTotalLength();
-      strokeDasharray = `${ghostPath} ${ghostPath}`;
-      strokeDashoffset = ghostPath;
+    if (!hasArea && pathLength !== undefined) {
+      strokeDasharray = `${pathLength} ${pathLength}`;
+      strokeDashoffset = pathLength;
     }
 
     return {
@@ -145,14 +155,14 @@ export class Line extends PureComponent<LineProps, LineState> {
 
   render() {
     const { data, color, index, strokeWidth, hasArea } = this.props;
-    const { mounted } = this.state;
+    const { pathLength } = this.state;
     const coords = this.getCoords();
     const stroke = color(data, index);
     const enter = this.getLineEnter(coords);
     const exit = this.getLineExit();
     const extras = constructFunctionProps(this.props, data);
     const transition = this.getTransition();
-    const showLine = hasArea || mounted;
+    const showLine = hasArea || pathLength !== undefined;
 
     return (
       <Fragment>
