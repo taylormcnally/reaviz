@@ -1,3 +1,7 @@
+# 4.1.0
+- [Chore] Remove `react-transition-group` in favor of `framer-motion`
+- [Chore] Update `rdk`
+
 # 4.0.2
 - [Fix] Improve performance on scatter points
 
