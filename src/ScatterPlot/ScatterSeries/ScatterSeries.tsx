@@ -49,6 +49,7 @@ export class ScatterSeries extends Component<ScatterSeriesProps, {}> {
         element={point}
         key={key}
         {...rest}
+        id={id}
         data={pointData}
         index={index}
         active={active}

@@ -163,6 +163,7 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
         {visible && (
           <CloneElement<PointSeriesProps>
             element={symbols}
+            key={`point-series-${id}`}
             id={id}
             height={height}
             width={width}

@@ -1,3 +1,6 @@
+# 4.0.2
+- [Fix] Improve performance on scatter points
+
 # 4.0.1
 - [Fix] Fix memory leaks in spring handlers
 - [Fix] Fix line chart behind one change

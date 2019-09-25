@@ -13,7 +13,6 @@ import { motion } from 'framer-motion';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
 
 export type ScatterPointProps = {
-  symbol: (data: ChartInternalShallowDataShape) => ReactNode;
   active?: boolean;
   size?: ((data: ChartInternalShallowDataShape) => number) | number;
   color: any;
@@ -25,6 +24,8 @@ export type ScatterPointProps = {
   index: number;
   tooltip: JSX.Element | null;
   data: ChartInternalShallowDataShape;
+  id: string;
+  symbol: (data: ChartInternalShallowDataShape) => ReactNode;
   visible?: (data: ChartInternalShallowDataShape, index: number) => boolean;
   onClick: (data: ChartInternalShallowDataShape) => void;
   onMouseEnter: (data: ChartInternalShallowDataShape) => void;
@@ -117,7 +118,7 @@ export class ScatterPoint extends Component<
   }
 
   renderCircle() {
-    const { data, index, size, color, cursor } = this.props;
+    const { data, index, size, color, cursor, id } = this.props;
     const fill = typeof color === 'function' ? color(data, index) : color;
     const r = typeof size === 'function' ? size(data) : size;
     const enter = this.getEnter();
@@ -132,6 +133,7 @@ export class ScatterPoint extends Component<
 
     return (
       <motion.circle
+        key={`symbol-${id}-${data.id!}`}
         className={extras.className}
         style={{ ...extras.style, cursor }}
         initial={initial}
@@ -149,7 +151,7 @@ export class ScatterPoint extends Component<
   }
 
   renderSymbol() {
-    const { data, symbol } = this.props;
+    const { data, symbol, id } = this.props;
     const enter = this.getEnter();
     const exit = this.getExit();
     const renderedSymbol = symbol(data);
@@ -164,6 +166,7 @@ export class ScatterPoint extends Component<
 
     return (
       <motion.g
+        key={`symbol-${id}-${data.id!}`}
         {...extras}
         initial={initial}
         animate={{
