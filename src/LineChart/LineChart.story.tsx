@@ -327,6 +327,7 @@ class LiveUpdatingStory extends React.Component<any, any> {
       const data = [
         ...this.state.data,
         {
+          id: randomNumber(1, 10000),
           key: moment()
             .add(++this.offset, 'day')
             .toDate(),
