@@ -8,6 +8,7 @@ import {
   TriggerTypes
 } from 'rdk';
 import css from './Tooltip.module.scss';
+import { motion } from 'framer-motion';
 
 const tooltips: Tooltip[] = [];
 
@@ -97,21 +98,24 @@ export class Tooltip extends Component<TooltipProps, TooltipState> {
     tooltips.forEach(t => t.deactivate());
   }
 
-  renderContent = (animationState: string) => {
+  renderContent = () => {
     const { content, className } = this.props;
-
-    const cls = classNames(css.tooltip, className, {
-      [css.active]: animationState === 'entered',
-      [css.inactive]: animationState === 'exited'
-    });
-
     const children = typeof content === 'function' ? content() : content;
 
     if (!children) {
       return null;
     }
 
-    return <div className={cls}>{children}</div>;
+    return (
+      <motion.div
+        className={classNames(css.tooltip, className)}
+        initial={{ opacity: 0, scale: .3 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: .3 }}
+      >
+        {children}
+      </motion.div>
+    );
   };
 
   render() {
