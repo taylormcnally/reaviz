@@ -15,8 +15,9 @@ export const MotionArc = ({ custom, transition, arc, ...rest }) => {
   useEffect(() => {
     const from = custom.previousEnter || prevPath.get();
     const interpolator = interpolate(from, custom.enter);
-    spring.onChange(v => d.set(arc(interpolator(v))));
+    const unsub = spring.onChange(v => d.set(arc(interpolator(v))));
     prevPath.set(custom.enter);
+    return unsub;
   });
 
   const { d: enterD } = custom.enter;

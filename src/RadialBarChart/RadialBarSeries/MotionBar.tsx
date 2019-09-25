@@ -17,8 +17,11 @@ export const MotionBar = ({ custom, transition, arc, ...rest }) => {
       ? custom.previousEnter.y
       : prevPath.get().y;
     const interpolator = interpolate(from, custom.enter.y);
-    spring.onChange(v => d.set(arc({ ...custom.enter, y: interpolator(v) })));
+    const unsub = spring.onChange(v =>
+      d.set(arc({ ...custom.enter, y: interpolator(v) }))
+    );
     prevPath.set(custom.enter);
+    return unsub;
   });
 
   const { d: enterD, ...enterRest } = custom.enter;
