@@ -51,7 +51,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
       const rounded = boolean('Rounded', true);
       const padding = number('Padding', 0.1);
       const height = number('Height', 250);
-      const width = number('Width', 350);
+      const width = number('Width', 400);
       const fill = color('Color', '#418AD7');
       const data = object('Data', categoryData);
       const gradient = hasGradient ? Bar.defaultProps.gradient : null;
@@ -98,20 +98,30 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
       }
     />
   ))
-  .add('Large Dataset', () => (
-    <BarChart
-      width={350}
-      height={350}
-      data={largeCategoryData}
-      series={
-        <BarSeries
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(largeCategoryData.length)}
+  .add(
+    'Large Dataset',
+    () => {
+      const height = number('Height', 350);
+      const width = number('Width', 350);
+      const data = object('Data', largeCategoryData);
+
+      return (
+        <BarChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <BarSeries
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data.length)}
+            />
+          }
         />
-      }
-    />
-  ))
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Mask', () => (
     <BarChart
       width={350}
@@ -170,17 +180,32 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
       series={<BarSeries animated={false} />}
     />
   ))
-  .add('Waterfall', () => (
-    <BarChart
-      width={350}
-      height={250}
-      data={categoryData}
-      series={<BarSeries type="waterfall" />}
-    />
-  ))
-  .add('Non-Zero', () => (
-    <BarChart width={350} height={250} data={nonZeroCategoryData as any} />
-  ));
+  .add(
+    'Waterfall',
+    () => {
+      const height = number('Height', 350);
+      const width = number('Width', 350);
+      const data = object('Data', categoryData);
+
+      return (
+        <BarChart
+          width={width}
+          height={height}
+          data={data}
+          series={<BarSeries type="waterfall" />}
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Non-Zero',
+    () => {
+      const data = object('Data', nonZeroCategoryData);
+      return <BarChart width={350} height={250} data={data} />;
+    },
+    { options: { showPanel: true } }
+  );
 
 storiesOf('Charts/Bar/Vertical/Histogram', module)
   .add('Dates', () => (
@@ -222,36 +247,100 @@ storiesOf('Charts/Bar/Vertical/Histogram', module)
   ));
 
 storiesOf('Charts/Bar/Vertical/Multi Series', module)
-  .add('Simple', () => (
-    <BarChart
-      width={350}
-      height={350}
-      data={multiCategory}
-      series={
-        <BarSeries
-          type="grouped"
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory[0].data.length)}
-          padding={0.8}
+  .add(
+    'Simple',
+    () => {
+      const height = number('Height', 350);
+      const width = number('Width', 350);
+      const rangeWidth = number('Rangeline', 3);
+      const hasGradient = boolean('Gradient', true);
+      const hasRangelines = boolean('Rangelines', false);
+      const rounded = boolean('Rounded', true);
+      const data = object('Data', multiCategory);
+
+      const gradient = hasGradient ? <Gradient /> : null;
+      const rangelines = hasRangelines ? (
+        <RangeLines type="top" strokeWidth={rangeWidth} />
+      ) : null;
+
+      return (
+        <BarChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <BarSeries
+              type="grouped"
+              bar={
+                <Bar
+                  rounded={rounded}
+                  gradient={gradient}
+                  rangeLines={rangelines}
+                />
+              }
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data[0].data.length)}
+              padding={0.8}
+            />
+          }
         />
-      }
-    />
-  ))
-  .add('Stacked', () => (
-    <StackedBarChart
-      width={350}
-      height={350}
-      data={multiCategory}
-      series={
-        <StackedBarSeries
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Stacked',
+    () => {
+      const rx = number('rx', 0);
+      const ry = number('ry', 0);
+      const height = number('Height', 350);
+      const width = number('Width', 350);
+      const rangeWidth = number('Rangeline', 3);
+      const hasGradient = boolean('Gradient', true);
+      const hasRangelines = boolean('Rangelines', true);
+      const rounded = boolean('Rounded', false);
+      const data = object('Data', multiCategory);
+
+      const gradient = hasGradient ? (
+        <Gradient
+          stops={[
+            <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
+            <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+          ]}
         />
-      }
-    />
-  ))
+      ) : null;
+
+      const rangelines = hasRangelines ? (
+        <RangeLines type="top" strokeWidth={rangeWidth} />
+      ) : null;
+
+      return (
+        <StackedBarChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <StackedBarSeries
+              bar={
+                <Bar
+                  rx={rx}
+                  ry={ry}
+                  rounded={rounded}
+                  gradient={gradient}
+                  rangeLines={rangelines}
+                />
+              }
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data.length)}
+            />
+          }
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Stacked Custom Style', () => (
     <StackedBarChart
       width={350}
@@ -301,7 +390,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
     'Stacked Diverging',
     () => {
       const data = select(
-        'data',
+        'Example Data',
         {
           'Opened/Closed': binnedDateData,
           'Opened Only': binnedDatePositiveOnly,
@@ -310,16 +399,47 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
         binnedDateData
       );
 
+      const rx = number('rx', 0);
+      const ry = number('ry', 0);
+      const height = number('Height', 250);
+      const width = number('Width', 400);
+      const rangeWidth = number('Rangeline', 3);
+      const hasGradient = boolean('Gradient', true);
+      const hasRangelines = boolean('Rangelines', true);
+      const rounded = boolean('Rounded', false);
+
+      const gradient = hasGradient ? (
+        <Gradient
+          stops={[
+            <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
+            <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+          ]}
+        />
+      ) : null;
+
+      const rangelines = hasRangelines ? (
+        <RangeLines type="top" strokeWidth={rangeWidth} />
+      ) : null;
+
       return (
         <StackedBarChart
           style={{ filter: 'drop-shadow(0 0 10px 2px white)' }}
-          width={400}
-          height={250}
+          width={width}
+          height={height}
           margins={0}
           data={data}
           gridlines={<GridlineSeries line={<Gridline direction="y" />} />}
           series={
             <StackedBarSeries
+              bar={
+                <Bar
+                  rx={rx}
+                  ry={ry}
+                  rounded={rounded}
+                  gradient={gradient}
+                  rangeLines={rangelines}
+                />
+              }
               type="stackedDiverging"
               colorScheme={chroma
                 .scale(['ACB7C9', '418AD7'])
@@ -349,34 +469,112 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
     },
     { options: { showPanel: true } }
   )
-  .add('Stacked Normalized', () => (
-    <StackedNormalizedBarChart
-      width={350}
-      height={350}
-      data={multiCategory}
-      series={
-        <StackedNormalizedBarSeries
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
+  .add(
+    'Stacked Normalized',
+    () => {
+      const rx = number('rx', 0);
+      const ry = number('ry', 0);
+      const height = number('Height', 350);
+      const width = number('Width', 350);
+      const rangeWidth = number('Rangeline', 3);
+      const hasGradient = boolean('Gradient', true);
+      const hasRangelines = boolean('Rangelines', true);
+      const rounded = boolean('Rounded', false);
+      const data = object('Data', multiCategory);
+
+      const gradient = hasGradient ? (
+        <Gradient
+          stops={[
+            <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
+            <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+          ]}
         />
-      }
-    />
-  ))
-  .add('Marimekko', () => (
-    <MarimekkoChart
-      width={350}
-      height={350}
-      data={multiCategory}
-      series={
-        <MarimekkoBarSeries
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
+      ) : null;
+
+      const rangelines = hasRangelines ? (
+        <RangeLines type="top" strokeWidth={rangeWidth} />
+      ) : null;
+
+      return (
+        <StackedNormalizedBarChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <StackedNormalizedBarSeries
+              bar={
+                <Bar
+                  {...StackedNormalizedBarSeries.defaultProps.bar}
+                  rx={rx}
+                  ry={ry}
+                  rounded={rounded}
+                  gradient={gradient}
+                  rangeLines={rangelines}
+                />
+              }
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data.length)}
+            />
+          }
         />
-      }
-    />
-  ));
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Marimekko',
+    () => {
+      const rx = number('rx', 0);
+      const ry = number('ry', 0);
+      const height = number('Height', 350);
+      const width = number('Width', 350);
+      const rangeWidth = number('Rangeline', 3);
+      const hasGradient = boolean('Gradient', true);
+      const hasRangelines = boolean('Rangelines', true);
+      const rounded = boolean('Rounded', false);
+      const data = object('Data', multiCategory);
+
+      const gradient = hasGradient ? (
+        <Gradient
+          stops={[
+            <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
+            <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+          ]}
+        />
+      ) : null;
+
+      const rangelines = hasRangelines ? (
+        <RangeLines type="top" strokeWidth={rangeWidth} />
+      ) : null;
+
+      return (
+        <MarimekkoChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <MarimekkoBarSeries
+              bar={
+                <Bar
+                  {...MarimekkoBarSeries.defaultProps.bar}
+                  rx={rx}
+                  ry={ry}
+                  rounded={rounded}
+                  gradient={gradient}
+                  rangeLines={rangelines}
+                />
+              }
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data.length)}
+            />
+          }
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  );
 
 storiesOf('Charts/Bar/Horizontal/Single Series', module)
   .add(
