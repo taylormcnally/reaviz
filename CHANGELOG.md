@@ -1,3 +1,7 @@
+# Master
+- [Feature] Add ability to pass rx/ry to bars
+- [Chore] Improve bar chart stories
+
 # 4.2.0 - 9/27/19
 - [Feature] Updated `BarSeries` to be able to accept more than one `Bar` component for `Bar` customization
 - [Fix] Fix gridlines not showing first lines when line is in middle
