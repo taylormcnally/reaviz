@@ -17,7 +17,7 @@ export interface BarSeriesProps {
   xScale: any;
   xScale1: any;
   yScale: any;
-  bar: JSX.Element;
+  bar: JSX.Element | JSX.Element[];
   type:
     | 'standard'
     | 'grouped'
@@ -144,10 +144,15 @@ export class BarSeries extends Component<BarSeriesProps> {
       key = `${data.key!.toString()}-${data.value!.toString()}`;
     }
 
+    let barElements = Array.isArray(bar) ? bar[barIndex] : bar;
+    if (!bar) {
+      barElements = <Bar />;
+    }
+
     return (
       <Fragment key={key}>
         <CloneElement<BarProps>
-          element={bar}
+          element={barElements}
           id={`${id}-bar-${groupIndex}-${barIndex}`}
           animated={animated}
           xScale={xScale}

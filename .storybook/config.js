@@ -1,8 +1,8 @@
+import React from 'react';
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { themes } from '@storybook/theming';
 import { withInfo } from '@storybook/addon-info';
-import centered from '@storybook/addon-centered/react';
 import ReavizLogo from './assets/reaviz.svg';
 import 'rdk/dist/index.css';
 
@@ -20,9 +20,20 @@ addParameters({
   },
 });
 
-addDecorator(centered);
+const CenterDecorator = storyFn => (
+  <div style={{
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }} className="container">
+    {storyFn()}
+  </div>
+);
+
 addDecorator(withInfo);
 addDecorator(withKnobs);
+addDecorator(CenterDecorator);
 
 // Grep src for .story file extensions
 const req = require.context('../src', true, /\.story\.tsx/);

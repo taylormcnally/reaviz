@@ -73,8 +73,10 @@ export class GridlineSeries extends Component<GridlineSeriesProps> {
     const { yAxis, xAxis } = this.props;
 
     if (
-      (direction === 'x' && yAxis.axisLine !== null) ||
-      (direction === 'y' && xAxis.axisLine !== null)
+      (direction === 'x' &&
+        yAxis.axisLine !== null &&
+        yAxis.position === 'start') ||
+      (direction === 'y' && xAxis.axisLine !== null && xAxis.position === 'end')
     ) {
       return 0;
     }

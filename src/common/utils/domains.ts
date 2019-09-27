@@ -20,13 +20,17 @@ export function extent(data: any[], attr: string): number[] {
 /**
  * Get the domain for the Y Axis.
  */
-export function getYDomain({ scaled = false, data }): number[] {
+export function getYDomain({
+  data,
+  scaled = false,
+  isDiverging = false
+}): number[] {
   const [startY, endY] = extent(data, 'y');
   const [startY1, endY1] = extent(data, 'y1');
 
   // If dealing w/ negative numbers, we should
   // normalize the top and bottom values
-  if (startY <= 0) {
+  if (startY < 0 || isDiverging) {
     const posStart = -startY;
     const maxNum = Math.max(posStart, endY);
 
@@ -45,17 +49,21 @@ export function getYDomain({ scaled = false, data }): number[] {
 /**
  * Get the domain for the X Axis.
  */
-export function getXDomain({ data, scaled = false }): number[] {
+export function getXDomain({
+  data,
+  scaled = false,
+  isDiverging = false
+}): number[] {
   const [startX, endX] = extent(data, 'x');
-  const [startX0, endX0] = extent(data, 'x0');
+  const [startX0] = extent(data, 'x0');
 
   // Histograms use dates for start/end
   if (typeof startX === 'number' && typeof endX === 'number') {
     // If dealing w/ negative numbers, we should
     // normalize the top and bottom values
-    if (startX0 < 0) {
+    if (startX0 < 0 || isDiverging) {
       const posStart = -startX0;
-      const maxNum = Math.max(posStart, endX0);
+      const maxNum = Math.max(posStart, endX);
 
       return [-maxNum, maxNum];
     }

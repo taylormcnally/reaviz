@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
-import { object, boolean, color, number } from '@storybook/addon-knobs';
+import { boolean, color, number, object, select } from '@storybook/addon-knobs';
 import { BarChart } from './BarChart';
 import { MarimekkoChart } from './MarimekkoChart';
 import { StackedBarChart } from './StackedBarChart';
@@ -14,7 +14,9 @@ import {
   numberData,
   nonZeroCategoryData,
   durationCategoryData,
-  binnedDateData
+  binnedDateData,
+  binnedDatePositiveOnly,
+  binnedDateNegativeOnly
 } from '../../demo';
 import chroma from 'chroma-js';
 import { timeWeek, timeMonth } from 'd3-time';
@@ -250,53 +252,103 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       }
     />
   ))
-  .add('Stacked Custom Bar Width', () => (
+  .add('Stacked Custom Style', () => (
     <StackedBarChart
       width={350}
       height={350}
       data={multiCategory}
+      gridlines={null}
       series={
         <StackedBarSeries
-          bar={<Bar width={10} />}
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(multiCategory.length)}
-        />
-      }
-    />
-  ))
-  .add('Stacked Diverging', () => (
-    <StackedBarChart
-      width={400}
-      height={250}
-      data={binnedDateData}
-      gridlines={<GridlineSeries line={<Gridline direction="y" />} />}
-      series={
-        <StackedBarSeries
-          type="stackedDiverging"
-          bar={<Bar rounded={false} rangeLines={null} gradient={null} />}
-          colorScheme={['rgba(244, 67, 54, .7)', 'rgba(76, 175, 80, .7)']}
+          bar={[
+            { start: '#d7b5d8', end: '#980043' },
+            { start: '#fbb4b9', end: '#7a0177' },
+            { start: '#c2e699', end: '#006837' },
+            { start: '#a1dab4', end: '#253494' }
+          ].map(gradient => (
+            <Bar
+              rounded={false}
+              gradient={
+                <Gradient
+                  stops={[
+                    <GradientStop
+                      offset="0%"
+                      key="start"
+                      color={gradient.start}
+                    />,
+                    <GradientStop
+                      offset="100%"
+                      key="stop"
+                      color={gradient.end}
+                    />
+                  ]}
+                />
+              }
+              width={10}
+            />
+          ))}
         />
       }
       yAxis={
         <LinearYAxis
-          tickSeries={
-            <LinearYAxisTickSeries
-              line={null}
-              label={<LinearYAxisTickLabel padding={5} />}
-            />
-          }
-        />
-      }
-      xAxis={
-        <LinearXAxis
-          type="category"
-          position="center"
-          tickSeries={<LinearXAxisTickSeries line={null} label={null} />}
+          axisLine={null}
+          tickSeries={<LinearYAxisTickSeries line={null} label={null} />}
         />
       }
     />
   ))
+  .add(
+    'Stacked Diverging',
+    () => {
+      const data = select(
+        'data',
+        {
+          'Opened/Closed': binnedDateData,
+          'Opened Only': binnedDatePositiveOnly,
+          'Closed Only': binnedDateNegativeOnly
+        },
+        binnedDateData
+      );
+
+      return (
+        <StackedBarChart
+          style={{ filter: 'drop-shadow(0 0 10px 2px white)' }}
+          width={400}
+          height={250}
+          margins={0}
+          data={data}
+          gridlines={<GridlineSeries line={<Gridline direction="y" />} />}
+          series={
+            <StackedBarSeries
+              type="stackedDiverging"
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data[0].data.length)}
+            />
+          }
+          yAxis={
+            <LinearYAxis
+              roundDomains={true}
+              tickSeries={
+                <LinearYAxisTickSeries
+                  line={null}
+                  label={<LinearYAxisTickLabel padding={5} />}
+                />
+              }
+            />
+          }
+          xAxis={
+            <LinearXAxis
+              type="category"
+              position="center"
+              tickSeries={<LinearXAxisTickSeries line={null} label={null} />}
+            />
+          }
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Stacked Normalized', () => (
     <StackedNormalizedBarChart
       width={350}
@@ -503,40 +555,58 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
       }
     />
   ))
-  .add('Stacked Diverging', () => (
-    <StackedBarChart
-      width={400}
-      height={250}
-      data={binnedDateData}
-      gridlines={<GridlineSeries line={<Gridline direction="x" />} />}
-      series={
-        <StackedBarSeries
-          layout="horizontal"
-          type="stackedDiverging"
-          bar={<Bar rounded={false} rangeLines={null} gradient={null} />}
-          colorScheme={['rgba(244, 67, 54, .7)', 'rgba(76, 175, 80, .7)']}
-        />
-      }
-      yAxis={
-        <LinearYAxis
-          type="category"
-          position="center"
-          tickSeries={<LinearYAxisTickSeries line={null} label={null} />}
-        />
-      }
-      xAxis={
-        <LinearXAxis
-          type="value"
-          tickSeries={
-            <LinearXAxisTickSeries
-              line={null}
-              label={<LinearXAxisTickLabel padding={5} />}
+  .add(
+    'Stacked Diverging',
+    () => {
+      const data = select(
+        'data',
+        {
+          'Opened/Closed': binnedDateData,
+          'Opened Only': binnedDatePositiveOnly,
+          'Closed Only': binnedDateNegativeOnly
+        },
+        binnedDateData
+      );
+
+      return (
+        <StackedBarChart
+          width={400}
+          height={250}
+          data={data}
+          gridlines={<GridlineSeries line={<Gridline direction="x" />} />}
+          series={
+            <StackedBarSeries
+              layout="horizontal"
+              type="stackedDiverging"
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data[0].data.length)}
+            />
+          }
+          yAxis={
+            <LinearYAxis
+              type="category"
+              position="center"
+              tickSeries={<LinearYAxisTickSeries line={null} label={null} />}
+            />
+          }
+          xAxis={
+            <LinearXAxis
+              roundDomains={true}
+              type="value"
+              tickSeries={
+                <LinearXAxisTickSeries
+                  line={null}
+                  label={<LinearXAxisTickLabel padding={5} />}
+                />
+              }
             />
           }
         />
-      }
-    />
-  ))
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Stacked Normalized', () => (
     <StackedNormalizedBarChart
       width={500}

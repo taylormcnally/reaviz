@@ -4,120 +4,72 @@ import { generateDate, randomNumber } from './utils';
 
 const generateData = (count, minVal = 1, maxVal = 50) =>
   range(count)
-    .map(i => ({
+    .map((i: number) => ({
       id: (i + 1).toString(),
       key: generateDate(i),
       data: randomNumber(minVal, maxVal)
     }))
     .reverse();
 
+const DIVERGING_DATA_KEY_POSITIVE = 'Opened';
+const DIVERGING_DATA_KEY_NEGATIVE = 'Closed';
+const generateBinnedData = (
+  count: number,
+  minVal = 0,
+  maxVal = 50,
+  dataKeyToZero = ''
+) =>
+  range(count)
+    .map((i: number) => ({
+      key: generateDate(i).toLocaleDateString(),
+      data: [
+        {
+          key: DIVERGING_DATA_KEY_NEGATIVE,
+          data:
+            dataKeyToZero === DIVERGING_DATA_KEY_NEGATIVE
+              ? 0
+              : -randomNumber(minVal, maxVal)
+        },
+        {
+          key: DIVERGING_DATA_KEY_POSITIVE,
+          data:
+            dataKeyToZero === DIVERGING_DATA_KEY_POSITIVE
+              ? 0
+              : randomNumber(minVal, maxVal)
+        }
+      ]
+    }))
+    .reverse();
+
+const dateOffsets = [14, 10, 5, 2];
+const generateBaseDateData = (offsets = dateOffsets) =>
+  offsets.map(offset => ({ offset, data: randomNumber(0, 20) }));
+const generateDateData = (baseData = generateBaseDateData()) =>
+  baseData.map((item: any, index: number) => ({
+    key: generateDate(item.offset),
+    id: index.toString(),
+    data: item.data
+  }));
+
 export const largeDateData = generateData(100);
 export const medDateData = generateData(50);
 export const smallDateData = generateData(15);
 
-export const binnedDateData = [
-  {
-    key: '1/10/2019',
-    data: [
-      {
-        key: 'Closed',
-        data: -8
-      },
-      {
-        key: 'Opened',
-        data: 5
-      }
-    ]
-  },
-  {
-    key: '1/11/2019',
-    data: [
-      {
-        key: 'Closed',
-        data: -1
-      },
-      {
-        key: 'Opened',
-        data: 10
-      }
-    ]
-  },
-  {
-    key: '1/12/2019',
-    data: [
-      {
-        key: 'Closed',
-        data: -12
-      },
-      {
-        key: 'Opened',
-        data: 3
-      }
-    ]
-  },
-  {
-    key: '1/13/2019',
-    data: [
-      {
-        key: 'Closed',
-        data: -5
-      },
-      {
-        key: 'Opened',
-        data: 0
-      }
-    ]
-  },
-  {
-    key: '1/14/2019',
-    data: [
-      {
-        key: 'Closed',
-        data: -2
-      },
-      {
-        key: 'Opened',
-        data: 10
-      }
-    ]
-  },
-  {
-    key: '1/15/2019',
-    data: [
-      {
-        key: 'Closed',
-        data: -8
-      },
-      {
-        key: 'Opened',
-        data: 3
-      }
-    ]
-  }
-];
+export const binnedDateData = generateBinnedData(7);
+export const binnedDatePositiveOnly = generateBinnedData(
+  7,
+  0,
+  50,
+  DIVERGING_DATA_KEY_NEGATIVE
+);
+export const binnedDateNegativeOnly = generateBinnedData(
+  7,
+  0,
+  50,
+  DIVERGING_DATA_KEY_POSITIVE
+);
 
-export const singleDateData = [
-  {
-    key: generateDate(14),
-    id: '1',
-    data: 10
-  },
-  {
-    key: generateDate(10),
-    id: '2',
-    data: 8
-  },
-  {
-    key: generateDate(5),
-    id: '3',
-    data: 18
-  },
-  {
-    key: generateDate(2),
-    id: '4',
-    data: 10
-  }
-];
+export const singleDateData = generateDateData();
 
 export const nonZeroDateData = [
   {
@@ -141,66 +93,15 @@ export const nonZeroDateData = [
 export const multiDateData = [
   {
     key: 'Threat Intel',
-    data: [
-      {
-        key: generateDate(14),
-        data: 5
-      },
-      {
-        key: generateDate(10),
-        data: 10
-      },
-      {
-        key: generateDate(5),
-        data: 12
-      },
-      {
-        key: generateDate(2),
-        data: 10
-      }
-    ]
+    data: generateDateData()
   },
   {
     key: 'DLP',
-    data: [
-      {
-        key: generateDate(14),
-        data: 10
-      },
-      {
-        key: generateDate(10),
-        data: 15
-      },
-      {
-        key: generateDate(5),
-        data: 12
-      },
-      {
-        key: generateDate(2),
-        data: 10
-      }
-    ]
+    data: generateDateData()
   },
   {
     key: 'Syslog',
-    data: [
-      {
-        key: generateDate(14),
-        data: 10
-      },
-      {
-        key: generateDate(10),
-        data: 20
-      },
-      {
-        key: generateDate(5),
-        data: 10
-      },
-      {
-        key: generateDate(2),
-        data: 12
-      }
-    ]
+    data: generateDateData()
   }
 ];
 
@@ -223,9 +124,8 @@ export const singleDateBigIntData = [
   }
 ];
 
-export const longMultiDateData =
-  range(25)
-  .map(i => ({
+export const longMultiDateData = range(25)
+  .map((i: number) => ({
     key: `Series-${i + 1}`,
     data: generateData(15).map(({ id, ...rest }) => ({ ...rest }))
   }))

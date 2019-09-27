@@ -16,6 +16,7 @@ interface ScaleConfig {
   width?: number;
   height?: number;
   isMultiSeries?: boolean;
+  isDiverging?: boolean;
 }
 
 /**
@@ -29,7 +30,8 @@ export function getXScale({
   domain,
   padding,
   scaled,
-  isMultiSeries = false
+  isMultiSeries = false,
+  isDiverging = false
 }: ScaleConfig) {
   let scale;
 
@@ -40,7 +42,7 @@ export function getXScale({
       scale = scaleLinear().rangeRound([0, width!]);
     }
 
-    scale = scale.domain(domain || getXDomain({ data, scaled }));
+    scale = scale.domain(domain || getXDomain({ data, scaled, isDiverging }));
   } else {
     if (!domain) {
       if (isMultiSeries) {
@@ -70,14 +72,15 @@ export function getYScale({
   domain,
   scaled,
   padding,
-  isMultiSeries = false
+  isMultiSeries = false,
+  isDiverging = false
 }: ScaleConfig) {
   let scale;
 
   if (type === 'time' || type === 'value' || type === 'duration') {
     scale = scaleLinear()
       .range([height!, 0])
-      .domain(domain || getYDomain({ scaled, data }));
+      .domain(domain || getYDomain({ data, scaled, isDiverging }));
   } else {
     if (!domain) {
       if (isMultiSeries) {

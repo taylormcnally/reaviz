@@ -31,20 +31,31 @@ export class RangeLines extends Component<RangeLinesProps> {
   }
 
   getEnter(rangeLineHeight: number) {
-    const { x, y, height, type, width } = this.props;
+    const { x, y, height, type, width, data } = this.props;
 
     const isVertical = this.getIsVertical();
     let newY = y;
     let newX = x;
 
+    // If its diverging and the value is negative, we
+    // need to reverse the type...
+    const isTop = type === 'top';
+    const direction = isVertical
+      ? data.y < 0 && isTop
+        ? 'bottom'
+        : type
+      : data.x0 < 0 && isTop
+      ? 'bottom'
+      : type;
+
     if (isVertical) {
-      if (type !== 'bottom') {
+      if (direction === 'top') {
         newY = y;
       } else {
         newY = y + height - rangeLineHeight;
       }
     } else {
-      if (type !== 'bottom') {
+      if (direction === 'top') {
         newX = x + width - rangeLineHeight;
       } else {
         newX = x;
@@ -67,14 +78,14 @@ export class RangeLines extends Component<RangeLinesProps> {
 
     if (isVertical) {
       const maxY = Math.max(...scale.range());
-      if (type !== 'bottom') {
+      if (type === 'top') {
         newY = maxY;
       } else {
         newY = maxY + height - rangeLineHeight;
       }
     } else {
       const minX = Math.min(...scale.range());
-      if (type !== 'bottom') {
+      if (type === 'top') {
         newX = minX;
       } else {
         newX = minX + width - rangeLineHeight;

@@ -165,6 +165,10 @@ export class BarChart extends Component<BarChartProps> {
     return isVertical ? xAxis : yAxis;
   }
 
+  getIsDiverging() {
+    return this.props.series.props.type === 'stackedDiverging';
+  }
+
   getIsVertical() {
     return this.props.series.props.layout === 'vertical';
   }
@@ -245,7 +249,8 @@ export class BarChart extends Component<BarChartProps> {
       data,
       padding: series.props.padding,
       domain: axis.props.domain,
-      isMultiSeries
+      isMultiSeries,
+      isDiverging: this.getIsDiverging()
     });
   }
 
@@ -259,7 +264,8 @@ export class BarChart extends Component<BarChartProps> {
       height,
       data,
       domain: axis.props.domain,
-      isMultiSeries
+      isMultiSeries,
+      isDiverging: this.getIsDiverging()
     });
   }
 
