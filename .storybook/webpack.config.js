@@ -11,7 +11,7 @@ module.exports = async ({ config, mode }) => ({
     rules: [
       ...config.module.rules,
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.(ts|tsx|mdx|js|jsx)$/,
         include: [
           resolve(__dirname, '../src'),
           resolve(__dirname, '../demo')
@@ -22,7 +22,7 @@ module.exports = async ({ config, mode }) => ({
         ]
       },
       {
-        test: /\.story\.tsx?$/,
+        test: /\.story\.(ts|tsx|mdx|js|jsx)$/,
         loaders: [
           {
             loader: require.resolve('@storybook/source-loader'),
@@ -79,7 +79,9 @@ module.exports = async ({ config, mode }) => ({
     extensions: [
       ...config.resolve.extensions,
       '.ts',
-      '.tsx'
+      '.tsx',
+      '.js',
+      '.mdx'
     ]
   }
 });
