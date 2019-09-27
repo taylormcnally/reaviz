@@ -22,6 +22,8 @@ export type BarProps = {
   data: ChartInternalShallowDataShape;
   id: string;
   gradient: JSX.Element | null;
+  rx: number;
+  ry: number;
   yScale: any;
   width: number;
   padding: number;
@@ -63,6 +65,8 @@ const modifiers = {
 export class Bar extends Component<BarProps, BarState> {
   static defaultProps: Partial<BarProps> = {
     rounded: true,
+    rx: 0,
+    ry: 0,
     cursor: 'auto',
     tooltip: <ChartTooltip />,
     rangeLines: null,
@@ -315,7 +319,7 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const { rounded, cursor, mask, id, data } = this.props;
+    const { rounded, cursor, mask, id, data, rx, ry } = this.props;
     const maskPath = mask ? `url(#mask-${id})` : '';
     const fill = this.getFill(currentColorShade);
     const initialExit = this.getExit(coords);
@@ -337,6 +341,8 @@ export class Bar extends Component<BarProps, BarState> {
           style={{ ...extras.style, cursor }}
           fill={fill}
           mask={maskPath}
+          rx={rx}
+          ry={ry}
           initial={initialExit}
           animate={coords}
           exit={initialExit}
