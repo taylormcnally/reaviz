@@ -1,3 +1,12 @@
+# 4.2.0
+- [Feature] Updated `BarSeries` to be able to accept more than one `Bar` component for `Bar` customization
+- [Fix] Fix gridlines not showing first lines when line is in middle
+- [Fix] Fix diverging bar chart range lines not positioned correctly on negative axis
+- [Fix] Fix diverging bar chart positive bar issue #91
+- [Chore] Add storybook docs plugin
+- [Chore] Add more storybook demos
+- [Chore] Remove centered plugin in favor of custom solution that works with storybook docs
+
 # 4.1.0
 - [Chore] Remove `react-transition-group` in favor of `framer-motion`
 - [Chore] Update `rdk`
