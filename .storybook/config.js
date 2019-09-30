@@ -6,6 +6,10 @@ import { withInfo } from '@storybook/addon-info';
 import ReavizLogo from './assets/reaviz.svg';
 import 'rdk/dist/index.css';
 
+// Add google analytics tracking
+window.STORYBOOK_GA_ID = 'UA-104197992-2';
+
+// Customize the UI a bit
 addParameters({
   options: {
     showPanel: false,
@@ -20,6 +24,7 @@ addParameters({
   },
 });
 
+// Custom center decorator that supports docs extensions
 const CenterDecorator = storyFn => (
   <div style={{
     textAlign: 'center',
@@ -31,6 +36,7 @@ const CenterDecorator = storyFn => (
   </div>
 );
 
+// Add all our decorators
 addDecorator(withInfo);
 addDecorator(withKnobs);
 addDecorator(CenterDecorator);

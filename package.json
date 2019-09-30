@@ -57,6 +57,7 @@
   },
   "homepage": "https://github.com/jask-oss/reaviz#readme",
   "dependencies": {
+    "@storybook/addon-google-analytics": "^5.2.1",
     "big-integer": "^1.6.45",
     "calculate-size": "^1.1.1",
     "chroma-js": "^2.0.6",
