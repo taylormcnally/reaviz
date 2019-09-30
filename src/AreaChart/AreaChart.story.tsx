@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
@@ -147,36 +147,56 @@ storiesOf('Charts/Area/Single Series', module)
   ));
 
 storiesOf('Charts/Area/Multi Series', module)
-  .add('Simple', () => (
-    <AreaChart
-      width={550}
-      height={350}
-      data={multiDateData}
-      series={
-        <AreaSeries
-          type="grouped"
-          colorScheme={chroma
-            .scale(['27efb5', '00bfff'])
-            .colors(multiDateData.length)}
+  .add(
+    'Simple',
+    () => {
+      const height = number('Height', 350);
+      const width = number('Width', 550);
+      const data = object('Data', multiDateData);
+
+      return (
+        <AreaChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <AreaSeries
+              type="grouped"
+              colorScheme={chroma
+                .scale(['27efb5', '00bfff'])
+                .colors(data.length)}
+            />
+          }
         />
-      }
-    />
-  ))
-  .add('Large Dataset', () => (
-    <AreaChart
-      width={550}
-      height={350}
-      series={
-        <AreaSeries
-          type="grouped"
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(longMultiDateData.length)}
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Large Dataset',
+    () => {
+      const height = number('Height', 350);
+      const width = number('Width', 550);
+      const data = object('Data', longMultiDateData);
+
+      return (
+        <AreaChart
+          width={width}
+          height={height}
+          series={
+            <AreaSeries
+              type="grouped"
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data.length)}
+            />
+          }
+          data={data}
         />
-      }
-      data={longMultiDateData}
-    />
-  ))
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Live Updating', () => <LiveUpdatingStory />)
   .add('Custom Colors', () => (
     <AreaChart
@@ -191,34 +211,54 @@ storiesOf('Charts/Area/Multi Series', module)
       data={multiDateData}
     />
   ))
-  .add('Stacked', () => (
-    <StackedAreaChart
-      width={550}
-      height={350}
-      series={
-        <StackedAreaSeries
-          colorScheme={chroma
-            .scale(['27efb5', '00bfff'])
-            .colors(multiDateData.length)}
+  .add(
+    'Stacked',
+    () => {
+      const height = number('Height', 350);
+      const width = number('Width', 550);
+      const data = object('Data', multiDateData);
+
+      return (
+        <StackedAreaChart
+          width={width}
+          height={height}
+          series={
+            <StackedAreaSeries
+              colorScheme={chroma
+                .scale(['27efb5', '00bfff'])
+                .colors(data.length)}
+            />
+          }
+          data={data}
         />
-      }
-      data={multiDateData}
-    />
-  ))
-  .add('Stacked Normalized', () => (
-    <StackedNormalizedAreaChart
-      width={550}
-      height={350}
-      data={multiDateData}
-      series={
-        <StackedNormalizedAreaSeries
-          colorScheme={chroma
-            .scale(['27efb5', '00bfff'])
-            .colors(multiDateData.length)}
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Stacked Normalized',
+    () => {
+      const height = number('Height', 350);
+      const width = number('Width', 550);
+      const data = object('Data', multiDateData);
+
+      return (
+        <StackedNormalizedAreaChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <StackedNormalizedAreaSeries
+              colorScheme={chroma
+                .scale(['27efb5', '00bfff'])
+                .colors(data.length)}
+            />
+          }
         />
-      }
-    />
-  ));
+      );
+    },
+    { options: { showPanel: true } }
+  );
 
 storiesOf('Charts/Area/Gridlines', module)
   .add('All Axes', () => (
@@ -324,42 +364,37 @@ storiesOf('Charts/Area/Circle Series', module)
     />
   ));
 
-class LiveUpdatingStory extends Component<any, any> {
-  state = {
-    data: multiDateData.map(d => ({ ...d }))
-  };
+const LiveUpdatingStory = () => {
+  const [data, setData] = useState(multiDateData.map(d => ({ ...d })));
 
-  updateData = () => {
-    const data = [...this.state.data];
-    const idx = randomNumber(0, data.length - 1);
-    const set = data[idx];
+  const updateData = () => {
+    const newData = [...data];
+    const idx = randomNumber(0, newData.length - 1);
+    const set = newData[idx];
 
     const updateIndex = randomNumber(0, set.data.length - 1);
     set.data[updateIndex].data = randomNumber(10, 50);
 
-    this.setState({ data });
+    setData(newData);
   };
 
-  render() {
-    const data = this.state.data;
-    return (
-      <Fragment>
-        <AreaChart
-          width={550}
-          height={350}
-          series={
-            <AreaSeries
-              type="grouped"
-              colorScheme={chroma
-                .scale(['27efb5', '00bfff'])
-                .colors(multiDateData.length)}
-            />
-          }
-          data={data}
-        />
-        <br />
-        <button onClick={this.updateData}>Update</button>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <AreaChart
+        width={550}
+        height={350}
+        series={
+          <AreaSeries
+            type="grouped"
+            colorScheme={chroma
+              .scale(['27efb5', '00bfff'])
+              .colors(multiDateData.length)}
+          />
+        }
+        data={data}
+      />
+      <br />
+      <button onClick={updateData}>Update</button>
+    </Fragment>
+  );
+};

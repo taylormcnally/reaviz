@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import { boolean, color, number, object, select } from '@storybook/addon-knobs';
 import { BarChart } from './BarChart';
@@ -142,14 +142,22 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
       }
     />
   ))
-  .add('Custom Bar Width', () => (
-    <BarChart
-      width={350}
-      height={250}
-      series={<BarSeries bar={<Bar width={5} />} />}
-      data={categoryData}
-    />
-  ))
+  .add(
+    'Custom Bar Width',
+    () => {
+      const barWidth = number('Bar Width', 5);
+
+      return (
+        <BarChart
+          width={350}
+          height={250}
+          series={<BarSeries bar={<Bar width={barWidth} />} />}
+          data={categoryData}
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Live Updating', () => <LiveDataDemo />)
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
@@ -208,43 +216,67 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
   );
 
 storiesOf('Charts/Bar/Vertical/Histogram', module)
-  .add('Dates', () => (
-    <BarChart
-      width={350}
-      height={250}
-      xAxis={
-        <LinearXAxis
-          type="time"
-          roundDomains={true}
-          tickSeries={<LinearXAxisTickSeries interval={timeWeek} />}
+  .add(
+    'Dates',
+    () => {
+      const data = object('Data', medDateData);
+
+      return (
+        <BarChart
+          width={350}
+          height={250}
+          xAxis={
+            <LinearXAxis
+              type="time"
+              roundDomains={true}
+              tickSeries={<LinearXAxisTickSeries interval={timeWeek} />}
+            />
+          }
+          data={data}
         />
-      }
-      data={medDateData}
-    />
-  ))
-  .add('Numbers', () => (
-    <BarChart
-      width={350}
-      height={250}
-      xAxis={<LinearXAxis type="value" />}
-      data={numberData}
-    />
-  ))
-  .add('Custom Bin Thresholds', () => (
-    <BarChart
-      width={350}
-      height={250}
-      data={medDateData}
-      xAxis={
-        <LinearXAxis
-          type="time"
-          roundDomains={true}
-          tickSeries={<LinearXAxisTickSeries interval={timeMonth} />}
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Numbers',
+    () => {
+      const data = object('Data', numberData);
+
+      return (
+        <BarChart
+          width={350}
+          height={250}
+          xAxis={<LinearXAxis type="value" />}
+          data={data}
         />
-      }
-      series={<BarSeries binThreshold={timeWeek} />}
-    />
-  ));
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Custom Bin Thresholds',
+    () => {
+      const data = object('Data', medDateData);
+
+      return (
+        <BarChart
+          width={350}
+          height={250}
+          data={data}
+          xAxis={
+            <LinearXAxis
+              type="time"
+              roundDomains={true}
+              tickSeries={<LinearXAxisTickSeries interval={timeMonth} />}
+            />
+          }
+          series={<BarSeries binThreshold={timeWeek} />}
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  );
 
 storiesOf('Charts/Bar/Vertical/Multi Series', module)
   .add(
@@ -890,16 +922,10 @@ storiesOf('Charts/Bar/Gridlines', module)
     />
   ));
 
-class LiveDataDemo extends React.Component<any, any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [...largeCategoryData]
-    };
-  }
+const LiveDataDemo = () => {
+  const [data, setData] = useState([...largeCategoryData]);
 
-  updateData = () => {
-    const data = this.state.data;
+  const updateData = () => {
     const updateCount = randomNumber(1, 4);
     const newData = [...data];
 
@@ -910,36 +936,28 @@ class LiveDataDemo extends React.Component<any, any> {
       idx++;
     }
 
-    this.setState({ data: newData });
+    setData(newData);
   };
 
-  sortData = () => {
-    const data = this.state.data;
-    this.setState({
-      data: data.reverse()
-    });
+  const sortData = () => {
+    setData([...data].reverse());
   };
 
-  render() {
-    const data = this.state.data;
-    return (
-      <Fragment>
-        <BarChart
-          width={350}
-          height={350}
-          data={data}
-          series={
-            <BarSeries
-              colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
-                .colors(data.length)}
-            />
-          }
-        />
-        <br />
-        <button onClick={this.updateData}>Update</button>
-        <button onClick={this.sortData}>Sort</button>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <BarChart
+        width={350}
+        height={350}
+        data={data}
+        series={
+          <BarSeries
+            colorScheme={chroma.scale(['ACB7C9', '418AD7']).colors(data.length)}
+          />
+        }
+      />
+      <br />
+      <button onClick={updateData}>Update</button>
+      <button onClick={sortData}>Sort</button>
+    </Fragment>
+  );
+};
