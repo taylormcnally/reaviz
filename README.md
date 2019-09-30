@@ -29,7 +29,7 @@ creating charts without sacrificing customization ability.
 
 ## 🚀 Quick Links
 
-- Checkout the [demos](https://jask-oss.github.io/reaviz/)
+- Checkout the [demos](https://reaviz.io)
 - Learn more in the [docs](/docs)
 - Try it yourself on [CodeSandbox](https://codesandbox.io/embed/m7rl2z1989)
 - Learn about updates from the [changelog](CHANGELOG.md)
