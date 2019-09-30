@@ -21,9 +21,8 @@ export interface RadialGaugeSeriesProps {
   outerArc: JSX.Element | null;
   label: JSX.Element | null;
   valueLabel: JSX.Element | null;
+  minGaugeWidth: number;
 }
-
-const MIN_GAUGE_WIDTH = 50;
 
 export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   static defaultProps: Partial<RadialGaugeSeriesProps> = {
@@ -32,7 +31,8 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     label: <RadialGaugeLabel />,
     valueLabel: <RadialGaugeValueLabel />,
     colorScheme: ['#00ECB1'],
-    padding: 10
+    padding: 10,
+    minGaugeWidth: 50
   };
 
   getColor(point, index) {
@@ -45,13 +45,13 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   }
 
   getWidths() {
-    const { data, width, height } = this.props;
+    const { data, width, height, minGaugeWidth } = this.props;
 
     let rows = 1;
     let columns = data.length;
 
-    if (width / data.length < MIN_GAUGE_WIDTH) {
-      while (width / columns < MIN_GAUGE_WIDTH) {
+    if (width / data.length < minGaugeWidth) {
+      while (width / columns < minGaugeWidth) {
         rows += 1;
         columns = Math.ceil(data.length / rows);
       }

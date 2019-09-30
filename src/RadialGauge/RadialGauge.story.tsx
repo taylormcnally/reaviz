@@ -71,7 +71,12 @@ storiesOf('Charts/Radial Gauge', module)
     { options: { showPanel: true } }
   )
   .add('Multi-line', () => (
-    <RadialGauge data={categoryData} width={350} height={450} />
+    <RadialGauge
+      data={categoryData}
+      width={350}
+      height={450}
+      series={<RadialGaugeSeries minGaugeWidth={150} />}
+    />
   ))
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
