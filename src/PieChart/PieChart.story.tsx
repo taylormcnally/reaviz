@@ -1,41 +1,62 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 
 import { PieChart } from './PieChart';
 import { categoryData, randomNumber, browserData } from '../../demo';
 import { PieArcSeries } from './PieArcSeries';
+import { number, object, text } from '@storybook/addon-knobs';
 
 storiesOf('Charts/Pie/Pie', module)
-  .add('Simple', () => (
-    <PieChart
-      width={350}
-      height={250}
-      data={categoryData}
-      series={
-        <PieArcSeries
-          colorScheme={chroma
-            .scale(['#4dd0e1', '#1976d2'])
-            .colors(categoryData.length)}
+  .add(
+    'Simple',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const data = object('Data', categoryData);
+
+      return (
+        <PieChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <PieArcSeries
+              colorScheme={chroma
+                .scale(['#4dd0e1', '#1976d2'])
+                .colors(data.length)}
+            />
+          }
         />
-      }
-    />
-  ))
-  .add('Explode', () => (
-    <PieChart
-      width={350}
-      height={250}
-      data={categoryData}
-      series={
-        <PieArcSeries
-          explode={true}
-          colorScheme={chroma
-            .scale(['#4dd0e1', '#1976d2'])
-            .colors(categoryData.length)}
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Explode',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const data = object('Data', categoryData);
+
+      return (
+        <PieChart
+          width={height}
+          height={width}
+          data={data}
+          series={
+            <PieArcSeries
+              explode={true}
+              colorScheme={chroma
+                .scale(['#4dd0e1', '#1976d2'])
+                .colors(data.length)}
+            />
+          }
         />
-      }
-    />
-  ))
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Label Overlap', () => (
     <PieChart
       width={350}
@@ -67,21 +88,31 @@ storiesOf('Charts/Pie/Pie', module)
   ));
 
 storiesOf('Charts/Pie/Donut', module)
-  .add('Simple', () => (
-    <PieChart
-      width={350}
-      height={250}
-      data={categoryData}
-      series={
-        <PieArcSeries
-          doughnut={true}
-          colorScheme={chroma
-            .scale(['#4dd0e1', '#1976d2'])
-            .colors(categoryData.length)}
+  .add(
+    'Simple',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const data = object('Data', categoryData);
+
+      return (
+        <PieChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <PieArcSeries
+              doughnut={true}
+              colorScheme={chroma
+                .scale(['#4dd0e1', '#1976d2'])
+                .colors(data.length)}
+            />
+          }
         />
-      }
-    />
-  ))
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Labels', () => (
     <PieChart
       width={350}
@@ -97,51 +128,56 @@ storiesOf('Charts/Pie/Donut', module)
       }
     />
   ))
-  .add('Inner Label', () => (
-    <div
-      style={{
-        position: 'relative',
-        height: '250px',
-        width: '350px',
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'center'
-      }}
-    >
-      <div style={{ position: 'absolute', top: 0, left: 0 }}>
-        <PieChart
-          width={350}
-          height={250}
-          data={categoryData}
-          series={
-            <PieArcSeries
-              doughnut={true}
-              label={null}
-              colorScheme={chroma
-                .scale(['#4dd0e1', '#1976d2'])
-                .colors(categoryData.length)}
+  .add(
+    'Inner Label',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const words = text('Label', 'Attacks');
+      const data = object('Data', categoryData);
+
+      return (
+        <div
+          style={{
+            position: 'relative',
+            height: '250px',
+            width: '350px',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center'
+          }}
+        >
+          <div style={{ position: 'absolute', top: 0, left: 0 }}>
+            <PieChart
+              width={width}
+              height={height}
+              data={data}
+              series={
+                <PieArcSeries
+                  doughnut={true}
+                  label={null}
+                  colorScheme={chroma
+                    .scale(['#4dd0e1', '#1976d2'])
+                    .colors(data.length)}
+                />
+              }
             />
-          }
-        />
-      </div>
-      <h2 style={{ margin: '0 5px', padding: 0, color: 'white' }}>
-        {categoryData.length} Attacks
-      </h2>
-    </div>
-  ));
+          </div>
+          <h2 style={{ margin: '0 5px', padding: 0, color: 'white' }}>
+            {data.length} {words}
+          </h2>
+        </div>
+      );
+    },
+    { options: { showPanel: true } }
+  );
 
-class LiveUpdatingStory extends React.Component<any, any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [...categoryData]
-    };
-  }
+const LiveUpdatingStory = () => {
+  const [data, setData] = useState([...categoryData]);
 
-  updateData = () => {
-    const data = this.state.data;
-    const updateCount = randomNumber(1, 4);
+  const updateData = () => {
     const newData = [...data];
+    const updateCount = randomNumber(1, 4);
 
     let idx = 0;
     while (idx <= updateCount) {
@@ -154,28 +190,25 @@ class LiveUpdatingStory extends React.Component<any, any> {
       idx++;
     }
 
-    this.setState({ data: newData });
+    setData(newData);
   };
 
-  render() {
-    const data = this.state.data;
-    return (
-      <React.Fragment>
-        <PieChart
-          width={350}
-          height={250}
-          data={data}
-          series={
-            <PieArcSeries
-              colorScheme={chroma
-                .scale(['#ACB7C9', '#418AD7'])
-                .colors(data.length)}
-            />
-          }
-        />
-        <br />
-        <button onClick={this.updateData}>Update</button>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <PieChart
+        width={350}
+        height={250}
+        data={data}
+        series={
+          <PieArcSeries
+            colorScheme={chroma
+              .scale(['#ACB7C9', '#418AD7'])
+              .colors(data.length)}
+          />
+        }
+      />
+      <br />
+      <button onClick={updateData}>Update</button>
+    </Fragment>
+  );
+};

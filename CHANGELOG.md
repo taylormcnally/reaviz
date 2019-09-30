@@ -1,6 +1,7 @@
 # Master
 - [Feature] Add ability to pass rx/ry to bars
-- [Chore] Improve bar chart stories
+- [Fix] Fix fill not transitioning
+- [Chore] Improve bar/area/pie demos
 
 # 4.2.0 - 9/27/19
 - [Feature] Updated `BarSeries` to be able to accept more than one `Bar` component for `Bar` customization
