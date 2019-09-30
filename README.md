@@ -143,3 +143,8 @@ If you want to run REAVIZ locally, its super easy!
 - `npm i`
 - `npm start`
 - Browser opens to Storybook page
+
+to publish the repo to git you can run:
+
+- `npm version x.x.x` to bump the version
+- `git push --follow-tags`
