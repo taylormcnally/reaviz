@@ -6,9 +6,6 @@ import { withInfo } from '@storybook/addon-info';
 import ReavizLogo from './assets/reaviz.svg';
 import 'rdk/dist/index.css';
 
-// Add google analytics tracking
-window.STORYBOOK_GA_ID = 'UA-104197992-2';
-
 // Customize the UI a bit
 addParameters({
   options: {
