@@ -1,7 +1,8 @@
-# Master
-- [Feature] Add ability to pass rx/ry to bars
+# 4.2.1 - 9/30/19
+- [Feature] Add ability to pass `rx`/`ry` to bars
+- [Feature] Add ability to pass `minGaugeWidth` to Radial Gauge charts
 - [Fix] Fix fill not transitioning
-- [Chore] Improve bar/area/pie demos
+- [Chore] Improve bar/area/pie/line/heatmap/sankey demos
 
 # 4.2.0 - 9/27/19
 - [Feature] Updated `BarSeries` to be able to accept more than one `Bar` component for `Bar` customization
