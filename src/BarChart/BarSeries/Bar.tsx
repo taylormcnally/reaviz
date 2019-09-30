@@ -339,13 +339,12 @@ export class Bar extends Component<BarProps, BarState> {
             extras.className
           )}
           style={{ ...extras.style, cursor }}
-          fill={fill}
           mask={maskPath}
           rx={rx}
           ry={ry}
-          initial={initialExit}
-          animate={coords}
-          exit={initialExit}
+          initial={{ ...initialExit, fill }}
+          animate={{ ...coords, fill }}
+          exit={{ ...initialExit, fill }}
           transition={transition}
           onMouseEnter={bind(this.onMouseEnter, this)}
           onMouseLeave={bind(this.onMouseLeave, this)}
