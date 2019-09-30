@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import moment from 'moment';
 import { object, color, number, select } from '@storybook/addon-knobs';
 
@@ -88,14 +88,24 @@ storiesOf('Charts/Line/Single Series', module)
       }
     />
   ))
-  .add('Large Dataset', () => (
-    <LineChart
-      width={350}
-      height={250}
-      data={largeDateData}
-      xAxis={<LinearXAxis type="time" />}
-    />
-  ))
+  .add(
+    'Large Dataset',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 350);
+      const data = object('Data', largeDateData);
+
+      return (
+        <LineChart
+          width={width}
+          height={height}
+          data={data}
+          xAxis={<LinearXAxis type="time" />}
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Dynamic Colors', () => (
     <LineChart
       width={350}
@@ -111,21 +121,33 @@ storiesOf('Charts/Line/Single Series', module)
   .add('Live Updating', () => <LiveUpdatingStory />);
 
 storiesOf('Charts/Line/Multi Series', module)
-  .add('Simple', () => (
-    <LineChart
-      width={550}
-      height={350}
-      series={
-        <LineSeries
-          type="grouped"
-          colorScheme={chroma
-            .scale(['27efb5', '00bfff'])
-            .colors(multiDateData.length)}
+  .add(
+    'Simple',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 550);
+      const lineStroke = number('Stroke Width', 4);
+      const data = object('Data', multiDateData);
+
+      return (
+        <LineChart
+          width={width}
+          height={height}
+          series={
+            <LineSeries
+              type="grouped"
+              line={<Line strokeWidth={lineStroke} />}
+              colorScheme={chroma
+                .scale(['27efb5', '00bfff'])
+                .colors(data.length)}
+            />
+          }
+          data={data}
         />
-      }
-      data={multiDateData}
-    />
-  ))
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Custom Line Styles', () => (
     <LineChart
       width={550}
@@ -174,38 +196,60 @@ storiesOf('Charts/Line/Multi Series', module)
       data={longMultiDateData}
     />
   ))
-  .add('Stacked', () => (
-    <StackedAreaChart
-      width={550}
-      height={350}
-      series={
-        <StackedAreaSeries
-          colorScheme={chroma
-            .scale(['ACB7C9', '418AD7'])
-            .colors(multiDateData.length)}
-          area={null}
-          line={<Line strokeWidth={3} />}
+  .add(
+    'Stacked',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 550);
+      const lineStroke = number('Stroke Width', 4);
+      const data = object('Data', multiDateData);
+
+      return (
+        <StackedAreaChart
+          width={width}
+          height={height}
+          series={
+            <StackedAreaSeries
+              colorScheme={chroma
+                .scale(['ACB7C9', '418AD7'])
+                .colors(data.length)}
+              area={null}
+              line={<Line strokeWidth={lineStroke} />}
+            />
+          }
+          data={data}
         />
-      }
-      data={multiDateData}
-    />
-  ))
-  .add('Stacked Normalized', () => (
-    <StackedNormalizedAreaChart
-      width={550}
-      height={350}
-      data={multiDateData}
-      series={
-        <StackedNormalizedAreaSeries
-          colorScheme={chroma
-            .scale(['27efb5', '00bfff'])
-            .colors(multiDateData.length)}
-          area={null}
-          line={<Line strokeWidth={3} />}
+      );
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Stacked Normalized',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 550);
+      const lineStroke = number('Stroke Width', 4);
+      const data = object('Data', multiDateData);
+
+      return (
+        <StackedNormalizedAreaChart
+          width={width}
+          height={height}
+          data={data}
+          series={
+            <StackedNormalizedAreaSeries
+              colorScheme={chroma
+                .scale(['27efb5', '00bfff'])
+                .colors(data.length)}
+              area={null}
+              line={<Line strokeWidth={lineStroke} />}
+            />
+          }
         />
-      }
-    />
-  ));
+      );
+    },
+    { options: { showPanel: true } }
+  );
 
 storiesOf('Charts/Line/Gridlines', module)
   .add('All Axes', () => (
@@ -311,46 +355,34 @@ storiesOf('Charts/Line/Circle Series', module)
     />
   ));
 
-class LiveUpdatingStory extends React.Component<any, any> {
-  int: any;
-  offset = 0;
+let interval;
+let offset = 0;
+const LiveUpdatingStory = () => {
+  const [data, setData] = useState([...singleDateData]);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [...singleDateData]
-    };
-  }
-
-  startData = () => {
-    this.int = setInterval(() => {
-      const data = [
-        ...this.state.data,
+  const startData = () => {
+    interval = setInterval(() => {
+      const newData: any[] = [
+        ...data,
         {
           id: randomNumber(1, 10000),
           key: moment()
-            .add(++this.offset, 'day')
+            .add(++offset, 'day')
             .toDate(),
           data: randomNumber(1, 20)
         }
       ];
 
-      this.setState({ data });
+      setData(newData);
     }, 500);
   };
 
-  stopData = () => {
-    clearInterval(this.int);
-  };
-
-  render() {
-    return (
-      <Fragment>
-        <LineChart width={550} height={350} data={this.state.data} />
-        <br />
-        <button onClick={this.startData}>Start</button>
-        <button onClick={this.stopData}>Stop</button>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <LineChart width={550} height={350} data={data} />
+      <br />
+      <button onClick={startData}>Start</button>
+      <button onClick={() => clearInterval(interval)}>Stop</button>
+    </Fragment>
+  );
+};
