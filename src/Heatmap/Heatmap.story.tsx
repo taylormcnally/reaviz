@@ -11,11 +11,20 @@ import {
   heatmapCalendarOffsetData
 } from '../../demo';
 import { SequentialLegend } from '../common/legends/SequentialLegend/SequentialLegend';
+import { number, object } from '@storybook/addon-knobs';
 
 storiesOf('Charts/Heatmap', module)
-  .add('Basic', () => (
-    <Heatmap height={250} width={400} data={heatmapSimpleData} />
-  ))
+  .add(
+    'Basic',
+    () => {
+      const height = number('Height', 250);
+      const width = number('Width', 400);
+      const data = object('Data', heatmapSimpleData);
+
+      return <Heatmap height={height} width={width} data={data} />;
+    },
+    { options: { showPanel: true } }
+  )
   .add('Basic + Legend', () => (
     <div style={{ display: 'flex', height: '250px' }}>
       <Heatmap height={250} width={400} data={heatmapSimpleData} />
@@ -25,24 +34,46 @@ storiesOf('Charts/Heatmap', module)
       />
     </div>
   ))
-  .add('Year Calendar', () => (
-    <CalendarHeatmap height={115} width={715} data={heatmapCalendarData} />
-  ))
-  .add('Year Calendar w/ March Start', () => (
-    <CalendarHeatmap
-      height={115}
-      width={715}
-      data={heatmapCalendarOffsetData}
-    />
-  ))
-  .add('Month Calendar', () => (
-    <CalendarHeatmap
-      height={115}
-      width={100}
-      view="month"
-      data={janHeatMapData}
-    />
-  ))
+  .add(
+    'Year Calendar',
+    () => {
+      const height = number('Height', 115);
+      const width = number('Width', 715);
+      const data = object('Data', heatmapCalendarData);
+
+      return <CalendarHeatmap height={height} width={width} data={data} />;
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Year Calendar w/ March Start',
+    () => {
+      const height = number('Height', 115);
+      const width = number('Width', 715);
+      const data = object('Data', heatmapCalendarOffsetData);
+
+      return <CalendarHeatmap height={height} width={width} data={data} />;
+    },
+    { options: { showPanel: true } }
+  )
+  .add(
+    'Month Calendar',
+    () => {
+      const height = number('Height', 115);
+      const width = number('Width', 100);
+      const data = object('Data', janHeatMapData);
+
+      return (
+        <CalendarHeatmap
+          height={height}
+          width={width}
+          view="month"
+          data={data}
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Multi Month Calendar', () => (
     <div style={{ display: 'flex' }}>
       <CalendarHeatmap
