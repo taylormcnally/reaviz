@@ -7,6 +7,7 @@
     "storybook:build": "build-storybook",
     "storybook:deploy": "storybook-to-ghpages",
     "storybook:ci": "storybook-to-ghpages --existing-output-dir=storybook-static --ci",
+    "copy": "cp CNAME storybook-static/",
     "build": "rollup -c",
     "test": "jest --env=jsdom",
     "prettier": "prettier --loglevel warn --write 'src/**/*.{ts,tsx,js,jsx}'"

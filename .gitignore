@@ -7,13 +7,7 @@ yarn-error.log*
 pkg/
 .rpt2_cache/
 dist/
-storybook-static/sb_dll
-storybook-static/static
-storybook-static/*.js
-storybook-static/*.js.map
-storybook-static/*.html
-storybook-static/*.css
-storybook-static/*.ico
+storybook-static/
 
 # Runtime data
 pids

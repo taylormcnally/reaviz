@@ -99,6 +99,7 @@ jobs:
     steps:
       - *checkout_code
       - *attach_workspace
+      - run: npm run copy
       - run: npm run storybook:ci
 
   publish_npm:
