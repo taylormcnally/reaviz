@@ -5,6 +5,7 @@ import { uniqueBy } from '../../common/utils/array';
 import { extent, sum } from 'd3-array';
 import { CloneElement } from '../../common/utils/children';
 import memoize from 'memoize-one';
+import { ColorSchemeType, getColor } from '../../common/color';
 
 export interface HeatmapSeriesProps {
   padding: number;
@@ -12,7 +13,7 @@ export interface HeatmapSeriesProps {
   data: any[];
   xScale: any;
   yScale: any;
-  colorScheme: any;
+  colorScheme: ColorSchemeType;
   emptyColor: string;
   animated: boolean;
   cell: JSX.Element;
@@ -36,9 +37,12 @@ export class HeatmapSeries extends Component<HeatmapSeriesProps> {
         return emptyColor;
       }
 
-      return scaleQuantile<string>()
-        .domain(valueDomain)
-        .range(colorScheme)(point);
+      return getColor({
+        scale: scaleQuantile,
+        domain: valueDomain,
+        key: point,
+        colorScheme
+      });
     };
   });
 

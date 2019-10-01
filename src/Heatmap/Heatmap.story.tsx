@@ -11,7 +11,9 @@ import {
   heatmapCalendarOffsetData
 } from '../../demo';
 import { SequentialLegend } from '../common/legends/SequentialLegend/SequentialLegend';
-import { number, object } from '@storybook/addon-knobs';
+import { number, object, select } from '@storybook/addon-knobs';
+import { HeatmapSeries } from './HeatmapSeries';
+import { schemes } from '../common/color';
 
 storiesOf('Charts/Heatmap', module)
   .add(
@@ -19,9 +21,17 @@ storiesOf('Charts/Heatmap', module)
     () => {
       const height = number('Height', 250);
       const width = number('Width', 400);
+      const color = select('Color Scheme', schemes, 'OrRd');
       const data = object('Data', heatmapSimpleData);
 
-      return <Heatmap height={height} width={width} data={data} />;
+      return (
+        <Heatmap
+          height={height}
+          width={width}
+          data={data}
+          series={<HeatmapSeries colorScheme={color} />}
+        />
+      );
     },
     { options: { showPanel: true } }
   )

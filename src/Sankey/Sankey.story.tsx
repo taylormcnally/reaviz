@@ -10,7 +10,8 @@ import {
   simpleSankeyNodes,
   simpleSankeyLinks
 } from '../../demo';
-import { select, object, number } from '@storybook/addon-knobs';
+import { select, object, number, array } from '@storybook/addon-knobs';
+import { schemes } from '../common/color';
 
 const colorScheme = chroma
   .scale([
@@ -37,13 +38,13 @@ storiesOf('Charts/Sankey', module)
     () => {
       const height = number('Height', 300);
       const width = number('Width', 550);
-      const colors = object('Colors', colorScheme);
+      const color = select('Color Scheme', schemes, 'Spectral');
       const nodes = object('Nodes', simpleSankeyNodes);
       const links = object('Links', simpleSankeyLinks);
 
       return (
         <Sankey
-          colorScheme={colors}
+          colorScheme={color}
           height={height}
           width={width}
           nodes={nodes.map((node, i) => (

@@ -20,6 +20,7 @@ import {
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 import { symbolStar, symbol } from 'd3-shape';
+import { schemes } from '../common/color';
 
 storiesOf('Charts/Scatter Plot/Linear', module)
   .add(
@@ -28,7 +29,7 @@ storiesOf('Charts/Scatter Plot/Linear', module)
       const height = number('Height', 400);
       const width = number('Width', 750);
       const size = number('Size', 4);
-      const fill = color('Color', '#418AD7');
+      const fill = color('Color', schemes.cybertron[0]);
       const data = object('Data', medSignalChartData);
 
       return (
@@ -138,7 +139,7 @@ storiesOf('Charts/Scatter Plot/Linear', module)
         <ScatterSeries
           point={
             <ScatterPoint
-              color="rgba(174, 52, 255, .5)"
+              color="rgba(45, 96, 232, .8)"
               size={v => v.metadata.severity + 5}
             />
           }
@@ -177,7 +178,7 @@ class BubbleChartLiveUpdate extends React.Component<any, any> {
             <ScatterSeries
               point={
                 <ScatterPoint
-                  color="rgba(174, 52, 255, .5)"
+                  color="rgba(45, 96, 232, .8)"
                   size={v => {
                     return v.metadata.severity + 5;
                   }}

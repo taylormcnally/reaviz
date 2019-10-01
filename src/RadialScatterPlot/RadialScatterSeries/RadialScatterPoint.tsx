@@ -8,6 +8,7 @@ import { CloneElement } from '../../common/utils/children';
 import css from './RadialScatterPoint.module.scss';
 import { motion } from 'framer-motion';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
+import { schemes } from '../../common/color';
 
 export interface RadialScatterPointProps {
   data: ChartInternalShallowDataShape;
@@ -39,7 +40,7 @@ export class RadialScatterPoint extends Component<
 > {
   static defaultProps: Partial<RadialScatterPointProps> = {
     size: 3,
-    color: 'rgba(174, 52, 255, .5)',
+    color: schemes.cybertron[0],
     tooltip: <ChartTooltip />,
     active: true,
     onClick: () => undefined,

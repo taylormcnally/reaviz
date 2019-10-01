@@ -11,11 +11,12 @@ import {
 import css from './ScatterPoint.module.scss';
 import { motion } from 'framer-motion';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
+import { schemes, getColor, ColorSchemeType } from '../../common/color';
 
 export type ScatterPointProps = {
   active?: boolean;
   size?: ((data: ChartInternalShallowDataShape) => number) | number;
-  color: any;
+  color: ColorSchemeType;
   cursor?: string;
   xScale: any;
   yScale: any;
@@ -45,7 +46,7 @@ export class ScatterPoint extends Component<
     tooltip: <ChartTooltip />,
     cursor: 'pointer',
     size: 4,
-    color: '#AE34FF',
+    color: schemes.cybertron[0],
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
@@ -119,7 +120,12 @@ export class ScatterPoint extends Component<
 
   renderCircle() {
     const { data, index, size, color, cursor, id } = this.props;
-    const fill = typeof color === 'function' ? color(data, index) : color;
+    const fill = getColor({
+      colorScheme: color,
+      index,
+      point: data
+    });
+
     const r = typeof size === 'function' ? size(data) : size;
     const enter = this.getEnter();
     const exit = this.getExit();
@@ -128,6 +134,8 @@ export class ScatterPoint extends Component<
     const initial = {
       cx: exit.x,
       cy: exit.y,
+      fill,
+      r,
       opacity: 0
     };
 
@@ -140,11 +148,11 @@ export class ScatterPoint extends Component<
         animate={{
           cx: enter.x,
           cy: enter.y,
-          opacity: 1
+          opacity: 1,
+          fill,
+          r
         }}
         exit={initial}
-        fill={fill}
-        r={r}
         transition={transition}
       />
     );

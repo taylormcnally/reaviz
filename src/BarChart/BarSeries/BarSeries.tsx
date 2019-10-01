@@ -6,7 +6,7 @@ import {
   ChartInternalShallowDataShape,
   Direction
 } from '../../common/data';
-import { sequentialScheme, getColor } from '../../common/utils/color';
+import { getColor, ColorSchemeType } from '../../common/color';
 import { CloneElement } from '../../common/utils/children';
 import { ThresholdCountGenerator, ThresholdArrayGenerator } from 'd3-array';
 import { CountableTimeInterval } from 'd3-time';
@@ -26,7 +26,7 @@ export interface BarSeriesProps {
     | 'stackedDiverging'
     | 'marimekko'
     | 'waterfall';
-  colorScheme: ((data, index: number) => string) | string[];
+  colorScheme: ColorSchemeType;
   animated: boolean;
   padding: number;
   groupPadding: number;
@@ -49,7 +49,7 @@ export class BarSeries extends Component<BarSeriesProps> {
     padding: 0.1,
     groupPadding: 16,
     animated: true,
-    colorScheme: [...sequentialScheme],
+    colorScheme: 'cybertron',
     bar: <Bar />,
     layout: 'vertical'
   };
@@ -89,10 +89,10 @@ export class BarSeries extends Component<BarSeriesProps> {
 
   getColor(point, index) {
     const { colorScheme, data, layout } = this.props;
-    const isMulti = this.getIsMulti();
+    const isMultiSeries = this.getIsMulti();
 
     let key = 'key';
-    if (isMulti) {
+    if (isMultiSeries) {
       if (layout === 'vertical') {
         key = 'x';
       } else {
@@ -105,9 +105,14 @@ export class BarSeries extends Component<BarSeriesProps> {
       key = 'x0';
     }
 
-    return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data, key, isMulti)(point[key].toString())
-      : colorScheme(point, index);
+    return getColor({
+      colorScheme,
+      point,
+      index,
+      data,
+      isMultiSeries,
+      attribute: key
+    });
   }
 
   renderBar(

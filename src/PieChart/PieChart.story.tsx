@@ -5,7 +5,8 @@ import chroma from 'chroma-js';
 import { PieChart } from './PieChart';
 import { categoryData, randomNumber, browserData } from '../../demo';
 import { PieArcSeries } from './PieArcSeries';
-import { number, object, text } from '@storybook/addon-knobs';
+import { number, object, text, select } from '@storybook/addon-knobs';
+import { schemes } from '../common/color';
 
 storiesOf('Charts/Pie/Pie', module)
   .add(
@@ -13,6 +14,7 @@ storiesOf('Charts/Pie/Pie', module)
     () => {
       const height = number('Height', 250);
       const width = number('Width', 350);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', categoryData);
 
       return (
@@ -20,13 +22,7 @@ storiesOf('Charts/Pie/Pie', module)
           width={width}
           height={height}
           data={data}
-          series={
-            <PieArcSeries
-              colorScheme={chroma
-                .scale(['#4dd0e1', '#1976d2'])
-                .colors(data.length)}
-            />
-          }
+          series={<PieArcSeries colorScheme={color} />}
         />
       );
     },
@@ -37,6 +33,7 @@ storiesOf('Charts/Pie/Pie', module)
     () => {
       const height = number('Height', 250);
       const width = number('Width', 350);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', categoryData);
 
       return (
@@ -44,46 +41,19 @@ storiesOf('Charts/Pie/Pie', module)
           width={height}
           height={width}
           data={data}
-          series={
-            <PieArcSeries
-              explode={true}
-              colorScheme={chroma
-                .scale(['#4dd0e1', '#1976d2'])
-                .colors(data.length)}
-            />
-          }
+          series={<PieArcSeries explode={true} colorScheme={color} />}
         />
       );
     },
     { options: { showPanel: true } }
   )
   .add('Label Overlap', () => (
-    <PieChart
-      width={350}
-      height={250}
-      data={browserData}
-      series={
-        <PieArcSeries
-          colorScheme={chroma
-            .scale(['#4dd0e1', '#1976d2'])
-            .colors(browserData.length)}
-        />
-      }
-    />
+    <PieChart width={350} height={250} data={browserData} />
   ))
   .add('Live Updating', () => <LiveUpdatingStory />)
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
-      <PieChart
-        data={categoryData}
-        series={
-          <PieArcSeries
-            colorScheme={chroma
-              .scale(['#4dd0e1', '#1976d2'])
-              .colors(categoryData.length)}
-          />
-        }
-      />
+      <PieChart data={categoryData} />
     </div>
   ));
 
@@ -93,6 +63,7 @@ storiesOf('Charts/Pie/Donut', module)
     () => {
       const height = number('Height', 250);
       const width = number('Width', 350);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', categoryData);
 
       return (
@@ -100,14 +71,7 @@ storiesOf('Charts/Pie/Donut', module)
           width={width}
           height={height}
           data={data}
-          series={
-            <PieArcSeries
-              doughnut={true}
-              colorScheme={chroma
-                .scale(['#4dd0e1', '#1976d2'])
-                .colors(data.length)}
-            />
-          }
+          series={<PieArcSeries doughnut={true} colorScheme={color} />}
         />
       );
     },
@@ -118,14 +82,7 @@ storiesOf('Charts/Pie/Donut', module)
       width={350}
       height={250}
       data={categoryData}
-      series={
-        <PieArcSeries
-          doughnut={true}
-          colorScheme={chroma
-            .scale(['#4dd0e1', '#1976d2'])
-            .colors(categoryData.length)}
-        />
-      }
+      series={<PieArcSeries doughnut={true} />}
     />
   ))
   .add(
@@ -134,6 +91,7 @@ storiesOf('Charts/Pie/Donut', module)
       const height = number('Height', 250);
       const width = number('Width', 350);
       const words = text('Label', 'Attacks');
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', categoryData);
 
       return (
@@ -156,9 +114,7 @@ storiesOf('Charts/Pie/Donut', module)
                 <PieArcSeries
                   doughnut={true}
                   label={null}
-                  colorScheme={chroma
-                    .scale(['#4dd0e1', '#1976d2'])
-                    .colors(data.length)}
+                  colorScheme={color}
                 />
               }
             />
@@ -195,18 +151,7 @@ const LiveUpdatingStory = () => {
 
   return (
     <Fragment>
-      <PieChart
-        width={350}
-        height={250}
-        data={data}
-        series={
-          <PieArcSeries
-            colorScheme={chroma
-              .scale(['#ACB7C9', '#418AD7'])
-              .colors(data.length)}
-          />
-        }
-      />
+      <PieChart width={350} height={250} data={data} />
       <br />
       <button onClick={updateData}>Update</button>
     </Fragment>

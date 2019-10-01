@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { RadialBar, RadialBarProps } from './RadialBar';
-import { sequentialScheme, getColor } from '../../common/utils/color';
 import { CloneElement } from '../../common/utils/children';
+import { ColorSchemeType, getColor } from '../../common/color';
 
 export interface RadialBarSeriesProps {
   data: ChartInternalShallowDataShape[];
-  colorScheme: ((data, index: number) => string) | string[];
+  colorScheme: ColorSchemeType;
   innerRadius: number;
   xScale: any;
   yScale: any;
@@ -17,22 +17,22 @@ export interface RadialBarSeriesProps {
 
 export class RadialBarSeries extends Component<RadialBarSeriesProps> {
   static defaultProps: Partial<RadialBarSeriesProps> = {
-    colorScheme: [...sequentialScheme],
+    colorScheme: 'cybertron',
     bar: <RadialBar />,
     animated: true
   };
 
-  getColor(point: ChartInternalShallowDataShape, index: number) {
-    const { colorScheme, data } = this.props;
-    const key = point.key;
-
-    return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(key!.toString())
-      : colorScheme(point, index);
-  }
-
   renderBar(point: ChartInternalShallowDataShape, index: number) {
-    const { innerRadius, xScale, yScale, bar, id, data, animated } = this.props;
+    const {
+      innerRadius,
+      xScale,
+      yScale,
+      bar,
+      id,
+      data,
+      animated,
+      colorScheme
+    } = this.props;
 
     return (
       <Fragment key={index}>
@@ -44,7 +44,9 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
           xScale={xScale}
           yScale={yScale}
           innerRadius={innerRadius}
-          color={this.getColor.bind(this)}
+          color={(point, index) =>
+            getColor({ data, point, index, colorScheme })
+          }
           barCount={data.length}
           animated={animated}
         />

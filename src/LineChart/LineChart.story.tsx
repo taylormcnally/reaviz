@@ -25,6 +25,7 @@ import { PointSeries } from '../AreaChart';
 import { LinearXAxisTickSeries, LinearXAxis } from '../common/Axis/LinearAxis';
 import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
+import { schemes } from '../common/color';
 
 storiesOf('Charts/Line/Single Series', module)
   .add(
@@ -33,7 +34,7 @@ storiesOf('Charts/Line/Single Series', module)
       const height = number('Height', 250);
       const width = number('Width', 350);
       const lineStroke = number('Stroke Width', 4);
-      const fill = color('Color', '#418AD7');
+      const color = select('Color Scheme', schemes, 'cybertron');
       const interpolation = select(
         'Interpolation',
         {
@@ -53,7 +54,7 @@ storiesOf('Charts/Line/Single Series', module)
           series={
             <LineSeries
               interpolation={interpolation}
-              colorScheme={[fill]}
+              colorScheme={color}
               line={<Line strokeWidth={lineStroke} />}
             />
           }
@@ -92,7 +93,17 @@ storiesOf('Charts/Line/Single Series', module)
     'Large Dataset',
     () => {
       const height = number('Height', 250);
-      const width = number('Width', 350);
+      const width = number('Width', 400);
+      const color = select('Color Scheme', schemes, 'cybertron');
+      const interpolation = select(
+        'Interpolation',
+        {
+          linear: 'linear',
+          step: 'step',
+          smooth: 'smooth'
+        },
+        'linear'
+      );
       const data = object('Data', largeDateData);
 
       return (
@@ -100,6 +111,9 @@ storiesOf('Charts/Line/Single Series', module)
           width={width}
           height={height}
           data={data}
+          series={
+            <LineSeries colorScheme={color} interpolation={interpolation} />
+          }
           xAxis={<LinearXAxis type="time" />}
         />
       );
@@ -127,6 +141,7 @@ storiesOf('Charts/Line/Multi Series', module)
       const height = number('Height', 250);
       const width = number('Width', 550);
       const lineStroke = number('Stroke Width', 4);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', multiDateData);
 
       return (
@@ -137,9 +152,7 @@ storiesOf('Charts/Line/Multi Series', module)
             <LineSeries
               type="grouped"
               line={<Line strokeWidth={lineStroke} />}
-              colorScheme={chroma
-                .scale(['27efb5', '00bfff'])
-                .colors(data.length)}
+              colorScheme={color}
             />
           }
           data={data}
@@ -202,6 +215,7 @@ storiesOf('Charts/Line/Multi Series', module)
       const height = number('Height', 250);
       const width = number('Width', 550);
       const lineStroke = number('Stroke Width', 4);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', multiDateData);
 
       return (
@@ -210,9 +224,7 @@ storiesOf('Charts/Line/Multi Series', module)
           height={height}
           series={
             <StackedAreaSeries
-              colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
-                .colors(data.length)}
+              colorScheme={color}
               area={null}
               line={<Line strokeWidth={lineStroke} />}
             />
@@ -229,6 +241,7 @@ storiesOf('Charts/Line/Multi Series', module)
       const height = number('Height', 250);
       const width = number('Width', 550);
       const lineStroke = number('Stroke Width', 4);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', multiDateData);
 
       return (
@@ -238,9 +251,7 @@ storiesOf('Charts/Line/Multi Series', module)
           data={data}
           series={
             <StackedNormalizedAreaSeries
-              colorScheme={chroma
-                .scale(['27efb5', '00bfff'])
-                .colors(data.length)}
+              colorScheme={color}
               area={null}
               line={<Line strokeWidth={lineStroke} />}
             />

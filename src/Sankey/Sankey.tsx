@@ -13,7 +13,7 @@ import {
 } from '../common/containers/ChartContainer';
 import { CloneElement } from '../common/utils/children';
 
-import { getColor } from '../common/utils/color';
+import { getColor, ColorSchemeType } from '../common/color';
 import { SankeyNodeProps } from './SankeyNode';
 import { SankeyLinkProps } from './SankeyLink';
 import { Node, Link } from './utils';
@@ -30,7 +30,7 @@ type Justification = 'justify' | 'center' | 'left' | 'right';
 
 interface SankeyProps extends ChartProps {
   animated: boolean;
-  colorScheme?: ((data, index: number) => string) | string[];
+  colorScheme: ColorSchemeType;
   justification: Justification;
   nodeWidth: number;
   nodePadding: number;
@@ -55,12 +55,14 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
 
   getNodeColor(node: JSX.Element, index: any) {
     const { colorScheme, nodes } = this.props;
-    const key = nodes[index].key;
 
     if (colorScheme) {
-      return Array.isArray(colorScheme)
-        ? getColor(colorScheme, nodes)(key!.toString())
-        : colorScheme(node, index);
+      return getColor({
+        data: nodes,
+        colorScheme,
+        point: nodes[index],
+        index
+      });
     } else {
       return node.props.color;
     }

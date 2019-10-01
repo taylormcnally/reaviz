@@ -15,7 +15,7 @@ import {
 } from '../../common/Tooltip';
 import { Line, LineProps } from './Line';
 import { InterpolationTypes } from '../../common/utils/interpolation';
-import { getColor, sequentialScheme } from '../../common/utils/color';
+import { getColor, ColorSchemeType } from '../../common/color';
 import bind from 'memoize-bind';
 
 export type AreaChartTypes =
@@ -39,7 +39,7 @@ export interface AreaSeriesProps {
   symbols: JSX.Element | null;
   line: JSX.Element | null;
   area: JSX.Element | null;
-  colorScheme: ((data, index: number, activeValues?) => string) | string[];
+  colorScheme: ColorSchemeType;
   isZoomed: boolean;
 }
 
@@ -55,7 +55,7 @@ const HALF_PADDING = PADDING / 2;
 
 export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
   static defaultProps: Partial<AreaSeriesProps> = {
-    colorScheme: [...sequentialScheme],
+    colorScheme: 'cybertron',
     animated: true,
     interpolation: 'linear',
     type: 'standard',
@@ -73,9 +73,14 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
     const { activeValues } = this.state;
     const key = Array.isArray(point) ? point[0].key : point.key;
 
-    return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data, 'key')(key.toString())
-      : colorScheme(point, index, activeValues);
+    return getColor({
+      data,
+      colorScheme,
+      active: activeValues,
+      point,
+      index,
+      key
+    });
   }
 
   onValueEnter(event: TooltipAreaEvent) {

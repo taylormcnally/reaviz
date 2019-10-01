@@ -1,3 +1,13 @@
+# 4.3.0 - 10/1/19
+- [Feature] Add color brewer schemes
+- [Feature] Normalize `getColor` internal method and various code cleanups around that
+- [Feature] Animate fill/size of scatter plot points
+- [Fix] Fix BarSeries to generate the key in the same way as the id so that no duplicated keys are generated
+- [Fix] Fixed Bar to use the color of rangeLines when it's provided
+- [Fix] Fix overflow issue with storybook stories
+- [Fix] Fix radial scatter plot story colors not working
+- [Chore] Enhance storybook stories to allow color scheme selection
+
 # 4.2.1 - 9/30/19
 - [Feature] Add ability to pass `rx`/`ry` to bars
 - [Feature] Add ability to pass `minGaugeWidth` to Radial Gauge charts

@@ -23,7 +23,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
       const innerRadius = number('Inner Radius', 80);
       const size = number('Size', 5);
       const animated = boolean('Animated', true);
-      const fill = color('Fill', 'rgba(174, 52, 255, .5)');
+      const fill = color('Fill', 'rgba(45, 96, 232, .8)');
       const tickCount = number('Tick Count', 5);
       const arcCount = number('Arc Count', 10);
       const tickPosition = select(
@@ -45,7 +45,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
           series={
             <RadialScatterSeries
               animated={animated}
-              point={<RadialScatterPoint size={size} fill={fill} />}
+              point={<RadialScatterPoint size={size} color={fill} />}
             />
           }
           axis={
@@ -73,7 +73,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
     () => {
       const innerRadius = number('Inner Radius', 0.1);
       const animated = boolean('Animated', true);
-      const fill = color('Fill', 'rgba(174, 52, 255, .5)');
+      const fill = color('Fill', 'rgba(45, 96, 232, .6)');
       const tickCount = number('Tick Count', 5);
       const arcCount = number('Arc Count', 10);
       const tickPosition = select(
@@ -97,7 +97,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
               animated={animated}
               point={
                 <RadialScatterPoint
-                  fill={fill}
+                  color={fill}
                   size={v => v.metadata.severity + 5}
                 />
               }
@@ -128,7 +128,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
     () => {
       const innerRadius = number('Inner Radius', 80);
       const animated = boolean('Animated', true);
-      const fill = color('Fill', 'rgba(174, 52, 255, .5)');
+      const fill = color('Fill', 'rgba(206, 0, 62, .7)');
       const tickCount = number('Tick Count', 5);
       const arcCount = number('Arc Count', 10);
       const tickPosition = select(
@@ -152,7 +152,6 @@ storiesOf('Charts/Scatter Plot/Radial', module)
               animated={animated}
               point={
                 <RadialScatterPoint
-                  fill={fill}
                   symbol={d => {
                     const scale = d.metadata.severity / 50;
                     const size = scale * 100;
@@ -162,7 +161,7 @@ storiesOf('Charts/Scatter Plot/Radial', module)
                           points="225,10 100,210 350,210"
                           transform={`scale(${scale})`}
                           style={{
-                            fill: 'rgba(206, 0, 62, .7)',
+                            fill,
                             stroke: '#FF004D',
                             strokeWidth: 5
                           }}

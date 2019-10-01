@@ -4,7 +4,7 @@ import { CloneElement } from '../../common/utils/children';
 import { RadialGaugeArcProps, RadialGaugeArc } from './RadialGaugeArc';
 import { RadialGaugeLabel, RadialGaugeLabelProps } from './RadialGaugeLabel';
 import { RadialGaugeValueLabel } from './RadialGaugeValueLabel';
-import { getColor } from '../../common/utils/color';
+import { getColor, ColorSchemeType } from '../../common/color';
 import { range, min } from 'd3-array';
 import { scaleBand } from 'd3-scale';
 
@@ -16,7 +16,7 @@ export interface RadialGaugeSeriesProps {
   width: number;
   height: number;
   padding: number;
-  colorScheme: ((data, index: number) => string) | string[];
+  colorScheme: ColorSchemeType;
   innerArc: JSX.Element;
   outerArc: JSX.Element | null;
   label: JSX.Element | null;
@@ -34,15 +34,6 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     padding: 10,
     minGaugeWidth: 50
   };
-
-  getColor(point, index) {
-    const { colorScheme, data } = this.props;
-    const key = point.key;
-
-    return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(key.toString())
-      : colorScheme(point, index);
-  }
 
   getWidths() {
     const { data, width, height, minGaugeWidth } = this.props;
@@ -131,7 +122,12 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
           startAngle={startAngle}
           endAngle={dataEndAngle}
           data={data}
-          color={this.getColor(data, index)}
+          color={getColor({
+            data: this.props.data,
+            colorScheme: this.props.colorScheme,
+            point: data,
+            index
+          })}
         />
         {valueLabel && (
           <CloneElement<RadialGaugeLabelProps>

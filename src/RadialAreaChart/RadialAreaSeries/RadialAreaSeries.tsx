@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
-import { sequentialScheme, getColor } from '../../common/utils/color';
+import { getColor, ColorSchemeType } from '../../common/color';
 import { CloneElement } from '../../common/utils/children';
 import { RadialAreaProps, RadialArea } from './RadialArea';
 import { RadialLine, RadialLineProps } from './RadialLine';
@@ -15,7 +15,7 @@ import bind from 'memoize-bind';
 
 export interface RadialAreaSeriesProps {
   data: ChartInternalShallowDataShape[];
-  colorScheme: ((data, index: number) => string) | string[];
+  colorScheme: ColorSchemeType;
   outerRadius: number;
   innerRadius: number;
   xScale: any;
@@ -41,7 +41,7 @@ export class RadialAreaSeries extends Component<
   RadialAreaSeriesState
 > {
   static defaultProps: Partial<RadialAreaSeriesProps> = {
-    colorScheme: [...sequentialScheme],
+    colorScheme: 'cybertron',
     interpolation: 'smooth',
     animated: true,
     area: <RadialArea />,
@@ -54,10 +54,12 @@ export class RadialAreaSeries extends Component<
 
   getColor(point: ChartInternalShallowDataShape, index: number) {
     const { colorScheme, data } = this.props;
-
-    return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(index as any)
-      : colorScheme(point, index);
+    return getColor({
+      colorScheme,
+      data,
+      index,
+      point
+    });
   }
 
   onValueEnter(event: TooltipAreaEvent) {

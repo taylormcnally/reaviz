@@ -1,6 +1,13 @@
 import React, { Fragment, useState } from 'react';
 import { storiesOf } from '@storybook/react';
-import { boolean, color, number, object, select } from '@storybook/addon-knobs';
+import {
+  boolean,
+  color,
+  number,
+  object,
+  select,
+  array
+} from '@storybook/addon-knobs';
 import { BarChart } from './BarChart';
 import { MarimekkoChart } from './MarimekkoChart';
 import { StackedBarChart } from './StackedBarChart';
@@ -42,28 +49,29 @@ import { Stripes } from '../common/Mask';
 import { ChartTooltip, TooltipTemplate } from '../common/Tooltip';
 import { formatValue } from '../common/utils';
 import { Gradient, GradientStop } from '../common/Gradient';
+import { schemes } from '../common/color';
 
 storiesOf('Charts/Bar/Vertical/Single Series', module)
   .add(
     'Simple',
     () => {
+      const color = select('Color Scheme', schemes, 'cybertron');
       const hasGradient = boolean('Gradient', true);
       const rounded = boolean('Rounded', true);
       const padding = number('Padding', 0.1);
-      const height = number('Height', 250);
+      const height = number('Height', 350);
       const width = number('Width', 400);
-      const fill = color('Color', '#418AD7');
       const data = object('Data', categoryData);
       const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
       return (
         <BarChart
-          width={height}
-          height={width}
+          width={width}
+          height={height}
           data={data}
           series={
             <BarSeries
-              colorScheme={[fill]}
+              colorScheme={color}
               padding={padding}
               bar={<Bar rounded={rounded} gradient={gradient} />}
             />
@@ -103,6 +111,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
     () => {
       const height = number('Height', 350);
       const width = number('Width', 350);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', largeCategoryData);
 
       return (
@@ -110,13 +119,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
           width={width}
           height={height}
           data={data}
-          series={
-            <BarSeries
-              colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
-                .colors(data.length)}
-            />
-          }
+          series={<BarSeries colorScheme={color} />}
         />
       );
     },
@@ -193,6 +196,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
     () => {
       const height = number('Height', 350);
       const width = number('Width', 350);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', categoryData);
 
       return (
@@ -200,7 +204,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
           width={width}
           height={height}
           data={data}
-          series={<BarSeries type="waterfall" />}
+          series={<BarSeries type="waterfall" colorScheme={color} />}
         />
       );
     },
@@ -209,8 +213,16 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
   .add(
     'Non-Zero',
     () => {
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', nonZeroCategoryData);
-      return <BarChart width={350} height={250} data={data} />;
+      return (
+        <BarChart
+          width={350}
+          height={250}
+          data={data}
+          series={<BarSeries colorScheme={color} />}
+        />
+      );
     },
     { options: { showPanel: true } }
   );
@@ -288,6 +300,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       const hasGradient = boolean('Gradient', true);
       const hasRangelines = boolean('Rangelines', false);
       const rounded = boolean('Rounded', true);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', multiCategory);
 
       const gradient = hasGradient ? <Gradient /> : null;
@@ -310,9 +323,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
                   rangeLines={rangelines}
                 />
               }
-              colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
-                .colors(data[0].data.length)}
+              colorScheme={color}
               padding={0.8}
             />
           }
@@ -332,6 +343,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       const hasGradient = boolean('Gradient', true);
       const hasRangelines = boolean('Rangelines', true);
       const rounded = boolean('Rounded', false);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', multiCategory);
 
       const gradient = hasGradient ? (
@@ -363,9 +375,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
                   rangeLines={rangelines}
                 />
               }
-              colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
-                .colors(data.length)}
+              colorScheme={color}
             />
           }
         />
@@ -512,6 +522,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       const hasGradient = boolean('Gradient', true);
       const hasRangelines = boolean('Rangelines', true);
       const rounded = boolean('Rounded', false);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', multiCategory);
 
       const gradient = hasGradient ? (
@@ -544,9 +555,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
                   rangeLines={rangelines}
                 />
               }
-              colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
-                .colors(data.length)}
+              colorScheme={color}
             />
           }
         />
@@ -565,6 +574,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
       const hasGradient = boolean('Gradient', true);
       const hasRangelines = boolean('Rangelines', true);
       const rounded = boolean('Rounded', false);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', multiCategory);
 
       const gradient = hasGradient ? (
@@ -597,9 +607,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
                   rangeLines={rangelines}
                 />
               }
-              colorScheme={chroma
-                .scale(['ACB7C9', '418AD7'])
-                .colors(data.length)}
+              colorScheme={color}
             />
           }
         />
@@ -617,7 +625,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module)
       const padding = number('Padding', 0.1);
       const height = number('Height', 350);
       const width = number('Width', 500);
-      const fill = color('Color', '#418AD7');
+      const color = select('Color Scheme', schemes, 'cybertron');
       const data = object('Data', categoryData);
       const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
@@ -635,7 +643,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module)
           }
           series={
             <BarSeries
-              colorScheme={[fill]}
+              colorScheme={color}
               layout="horizontal"
               padding={padding}
               bar={<Bar rounded={rounded} gradient={gradient} />}

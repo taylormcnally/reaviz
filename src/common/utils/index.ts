@@ -1,6 +1,5 @@
 export * from './bigint';
 export * from './children';
-export * from './color';
 export * from './dimensions';
 export * from './domains';
 export * from './formatting';

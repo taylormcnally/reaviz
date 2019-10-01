@@ -3,7 +3,7 @@ import { PieArc, PieArcProps } from './PieArc';
 import { arc } from 'd3-shape';
 import { PieArcLabel, PieArcLabelProps } from './PieArcLabel';
 import { CloneElement } from '../../common/utils/children';
-import { sequentialScheme, getColor } from '../../common/utils/color';
+import { getColor, ColorSchemeType } from '../../common/color';
 import { max } from 'd3-array';
 
 export interface PieArcSeriesProps {
@@ -18,7 +18,7 @@ export interface PieArcSeriesProps {
   width: number;
   label?: JSX.Element | null;
   arc: JSX.Element;
-  colorScheme: ((data, index: number) => string) | string[];
+  colorScheme: ColorSchemeType;
 }
 
 const factor = 1.2;
@@ -28,7 +28,7 @@ const labelVisible = arc => arc.endAngle - arc.startAngle > Math.PI / 30;
 export class PieArcSeries extends Component<PieArcSeriesProps> {
   static defaultProps: Partial<PieArcSeriesProps> = {
     animated: true,
-    colorScheme: sequentialScheme,
+    colorScheme: 'cybertron',
     innerRadius: 0,
     explode: false,
     arcWidth: 0.25,
@@ -89,14 +89,6 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
     }
 
     return positions;
-  }
-
-  getColor(point, index) {
-    const { colorScheme, data } = this.props;
-
-    return Array.isArray(colorScheme)
-      ? getColor(colorScheme, data)(index)
-      : colorScheme(point, index);
   }
 
   innerArc(innerRadius: number, outerRadius: number) {
@@ -168,7 +160,12 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
               data={arcData}
               animated={animated}
               innerArc={innerArc}
-              color={this.getColor(arcData, index)}
+              color={getColor({
+                data: this.props.data,
+                colorScheme: this.props.colorScheme,
+                point: arcData.data,
+                index
+              })}
             />
           </Fragment>
         ))}

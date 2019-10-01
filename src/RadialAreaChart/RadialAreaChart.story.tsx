@@ -4,7 +4,6 @@ import { RadialAreaChart } from './RadialAreaChart';
 import { medDateData } from '../../demo';
 import { RadialAreaSeries, RadialArea } from './RadialAreaSeries';
 import { number, boolean, object, array, select } from '@storybook/addon-knobs';
-import { sequentialScheme } from '../common/utils/color';
 import {
   RadialAxis,
   RadialAxisTickSeries,
@@ -13,6 +12,7 @@ import {
   RadialAxisArcSeries,
   RadialAxisTickLine
 } from '../common/Axis';
+import { schemes } from '../common/color';
 
 storiesOf('Charts/Area/Radial', module)
   .add(
@@ -22,7 +22,7 @@ storiesOf('Charts/Area/Radial', module)
       const animated = boolean('Animated', true);
       const hasGradient = boolean('Gradient', true);
       const autoRotate = boolean('Auto Rotate Labels', true);
-      const colorScheme = array('Color Scheme', sequentialScheme);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const gradient = hasGradient ? RadialArea.defaultProps.gradient : null;
       const tickCount = number('Tick Count', 5);
       const arcCount = number('Arc Count', 10);
@@ -52,7 +52,7 @@ storiesOf('Charts/Area/Radial', module)
           innerRadius={innerRadius}
           series={
             <RadialAreaSeries
-              colorScheme={colorScheme}
+              colorScheme={color}
               animated={animated}
               interpolation={interpolation}
               area={<RadialArea gradient={gradient} />}
@@ -90,7 +90,7 @@ storiesOf('Charts/Line/Radial', module).add(
   () => {
     const innerRadius = number('Inner Radius', 80);
     const animated = boolean('Animated', true);
-    const colorScheme = array('Color Scheme', sequentialScheme);
+    const color = select('Color Scheme', schemes, 'cybertron');
     const autoRotate = boolean('Auto Rotate Labels', true);
     const tickCount = number('Tick Count', 5);
     const tickPosition = select(
@@ -121,7 +121,7 @@ storiesOf('Charts/Line/Radial', module).add(
         series={
           <RadialAreaSeries
             area={null}
-            colorScheme={colorScheme}
+            colorScheme={color}
             animated={animated}
             interpolation={interpolation}
           />

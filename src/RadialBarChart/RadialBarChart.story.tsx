@@ -3,7 +3,6 @@ import { storiesOf } from '@storybook/react';
 import { RadialBarChart } from './RadialBarChart';
 import { largeCategoryData } from '../../demo';
 import { number, boolean, object, array, select } from '@storybook/addon-knobs';
-import { sequentialScheme } from '../common/utils/color';
 import { RadialBarSeries, RadialBar } from './RadialBarSeries';
 import {
   RadialAxis,
@@ -12,6 +11,7 @@ import {
   RadialAxisTick,
   RadialAxisTickLine
 } from '../common/Axis/RadialAxis';
+import { schemes } from '../common/color';
 
 storiesOf('Charts/Bar/Radial', module)
   .add(
@@ -21,7 +21,7 @@ storiesOf('Charts/Bar/Radial', module)
       const curved = boolean('Curved', false);
       const hasGradient = boolean('Gradient', true);
       const animated = boolean('Animated', true);
-      const colorScheme = array('Color Scheme', sequentialScheme);
+      const color = select('Color Scheme', schemes, 'cybertron');
       const arcCount = number('Arc Count', 10);
       const tickPosition = select(
         'Tick Position',
@@ -43,7 +43,7 @@ storiesOf('Charts/Bar/Radial', module)
           series={
             <RadialBarSeries
               animated={animated}
-              colorScheme={colorScheme}
+              colorScheme={color}
               bar={<RadialBar curved={curved} gradient={gradient} />}
             />
           }
