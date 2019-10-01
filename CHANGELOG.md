@@ -1,12 +1,14 @@
-# 4.3.0 - 10/1/19
+# 5.0.0 - 10/1/19
+- [BREAKING] Remove need to import CSS manually
+- [BREAKING] Normalize `getColor` internal method and various code cleanups around that
 - [Feature] Add color brewer schemes
-- [Feature] Normalize `getColor` internal method and various code cleanups around that
 - [Feature] Animate fill/size of scatter plot points
 - [Fix] Fix BarSeries to generate the key in the same way as the id so that no duplicated keys are generated
 - [Fix] Fixed Bar to use the color of rangeLines when it's provided
 - [Fix] Fix overflow issue with storybook stories
 - [Fix] Fix radial scatter plot story colors not working
 - [Chore] Enhance storybook stories to allow color scheme selection
+- [Chore] Bump RDK
 
 # 4.2.1 - 9/30/19
 - [Feature] Add ability to pass `rx`/`ry` to bars

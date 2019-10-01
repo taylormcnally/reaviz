@@ -79,7 +79,7 @@
     "memoize-bind": "^1.0.3",
     "memoize-one": "^5.1.1",
     "moment": "^2.24.0",
-    "rdk": "^2.0.0",
+    "rdk": "^3.0.0",
     "react-countup": "^4.2.2",
     "react-sizeme": "^2.6.7",
     "topojson-client": "^3.0.1",

@@ -31,8 +31,8 @@ export default [
         includeDependencies: true
       }),
       postcss({
+        // extract: true,
         modules: true,
-        extract: true,
         writeDefinitions: true,
         plugins: [
           autoprefixer()
@@ -41,6 +41,11 @@ export default [
       typescript({
         clean: true,
         exclude: [
+          '*.scss',
+          '*.css',
+          '*.test.js',
+          '*.test.ts',
+          '*.test.tsx',
           '*.d.ts',
           '**/*.d.ts',
           '**/*.story.tsx'

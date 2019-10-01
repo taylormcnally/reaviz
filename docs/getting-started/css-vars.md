@@ -1,11 +1,5 @@
 # CSS Variables
 
-First, you will need to import the CSS to your application:
-
-```
-import "reaviz/dist/index.css";
-```
-
 To customize various elements in the charts,
 we use [CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables).
 This gives you fine grain control over the styles
