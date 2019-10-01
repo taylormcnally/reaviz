@@ -1,13 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { storiesOf } from '@storybook/react';
-import {
-  boolean,
-  color,
-  number,
-  object,
-  select,
-  array
-} from '@storybook/addon-knobs';
+import { boolean, number, object, select } from '@storybook/addon-knobs';
 import { BarChart } from './BarChart';
 import { MarimekkoChart } from './MarimekkoChart';
 import { StackedBarChart } from './StackedBarChart';

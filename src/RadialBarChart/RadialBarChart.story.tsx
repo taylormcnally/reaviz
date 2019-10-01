@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialBarChart } from './RadialBarChart';
 import { largeCategoryData } from '../../demo';
-import { number, boolean, object, array, select } from '@storybook/addon-knobs';
+import { number, boolean, object, select } from '@storybook/addon-knobs';
 import { RadialBarSeries, RadialBar } from './RadialBarSeries';
 import {
   RadialAxis,

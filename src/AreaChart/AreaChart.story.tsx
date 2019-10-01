@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
-import { object, color, number, select } from '@storybook/addon-knobs';
+import { object, number, select } from '@storybook/addon-knobs';
 
 import {
   multiDateData,

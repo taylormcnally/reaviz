@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { RadialAreaChart } from './RadialAreaChart';
 import { medDateData } from '../../demo';
 import { RadialAreaSeries, RadialArea } from './RadialAreaSeries';
-import { number, boolean, object, array, select } from '@storybook/addon-knobs';
+import { number, boolean, object, select } from '@storybook/addon-knobs';
 import {
   RadialAxis,
   RadialAxisTickSeries,

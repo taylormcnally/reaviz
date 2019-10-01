@@ -10,7 +10,7 @@ import {
   simpleSankeyNodes,
   simpleSankeyLinks
 } from '../../demo';
-import { select, object, number, array } from '@storybook/addon-knobs';
+import { select, object, number } from '@storybook/addon-knobs';
 import { schemes } from '../common/color';
 
 const colorScheme = chroma

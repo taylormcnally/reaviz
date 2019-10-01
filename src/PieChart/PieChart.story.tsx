@@ -1,7 +1,5 @@
 import React, { useState, Fragment } from 'react';
 import { storiesOf } from '@storybook/react';
-import chroma from 'chroma-js';
-
 import { PieChart } from './PieChart';
 import { categoryData, randomNumber, browserData } from '../../demo';
 import { PieArcSeries } from './PieArcSeries';

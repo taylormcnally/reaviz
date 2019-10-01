@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import { timeDay } from 'd3-time';
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
-import { object, color, number, select } from '@storybook/addon-knobs';
+import { object, number, select } from '@storybook/addon-knobs';
 
 import {
   multiDateData,
