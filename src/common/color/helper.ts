@@ -57,13 +57,14 @@ export const getColor = (props: Partial<ColorHelperProps>) => {
     scale: scaleOrdinal,
     ...props
   };
+
   if (typeof colorScheme === 'string' && schemes[colorScheme]) {
     colorScheme = schemes[colorScheme];
   }
 
   if (Array.isArray(colorScheme)) {
     if (!domain) {
-      if (isMultiSeries) {
+      if (isMultiSeries && Array.isArray(data)) {
         const maxIdx = maxIndex(data, d => d.data.length);
         const maxVal = data[maxIdx];
         data = maxVal.data;
@@ -75,9 +76,9 @@ export const getColor = (props: Partial<ColorHelperProps>) => {
     key = key !== undefined ? key : point[attribute];
 
     return scale(colorScheme).domain(domain)(key);
-  } else if (typeof colorScheme === 'string') {
-    return colorScheme;
+  } else if (typeof colorScheme === 'function') {
+    return colorScheme(point, index!, active);
   } else {
-    return colorScheme(point, index, active);
+    return colorScheme;
   }
 };
