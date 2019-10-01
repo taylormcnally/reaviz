@@ -375,6 +375,10 @@ export class Bar extends Component<BarProps, BarState> {
     const stroke = color(data, barIndex);
     const coords = this.getCoords();
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
+    const rangeLineColor = (rangeLines && rangeLines.props.color) || stroke;
+    const rangeLineColorShade = active
+      ? chroma(rangeLineColor).brighten(0.5)
+      : rangeLineColor;
     const index = groupIndex !== undefined ? groupIndex : barIndex;
     const placement = layout === 'vertical' ? 'top' : 'right';
     const isVertical = this.getIsVertical();
@@ -390,7 +394,7 @@ export class Bar extends Component<BarProps, BarState> {
             index={index}
             data={data}
             scale={scale}
-            color={currentColorShade}
+            color={rangeLineColorShade}
             barCount={barCount}
             animated={animated}
             layout={layout}
