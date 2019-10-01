@@ -59,7 +59,6 @@
   },
   "homepage": "https://github.com/jask-oss/reaviz#readme",
   "dependencies": {
-    "@storybook/addon-google-analytics": "^5.2.1",
     "big-integer": "^1.6.45",
     "calculate-size": "^1.1.1",
     "chroma-js": "^2.0.6",
@@ -98,6 +97,7 @@
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
+    "@storybook/addon-google-analytics": "^5.2.1",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
@@ -110,7 +110,6 @@
     "@storybook/addon-docs": "^5.2.1",
     "@storybook/addon-info": "^5.2.1",
     "@storybook/addon-knobs": "^5.2.1",
-    "@storybook/addon-storysource": "^5.2.1",
     "@storybook/addons": "^5.2.1",
     "@storybook/react": "^5.2.1",
     "@storybook/storybook-deployer": "^2.8.1",

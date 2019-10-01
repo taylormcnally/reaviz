@@ -4,7 +4,6 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { themes } from '@storybook/theming';
 import { withInfo } from '@storybook/addon-info';
 import ReavizLogo from './assets/reaviz.svg';
-import 'rdk/dist/index.css';
 
 // Customize the UI a bit
 addParameters({
@@ -13,22 +12,16 @@ addParameters({
     panelPosition: 'right',
     theme: {
       ...themes.dark,
-      animation: true,
       brandImage: ReavizLogo,
       brandTitle: 'REAVIZ',
-      url: 'https://jask-oss.github.io/reaviz/'
+      url: 'https://reaviz.io'
     }
   },
 });
 
 // Custom center decorator that supports docs extensions
 const CenterDecorator = storyFn => (
-  <div style={{
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }} className="container">
+  <div className="container">
     {storyFn()}
   </div>
 );
