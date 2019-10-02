@@ -4,7 +4,7 @@ import { generateDate, randomNumber } from './utils';
 
 const generateData = (count, minVal = 1, maxVal = 50) =>
   range(count)
-    .map((i: number) => ({
+    .map(i => ({
       id: (i + 1).toString(),
       key: generateDate(i),
       data: randomNumber(minVal, maxVal)
@@ -20,7 +20,7 @@ const generateBinnedData = (
   dataKeyToZero = ''
 ) =>
   range(count)
-    .map((i: number) => ({
+    .map(i => ({
       key: generateDate(i).toLocaleDateString(),
       data: [
         {
@@ -125,7 +125,7 @@ export const singleDateBigIntData = [
 ];
 
 export const longMultiDateData = range(25)
-  .map((i: number) => ({
+  .map(i => ({
     key: `Series-${i + 1}`,
     data: generateData(15).map(({ id, ...rest }) => ({ ...rest }))
   }))
