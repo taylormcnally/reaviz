@@ -541,6 +541,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
               bar={
                 <Bar
                   {...StackedNormalizedBarSeries.defaultProps.bar}
+                  key="stacked-normalized-bar"
                   rx={rx}
                   ry={ry}
                   rounded={rounded}
@@ -593,6 +594,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
               bar={
                 <Bar
                   {...MarimekkoBarSeries.defaultProps.bar}
+                  key="marimekko-bar"
                   rx={rx}
                   ry={ry}
                   rounded={rounded}
