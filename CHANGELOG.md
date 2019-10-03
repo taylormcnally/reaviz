@@ -1,3 +1,10 @@
+# 5.0.1 - 10/3/19
+- [Fix] esm module in rollup config
+- [Chore] Update depedencies
+- [Chore] Minor TypeScript strict fixes
+- [Chore] Add storybook title addon
+- [Chore] More storybook improvements 
+
 # 5.0.0 - 10/1/19
 - [BREAKING] Remove need to import CSS manually
 - [BREAKING] Normalize `getColor` internal method and various code cleanups around that
