@@ -14,17 +14,17 @@ export default [
       {
         file: pkg.browser,
         format: 'umd',
-        name: 'reaviz',
+        name: 'reaviz'
       },
       {
         file: pkg.main,
         format: 'cjs',
-        name: 'reaviz',
+        name: 'reaviz'
       },
       {
         file: pkg.module,
-        format: 'es',
-      },
+        format: 'esm'
+      }
     ],
     plugins: [
       external({
@@ -34,9 +34,7 @@ export default [
         // extract: true,
         modules: true,
         writeDefinitions: true,
-        plugins: [
-          autoprefixer()
-        ]
+        plugins: [autoprefixer()]
       }),
       typescript({
         clean: true,
