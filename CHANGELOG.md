@@ -1,5 +1,8 @@
+# 5.0.2 - 10/3/19
+- [Fix] Fix Map causing app crash [Issue #94](https://github.com/jask-oss/reaviz/issues/94)
+- [Fix] Fix Reaviz giving missing declaration file error after version update [Issue #95](https://github.com/jask-oss/reaviz/issues/95)
+  
 # 5.0.1 - 10/3/19
-- [Fix] esm module in rollup config
 - [Chore] Update depedencies
 - [Chore] Minor TypeScript strict fixes
 - [Chore] Add storybook title addon
