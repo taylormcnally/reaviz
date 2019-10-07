@@ -14,7 +14,7 @@ import {
 } from '../common/Axis';
 import { schemes } from '../common/color';
 
-storiesOf('Charts/Area/Radial', module)
+storiesOf('Demos|Area Chart/Radial', module)
   .add(
     'Simple',
     () => {
@@ -85,7 +85,7 @@ storiesOf('Charts/Area/Radial', module)
     </div>
   ));
 
-storiesOf('Charts/Line/Radial', module).add(
+storiesOf('Demos|Line/Radial', module).add(
   'Simple',
   () => {
     const innerRadius = number('Inner Radius', 80);

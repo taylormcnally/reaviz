@@ -22,7 +22,7 @@ import {
 import { symbolStar, symbol } from 'd3-shape';
 import { schemes } from '../common/color';
 
-storiesOf('Charts/Scatter Plot/Linear', module)
+storiesOf('Demos|Scatter Plot/Linear', module)
   .add(
     'Simple',
     () => {

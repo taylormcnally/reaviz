@@ -12,7 +12,7 @@ import {
   LinearXAxisTickLabel
 } from '../Axis';
 
-storiesOf('Charts/Zoom Pan', module)
+storiesOf('Demos|Zoom Pan', module)
   .add('Line', () => (
     <LineChart
       width={450}

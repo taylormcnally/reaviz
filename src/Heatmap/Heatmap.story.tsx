@@ -15,7 +15,7 @@ import { number, object, select } from '@storybook/addon-knobs';
 import { HeatmapSeries } from './HeatmapSeries';
 import { schemes } from '../common/color';
 
-storiesOf('Charts/Heatmap', module)
+storiesOf('Demos|Heatmap', module)
   .add(
     'Basic',
     () => {

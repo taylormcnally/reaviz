@@ -14,6 +14,7 @@ module.exports = async ({ config, mode }) => ({
         test: /\.(ts|tsx|mdx|js|jsx)$/,
         include: [
           resolve(__dirname, '../src'),
+          resolve(__dirname, '../docs'),
           resolve(__dirname, '../demo')
         ],
         use: [
@@ -74,6 +75,7 @@ module.exports = async ({ config, mode }) => ({
     modules: [
       ...config.resolve.modules,
       resolve(__dirname, '../src'),
+      resolve(__dirname, '../docs'),
       resolve(__dirname, '../demo')
     ],
     extensions: [

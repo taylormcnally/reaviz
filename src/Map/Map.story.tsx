@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { Map } from './Map';
 import { MapMarker } from './MapMarker';
 
-storiesOf('Charts/Map', module)
+storiesOf('Demos|Map', module)
   .add('Simple', () => <Map height={350} width={500} />)
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>

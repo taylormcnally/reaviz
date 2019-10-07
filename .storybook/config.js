@@ -31,8 +31,13 @@ addDecorator(withInfo);
 addDecorator(withKnobs);
 addDecorator(CenterDecorator);
 
-// Grep src for .story file extensions
-const req = require.context('../src', true, /\.story\.tsx/);
-const loadStories = () => req.keys().forEach(filename => req(filename));
+const loadStories = () => {
+  // Load welcome first
+  require('../docs/Welcome.story.tsx');
+
+  // Grep src for .story file extensions
+  const req = require.context('../src', true, /\.story\.tsx/);
+  req.keys().forEach(filename => req(filename));
+}
 
 configure(loadStories, module);

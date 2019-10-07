@@ -44,7 +44,7 @@ import { formatValue } from '../common/utils';
 import { Gradient, GradientStop } from '../common/Gradient';
 import { schemes } from '../common/color';
 
-storiesOf('Charts/Bar/Vertical/Single Series', module)
+storiesOf('Demos|Bar Chart/Vertical/Single Series', module)
   .add(
     'Simple',
     () => {
@@ -220,7 +220,7 @@ storiesOf('Charts/Bar/Vertical/Single Series', module)
     { options: { showPanel: true } }
   );
 
-storiesOf('Charts/Bar/Vertical/Histogram', module)
+storiesOf('Demos|Bar Chart/Vertical/Histogram', module)
   .add(
     'Dates',
     () => {
@@ -283,7 +283,7 @@ storiesOf('Charts/Bar/Vertical/Histogram', module)
     { options: { showPanel: true } }
   );
 
-storiesOf('Charts/Bar/Vertical/Multi Series', module)
+storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
   .add(
     'Simple',
     () => {
@@ -611,7 +611,7 @@ storiesOf('Charts/Bar/Vertical/Multi Series', module)
     { options: { showPanel: true } }
   );
 
-storiesOf('Charts/Bar/Horizontal/Single Series', module)
+storiesOf('Demos|Bar Chart/Horizontal/Single Series', module)
   .add(
     'Simple',
     () => {
@@ -741,7 +741,7 @@ storiesOf('Charts/Bar/Horizontal/Single Series', module)
     />
   ));
 
-storiesOf('Charts/Bar/Horizontal/Multi Series', module)
+storiesOf('Demos|Bar Chart/Horizontal/Multi Series', module)
   .add('Simple', () => (
     <BarChart
       width={500}
@@ -899,7 +899,7 @@ storiesOf('Charts/Bar/Horizontal/Multi Series', module)
     />
   ));
 
-storiesOf('Charts/Bar/Gridlines', module)
+storiesOf('Demos|Bar Chart/Gridlines', module)
   .add('All Axes', () => (
     <BarChart
       width={350}

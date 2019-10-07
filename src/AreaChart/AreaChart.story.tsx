@@ -33,7 +33,7 @@ import { Stripes } from '../common/Mask';
 import { ChartDataShape } from '../common/data';
 import { schemes } from '../common/color';
 
-storiesOf('Charts/Area/Single Series', module)
+storiesOf('Demos|Area Chart/Single Series', module)
   .add(
     'Simple',
     () => {
@@ -147,7 +147,7 @@ storiesOf('Charts/Area/Single Series', module)
     <AreaChart width={350} height={250} data={singleDateBigIntData} />
   ));
 
-storiesOf('Charts/Area/Multi Series', module)
+storiesOf('Demos|Area Chart/Multi Series', module)
   .add(
     'Simple',
     () => {
@@ -239,7 +239,7 @@ storiesOf('Charts/Area/Multi Series', module)
     { options: { showPanel: true } }
   );
 
-storiesOf('Charts/Area/Gridlines', module)
+storiesOf('Demos|Area Chart/Gridlines', module)
   .add('All Axes', () => (
     <AreaChart
       width={350}
@@ -265,7 +265,7 @@ storiesOf('Charts/Area/Gridlines', module)
     />
   ));
 
-storiesOf('Charts/Area/Circle Series', module)
+storiesOf('Demos|Area Chart/Circle Series', module)
   .add('On', () => (
     <AreaChart
       width={350}

@@ -27,7 +27,7 @@ import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
 import { schemes } from '../common/color';
 
-storiesOf('Charts/Line/Single Series', module)
+storiesOf('Demos|Line/Single Series', module)
   .add(
     'Simple',
     () => {
@@ -134,7 +134,7 @@ storiesOf('Charts/Line/Single Series', module)
   ))
   .add('Live Updating', () => <LiveUpdatingStory />);
 
-storiesOf('Charts/Line/Multi Series', module)
+storiesOf('Demos|Line/Multi Series', module)
   .add(
     'Simple',
     () => {
@@ -262,7 +262,7 @@ storiesOf('Charts/Line/Multi Series', module)
     { options: { showPanel: true } }
   );
 
-storiesOf('Charts/Line/Gridlines', module)
+storiesOf('Demos|Line/Gridlines', module)
   .add('All Axes', () => (
     <LineChart
       width={350}
@@ -288,7 +288,7 @@ storiesOf('Charts/Line/Gridlines', module)
     />
   ));
 
-storiesOf('Charts/Line/Circle Series', module)
+storiesOf('Demos|Line/Circle Series', module)
   .add('On', () => (
     <LineChart
       width={350}
