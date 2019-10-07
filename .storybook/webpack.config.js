@@ -1,5 +1,6 @@
 const { resolve } = require('path');
 const autoprefixer = require('autoprefixer');
+const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin');
 
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
@@ -11,19 +12,42 @@ module.exports = async ({ config, mode }) => ({
     rules: [
       ...config.module.rules,
       {
-        test: /\.(ts|tsx|mdx|js|jsx)$/,
+        test: /\.(ts|tsx|js|jsx)$/,
         include: [
           resolve(__dirname, '../src'),
           resolve(__dirname, '../docs'),
           resolve(__dirname, '../demo')
         ],
         use: [
-          require.resolve('babel-loader'),
+          'babel-loader',
           ...(mode === 'PRODUCTION' ? [require.resolve('react-docgen-typescript-loader')] : [])
         ]
       },
       {
-        test: /\.story\.(ts|tsx|mdx|js|jsx)$/,
+        test: /\.story\.mdx$/,
+        include: [
+          resolve(__dirname, '../src'),
+          resolve(__dirname, '../docs'),
+          resolve(__dirname, '../demo')
+        ],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: ['@babel/plugin-transform-react-jsx']
+            }
+          },
+          {
+            loader: '@mdx-js/loader',
+            options: {
+              compilers: [createCompiler({})]
+            }
+          }
+        ],
+      },
+      {
+        test: /\.story\.(js|jsx|ts|tsx)$/,
+        exclude: [/node_modules/],
         loaders: [
           {
             loader: require.resolve('@storybook/source-loader'),
@@ -83,6 +107,7 @@ module.exports = async ({ config, mode }) => ({
       '.ts',
       '.tsx',
       '.js',
+      '.jsx',
       '.mdx'
     ]
   }

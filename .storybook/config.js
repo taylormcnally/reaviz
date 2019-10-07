@@ -4,6 +4,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { themes } from '@storybook/theming';
 import { withInfo } from '@storybook/addon-info';
 import ReavizLogo from './assets/reaviz.svg';
+import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
 
 // Customize the UI a bit
 addParameters({
@@ -16,6 +17,13 @@ addParameters({
       brandTitle: 'REAVIZ',
       url: 'https://reaviz.io'
     }
+  },
+});
+
+addParameters({
+  docs: {
+    container: DocsContainer,
+    page: DocsPage
   },
 });
 
@@ -32,12 +40,12 @@ addDecorator(withKnobs);
 addDecorator(CenterDecorator);
 
 const loadStories = () => {
-  // Load welcome first
-  require('../docs/Welcome.story.tsx');
-
-  // Grep src for .story file extensions
-  const req = require.context('../src', true, /\.story\.tsx/);
-  req.keys().forEach(filename => req(filename));
+  return [
+    // Ensure we load Welcome First
+    require.context('../docs', true, /Intro.story.mdx/),
+    require.context('../docs', true, /GettingStarted.story.mdx/),
+    require.context('../src', true, /\.story\.(js|jsx|ts|tsx|mdx)$/)
+  ];
 }
 
-configure(loadStories, module);
+configure(loadStories(), module);
