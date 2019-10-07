@@ -20,7 +20,7 @@ addParameters({
         return 1;
       }
 
-      return a[1].id.localeCompare(b[1].id);
+      return 0;
     },
     theme: {
       ...themes.dark,

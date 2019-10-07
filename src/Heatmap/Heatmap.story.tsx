@@ -14,8 +14,14 @@ import { SequentialLegend } from '../common/legends/SequentialLegend/SequentialL
 import { number, object, select } from '@storybook/addon-knobs';
 import { HeatmapSeries } from './HeatmapSeries';
 import { schemes } from '../common/color';
+import { getXScale, getYScale } from '../common/scales';
+import {
+  LinearYAxis,
+  LinearYAxisTickSeries,
+  LinearYAxisTickLabel
+} from '../common/Axis';
 
-storiesOf('Demos|Heatmap', module)
+storiesOf('Demos|Heatmap/Simple', module)
   .add(
     'Basic',
     () => {
@@ -44,6 +50,49 @@ storiesOf('Demos|Heatmap', module)
       />
     </div>
   ))
+  .add('Multi Axis', () => {
+    const scale = getYScale({
+      type: 'category',
+      height: 190,
+      data: [
+        {
+          key: 'Before',
+          data: 0,
+          y: 'Before'
+        },
+        {
+          key: 'After',
+          data: 0,
+          y: 'After'
+        }
+      ]
+    });
+
+    return (
+      <Heatmap
+        height={250}
+        width={400}
+        margins={0}
+        data={heatmapSimpleData}
+        secondaryAxis={[
+          <LinearYAxis
+            type="category"
+            scale={scale}
+            axisLine={null}
+            position="end"
+            tickSeries={
+              <LinearYAxisTickSeries
+                line={null}
+                label={<LinearYAxisTickLabel padding={10} position="end" />}
+              />
+            }
+          />
+        ]}
+      />
+    );
+  });
+
+storiesOf('Demos|Heatmap/Calendar', module)
   .add(
     'Year Calendar',
     () => {

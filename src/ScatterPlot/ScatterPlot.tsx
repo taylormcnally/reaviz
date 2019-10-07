@@ -35,6 +35,7 @@ interface ScatterPlotProps extends ChartProps {
   gridlines: JSX.Element | null;
   brush: JSX.Element | null;
   zoomPan: JSX.Element | null;
+  secondaryAxis?: JSX.Element[];
 }
 
 interface ScatterPlotState {
@@ -140,7 +141,15 @@ export class ScatterPlot extends Component<ScatterPlotProps, ScatterPlotState> {
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartHeight, chartWidth, id, updateAxes } = containerProps;
-    const { series, xAxis, yAxis, gridlines, brush, zoomPan } = this.props;
+    const {
+      series,
+      xAxis,
+      yAxis,
+      gridlines,
+      brush,
+      zoomPan,
+      secondaryAxis
+    } = this.props;
     const { isZoomed, zoomDomain, preventAnimation } = this.state;
     const data = this.getData(this.props.data);
     const { yScale, xScale } = this.getScales(data, chartHeight, chartWidth);
@@ -173,6 +182,16 @@ export class ScatterPlot extends Component<ScatterPlotProps, ScatterPlotState> {
           scale={yScale}
           onDimensionsChange={bind(updateAxes, this, 'vertical')}
         />
+        {secondaryAxis &&
+          secondaryAxis.map((axis, i) => (
+            <CloneElement<LinearAxisProps>
+              key={i}
+              element={axis}
+              height={chartHeight}
+              width={chartWidth}
+              onDimensionsChange={bind(updateAxes, this, 'horizontal')}
+            />
+          ))}
         {containerProps.chartSized && (
           <CloneElement<ChartBrushProps>
             element={brush}

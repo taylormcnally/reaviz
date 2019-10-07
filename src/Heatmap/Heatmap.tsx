@@ -31,6 +31,7 @@ export interface HeatmapProps extends ChartProps {
   series: JSX.Element;
   yAxis: JSX.Element;
   xAxis: JSX.Element;
+  secondaryAxis?: JSX.Element[];
 }
 
 export class Heatmap extends Component<HeatmapProps> {
@@ -94,7 +95,7 @@ export class Heatmap extends Component<HeatmapProps> {
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartWidth, chartHeight, updateAxes, id } = containerProps;
-    const { yAxis, xAxis, series } = this.props;
+    const { yAxis, xAxis, series, secondaryAxis } = this.props;
     const { xScale, yScale, data } = this.getScalesData(
       chartHeight,
       chartWidth
@@ -116,6 +117,16 @@ export class Heatmap extends Component<HeatmapProps> {
           scale={yScale}
           onDimensionsChange={bind(updateAxes, this, 'vertical')}
         />
+        {secondaryAxis &&
+          secondaryAxis.map((axis, i) => (
+            <CloneElement<LinearAxisProps>
+              key={i}
+              element={axis}
+              height={chartHeight}
+              width={chartWidth}
+              onDimensionsChange={bind(updateAxes, this, 'horizontal')}
+            />
+          ))}
         <CloneElement<HeatmapSeriesProps>
           element={series}
           id={`heat-series-${id}`}

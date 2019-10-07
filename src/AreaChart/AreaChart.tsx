@@ -39,6 +39,7 @@ export interface AreaChartProps extends ChartProps {
   gridlines: JSX.Element | null;
   brush: JSX.Element | null;
   zoomPan: JSX.Element | null;
+  secondaryAxis?: JSX.Element[];
 }
 
 interface AreaChartState {
@@ -152,7 +153,15 @@ export class AreaChart extends Component<AreaChartProps, AreaChartState> {
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartHeight, chartWidth, id, updateAxes } = containerProps;
-    const { series, yAxis, xAxis, gridlines, brush, zoomPan } = this.props;
+    const {
+      series,
+      yAxis,
+      xAxis,
+      gridlines,
+      brush,
+      zoomPan,
+      secondaryAxis
+    } = this.props;
     const { zoomDomain, preventAnimation, isZoomed } = this.state;
 
     const seriesType = series.props.type;
@@ -196,6 +205,16 @@ export class AreaChart extends Component<AreaChartProps, AreaChartState> {
           scale={yScale}
           onDimensionsChange={bind(updateAxes, this, 'vertical')}
         />
+        {secondaryAxis &&
+          secondaryAxis.map((axis, i) => (
+            <CloneElement<LinearAxisProps>
+              key={i}
+              element={axis}
+              height={chartHeight}
+              width={chartWidth}
+              onDimensionsChange={bind(updateAxes, this, 'horizontal')}
+            />
+          ))}
         {containerProps.chartSized && (
           <CloneElement<ChartBrushProps>
             element={brush}

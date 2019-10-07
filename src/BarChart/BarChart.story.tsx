@@ -962,7 +962,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
             bar={
               <Bar
                 rounded={false}
-                width={25}
+                width={10}
                 gradient={
                   <Gradient
                     stops={[
@@ -998,7 +998,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
             }
           />
         }
-        xAxisSecondary={
+        secondaryAxis={[
           <LinearYAxis
             orientation="horizontal"
             type="category"
@@ -1010,7 +1010,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
               />
             }
           />
-        }
+        ]}
         yAxis={
           <LinearXAxis
             type="category"
@@ -1093,7 +1093,14 @@ storiesOf('Demos|Bar Chart/Axis', module)
             }
           />
         }
-        yAxisSecondary={
+        xAxis={
+          <LinearXAxis
+            type="category"
+            position="center"
+            tickSeries={<LinearXAxisTickSeries line={null} label={null} />}
+          />
+        }
+        secondaryAxis={[
           <LinearYAxis
             type="category"
             position="start"
@@ -1113,116 +1120,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
               />
             }
           />
-        }
-        xAxis={
-          <LinearXAxis
-            type="category"
-            position="center"
-            tickSeries={<LinearXAxisTickSeries line={null} label={null} />}
-          />
-        }
-      />
-    );
-  })
-  .add('Left + Right Axis Bar Chart', () => {
-    const scale = getYScale({
-      type: 'category',
-      height: 200,
-      data: [
-        {
-          key: 'Closed',
-          data: 0,
-          y: 'Closed'
-        },
-        {
-          key: 'Opened',
-          data: 0,
-          y: 'Opened'
-        }
-      ],
-      isMultiSeries: false,
-      isDiverging: true
-    });
-
-    return (
-      <StackedBarChart
-        width={450}
-        height={200}
-        margins={0}
-        data={binnedDateData}
-        gridlines={<GridlineSeries line={<Gridline direction="y" />} />}
-        series={
-          <StackedBarSeries
-            type="stackedDiverging"
-            colorScheme={['#ACB7C9', '#418AD7']}
-            bar={
-              <Bar
-                rounded={false}
-                width={25}
-                gradient={
-                  <Gradient
-                    stops={[
-                      <GradientStop
-                        offset="5%"
-                        stopOpacity={0.1}
-                        key="start"
-                      />,
-                      <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
-                    ]}
-                  />
-                }
-                rangeLines={<RangeLines type="top" strokeWidth={3} />}
-              />
-            }
-          />
-        }
-        yAxis={
-          <LinearYAxis
-            roundDomains={true}
-            position="end"
-            axisLine={null}
-            tickSeries={
-              <LinearYAxisTickSeries
-                line={null}
-                label={
-                  <LinearYAxisTickLabel
-                    padding={5}
-                    position="end"
-                    format={d => `${d < 0 ? d * -1 : d}`}
-                  />
-                }
-              />
-            }
-          />
-        }
-        yAxisSecondary={
-          <LinearYAxis
-            type="category"
-            position="start"
-            axisLine={null}
-            scale={scale}
-            tickSeries={
-              <LinearYAxisTickSeries
-                line={null}
-                label={
-                  <LinearYAxisTickLabel
-                    padding={20}
-                    position="start"
-                    rotation={270}
-                    align="start"
-                  />
-                }
-              />
-            }
-          />
-        }
-        xAxis={
-          <LinearXAxis
-            type="category"
-            position="center"
-            tickSeries={<LinearXAxisTickSeries line={null} label={null} />}
-          />
-        }
+        ]}
       />
     );
   });

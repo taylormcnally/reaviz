@@ -43,11 +43,10 @@ export interface BarChartProps extends ChartProps {
   data: ChartDataShape[];
   series: JSX.Element;
   yAxis: JSX.Element;
-  yAxisSecondary: JSX.Element;
-  xAxisSecondary: JSX.Element;
   xAxis: JSX.Element;
   gridlines: JSX.Element | null;
   brush: JSX.Element | null;
+  secondaryAxis?: JSX.Element[];
 }
 
 export class BarChart extends Component<BarChartProps> {
@@ -279,8 +278,7 @@ export class BarChart extends Component<BarChartProps> {
       yAxis,
       brush,
       gridlines,
-      yAxisSecondary,
-      xAxisSecondary
+      secondaryAxis
     } = this.props;
     const { xScale, xScale1, yScale, data } = this.getScalesAndData(
       chartHeight,
@@ -315,18 +313,6 @@ export class BarChart extends Component<BarChartProps> {
             isVertical ? 'horizontal' : 'vertical'
           )}
         />
-        {xAxisSecondary && (
-          <CloneElement<LinearAxisProps>
-            element={xAxisSecondary}
-            height={chartHeight}
-            width={chartWidth}
-            onDimensionsChange={bind(
-              updateAxes,
-              this,
-              isVertical ? 'horizontal' : 'vertical'
-            )}
-          />
-        )}
         <CloneElement<LinearAxisProps>
           element={yAxis}
           height={chartHeight}
@@ -338,18 +324,16 @@ export class BarChart extends Component<BarChartProps> {
             isVertical ? 'vertical' : 'horizontal'
           )}
         />
-        {yAxisSecondary && (
-          <CloneElement<LinearAxisProps>
-            element={yAxisSecondary}
-            height={chartHeight}
-            width={chartWidth}
-            onDimensionsChange={bind(
-              updateAxes,
-              this,
-              isVertical ? 'vertical' : 'horizontal'
-            )}
-          />
-        )}
+        {secondaryAxis &&
+          secondaryAxis.map((axis, i) => (
+            <CloneElement<LinearAxisProps>
+              key={i}
+              element={axis}
+              height={chartHeight}
+              width={chartWidth}
+              onDimensionsChange={bind(updateAxes, this, 'horizontal')}
+            />
+          ))}
         {containerProps.chartSized && (
           <CloneElement<ChartBrushProps>
             element={brush}
