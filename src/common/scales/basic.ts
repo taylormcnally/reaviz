@@ -8,7 +8,7 @@ import { uniqueBy } from '../utils/array';
 
 interface ScaleConfig {
   type: 'category' | 'value' | 'time' | 'duration';
-  roundDomains: boolean;
+  roundDomains?: boolean;
   data: any[];
   domain?: any[];
   padding?: number;
@@ -66,12 +66,12 @@ export function getXScale({
  */
 export function getYScale({
   type,
-  roundDomains,
   height,
   data,
   domain,
-  scaled,
-  padding,
+  roundDomains = false,
+  scaled = false,
+  padding = 0,
   isMultiSeries = false,
   isDiverging = false
 }: ScaleConfig) {
@@ -92,7 +92,7 @@ export function getYScale({
 
     scale = scaleBand()
       .rangeRound([height!, 0])
-      .padding(padding || 0)
+      .padding(padding)
       .domain(domain as ReadonlyArray<any>);
   }
 
