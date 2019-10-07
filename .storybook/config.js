@@ -11,6 +11,17 @@ addParameters({
   options: {
     showPanel: false,
     panelPosition: 'right',
+    storySort: (a, b) => {
+      if (a[0].includes('docs-')) {
+        if (a[0].includes('intro-')) {
+          return -1;
+        }
+
+        return 1;
+      }
+
+      return a[1].id.localeCompare(b[1].id);
+    },
     theme: {
       ...themes.dark,
       brandImage: ReavizLogo,
