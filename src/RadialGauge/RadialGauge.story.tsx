@@ -6,7 +6,7 @@ import { categoryData } from '../../demo';
 import { RadialGaugeSeries } from './RadialGaugeSeries';
 import { max } from 'd3-array';
 
-storiesOf('Demos|Radial Gauge', module)
+storiesOf('Demos|Gauge/Radial', module)
   .add(
     'Single',
     () => {
