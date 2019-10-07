@@ -13,6 +13,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
     "noUnusedLocals": true,

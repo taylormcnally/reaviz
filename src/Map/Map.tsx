@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { geoMercator, geoPath, GeoProjection, GeoPath } from 'd3-geo';
-import { feature } from 'topojson-client';
 import {
   ChartProps,
   ChartContainer,
@@ -10,33 +9,17 @@ import classNames from 'classnames';
 import { CloneElement } from '../common/utils/children';
 import { MapMarkerProps } from './MapMarker';
 import { motion } from 'framer-motion';
-import geojson from 'world-atlas/countries-110m.json';
 import css from './Map.module.scss';
 
 interface MapProps extends ChartProps {
   markers?: JSX.Element[];
+  data: any;
 }
 
-interface MapState {
-  worldData?: any;
-}
-
-export class Map extends Component<MapProps, MapState> {
-  state: MapState = {};
-
-  componentDidMount() {
-    // Using 'countries' is less performant than 'land' but we want to be able
-    // to filter and disect on specific shapes
-    const worldData = feature(geojson, geojson.objects.countries);
-
-    this.setState({
-      worldData
-    });
-  }
-
+export class Map extends Component<MapProps> {
   getProjection({ chartWidth, chartHeight }: ChartContainerChildProps) {
     return geoMercator()
-      .fitSize([chartWidth, chartHeight], this.state.worldData)
+      .fitSize([chartWidth, chartHeight], this.props.data)
       .center([0, 35]);
   }
 
@@ -72,10 +55,9 @@ export class Map extends Component<MapProps, MapState> {
   }
 
   renderChart(containerProps: ChartContainerChildProps) {
-    const { markers } = this.props;
-    const { worldData } = this.state;
+    const { markers, data } = this.props;
 
-    if (!worldData) {
+    if (!data) {
       return null;
     }
 
@@ -91,7 +73,7 @@ export class Map extends Component<MapProps, MapState> {
           opacity: 1
         }}
       >
-        {worldData.features.map((point, index) =>
+        {data.features.map((point, index) =>
           this.renderCountry(point, index, path)
         )}
         {markers &&

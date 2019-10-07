@@ -81,9 +81,7 @@
     "rdk": "^3.0.0",
     "react-countup": "^4.2.2",
     "react-sizeme": "^2.6.7",
-    "topojson-client": "^3.0.1",
-    "transformation-matrix": "^2.1.0",
-    "world-atlas": "^2.0.2"
+    "transformation-matrix": "^2.1.0"
   },
   "storybook-deployer": {
     "gitUsername": "amcdnl",
@@ -95,6 +93,8 @@
     "react-dom": ">=16"
   },
   "devDependencies": {
+    "world-atlas": "^2.0.2",
+    "topojson-client": "^3.0.1",
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
     "@babel/plugin-proposal-class-properties": "^7.5.5",

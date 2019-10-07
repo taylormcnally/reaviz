@@ -1,3 +1,7 @@
+# Master - 10/7/19
+- [Feature] Add ability to pass in data to map and decouple it from build
+- [Chore] Start adding new docs
+
 # 5.0.2 - 10/3/19
 - [Fix] Fix Map causing app crash [Issue #94](https://github.com/jask-oss/reaviz/issues/94)
 - [Fix] Fix Reaviz giving missing declaration file error after version update [Issue #95](https://github.com/jask-oss/reaviz/issues/95)
