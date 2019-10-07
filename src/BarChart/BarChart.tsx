@@ -43,6 +43,8 @@ export interface BarChartProps extends ChartProps {
   data: ChartDataShape[];
   series: JSX.Element;
   yAxis: JSX.Element;
+  yAxisSecondary: JSX.Element;
+  xAxisSecondary: JSX.Element;
   xAxis: JSX.Element;
   gridlines: JSX.Element | null;
   brush: JSX.Element | null;
@@ -271,7 +273,15 @@ export class BarChart extends Component<BarChartProps> {
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartHeight, chartWidth, id, updateAxes } = containerProps;
-    const { series, xAxis, yAxis, brush, gridlines } = this.props;
+    const {
+      series,
+      xAxis,
+      yAxis,
+      brush,
+      gridlines,
+      yAxisSecondary,
+      xAxisSecondary
+    } = this.props;
     const { xScale, xScale1, yScale, data } = this.getScalesAndData(
       chartHeight,
       chartWidth
@@ -305,6 +315,18 @@ export class BarChart extends Component<BarChartProps> {
             isVertical ? 'horizontal' : 'vertical'
           )}
         />
+        {xAxisSecondary && (
+          <CloneElement<LinearAxisProps>
+            element={xAxisSecondary}
+            height={chartHeight}
+            width={chartWidth}
+            onDimensionsChange={bind(
+              updateAxes,
+              this,
+              isVertical ? 'horizontal' : 'vertical'
+            )}
+          />
+        )}
         <CloneElement<LinearAxisProps>
           element={yAxis}
           height={chartHeight}
@@ -316,6 +338,18 @@ export class BarChart extends Component<BarChartProps> {
             isVertical ? 'vertical' : 'horizontal'
           )}
         />
+        {yAxisSecondary && (
+          <CloneElement<LinearAxisProps>
+            element={yAxisSecondary}
+            height={chartHeight}
+            width={chartWidth}
+            onDimensionsChange={bind(
+              updateAxes,
+              this,
+              isVertical ? 'vertical' : 'horizontal'
+            )}
+          />
+        )}
         {containerProps.chartSized && (
           <CloneElement<ChartBrushProps>
             element={brush}
