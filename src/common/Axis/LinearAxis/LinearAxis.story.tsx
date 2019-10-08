@@ -1,18 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import {
-  largeSignalChartData,
-  categoryData,
-  binnedDateData
-} from '../../../../demo';
+import { largeSignalChartData, categoryData } from '../../../../demo';
 import { ScatterPlot } from '../../../ScatterPlot';
-import {
-  BarChart,
-  StackedBarChart,
-  StackedBarSeries,
-  RangeLines,
-  Bar
-} from '../../../BarChart';
+import { BarChart } from '../../../BarChart';
 import {
   LinearYAxis,
   LinearYAxisTickSeries,

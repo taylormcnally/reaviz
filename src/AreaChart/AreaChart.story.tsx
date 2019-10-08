@@ -10,8 +10,7 @@ import {
   singleDateBigIntData,
   randomNumber,
   nonZeroDateData,
-  longMultiDateData,
-  binnedDateData
+  longMultiDateData
 } from '../../demo';
 import { AreaChart } from './AreaChart';
 import { StackedNormalizedAreaChart } from './StackedNormalizedAreaChart';

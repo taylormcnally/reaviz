@@ -14,7 +14,7 @@ import { SequentialLegend } from '../common/legends/SequentialLegend/SequentialL
 import { number, object, select } from '@storybook/addon-knobs';
 import { HeatmapSeries } from './HeatmapSeries';
 import { schemes } from '../common/color';
-import { getXScale, getYScale } from '../common/scales';
+import { getYScale } from '../common/scales';
 import {
   LinearYAxis,
   LinearYAxisTickSeries,
