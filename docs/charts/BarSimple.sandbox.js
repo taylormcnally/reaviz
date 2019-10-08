@@ -21,10 +21,8 @@ export const categoryData = [
   }
 ];
 
-const App = () => (
-  <div style={{ margin: '55px' }}>
+export default () => (
+  <div style={{ margin: '55px', textAlign: 'center' }}>
     <BarChart width={350} height={250} data={categoryData} />
   </div>
 );
-
-ReactDOM.render(<App />, document.getElementById('root'));
