@@ -39,4 +39,4 @@ export const Sandbox = ({ name, path, description }) => (
       </div>
     )}
   </CodeSandboxer>
-)
+);
