@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ChartInternalShallowDataShape, Direction } from '../../common/data';
 import { motion } from 'framer-motion';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
+import { BarType } from './Bar';
 
 export interface RangeLinesProps {
   height: number;
@@ -11,17 +12,18 @@ export interface RangeLinesProps {
   index: number;
   strokeWidth: number;
   scale: any;
-  type: 'top' | 'bottom';
+  position: 'top' | 'bottom';
   data: ChartInternalShallowDataShape;
   color: string;
   barCount: number;
   layout: Direction;
   animated: boolean;
+  type: BarType;
 }
 
 export class RangeLines extends Component<RangeLinesProps> {
   static defaultProps: Partial<RangeLinesProps> = {
-    type: 'top',
+    position: 'top',
     strokeWidth: 1,
     layout: 'vertical'
   };
@@ -31,7 +33,7 @@ export class RangeLines extends Component<RangeLinesProps> {
   }
 
   getEnter(rangeLineHeight: number) {
-    const { x, y, height, type, width, data } = this.props;
+    const { x, y, height, position, width, data } = this.props;
 
     const isVertical = this.getIsVertical();
     let newY = y;
@@ -39,14 +41,14 @@ export class RangeLines extends Component<RangeLinesProps> {
 
     // If its diverging and the value is negative, we
     // need to reverse the type...
-    const isTop = type === 'top';
+    const isTop = position === 'top';
     const direction = isVertical
       ? data.y < 0 && isTop
         ? 'bottom'
-        : type
+        : position
       : data.x0 < 0 && isTop
       ? 'bottom'
-      : type;
+      : position;
 
     if (isVertical) {
       if (direction === 'top') {
@@ -70,7 +72,7 @@ export class RangeLines extends Component<RangeLinesProps> {
   }
 
   getExit(rangeLineHeight: number) {
-    const { x, scale, height, width, y, type } = this.props;
+    const { x, scale, height, width, y, position, type } = this.props;
 
     const isVertical = this.getIsVertical();
     let newY = y;
@@ -78,17 +80,25 @@ export class RangeLines extends Component<RangeLinesProps> {
 
     if (isVertical) {
       const maxY = Math.max(...scale.range());
-      if (type === 'top') {
+      if (position === 'top') {
         newY = maxY;
       } else {
         newY = maxY + height - rangeLineHeight;
       }
     } else {
       const minX = Math.min(...scale.range());
-      if (type === 'top') {
+      if (position === 'top') {
         newX = minX;
       } else {
         newX = minX + width - rangeLineHeight;
+      }
+    }
+
+    if (type === 'stackedDiverging') {
+      if (isVertical) {
+        newY = newY / 2;
+      } else {
+        newX = newX / 2;
       }
     }
 

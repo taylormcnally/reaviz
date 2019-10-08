@@ -34,7 +34,7 @@ export class MarimekkoBarSeries extends Component<BarSeriesProps, {}> {
             }}
           />
         }
-        rangeLines={<RangeLines type="top" strokeWidth={3} />}
+        rangeLines={<RangeLines position="top" strokeWidth={3} />}
       />
     )
   };

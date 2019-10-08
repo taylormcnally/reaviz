@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { Bar, BarProps } from './Bar';
+import { Bar, BarProps, BarType } from './Bar';
 import {
   ChartInternalDataShape,
   ChartInternalNestedDataShape,
@@ -18,14 +18,7 @@ export interface BarSeriesProps {
   xScale1: any;
   yScale: any;
   bar: JSX.Element | JSX.Element[];
-  type:
-    | 'standard'
-    | 'grouped'
-    | 'stacked'
-    | 'stackedNormalized'
-    | 'stackedDiverging'
-    | 'marimekko'
-    | 'waterfall';
+  type: BarType;
   colorScheme: ColorSchemeType;
   animated: boolean;
   padding: number;
@@ -128,6 +121,7 @@ export class BarSeries extends Component<BarSeriesProps> {
       animated,
       isCategorical,
       layout,
+      type,
       id
     } = this.props;
 
@@ -171,6 +165,7 @@ export class BarSeries extends Component<BarSeriesProps> {
           isCategorical={isCategorical}
           color={this.getColor.bind(this)}
           layout={layout}
+          type={type}
         />
       </Fragment>
     );

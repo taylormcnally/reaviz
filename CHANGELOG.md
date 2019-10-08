@@ -1,4 +1,7 @@
 # Master
+- [WARNING] Renamed internal property `type` on  `RangeLines` to `position`
+- [Fix] Make Diverging Bar Chart animations come from center
+- [Chore] Start Adding Docs with Sandboxes
 - [Chore] Update deps
 
 # 5.1.0 - 10/7/19

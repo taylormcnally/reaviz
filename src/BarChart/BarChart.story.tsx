@@ -299,7 +299,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
 
       const gradient = hasGradient ? <Gradient /> : null;
       const rangelines = hasRangelines ? (
-        <RangeLines type="top" strokeWidth={rangeWidth} />
+        <RangeLines position="top" strokeWidth={rangeWidth} />
       ) : null;
 
       return (
@@ -350,7 +350,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       ) : null;
 
       const rangelines = hasRangelines ? (
-        <RangeLines type="top" strokeWidth={rangeWidth} />
+        <RangeLines position="top" strokeWidth={rangeWidth} />
       ) : null;
 
       return (
@@ -454,7 +454,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       ) : null;
 
       const rangelines = hasRangelines ? (
-        <RangeLines type="top" strokeWidth={rangeWidth} />
+        <RangeLines position="top" strokeWidth={rangeWidth} />
       ) : null;
 
       return (
@@ -529,7 +529,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       ) : null;
 
       const rangelines = hasRangelines ? (
-        <RangeLines type="top" strokeWidth={rangeWidth} />
+        <RangeLines position="top" strokeWidth={rangeWidth} />
       ) : null;
 
       return (
@@ -582,7 +582,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       ) : null;
 
       const rangelines = hasRangelines ? (
-        <RangeLines type="top" strokeWidth={rangeWidth} />
+        <RangeLines position="top" strokeWidth={rangeWidth} />
       ) : null;
 
       return (
@@ -880,7 +880,7 @@ storiesOf('Demos|Bar Chart/Horizontal/Multi Series', module)
                 />
               }
               rounded={false}
-              rangeLines={<RangeLines type="top" strokeWidth={3} />}
+              rangeLines={<RangeLines position="top" strokeWidth={3} />}
               tooltip={
                 <ChartTooltip
                   content={data => {
@@ -975,7 +975,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
                     ]}
                   />
                 }
-                rangeLines={<RangeLines type="top" strokeWidth={3} />}
+                rangeLines={<RangeLines position="top" strokeWidth={3} />}
               />
             }
           />
@@ -1069,7 +1069,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
                     ]}
                   />
                 }
-                rangeLines={<RangeLines type="top" strokeWidth={3} />}
+                rangeLines={<RangeLines position="top" strokeWidth={3} />}
               />
             }
           />

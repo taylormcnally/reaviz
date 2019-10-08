@@ -16,6 +16,15 @@ import {
 import { motion } from 'framer-motion';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
 
+export type BarType =
+  | 'standard'
+  | 'grouped'
+  | 'stacked'
+  | 'stackedNormalized'
+  | 'stackedDiverging'
+  | 'marimekko'
+  | 'waterfall';
+
 export type BarProps = {
   xScale: any;
   xScale1: any;
@@ -39,6 +48,7 @@ export type BarProps = {
   mask: JSX.Element | null;
   tooltip: JSX.Element | null;
   layout: Direction;
+  type: BarType;
   onClick: (event) => void;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
@@ -81,13 +91,21 @@ export class Bar extends Component<BarProps, BarState> {
   state: BarState = {};
 
   getExit({ x, y, width, height }: BarCoordinates) {
-    const { yScale, xScale } = this.props;
+    const { yScale, xScale, type } = this.props;
 
     const isVertical = this.getIsVertical();
-    const newX = isVertical ? x : Math.min(...xScale.range());
-    const newY = isVertical ? Math.max(...yScale.range()) : y;
+    let newX = isVertical ? x : Math.min(...xScale.range());
+    let newY = isVertical ? Math.max(...yScale.range()) : y;
     const newHeight = isVertical ? 0 : height;
     const newWidth = isVertical ? width : 0;
+
+    if (type === 'stackedDiverging') {
+      if (isVertical) {
+        newY = newY / 2;
+      } else {
+        newX = newX / 2;
+      }
+    }
 
     return {
       x: newX,
@@ -368,6 +386,7 @@ export class Bar extends Component<BarProps, BarState> {
       groupIndex,
       rangeLines,
       animated,
+      type,
       layout,
       mask
     } = this.props;
@@ -398,6 +417,7 @@ export class Bar extends Component<BarProps, BarState> {
             barCount={barCount}
             animated={animated}
             layout={layout}
+            type={type}
           />
         )}
         {tooltip && !tooltip.props.disabled && (

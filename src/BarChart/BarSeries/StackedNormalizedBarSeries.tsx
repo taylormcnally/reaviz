@@ -21,7 +21,7 @@ export class StackedNormalizedBarSeries extends Component<BarSeriesProps, {}> {
             ]}
           />
         }
-        rangeLines={<RangeLines type="top" strokeWidth={3} />}
+        rangeLines={<RangeLines position="top" strokeWidth={3} />}
         tooltip={
           <ChartTooltip
             content={data => {

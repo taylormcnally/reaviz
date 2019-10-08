@@ -19,13 +19,13 @@ export class StackedBarSeries extends Component<BarSeriesProps, {}> {
             ]}
           />
         }
-        rangeLines={<RangeLines type="top" strokeWidth={3} />}
+        rangeLines={<RangeLines position="top" strokeWidth={3} />}
       />
     )
   };
 
   render() {
     const { type, ...rest } = this.props;
-    return <BarSeries type="stacked" {...rest} />;
+    return <BarSeries type={type} {...rest} />;
   }
 }
