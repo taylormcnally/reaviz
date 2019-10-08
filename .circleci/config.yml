@@ -36,12 +36,6 @@ var_7: &attach_workspace
   attach_workspace:
     at: .
 
-# Publish branches
-var_8: &publish_branches_filter
-  branches:
-    only:
-      - master
-
 # Ignore branches
 var_9: &ignore_branch_filter
   branches:
@@ -137,7 +131,10 @@ workflows:
             - build_storybook
             - build_package
       - publish_storybook:
-          filters: *publish_branches_filter
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - test
       - publish_dev_npm:
