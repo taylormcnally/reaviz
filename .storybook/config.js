@@ -2,7 +2,6 @@ import React from 'react';
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { themes } from '@storybook/theming';
-import { withInfo } from '@storybook/addon-info';
 import ReavizLogo from './assets/reaviz.svg';
 import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
 
@@ -46,7 +45,6 @@ const CenterDecorator = storyFn => (
 );
 
 // Add all our decorators
-addDecorator(withInfo);
 addDecorator(withKnobs);
 addDecorator(CenterDecorator);
 

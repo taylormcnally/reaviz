@@ -128,19 +128,18 @@ workflows:
           filters: *ignore_branch_filter
           requires:
             - prepare
-      - test:
-          filters: *ignore_branch_filter
-          requires:
-            - build_package
       - build_storybook:
           filters: *ignore_branch_filter
           requires:
             - prepare
+      - test:
+          filters: *ignore_branch_filter
+          requires:
+            - build_storybook
+            - build_package
       - publish_storybook:
           filters: *publish_branches_filter
           requires:
-            - build_package
-            - build_storybook
             - test
       - publish_dev_npm:
           filters:
@@ -150,8 +149,6 @@ workflows:
             tags:
               ignore: /.*/
           requires:
-            - build_package
-            - build_storybook
             - test
       - publish_prod_npm:
           filters:
@@ -160,6 +157,4 @@ workflows:
             tags:
               only: /^v.*/
           requires:
-            - build_package
-            - build_storybook
             - test

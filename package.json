@@ -108,7 +108,6 @@
     "@mdx-js/react": "^1.5.1",
     "@storybook/addon-docs": "^5.2.3",
     "@storybook/addon-google-analytics": "^5.2.3",
-    "@storybook/addon-info": "^5.2.3",
     "@storybook/addon-knobs": "^5.2.3",
     "@storybook/addons": "^5.2.3",
     "@storybook/react": "^5.2.3",
