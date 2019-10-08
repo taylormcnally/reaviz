@@ -10,6 +10,7 @@
     "copy": "cp CNAME storybook-static/",
     "build": "rollup -c",
     "publish:dev": "node .circleci/publish-dev-builds.js",
+    "publish:tag": "node .circleci/publish-tag-builds.js",
     "test": "jest --env=jsdom",
     "prettier": "prettier --loglevel warn --write 'src/**/*.{ts,tsx,js,jsx}'"
   },

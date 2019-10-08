@@ -109,7 +109,7 @@ jobs:
       - *checkout_code
       - *attach_workspace
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-      - run: npm publish
+      - run: npm publish:tag
 
 workflows:
   version: 2
