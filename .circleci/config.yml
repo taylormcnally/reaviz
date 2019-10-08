@@ -116,17 +116,19 @@ workflows:
   build-test-deploy:
     jobs:
       - prepare:
-          filters: *ignore_branch_filter
+          filters:
+            branches:
+              ignore:
+                - "gh-pages"
+            tags:
+              only: /.*/
       - build_package:
-          filters: *ignore_branch_filter
           requires:
             - prepare
       - build_storybook:
-          filters: *ignore_branch_filter
           requires:
             - prepare
       - test:
-          filters: *ignore_branch_filter
           requires:
             - build_storybook
             - build_package
