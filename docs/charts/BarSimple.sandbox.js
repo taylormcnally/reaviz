@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart } from 'reaviz';
-import 'https://raw.githubusercontent.com/jask-oss/reaviz/master/docs/tools/styles.css';
+import '';
 
 export const categoryData = [
   {
@@ -23,6 +23,7 @@ export const categoryData = [
 
 export default () => (
   <div style={{ margin: '55px', textAlign: 'center' }}>
+    <style url="https://raw.githubusercontent.com/jask-oss/reaviz/master/docs/tools/styles.css"></style>
     <BarChart width={350} height={250} data={categoryData} />
   </div>
 );
