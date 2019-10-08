@@ -20,7 +20,6 @@ const { execSync } = require('child_process');
   const newVersion = `${version.major}.${version.minor}.${version.patch}-dev.master-${commit}`;
   console.info('publishing new version', newVersion);
 
-  const script = `npm publish --access public --no-git-tag-version --new-version ${version} --tag dev`;
-  const output = execSync(script);
+  const output = execSync(`yarn publish --access public --non-interactive --no-git-tag-version --new-version ${version} --tag dev`);
   console.info(`Published Dev /r/n -> ${output}`);
 })();
