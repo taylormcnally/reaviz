@@ -1,214 +1,87 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Sandbox } from '../tools';
 
 <Meta title="Docs|Chart Types/Bar Chart" />
 
 # Bar Chart
 
-The bar chart supports:
+---
+<br />
+<Story id="demos-bar-chart-vertical-single-series--simple" />
+<br />
 
-- Single Series Bar
-- Multi Series Bar
-- Stacked Bar
-- Stacked Normalized Bar
-- Marimekko Chart
+A bar chart is a chart with rectangular bars with lengths proportional to the
+values that they represent.  One axis of the chart shows the specific categories being compared,
+and the other axis represents a discrete value.
 
-View [Demo Source Code](https://github.com/jask-oss/reaviz/blob/master/src/BarChart/BarChart.story.tsx)
+Bar charts provide a visual presentation of categorical data.
+Categorical data is a grouping of data into discrete groups, such as months of the year,
+age group, shoe sizes, and animals. These categories are usually qualitative.
+Bars on the chart may be arranged in any order. Bar charts are useful for comparisons and trend over time.
 
+Types supported by reaviz:
 
-### Single Series
+- Single Series Vertical / Horizontal
+- Multi Series Vertical / Horizontal
+- Stacked Vertical / Horizontal
+- Stacked Normalized Vertical / Horizontal
+- Stacked Diverging Vertical / Horizontal
+- Marimekko
+- Radial
+- Sparkline
+- Waterfall
+- Histograms
 
-The single series bar chart will render a bar for each data point.
-The only required properties is the `data` object.
-
-For the single series chart, you pass an array of objects with
-a `key` and a `data` property.
-
-```jsx
-import { BarChart } from 'reaviz';
-
-const data = [
-  { key: 'Malware', data: 10 },
-  ...more data...
-];
-
-<BarChart
-  width={350}
-  height={250}
-  data={data}
-/>
-```
-
-To customize the chart more, you can pass a `BarSeries` to the chart:
-
-```jsx
-import { BarChart, BarSeries, Bar } from 'reaviz';
-
-<BarChart
-  data={[]}
-  series={
-    <BarSeries
-      colorScheme={chroma
-        .scale(['ACB7C9', '418AD7'])
-        .colors(data.length)}
-      bar={<Bar width={5} />}
-      padding={0.5}
-    />
-  }
-/>
-```
-
-In the above example we are customizing the:
-
-- color scheme
-- setting a custom bar width
-- applying custom padding between bars
-
-There are many other properties available to customize, examples
-can be found in the demos.
-
-
-### Multi Series
-
-The multi series bar chart will render multiple groupings of bars. The
-options are similar to the single series except for the data object is
-slightly different.
+## Quick Start
+To create a Bar chart, use import the `BarChart` and give it `data`. The chart
+will automatically configure itself with the default options exposed via `props`.
 
 ```jsx
 import { BarChart } from 'reaviz';
 
-const data = [
-  {
-    key: 'Lateral Movement',
-    data: [
-      {
-        key: 'XML'
-        data: 5
-      },
-      ...more data...
-    ]
-  },
-  ...more data...
-];
-
-<BarChart
-  width={350}
-  height={250}
-  data={data}
-/>
+const MyChart = () => (
+  <BarChart
+    height={300}
+    width={300}
+    data={[
+      { key: 'DLP', data: 13 },
+      { key: 'SIEM', data: 2 },
+      { key: 'Endpoint', data: 7 }
+    ]}
+  />
+)
 ```
 
-### Stacked Bar
+In the simple example, the data object is just a `Array` of `key` and `data`. Below
+you can learn more about how to pass more complex types.
 
-The stacked bar chart is a multi series bar chart preconfigured
-for stacked data sets. This configuration will automatically
-set the series type to `stacked`.
+## API
 
-```jsx
-import { StackedBarChart } from 'reaviz';
+Below is the list of props the bar chart accepts.
 
-const multiCategoryData = [
-  {
-    key: 'Lateral Movement',
-    data: [
-      {
-        key: 'XML'
-        data: 5
-      },
-      ...more data...
-    ]
-  },
-  ...more data...
-];
+| Prop  | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| `height` | The height of the chart | `number` | `false` | `null` |
+| `width` | The width of the chart | `number` | `false` | `null` |
+| `margins` | Margins around the chart | `number` | `false` | `20` |
+| `data` | The data that is used to build the chart | `ChartDataShape[]` | `true` | `[]` |
+| `className` | Additional class names to apply to the container | `string` | `false` | `null`  |
+| `style` | Additional styles names to apply to the container | `Object` | `false` | `null`  |
+| `series` | The bar series configuration | `JSX.Element` | `true` | `[]`  |
+| `yAxis` | The y-axis configuration | `JSX.Element` | `true` | `<LinearYAxis />`  |
+| `xAxis` | The x-axis configuration | `JSX.Element` | `true` | `<LinearXAxis />`  |
+| `gridlines` | The gridline configuration | `JSX.Element` | `false` | `null`  |
+| `brush` | The brush configuration | `JSX.Element` | `false` | `null`  |
+| `secondaryAxis` | Additional axis configuration | `JSX.Element[]` | `false` | `null`  |
 
-<StackedBarChart
-  width={350}
-  height={350}
-  data={multiCategoryData}
-  series={
-    <StackedBarSeries
-      colorScheme={chroma
-        .scale(['ACB7C9', '418AD7'])
-        .colors(multiCategoryData[0].data.length)}
-    />
-  }
+## Single Series
+
+The single-series bar chart type is a useful for comparing a small to meduim size set
+of data that are categorical in nature. This is the most simple chart type but can
+be customized further.
+
+<Sandbox
+  name="Bar Chart Simple"
+  description="A simple bar chart example"
+  path="docs/charts/BarSimple.sandbox.js"
 />
-```
-
-### Stacked Normalized Bar
-
-The stacked normalized bar is a multi series bar chart preconfigured
-for normalized stacked data sets. This configuration includes:
-
-- Turning off y-axis label rotation
-- Formatting y-axis labels for percentage
-- Setting the series type to `stackedNormalized`
-- Configuring the tooltip to show values in percentages
-
-```jsx
-import { StackedNormalizedBarChart } from 'reaviz';
-
-const multiCategoryData = [
-  {
-    key: 'Lateral Movement',
-    data: [
-      {
-        key: 'XML'
-        data: 5
-      },
-      ...more data...
-    ]
-  },
-  ...more data...
-];
-
-<StackedNormalizedBarChart
-  width={350}
-  height={350}
-  data={multiCategoryData}
-  series={
-    <StackedBarSeries
-      colorScheme={chroma
-        .scale(['ACB7C9', '418AD7'])
-        .colors(multiCategoryData[0].data.length)}
-    />
-  }
-/>
-```
-
-### Marimekko Chart
-
-The marimekko chart is a multi series bar chart preconfigured
-similar to normalized stacked data sets with one difference: The
-width of each series is calculated based on its relation to the
-entire data set.
-
-```jsx
-import { MarimekkoChart, MarimekkoBarSeries } from 'reaviz';
-
-const multiCategoryData = [
-  {
-    key: 'Lateral Movement',
-    data: [
-      {
-        key: 'XML'
-        data: 5
-      },
-      ...more data...
-    ]
-  },
-  ...more data...
-];
-
-<MarimekkoChart
-  width={350}
-  height={350}
-  data={multiCategoryData}
-  series={
-    <MarimekkoBarSeries
-      colorScheme={chroma
-        .scale(['ACB7C9', '418AD7'])
-        .colors(multiCategoryData[0].data.length)}
-    />
-  }
-/>
-```
