@@ -48,11 +48,6 @@ var_9: &ignore_branch_filter
     ignore:
       - "gh-pages"
 
-commands:
-  setup_npm:
-    steps:
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-
 jobs:
   prepare:
     <<: *job_defaults
@@ -111,7 +106,7 @@ jobs:
     steps:
       - *checkout_code
       - *attach_workspace
-      - setup_npm
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run: yarn publish:dev
 
   publish_prod_npm:
@@ -119,7 +114,7 @@ jobs:
     steps:
       - *checkout_code
       - *attach_workspace
-      - setup_npm
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run: npm publish
 
 workflows:
