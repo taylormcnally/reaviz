@@ -2,7 +2,7 @@
 const { parse } = require('semver');
 const { execSync } = require('child_process');
 
-(async () => {
+(() => {
   const json = require('../package.json');
 
   // determine commit from either circle ci or last git commit
@@ -21,6 +21,6 @@ const { execSync } = require('child_process');
   console.info('publishing new version', newVersion);
 
   const script = `npm publish --access public --no-git-tag-version --new-version ${version} --tag ${tag}`;
-  const output = execSync(script, { cwd: pack.buildPath });
+  const output = execSync(script);
   console.info(`Published Dev /r/n -> ${output}`);
 })();
