@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart } from 'reaviz';
-import './styles.css';
+import 'https://raw.githubusercontent.com/jask-oss/reaviz/master/docs/tools/styles.css';
 
 export const categoryData = [
   {
