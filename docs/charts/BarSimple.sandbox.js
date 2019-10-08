@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { BarChart } from 'reaviz';
+import './styles.css';
 
 export const categoryData = [
   {
