@@ -1,5 +1,5 @@
 # Master
-- [Chore] Bump RDK
+- [Chore] Update deps
 
 # 5.1.0 - 10/7/19
 - [Feature] Add ability to pass secondary x/y axis to bar/area/scatter/line/heat
