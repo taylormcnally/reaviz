@@ -1,3 +1,6 @@
+# Master
+- [Chore] Bump RDK
+
 # 5.1.0 - 10/7/19
 - [Feature] Add ability to pass secondary x/y axis to bar/area/scatter/line/heat
 - [Feature] Add ability to pass in data to map and decouple it from build
