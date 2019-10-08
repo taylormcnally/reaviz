@@ -94,7 +94,7 @@ jobs:
       - store_artifacts:
           path: ./coverage
 
-  deploy_storybook:
+  publish_storybook:
     <<: *job_defaults
     steps:
       - *checkout_code
@@ -102,7 +102,15 @@ jobs:
       - run: npm run copy
       - run: npm run storybook:ci
 
-  publish_npm:
+  publish_dev_npm:
+    <<: *job_defaults
+    steps:
+      - *checkout_code
+      - *attach_workspace
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+      - run: npm run publish:dev
+
+  publish_prod_npm:
     <<: *job_defaults
     steps:
       - *checkout_code
@@ -128,13 +136,24 @@ workflows:
           filters: *ignore_branch_filter
           requires:
             - prepare
-      - deploy_storybook:
+      - publish_storybook:
           filters: *publish_branches_filter
           requires:
             - build_package
             - build_storybook
             - test
-      - publish_npm:
+      - publish_dev_npm:
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              ignore: /.*/
+          requires:
+            - build_package
+            - build_storybook
+            - test
+      - publish_prod_npm:
           filters:
             branches:
               ignore: /.*/
