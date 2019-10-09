@@ -3,8 +3,8 @@
   "version": "5.1.2",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
-    "start": "start-storybook -p 9010",
-    "storybook:build": "build-storybook",
+    "start": "start-storybook -p 9010 -s public",
+    "storybook:build": "build-storybook -s public",
     "storybook:deploy": "storybook-to-ghpages --existing-output-dir=storybook-static",
     "storybook:ci": "storybook-to-ghpages --existing-output-dir=storybook-static --ci",
     "copy": "cp CNAME storybook-static/",
