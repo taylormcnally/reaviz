@@ -22,10 +22,30 @@ import {
 } from '../AreaChart';
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import { PointSeries } from '../AreaChart';
-import { LinearXAxisTickSeries, LinearXAxis } from '../common/Axis/LinearAxis';
+import {
+  LinearXAxisTickSeries,
+  LinearXAxis,
+  LinearYAxisTickSeries,
+  LinearYAxis
+} from '../common/Axis/LinearAxis';
 import { ScatterPoint } from '../ScatterPlot';
 import { symbol, symbolStar } from 'd3-shape';
 import { schemes } from '../common/color';
+
+const prettyData = (() => {
+  const data = [];
+  for (let i = 0; i < 20; i++) {
+    const series = [];
+    for (let j = 0; j < 100; j++) {
+      series.push({
+        key: j,
+        data: (i / 10 + 1) * Math.sin((Math.PI * (i + j)) / 50)
+      });
+    }
+    data.push({ key: i, data: series });
+  }
+  return data;
+})();
 
 storiesOf('Demos|Line/Single Series', module)
   .add(
@@ -161,6 +181,36 @@ storiesOf('Demos|Line/Multi Series', module)
     },
     { options: { showPanel: true } }
   )
+  .add('Large Data', () => (
+    <LineChart
+      width={400}
+      height={300}
+      data={prettyData}
+      yAxis={
+        <LinearYAxis
+          scaled={true}
+          type="value"
+          axisLine={null}
+          tickSeries={<LinearYAxisTickSeries line={null} label={null} />}
+        />
+      }
+      xAxis={
+        <LinearXAxis
+          type="value"
+          scaled={true}
+          axisLine={null}
+          tickSeries={<LinearXAxisTickSeries line={null} label={null} />}
+        />
+      }
+      series={
+        <LineSeries
+          type="grouped"
+          line={<Line strokeWidth={1} />}
+          colorScheme="cybertron"
+        />
+      }
+    />
+  ))
   .add('Custom Line Styles', () => (
     <LineChart
       width={550}
