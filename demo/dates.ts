@@ -69,6 +69,14 @@ export const binnedDateNegativeOnly = generateBinnedData(
   DIVERGING_DATA_KEY_POSITIVE
 );
 
+export const sonarData = generateBinnedData(90).map(d => ({
+  ...d,
+  data: [
+    d.data[0],
+    { ...d.data[1], data: -d.data[0].data }
+  ]
+}));
+
 export const singleDateData = generateDateData();
 
 export const nonZeroDateData = [
