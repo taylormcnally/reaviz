@@ -28,6 +28,8 @@ import { Map, MapMarker } from 'reaviz';
 import { feature } from 'topojson-client';
 import geojson from 'world-atlas/countries-110m.json';
 
+const worldData = feature(geojson, geojson.objects.countries);
+
 <Map
   data={worldData}
   height={350}
