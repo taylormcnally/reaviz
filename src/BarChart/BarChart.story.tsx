@@ -444,11 +444,20 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       const hasRangelines = boolean('Rangelines', true);
       const rounded = boolean('Rounded', false);
 
-      const gradient = hasGradient ? (
+      const gradientBottom = hasGradient ? (
         <Gradient
           stops={[
             <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
             <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+          ]}
+        />
+      ) : null;
+
+      const gradientTop = hasGradient ? (
+        <Gradient
+          stops={[
+            <GradientStop offset="5%" stopOpacity={0.7} key="stop" />,
+            <GradientStop offset="90%" stopOpacity={0.1} key="start" />
           ]}
         />
       ) : null;
@@ -467,15 +476,22 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
           gridlines={<GridlineSeries line={<Gridline direction="y" />} />}
           series={
             <StackedBarSeries
-              bar={
+              bar={[
                 <Bar
                   rx={rx}
                   ry={ry}
                   rounded={rounded}
-                  gradient={gradient}
+                  gradient={gradientTop}
+                  rangeLines={rangelines}
+                />,
+                <Bar
+                  rx={rx}
+                  ry={ry}
+                  rounded={rounded}
+                  gradient={gradientBottom}
                   rangeLines={rangelines}
                 />
-              }
+              ]}
               type="stackedDiverging"
               colorScheme={chroma
                 .scale(['ACB7C9', '418AD7'])
