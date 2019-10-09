@@ -5,7 +5,7 @@
   "scripts": {
     "start": "start-storybook -p 9010",
     "storybook:build": "build-storybook",
-    "storybook:deploy": "storybook-to-ghpages",
+    "storybook:deploy": "storybook-to-ghpages --existing-output-dir=storybook-static",
     "storybook:ci": "storybook-to-ghpages --existing-output-dir=storybook-static --ci",
     "copy": "cp CNAME storybook-static/",
     "build": "rollup -c",
