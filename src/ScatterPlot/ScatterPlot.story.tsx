@@ -81,22 +81,24 @@ storiesOf('Demos|Scatter Plot/Linear', module)
       series={<ScatterSeries animated={false} />}
     />
   ))
-  .add('Performance', () =>
-    range(15).map(i => (
-      <div
-        key={i}
-        style={{
-          width: '250px',
-          height: '250px',
-          border: 'solid 1px green',
-          margin: '25px',
-          display: 'inline-block'
-        }}
-      >
-        <ScatterPlot data={medSignalChartData} />
-      </div>
-    ))
-  )
+  .add('Performance', () => (
+    <Fragment>
+      {range(15).map(i => (
+        <div
+          key={i}
+          style={{
+            width: '250px',
+            height: '250px',
+            border: 'solid 1px green',
+            margin: '25px',
+            display: 'inline-block'
+          }}
+        >
+          <ScatterPlot data={medSignalChartData} />
+        </div>
+      ))}
+    </Fragment>
+  ))
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
       <ScatterPlot data={medSignalChartData} />
