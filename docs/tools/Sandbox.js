@@ -1,7 +1,7 @@
 import React from 'react';
 import CodeSandboxer from 'react-codesandboxer';
 
-export const Sandbox = ({ name, path, description }) => (
+export const Sandbox = ({ name, path, description, dependencies }) => (
   <CodeSandboxer
     name={name}
     pkgJSON={{
@@ -12,7 +12,8 @@ export const Sandbox = ({ name, path, description }) => (
       dependencies: {
         'react': 'latest',
         'reaviz': 'latest',
-        'react-dom': 'latest'
+        'react-dom': 'latest',
+        ...(dependencies || {})
       }
     }}
     examplePath={path}
