@@ -1,7 +1,7 @@
 import React from 'react';
 import { BarChart } from 'reaviz';
 
-export const categoryData = [
+export const data = [
   {
     key: 'Phishing Attack',
     data: 10
@@ -22,6 +22,6 @@ export const categoryData = [
 
 export default () => (
   <div style={{ margin: '55px', textAlign: 'center' }}>
-    <BarChart width={350} height={250} data={categoryData} />
+    <BarChart width={350} height={250} data={data} />
   </div>
 );

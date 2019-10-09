@@ -1,7 +1,7 @@
 import React from 'react';
 import { AreaChart } from 'reaviz';
 
-export const categoryData = [
+export const data = [
   {
     key: new Date('11/29/2019'),
     data: 10
@@ -22,6 +22,6 @@ export const categoryData = [
 
 export default () => (
   <div style={{ margin: '55px', textAlign: 'center' }}>
-    <AreaChart width={350} height={250} data={categoryData} />
+    <AreaChart width={350} height={250} data={data} />
   </div>
 );

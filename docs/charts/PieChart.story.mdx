@@ -1,70 +1,58 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Sandbox } from '../tools';
 
 <Meta title="Docs|Chart Types/Pie Chart" />
 
 # Pie Chart
 
-The pie chart supports:
+---
+<br />
+<Story id="demos-pie-chart-pie--simple" />
+<br />
 
-- Single Series Pie
+A pie chart is divided into sectors, illustrating numerical proportion.
+In a pie chart, the arc length of each sector (and consequently its central angle and area),
+is proportional to the quantity it represents. While it is named for its resemblance to a pie
+which has been sliced, there are variations on the way it can be presented.
 
-View [Demo Source Code](https://github.com/jask-oss/reaviz/blob/master/src/PieChart/PieChart.story.tsx)
-
-
-### Single Series
-
-The single series pie chart will render circle sliced into pieces
-based on the data points.
-
-For the chart, you pass an array of objects with a `key` and a
-`data` property.
+## Quick Start
+To create a Bar chart, use import the `PieChart` and give it `data`. The chart
+will automatically configure itself with the default options exposed via `props`.
 
 ```jsx
 import { PieChart } from 'reaviz';
 
-const data = [
-  { key: 'Malware', data: 10 },
-  ...more data...
-];
-
-<PieChart
-  width={250}
-  height={250}
-  data={data}
-/>
+const MyChart = () => (
+  <PieChart
+    height={300}
+    width={300}
+    data={[
+      { key: 'Bacon', data: 13 },
+      { key: 'Eggs', data: 13 },
+      { key: 'Cheese', data: 13 },
+    ]}
+  />
+);
 ```
 
-To customize the chart more, you can pass a `PieArcSeries` to the chart:
+## API
 
-```jsx
-import { PieChart, PieArcSeries, PieArcLabel } from 'reaviz';
+Below is the list of props the chart accepts.
 
-const data = [
-  { key: 'Malware', data: 10 },
-  ...more data...
-];
+| Prop  | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| `height` | The height of the chart | `number` | `false` | `null` |
+| `width` | The width of the chart | `number` | `false` | `null` |
+| `margins` | Margins around the chart | `number` | `false` | `20` |
+| `data` | The data that is used to build the chart | `ChartDataShape[]` | `true` | `[]` |
+| `className` | Additional class names to apply to the container | `string` | `false` | `null`  |
+| `style` | Additional styles names to apply to the container | `Object` | `false` | `null`  |
+| `series` | The area series configuration | `JSX.Element` | `true` | `[]`  |
 
-<PieChart
-  width={250}
-  height={250}
-  data={data}
-  series={
-    <PieArcSeries
-      colorScheme={chroma
-        .scale(['ACB7C9', '418AD7'])
-        .colors(data.length)}
-      doughnut={true}
-      label={<PieArcLabel show={true} />}
-    />
-  }
+## Demo
+
+<Sandbox
+  name="Pie Chart Simple"
+  description="A simple pie chart example"
+  path="docs/charts/PieSimple.sandbox.js"
 />
-```
-
-In the above example we are customizing the:
-
-- color scheme
-- setting the chart to be a doughnut chart
-- turning on the labels for each slice
-
-There are many other properties available to customize, examples
-can be found in the demos.
