@@ -1,3 +1,6 @@
+# Master
+- [Fix] No delay for line charts line draw animations
+
 # 5.1.1/2 - 10/8/19
 - [WARNING] Renamed internal property `type` on  `RangeLines` to `position`
 - [Fix] Make Diverging Bar Chart animations come from center

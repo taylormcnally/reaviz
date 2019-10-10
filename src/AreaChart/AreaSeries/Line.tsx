@@ -138,12 +138,12 @@ export class Line extends PureComponent<LineProps, LineState> {
   }
 
   getTransition() {
-    const { animated, index } = this.props;
+    const { animated, index, hasArea } = this.props;
 
     if (animated) {
       return {
         ...DEFAULT_TRANSITION,
-        delay: index * 0.05
+        delay: hasArea ? 0 : index * 0.05
       };
     } else {
       return {
