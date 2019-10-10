@@ -1,5 +1,6 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Props } from '@storybook/addon-docs/blocks';
 import { Sandbox } from '../tools';
+import { PieChart } from '../../src';
 
 <Meta title="Docs|Chart Types/Pie Chart" />
 
@@ -36,21 +37,9 @@ const MyChart = () => (
 ```
 
 ## API
-
-Below is the list of props the chart accepts.
-
-| Prop  | Description | Type | Required | Default |
-| --- | --- | --- | --- | --- |
-| `height` | The height of the chart | `number` | `false` | `null` |
-| `width` | The width of the chart | `number` | `false` | `null` |
-| `margins` | Margins around the chart | `number` | `false` | `20` |
-| `data` | The data that is used to build the chart | `ChartDataShape[]` | `true` | `[]` |
-| `className` | Additional class names to apply to the container | `string` | `false` | `null`  |
-| `style` | Additional styles names to apply to the container | `Object` | `false` | `null`  |
-| `series` | The area series configuration | `JSX.Element` | `true` | `[]`  |
+<Props of={PieChart} />
 
 ## Demo
-
 <Sandbox
   name="Pie Chart Simple"
   description="A simple pie chart example"

@@ -7,7 +7,7 @@ import geojson from 'world-atlas/countries-110m.json';
 
 // Using 'countries' is less performant than 'land' but we want to be able
 // to filter and disect on specific shapes
-const worldData = feature(geojson, geojson.objects.countries);
+const worldData = feature(geojson as any, geojson.objects.countries as any);
 
 storiesOf('Demos|Map', module)
   .add('Simple', () => <Map data={worldData} height={350} width={500} />)

@@ -1,5 +1,6 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Props } from '@storybook/addon-docs/blocks';
 import { Sandbox } from '../tools';
+import { Heatmap } from '../../src';
 
 <Meta title="Docs|Chart Types/Heatmap" />
 
@@ -63,12 +64,17 @@ const data = [
   }
 ];
 
-<Heatmap
-  height={350}
-  width={350}
-  data={data}
-/>
+const MyChart = () => (
+  <Heatmap
+    height={350}
+    width={350}
+    data={data}
+  />
+);
 ```
+
+## API
+<Props of={Heatmap} />
 
 ## Demo
 

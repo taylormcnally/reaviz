@@ -5,26 +5,27 @@ const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin');
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-module.exports = async ({ config, mode }) => ({
+module.exports = async ({ config }) => ({
   ...config,
   module: {
     ...config.module,
     rules: [
       ...config.module.rules,
       {
-        test: /\.(ts|tsx|js|jsx)$/,
+        test: /\.(ts|tsx)$/,
+        exclude: [/node_modules/],
         include: [
           resolve(__dirname, '../src'),
-          resolve(__dirname, '../docs'),
           resolve(__dirname, '../demo')
         ],
         use: [
-          'babel-loader',
-          ...(mode === 'PRODUCTION' ? [require.resolve('react-docgen-typescript-loader')] : [])
+          require.resolve('ts-loader'),
+          require.resolve('react-docgen-typescript-loader')
         ]
       },
       {
         test: /\.story\.mdx$/,
+        exclude: [/node_modules/],
         include: [
           resolve(__dirname, '../src'),
           resolve(__dirname, '../docs'),

@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/addon-docs/blocks';
 import { Sandbox } from '../tools';
+import { Sankey } from '../../src';
 
 <Meta title="Docs|Chart Types/Sankey Plot" />
 
@@ -55,8 +56,10 @@ For the edges, SankeyLink's `source`, `target`, and `value`
 properties are all required. For `source` and `target`, you can use
 the index of the nodes' array or the node's `id` if it's assigned.
 
-## Demo
+## API
+<Props of={Sankey} />
 
+## Demo
 <Sandbox
   name="Sankey Plot Simple"
   description="A simple sankey plot chart example"

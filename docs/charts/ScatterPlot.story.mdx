@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/addon-docs/blocks';
 import { Sandbox } from '../tools';
+import { ScatterPlot } from '../../src';
 
 <Meta title="Docs|Chart Types/Scatter Plot" />
 
@@ -36,27 +37,9 @@ const MyChart = () => (
 ```
 
 ## API
-
-Below is the list of props the chart accepts.
-
-| Prop  | Description | Type | Required | Default |
-| --- | --- | --- | --- | --- |
-| `height` | The height of the chart | `number` | `false` | `null` |
-| `width` | The width of the chart | `number` | `false` | `null` |
-| `margins` | Margins around the chart | `number` | `false` | `20` |
-| `data` | The data that is used to build the chart | `ChartDataShape[]` | `true` | `[]` |
-| `className` | Additional class names to apply to the container | `string` | `false` | `null`  |
-| `style` | Additional styles names to apply to the container | `Object` | `false` | `null`  |
-| `series` | The area series configuration | `JSX.Element` | `true` | `[]`  |
-| `yAxis` | The y-axis configuration | `JSX.Element` | `true` | `<LinearYAxis />`  |
-| `xAxis` | The x-axis configuration | `JSX.Element` | `true` | `<LinearXAxis />`  |
-| `gridlines` | The gridline configuration | `JSX.Element` | `false` | `null`  |
-| `brush` | The brush configuration | `JSX.Element` | `false` | `null`  |
-| `zoomPan` | The zoom/pan configuration | `JSX.Element` | `false` | `null`  |
-| `secondaryAxis` | Additional axis configuration | `JSX.Element[]` | `false` | `null`  |
+<Props of={ScatterPlot} />
 
 ## Demo
-
 <Sandbox
   name="Scatter Chart Simple"
   description="A simple scatter chart example"

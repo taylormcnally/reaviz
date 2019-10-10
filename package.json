@@ -148,6 +148,7 @@
     "semver": "^6.3.0",
     "topojson-client": "^3.0.1",
     "ts-jest": "^24.1.0",
+    "ts-loader": "^6.2.0",
     "typescript": "^3.6.3",
     "world-atlas": "^2.0.2"
   },

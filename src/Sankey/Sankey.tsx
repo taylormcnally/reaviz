@@ -28,7 +28,7 @@ const JUSTIFICATION = {
 
 type Justification = 'justify' | 'center' | 'left' | 'right';
 
-interface SankeyProps extends ChartProps {
+export interface SankeyProps extends ChartProps {
   animated: boolean;
   colorScheme: ColorSchemeType;
   justification: Justification;

@@ -33,9 +33,9 @@ import { symbol, symbolStar } from 'd3-shape';
 import { schemes } from '../common/color';
 
 const prettyData = (() => {
-  const data = [];
+  const data: any[] = [];
   for (let i = 0; i < 20; i++) {
-    const series = [];
+    const series: any[] = [];
     for (let j = 0; j < 100; j++) {
       series.push({
         key: j,
