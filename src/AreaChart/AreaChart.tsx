@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import classNames from 'classnames';
 import bind from 'memoize-bind';
 import { AreaSeries, AreaChartTypes, AreaSeriesProps } from './AreaSeries';
@@ -6,7 +6,8 @@ import {
   isAxisVisible,
   LinearAxisProps,
   LinearXAxis,
-  LinearYAxis
+  LinearYAxis,
+  LinearAxis
 } from '../common/Axis/LinearAxis';
 import { getXScale, getYScale } from '../common/scales';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
@@ -21,8 +22,12 @@ import {
   buildNestedChartData
 } from '../common/data';
 import css from './AreaChart.module.scss';
-import { ChartBrushProps } from '../common/Brush';
-import { ZoomPanChangeEvent, ChartZoomPanProps } from '../common/ZoomPan';
+import { ChartBrushProps, ChartBrush } from '../common/Brush';
+import {
+  ZoomPanChangeEvent,
+  ChartZoomPanProps,
+  ChartZoomPan
+} from '../common/ZoomPan';
 import {
   ChartContainerChildProps,
   ChartContainer,
@@ -33,12 +38,12 @@ import memoize from 'memoize-one';
 
 export interface AreaChartProps extends ChartProps {
   data: ChartDataShape[];
-  series: JSX.Element;
-  yAxis: JSX.Element;
-  xAxis: JSX.Element;
-  gridlines: JSX.Element | null;
-  brush: JSX.Element | null;
-  zoomPan: JSX.Element | null;
+  series: ReactElement<AreaSeriesProps, typeof AreaSeries>;
+  yAxis: ReactElement<LinearAxisProps, typeof LinearAxis>;
+  xAxis: ReactElement<LinearAxisProps, typeof LinearAxis>;
+  gridlines: ReactElement<GridlineSeriesProps, typeof GridlineSeries> | null;
+  brush: ReactElement<ChartBrushProps, typeof ChartBrush> | null;
+  zoomPan: ReactElement<ChartZoomPanProps, typeof ChartZoomPan> | null;
   secondaryAxis?: JSX.Element[];
 }
 
@@ -82,7 +87,7 @@ export class AreaChart extends Component<AreaChartProps, AreaChartState> {
   constructor(props: AreaChartProps) {
     super(props);
 
-    const zoom = props.zoomPan ? props.zoomPan.props : {};
+    const zoom: any = props.zoomPan ? props.zoomPan.props : {};
     const zoomControlled = !zoom.hasOwnProperty('domain');
 
     this.state = {
