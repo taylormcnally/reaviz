@@ -146,5 +146,5 @@ If you want to run REAVIZ locally, its super easy!
 
 to publish the repo to git you can run:
 
-- `npm version x.x.x` to bump the version
+- `yarn version --new-version x.x.x` to bump the version
 - `git push --follow-tags`
