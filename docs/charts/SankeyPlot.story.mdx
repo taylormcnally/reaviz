@@ -1,6 +1,6 @@
-import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Props } from '@storybook/addon-docs/blocks';
 import { Sandbox } from '../tools';
-import { Sankey } from '../../src';
+import { Sankey, SankeyLink, SankeyNode } from '../../src';
 
 <Meta title="Docs|Chart Types/Sankey Plot" />
 
@@ -57,7 +57,14 @@ properties are all required. For `source` and `target`, you can use
 the index of the nodes' array or the node's `id` if it's assigned.
 
 ## API
+#### `Sankey`
 <Props of={Sankey} />
+
+#### `SankeyLink`
+<Props of={SankeyLink} />
+
+#### `SankeyNode`
+<Props of={SankeyNode} />
 
 ## Demo
 <Sandbox
