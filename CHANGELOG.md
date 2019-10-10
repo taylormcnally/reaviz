@@ -1,4 +1,6 @@
-# Master
+# 5.2.0 - 10/10/19
+- [Feature] Add bar labels
+- [Fix] Tooltips for horizontal bar charts wrong
 - [Fix] No delay for line charts line draw animations
 
 # 5.1.1/2 - 10/8/19

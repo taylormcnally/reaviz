@@ -1,4 +1,4 @@
-import React, { Fragment, Component, createRef } from 'react';
+import React, { Fragment, Component, createRef, ReactElement } from 'react';
 import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { Gradient, GradientProps } from '../../common/Gradient';
@@ -15,6 +15,8 @@ import {
 } from '../../common/utils/functions';
 import { motion } from 'framer-motion';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
+import { BarLabelProps, BarLabel } from './BarLabel';
+import { formatValue } from '../../common/utils/formatting';
 
 export type BarType =
   | 'standard'
@@ -49,6 +51,7 @@ export type BarProps = {
   tooltip: JSX.Element | null;
   layout: Direction;
   type: BarType;
+  label: ReactElement<BarLabelProps, typeof BarLabel> | null;
   onClick: (event) => void;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
@@ -80,6 +83,7 @@ export class Bar extends Component<BarProps, BarState> {
     cursor: 'auto',
     tooltip: <ChartTooltip />,
     rangeLines: null,
+    label: null,
     gradient: <Gradient />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
@@ -297,6 +301,7 @@ export class Bar extends Component<BarProps, BarState> {
   getTooltipData() {
     const { data, isCategorical } = this.props;
 
+    const isVertical = this.getIsVertical();
     const xAttr = isCategorical ? 'x' : 'x0';
     let x = data[xAttr]!;
 
@@ -306,11 +311,18 @@ export class Bar extends Component<BarProps, BarState> {
       x = data.x0;
     }
 
-    if (data.key && data.key !== x) {
+    const matches = isVertical
+      ? data.key && data.key !== x
+      : data.key && data.key !== data.y;
+
+    if (matches) {
       x = `${data.key} ∙ ${x}`;
     }
 
-    return { y: data.y, x };
+    return {
+      y: data.y,
+      x
+    };
   }
 
   getTransition(index: number) {
@@ -388,7 +400,8 @@ export class Bar extends Component<BarProps, BarState> {
       animated,
       type,
       layout,
-      mask
+      mask,
+      label
     } = this.props;
     const { active } = this.state;
     const stroke = color(data, barIndex);
@@ -402,6 +415,8 @@ export class Bar extends Component<BarProps, BarState> {
     const placement = layout === 'vertical' ? 'top' : 'right';
     const isVertical = this.getIsVertical();
     const scale = isVertical ? yScale : xScale;
+    const tooltipData = this.getTooltipData();
+    const barLabel = isVertical ? tooltipData.y : tooltipData.x;
 
     return (
       <Fragment>
@@ -427,7 +442,7 @@ export class Bar extends Component<BarProps, BarState> {
             modifiers={tooltip.props.modifiers || modifiers}
             reference={this.rect}
             color={color}
-            value={this.getTooltipData()}
+            value={tooltipData}
             placement={placement}
             data={data}
           />
@@ -448,6 +463,21 @@ export class Bar extends Component<BarProps, BarState> {
             id={`gradient-${id}`}
             direction={layout}
             color={currentColorShade}
+          />
+        )}
+        {label && (
+          <CloneElement<BarLabelProps>
+            element={label}
+            {...coords}
+            text={formatValue(barLabel)}
+            index={index}
+            data={data}
+            scale={scale}
+            fill={label.props.fill || currentColorShade}
+            barCount={barCount}
+            animated={animated}
+            layout={layout}
+            type={type}
           />
         )}
       </Fragment>

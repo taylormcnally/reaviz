@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { storiesOf } from '@storybook/react';
-import { boolean, number, object, select } from '@storybook/addon-knobs';
+import { boolean, number, object, select, color } from '@storybook/addon-knobs';
 import { BarChart } from './BarChart';
 import { MarimekkoChart } from './MarimekkoChart';
 import { StackedBarChart } from './StackedBarChart';
@@ -27,7 +27,8 @@ import {
   StackedBarSeries,
   StackedNormalizedBarSeries,
   MarimekkoBarSeries,
-  RangeLines
+  RangeLines,
+  BarLabel
 } from './BarSeries';
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import {
@@ -139,6 +140,35 @@ storiesOf('Demos|Bar Chart/Vertical/Single Series', module)
       }
     />
   ))
+  .add(
+    'Labels',
+    () => {
+      const position = select(
+        'Position',
+        {
+          top: 'top',
+          center: 'center',
+          bottom: 'bottom'
+        },
+        'top'
+      );
+      const fill = color('Color', '');
+
+      return (
+        <BarChart
+          width={350}
+          height={250}
+          data={categoryData}
+          series={
+            <BarSeries
+              bar={<Bar label={<BarLabel fill={fill} position={position} />} />}
+            />
+          }
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add(
     'Custom Bar Width',
     () => {
@@ -688,6 +718,43 @@ storiesOf('Demos|Bar Chart/Horizontal/Single Series', module)
       }
     />
   ))
+  .add(
+    'Labels',
+    () => {
+      const position = select(
+        'Position',
+        {
+          top: 'top',
+          center: 'center',
+          bottom: 'bottom'
+        },
+        'top'
+      );
+      const fill = color('Color', '');
+
+      return (
+        <BarChart
+          width={350}
+          height={250}
+          data={categoryData}
+          xAxis={<LinearXAxis type="value" />}
+          yAxis={
+            <LinearYAxis
+              type="category"
+              tickSeries={<LinearYAxisTickSeries tickSize={20} />}
+            />
+          }
+          series={
+            <BarSeries
+              layout="horizontal"
+              bar={<Bar label={<BarLabel fill={fill} position={position} />} />}
+            />
+          }
+        />
+      );
+    },
+    { options: { showPanel: true } }
+  )
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>
       <BarChart
