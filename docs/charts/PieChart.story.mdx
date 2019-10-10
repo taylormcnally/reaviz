@@ -1,6 +1,6 @@
 import { Meta, Story, Props } from '@storybook/addon-docs/blocks';
 import { Sandbox } from '../tools';
-import { PieChart } from '../../src';
+import { PieChart, PieArcSeries, PieArcLabel, PieArc } from '../../src';
 
 <Meta title="Docs|Chart Types/Pie Chart" />
 
@@ -37,7 +37,17 @@ const MyChart = () => (
 ```
 
 ## API
+### [PieChart](https://github.com/jask-oss/reaviz/blob/master/src/PieChart/PieChart.tsx)
 <Props of={PieChart} />
+
+### [PieArcSeries](https://github.com/jask-oss/reaviz/blob/master/src/PieChart/PieArcSeries/PieArcSeries.tsx)
+<Props of={PieArcSeries} />
+
+### [PieArcLabel](https://github.com/jask-oss/reaviz/blob/master/src/PieChart/PieArcSeries/PieArcLabel.tsx)
+<Props of={PieArcLabel} />
+
+### [PieArc](https://github.com/jask-oss/reaviz/blob/master/src/PieChart/PieArcSeries/PieArc/PieArc.tsx)
+<Props of={PieArc} />
 
 ## Demo
 <Sandbox

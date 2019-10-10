@@ -1,6 +1,6 @@
 import { Meta, Story, Props } from '@storybook/addon-docs/blocks';
 import { Sandbox } from '../tools';
-import { ScatterPlot } from '../../src';
+import { ScatterPlot, ScatterSeries, ScatterPoint } from '../../src';
 
 <Meta title="Docs|Chart Types/Scatter Plot" />
 
@@ -37,7 +37,14 @@ const MyChart = () => (
 ```
 
 ## API
+### [ScatterPlot](https://github.com/jask-oss/reaviz/blob/master/src/ScatterPlot/ScatterPlot.tsx)
 <Props of={ScatterPlot} />
+
+### [ScatterSeries](https://github.com/jask-oss/reaviz/blob/master/src/ScatterPlot/ScatterSeries/ScatterSeries.tsx)
+<Props of={ScatterSeries} />
+
+### [ScatterPoint](https://github.com/jask-oss/reaviz/blob/master/src/ScatterPlot/ScatterSeries/ScatterPoint.tsx)
+<Props of={ScatterPoint} />
 
 ## Demo
 <Sandbox
