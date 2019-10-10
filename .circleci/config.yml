@@ -120,8 +120,6 @@ workflows:
             branches:
               ignore:
                 - "gh-pages"
-            tags:
-              only: /.*/
       - build_package:
           requires:
             - prepare
