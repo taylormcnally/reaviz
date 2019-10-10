@@ -38,7 +38,7 @@ import memoize from 'memoize-one';
 
 export interface AreaChartProps extends ChartProps {
   /**
-   * Data the chart will recieve to render.
+   * Data the chart will receive to render.
    */
   data: ChartDataShape[];
 
