@@ -56,14 +56,13 @@ storiesOf('Demos|Bar Chart/Vertical/Single Series', module)
       const padding = number('Padding', 0.1);
       const height = number('Height', 350);
       const width = number('Width', 400);
-      const data = object('Data', categoryData);
       const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
       return (
         <BarChart
           width={width}
           height={height}
-          data={data}
+          data={categoryData}
           series={
             <BarSeries
               colorScheme={color}
@@ -325,7 +324,6 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       const hasRangelines = boolean('Rangelines', false);
       const rounded = boolean('Rounded', true);
       const color = select('Color Scheme', schemes, 'cybertron');
-      const data = object('Data', multiCategory);
 
       const gradient = hasGradient ? <Gradient /> : null;
       const rangelines = hasRangelines ? (
@@ -336,7 +334,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
         <BarChart
           width={width}
           height={height}
-          data={data}
+          data={multiCategory}
           series={
             <BarSeries
               type="grouped"
