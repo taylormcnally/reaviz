@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import {
   RadialAxisTickLineProps,
   RadialAxisTickLine
@@ -16,8 +16,11 @@ export interface RadialAxisTickProps {
   padding: number;
   data: any;
   index: number;
-  line: JSX.Element | null;
-  label: JSX.Element | null;
+  line: ReactElement<RadialAxisTickLineProps, typeof RadialAxisTickLine> | null;
+  label: ReactElement<
+    RadialAxisTickLabelProps,
+    typeof RadialAxisTickLabel
+  > | null;
 }
 
 export class RadialAxisTick extends Component<RadialAxisTickProps> {

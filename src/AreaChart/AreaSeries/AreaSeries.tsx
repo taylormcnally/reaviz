@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import { PointSeries, PointSeriesProps } from './PointSeries';
 import { Area, AreaProps } from './Area';
 import { MarkLine, MarkLineProps } from '../../common/MarkLine';
@@ -34,11 +34,11 @@ export interface AreaSeriesProps {
   animated: boolean;
   type: AreaChartTypes;
   interpolation: InterpolationTypes;
-  tooltip: JSX.Element;
-  markLine: JSX.Element | null;
-  symbols: JSX.Element | null;
-  line: JSX.Element | null;
-  area: JSX.Element | null;
+  tooltip: ReactElement<TooltipAreaProps, typeof TooltipArea>;
+  markLine: ReactElement<MarkLineProps, typeof MarkLine> | null;
+  symbols: ReactElement<PointSeriesProps, typeof PointSeries> | null;
+  line: ReactElement<LineProps, typeof Line> | null;
+  area: ReactElement<AreaProps, typeof Area> | null;
   colorScheme: ColorSchemeType;
   isZoomed: boolean;
 }

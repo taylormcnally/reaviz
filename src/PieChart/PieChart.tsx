@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import {
   ChartProps,
   ChartContainer,
@@ -14,7 +14,7 @@ import memoize from 'memoize-one';
 interface PieChartProps extends ChartProps {
   data: ChartDataShape[];
   disabled?: boolean;
-  series: JSX.Element;
+  series: ReactElement<PieArcSeriesProps, typeof PieArcSeries>;
 }
 
 export class PieChart extends Component<PieChartProps> {

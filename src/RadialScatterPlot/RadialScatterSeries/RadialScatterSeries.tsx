@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import {
   RadialScatterPoint,
@@ -12,7 +12,7 @@ export interface RadialScatterSeriesProps {
   xScale: any;
   yScale: any;
   id: string;
-  point: JSX.Element;
+  point: ReactElement<RadialScatterPointProps, typeof RadialScatterPoint>;
   animated: boolean;
   activeIds?: string[];
 }

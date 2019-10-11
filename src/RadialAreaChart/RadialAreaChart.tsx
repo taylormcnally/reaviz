@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import {
   ChartShallowDataShape,
   ChartInternalShallowDataShape,
@@ -19,9 +19,9 @@ import memoize from 'memoize-one';
 
 export interface RadialAreaChartProps extends ChartProps {
   data: ChartShallowDataShape[];
-  series: JSX.Element;
+  series: ReactElement<RadialAreaSeriesProps, typeof RadialAreaSeries>;
   innerRadius: number;
-  axis: JSX.Element | null;
+  axis: ReactElement<RadialAxisProps, typeof RadialAxis> | null;
 }
 
 export class RadialAreaChart extends Component<RadialAreaChartProps> {

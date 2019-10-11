@@ -1,4 +1,4 @@
-import React, { Component, Fragment, createRef } from 'react';
+import React, { Component, Fragment, createRef, ReactElement } from 'react';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { CloneElement } from '../../common/utils/children';
 import bind from 'memoize-bind';
@@ -20,7 +20,7 @@ export type HeatmapCellProps = {
   height: number;
   cellCount: number;
   width: number;
-  tooltip: JSX.Element | null;
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
   fill: string;
   data: any;
   animated: boolean;

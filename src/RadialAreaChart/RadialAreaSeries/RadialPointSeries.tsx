@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import {
   RadialScatterSeries,
   RadialScatterPoint,
@@ -16,7 +16,7 @@ export interface RadialPointSeriesProps {
   yScale: any;
   xScale: any;
   show: boolean | 'hover' | 'first' | 'last';
-  point: JSX.Element;
+  point: ReactElement<RadialScatterPointProps, typeof RadialScatterPoint>;
 }
 
 export class RadialPointSeries extends Component<RadialPointSeriesProps> {

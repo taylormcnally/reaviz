@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { GradientStop, GradientStopProps } from './GradientStop';
 import { CloneElement } from '../utils';
 
 export interface GradientProps {
   id: string;
-  stops: JSX.Element[];
+  stops: ReactElement<GradientStopProps, typeof GradientStop>[];
   color?: string;
   direction: 'vertical' | 'horizontal';
 }

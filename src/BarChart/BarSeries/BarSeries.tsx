@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import { Bar, BarProps, BarType } from './Bar';
 import {
   ChartInternalDataShape,
@@ -11,13 +11,15 @@ import { CloneElement } from '../../common/utils/children';
 import { ThresholdCountGenerator, ThresholdArrayGenerator } from 'd3-array';
 import { CountableTimeInterval } from 'd3-time';
 
+type BarElement = ReactElement<BarProps, typeof Bar>;
+
 export interface BarSeriesProps {
   data: ChartInternalDataShape[];
   id: string;
   xScale: any;
   xScale1: any;
   yScale: any;
-  bar: JSX.Element | JSX.Element[];
+  bar: BarElement | BarElement[];
   type: BarType;
   colorScheme: ColorSchemeType;
   animated: boolean;

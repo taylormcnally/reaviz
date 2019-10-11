@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialArea, curveCardinalClosed, curveLinear } from 'd3-shape';
 import { RadialGradient, RadialGradientProps } from '../../common/Gradient';
@@ -17,7 +17,7 @@ export interface RadialAreaProps {
   innerRadius: number;
   outerRadius: number;
   className?: any;
-  gradient: JSX.Element | null;
+  gradient: ReactElement<RadialGradientProps, typeof RadialGradient> | null;
 }
 
 export class RadialArea extends Component<RadialAreaProps> {

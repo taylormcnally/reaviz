@@ -1,9 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils/children';
 import { RadialGaugeArcProps, RadialGaugeArc } from './RadialGaugeArc';
 import { RadialGaugeLabel, RadialGaugeLabelProps } from './RadialGaugeLabel';
-import { RadialGaugeValueLabel } from './RadialGaugeValueLabel';
+import {
+  RadialGaugeValueLabel,
+  RadialGaugeValueLabelProps
+} from './RadialGaugeValueLabel';
 import { getColor, ColorSchemeType } from '../../common/color';
 import { range, min } from 'd3-array';
 import { scaleBand } from 'd3-scale';
@@ -17,10 +20,13 @@ export interface RadialGaugeSeriesProps {
   height: number;
   padding: number;
   colorScheme: ColorSchemeType;
-  innerArc: JSX.Element;
-  outerArc: JSX.Element | null;
-  label: JSX.Element | null;
-  valueLabel: JSX.Element | null;
+  innerArc: ReactElement<RadialGaugeArcProps, typeof RadialGaugeArc>;
+  outerArc: ReactElement<RadialGaugeArcProps, typeof RadialGaugeArc> | null;
+  label: ReactElement<RadialGaugeLabelProps, typeof RadialGaugeLabel> | null;
+  valueLabel: ReactElement<
+    RadialGaugeValueLabelProps,
+    typeof RadialGaugeValueLabel
+  > | null;
   minGaugeWidth: number;
 }
 

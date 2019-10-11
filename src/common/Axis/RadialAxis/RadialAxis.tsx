@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import {
   RadialAxisTickSeries,
   RadialAxisTickSeriesProps
@@ -14,8 +14,14 @@ export interface RadialAxisProps {
   width: number;
   xScale: any;
   innerRadius: number;
-  arcs: JSX.Element | null;
-  ticks: JSX.Element | null;
+  arcs: ReactElement<
+    RadialAxisArcSeriesProps,
+    typeof RadialAxisArcSeries
+  > | null;
+  ticks: ReactElement<
+    RadialAxisTickSeriesProps,
+    typeof RadialAxisTickSeries
+  > | null;
 }
 
 export class RadialAxis extends Component<RadialAxisProps, {}> {

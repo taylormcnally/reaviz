@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import classNames from 'classnames';
 import {
   ChartShallowDataShape,
@@ -10,15 +10,20 @@ import {
   isAxisVisible,
   LinearAxisProps,
   LinearXAxis,
-  LinearYAxis
+  LinearYAxis,
+  LinearAxis
 } from '../common/Axis';
 import bind from 'memoize-bind';
 import { getYScale, getXScale } from '../common/scales';
 import { ScatterSeries, ScatterSeriesProps } from './ScatterSeries';
 import { GridlineSeries, GridlineSeriesProps } from '../common/Gridline';
-import { ZoomPanChangeEvent, ChartZoomPanProps } from '../common/ZoomPan';
+import {
+  ZoomPanChangeEvent,
+  ChartZoomPanProps,
+  ChartZoomPan
+} from '../common/ZoomPan';
 import css from './ScatterPlot.module.scss';
-import { ChartBrushProps } from '../common/Brush';
+import { ChartBrushProps, ChartBrush } from '../common/Brush';
 import {
   ChartProps,
   ChartContainer,
@@ -29,13 +34,13 @@ import memoize from 'memoize-one';
 
 interface ScatterPlotProps extends ChartProps {
   data: ChartShallowDataShape[];
-  series: JSX.Element;
-  yAxis: JSX.Element;
-  xAxis: JSX.Element;
-  gridlines: JSX.Element | null;
-  brush: JSX.Element | null;
-  zoomPan: JSX.Element | null;
-  secondaryAxis?: JSX.Element[];
+  series: ReactElement<ScatterSeriesProps, typeof ScatterSeries>;
+  yAxis: ReactElement<LinearAxisProps, typeof LinearYAxis>;
+  xAxis: ReactElement<LinearAxisProps, typeof LinearXAxis>;
+  gridlines: ReactElement<GridlineSeriesProps, typeof GridlineSeries> | null;
+  brush: ReactElement<ChartBrushProps, typeof ChartBrush> | null;
+  zoomPan: ReactElement<ChartZoomPanProps, typeof ChartZoomPan> | null;
+  secondaryAxis?: ReactElement<LinearAxisProps, typeof LinearAxis>[];
 }
 
 interface ScatterPlotState {
@@ -78,7 +83,7 @@ export class ScatterPlot extends Component<ScatterPlotProps, ScatterPlotState> {
   constructor(props: ScatterPlotProps) {
     super(props);
 
-    const zoom = props.zoomPan ? props.zoomPan.props : {};
+    const zoom = props.zoomPan ? props.zoomPan.props : { domain: undefined };
     const zoomControlled = !zoom.hasOwnProperty('domain');
 
     this.state = {

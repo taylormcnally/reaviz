@@ -1,11 +1,12 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import classNames from 'classnames';
 import {
   isAxisVisible,
   LinearAxisProps,
   LinearXAxisTickSeries,
   LinearXAxis,
-  LinearYAxis
+  LinearYAxis,
+  LinearAxis
 } from '../common/Axis';
 import { BarSeries, BarSeriesProps } from './BarSeries';
 import {
@@ -29,7 +30,7 @@ import {
   getMarimekkoScale,
   getMarimekkoGroupScale
 } from '../common/scales';
-import { ChartBrushProps } from '../common/Brush';
+import { ChartBrushProps, ChartBrush } from '../common/Brush';
 import css from './BarChart.module.scss';
 import {
   ChartContainer,
@@ -41,12 +42,12 @@ import { CloneElement } from '../common/utils/children';
 
 export interface BarChartProps extends ChartProps {
   data: ChartDataShape[];
-  series: JSX.Element;
-  yAxis: JSX.Element;
-  xAxis: JSX.Element;
-  gridlines: JSX.Element | null;
-  brush: JSX.Element | null;
-  secondaryAxis?: JSX.Element[];
+  series: ReactElement<BarSeriesProps, typeof BarSeries>;
+  yAxis: ReactElement<LinearAxisProps, typeof LinearYAxis>;
+  xAxis: ReactElement<LinearAxisProps, typeof LinearXAxis>;
+  gridlines: ReactElement<GridlineSeriesProps, typeof GridlineSeries> | null;
+  brush: ReactElement<ChartBrushProps, typeof ChartBrush> | null;
+  secondaryAxis?: ReactElement<LinearAxisProps, typeof LinearAxis>[];
 }
 
 export class BarChart extends Component<BarChartProps> {
@@ -187,11 +188,7 @@ export class BarChart extends Component<BarChartProps> {
       keyAxisType === 'value' ||
       keyAxisType === 'duration'
     ) {
-      data = buildBins(
-        keyScale,
-        series.props.binThreshold || keyAxis.props.interval,
-        data
-      );
+      data = buildBins(keyScale, series.props.binThreshold, data);
     }
 
     return data;

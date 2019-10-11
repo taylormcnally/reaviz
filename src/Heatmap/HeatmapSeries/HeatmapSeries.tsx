@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { HeatmapCell, HeatmapCellProps } from './HeatmapCell';
 import { scaleQuantile } from 'd3-scale';
 import { uniqueBy } from '../../common/utils/array';
@@ -16,7 +16,7 @@ export interface HeatmapSeriesProps {
   colorScheme: ColorSchemeType;
   emptyColor: string;
   animated: boolean;
-  cell: JSX.Element;
+  cell: ReactElement<HeatmapCellProps, typeof HeatmapCell>;
 }
 
 export class HeatmapSeries extends Component<HeatmapSeriesProps> {

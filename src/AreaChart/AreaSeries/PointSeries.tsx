@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils';
 import {
@@ -20,7 +20,7 @@ export interface PointSeriesProps {
   height: number;
   width: number;
   show: boolean | 'hover' | 'first' | 'last';
-  point: JSX.Element;
+  point: ReactElement<ScatterPointProps, typeof ScatterPoint>;
   index: number;
 }
 

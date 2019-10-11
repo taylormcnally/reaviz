@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { RadialBar, RadialBarProps } from './RadialBar';
 import { CloneElement } from '../../common/utils/children';
@@ -11,7 +11,7 @@ export interface RadialBarSeriesProps {
   xScale: any;
   yScale: any;
   id: string;
-  bar: JSX.Element;
+  bar: ReactElement<RadialBarProps, typeof RadialBar>;
   animated: boolean;
 }
 

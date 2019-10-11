@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import classNames from 'classnames';
 import {
   ChartProps,
@@ -20,7 +20,8 @@ import {
   LinearYAxisTickSeries,
   LinearXAxisTickSeries,
   LinearYAxisTickLabel,
-  LinearXAxisTickLabel
+  LinearXAxisTickLabel,
+  LinearAxis
 } from '../common/Axis';
 import { HeatmapSeries, HeatmapSeriesProps } from './HeatmapSeries';
 import { scaleBand } from 'd3-scale';
@@ -28,10 +29,10 @@ import { uniqueBy } from '../common/utils/array';
 
 export interface HeatmapProps extends ChartProps {
   data: ChartNestedDataShape[];
-  series: JSX.Element;
-  yAxis: JSX.Element;
-  xAxis: JSX.Element;
-  secondaryAxis?: JSX.Element[];
+  series: ReactElement<HeatmapSeriesProps, typeof HeatmapSeries>;
+  yAxis: ReactElement<LinearAxisProps, typeof LinearYAxis>;
+  xAxis: ReactElement<LinearAxisProps, typeof LinearXAxis>;
+  secondaryAxis?: ReactElement<LinearAxisProps, typeof LinearAxis>[];
 }
 
 export class Heatmap extends Component<HeatmapProps> {

@@ -1,5 +1,5 @@
-import React, { Fragment, Component } from 'react';
-import { GradientProps } from '../../Gradient';
+import React, { Fragment, Component, ReactElement } from 'react';
+import { GradientProps, Gradient } from '../../Gradient';
 import { CloneElement } from '../../utils';
 
 export interface LinearAxisLineProps {
@@ -7,7 +7,7 @@ export interface LinearAxisLineProps {
   width: number;
   strokeColor?: string;
   strokeWidth: number;
-  strokeGradient: JSX.Element | null;
+  strokeGradient: ReactElement<GradientProps, typeof Gradient> | null;
   scale: any;
   orientation: 'horizontal' | 'vertical';
   className?: any;

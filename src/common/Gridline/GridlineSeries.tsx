@@ -1,9 +1,13 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import { Gridline, GridlineProps } from './Gridline';
 import { getTicks, getMaxTicks } from '../utils/ticks';
 import { CloneElement } from '../utils/children';
 import { LinearAxisProps } from '../Axis';
-import { GridStripeProps } from './GridStripe';
+import { GridStripeProps, GridStripe } from './GridStripe';
+
+type GridLineElement = ReactElement<GridlineProps, typeof Gridline>;
+type GridStripeElement = ReactElement<GridStripeProps, typeof GridStripe>;
+type GridElement = GridLineElement | GridStripeElement;
 
 export interface GridlineSeriesProps {
   yScale: any;
@@ -12,8 +16,8 @@ export interface GridlineSeriesProps {
   xAxis: LinearAxisProps;
   height: number;
   width: number;
-  line: JSX.Element | null;
-  stripe: JSX.Element | null;
+  line: GridLineElement | null;
+  stripe: GridStripeElement | null;
 }
 
 export class GridlineSeries extends Component<GridlineSeriesProps> {
@@ -46,7 +50,7 @@ export class GridlineSeries extends Component<GridlineSeriesProps> {
   renderSeries(
     yAxisGrid,
     xAxisGrid,
-    element: JSX.Element,
+    element: GridElement,
     type: 'line' | 'stripe'
   ) {
     const { xScale, yScale } = this.props;
@@ -85,7 +89,7 @@ export class GridlineSeries extends Component<GridlineSeriesProps> {
   }
 
   renderGroup(
-    element: JSX.Element,
+    element: GridElement,
     grid,
     scale,
     direction: 'x' | 'y',

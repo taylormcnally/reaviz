@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { PieArc, PieArcProps } from './PieArc';
 import { arc } from 'd3-shape';
 import { PieArcLabel, PieArcLabelProps } from './PieArcLabel';
@@ -16,8 +16,8 @@ export interface PieArcSeriesProps {
   explode: boolean;
   height: number;
   width: number;
-  label?: JSX.Element | null;
-  arc: JSX.Element;
+  label?: ReactElement<PieArcLabelProps, typeof PieArcLabel> | null;
+  arc: ReactElement<PieArcProps, typeof PieArc>;
   colorScheme: ColorSchemeType;
 }
 

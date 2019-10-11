@@ -1,4 +1,10 @@
-import React, { Component, ReactNode, createRef, Fragment } from 'react';
+import React, {
+  Component,
+  ReactNode,
+  createRef,
+  Fragment,
+  ReactElement
+} from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { radialLine } from 'd3-shape';
 import bind from 'memoize-bind';
@@ -24,7 +30,7 @@ export interface RadialScatterPointProps {
   visible?: (value, index) => boolean;
   symbol: (value) => ReactNode;
   size?: ((d) => number) | number;
-  tooltip: JSX.Element | null;
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
   onClick: (event) => void;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;

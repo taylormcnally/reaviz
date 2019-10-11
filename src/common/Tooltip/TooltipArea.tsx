@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import { TooltipAreaEvent } from './TooltipAreaEvent';
 import { Placement } from 'rdk';
 import {
@@ -26,7 +26,7 @@ export interface TooltipAreaProps {
   children?: any;
   isRadial?: boolean;
   innerRadius?: number;
-  tooltip: JSX.Element;
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip>;
   onValueEnter: (event: TooltipAreaEvent) => void;
   onValueLeave: () => void;
 }

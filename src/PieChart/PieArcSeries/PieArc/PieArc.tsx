@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, ReactElement } from 'react';
 import bind from 'memoize-bind';
 import chroma from 'chroma-js';
 import { ChartTooltip, ChartTooltipProps } from '../../../common/Tooltip';
@@ -10,7 +10,7 @@ export interface PieArcProps {
   data: any;
   animated: boolean;
   color: any;
-  tooltip: JSX.Element | null;
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
   cursor: string;
   innerArc: any;
   disabled: boolean;

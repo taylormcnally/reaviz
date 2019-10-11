@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import {
   sankey,
   sankeyLeft,
@@ -14,8 +14,8 @@ import {
 import { CloneElement } from '../common/utils/children';
 
 import { getColor, ColorSchemeType } from '../common/color';
-import { SankeyNodeProps } from './SankeyNode';
-import { SankeyLinkProps } from './SankeyLink';
+import { SankeyNodeProps, SankeyNode } from './SankeyNode';
+import { SankeyLinkProps, SankeyLink } from './SankeyLink';
 import { Node, Link } from './utils';
 import bind from 'memoize-bind';
 
@@ -27,6 +27,7 @@ const JUSTIFICATION = {
 };
 
 type Justification = 'justify' | 'center' | 'left' | 'right';
+type NodeElement = ReactElement<SankeyNodeProps, typeof SankeyNode>;
 
 export interface SankeyProps extends ChartProps {
   animated: boolean;
@@ -34,8 +35,8 @@ export interface SankeyProps extends ChartProps {
   justification: Justification;
   nodeWidth: number;
   nodePadding: number;
-  nodes: JSX.Element[];
-  links: JSX.Element[];
+  nodes: NodeElement[];
+  links: ReactElement<SankeyLinkProps, typeof SankeyLink>[];
 }
 
 interface SankeyState {
@@ -53,7 +54,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
 
   state: SankeyState = { activeNodes: [], activeLinks: [] };
 
-  getNodeColor(node: JSX.Element, index: any) {
+  getNodeColor(node: NodeElement, index: any) {
     const { colorScheme, nodes } = this.props;
 
     if (colorScheme) {
@@ -110,7 +111,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
     computedNode: Node,
     index: number,
     chartWidth: number,
-    node?: JSX.Element
+    node?: NodeElement
   ) {
     const { animated } = this.props;
     const { activeNodes } = this.state;
@@ -133,7 +134,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
   }
 
   renderNodes(nodes: Node[], chartWidth: number) {
-    const nodeMap = new Map<string, JSX.Element>();
+    const nodeMap = new Map<string, NodeElement>();
     this.props.nodes.forEach(
       node => node && nodeMap.set(node.props.title, node)
     );

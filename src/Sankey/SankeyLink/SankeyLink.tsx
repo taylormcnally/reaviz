@@ -1,4 +1,4 @@
-import React, { Component, Fragment, createRef } from 'react';
+import React, { Component, Fragment, createRef, ReactElement } from 'react';
 import bind from 'memoize-bind';
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
@@ -18,7 +18,7 @@ export interface SankeyLinkProps extends Link {
   gradient?: boolean;
   opacity: (active: boolean, disabled: boolean) => number;
   style?: object;
-  tooltip: JSX.Element;
+  tooltip: ReactElement<TooltipProps, typeof Tooltip>;
   width: number;
   onClick: (event: React.MouseEvent<SVGPathElement>) => void;
   onMouseEnter: (event: React.MouseEvent<SVGPathElement>) => void;

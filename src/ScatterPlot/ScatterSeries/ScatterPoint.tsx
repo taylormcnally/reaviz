@@ -1,4 +1,10 @@
-import React, { Component, Fragment, ReactNode, createRef } from 'react';
+import React, {
+  Component,
+  Fragment,
+  ReactNode,
+  createRef,
+  ReactElement
+} from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import bind from 'memoize-bind';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
@@ -23,7 +29,7 @@ export type ScatterPointProps = {
   height: number;
   animated: boolean;
   index: number;
-  tooltip: JSX.Element | null;
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
   data: ChartInternalShallowDataShape;
   id: string;
   symbol: (data: ChartInternalShallowDataShape) => ReactNode;

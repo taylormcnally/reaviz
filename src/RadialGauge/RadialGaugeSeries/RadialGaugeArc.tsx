@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { arc } from 'd3-shape';
 import { PieArc } from '../../PieChart';
 import { ChartShallowDataShape } from '../../common/data';
-import { ChartTooltip } from '../../common/Tooltip';
+import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 
 export interface RadialGaugeArcProps {
   data?: ChartShallowDataShape;
@@ -13,7 +13,7 @@ export interface RadialGaugeArcProps {
   width: number;
   animated: boolean;
   disabled: boolean;
-  tooltip: JSX.Element | null;
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
   onClick: (e) => void;
   onMouseEnter: (e) => void;
   onMouseLeave: (e) => void;

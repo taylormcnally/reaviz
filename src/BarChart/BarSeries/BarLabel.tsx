@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { ChartInternalShallowDataShape, Direction } from '../../common/data';
 import { BarType } from './Bar';
 import { motion } from 'framer-motion';
-import { DEFAULT_TRANSITION } from 'index';
+import { DEFAULT_TRANSITION } from '../../common/Motion';
 
 export interface BarLabelProps {
   text: string;

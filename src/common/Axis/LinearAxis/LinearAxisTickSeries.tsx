@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import {
   LinearAxisTickLabel,
   LinearAxisTickLabelProps
@@ -24,8 +24,11 @@ export interface LinearAxisTickSeriesProps {
   tickSize: number;
   tickValues: any[];
   orientation: 'horizontal' | 'vertical';
-  label: JSX.Element | null;
-  line: JSX.Element | null;
+  label: ReactElement<
+    LinearAxisTickLabelProps,
+    typeof LinearAxisTickLabel
+  > | null;
+  line: ReactElement<LinearAxisTickLineProps, typeof LinearAxisTickLine> | null;
   axis: LinearAxisProps;
 }
 
@@ -154,7 +157,7 @@ export class LinearAxisTickSeries extends Component<LinearAxisTickSeriesProps> {
         ? calculateDimensions(
             text,
             label.props.fontFamily,
-            label.props.fontSize
+            label.props.fontSize.toString()
           )
         : {};
 

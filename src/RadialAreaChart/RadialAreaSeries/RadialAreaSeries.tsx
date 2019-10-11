@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { getColor, ColorSchemeType } from '../../common/color';
 import { CloneElement } from '../../common/utils/children';
@@ -25,10 +25,13 @@ export interface RadialAreaSeriesProps {
   animated: boolean;
   height: number;
   width: number;
-  area: JSX.Element | null;
-  line: JSX.Element | null;
-  symbols: JSX.Element | null;
-  tooltip: JSX.Element;
+  area: ReactElement<RadialAreaProps, typeof RadialArea> | null;
+  line: ReactElement<RadialLineProps, typeof RadialLine> | null;
+  symbols: ReactElement<
+    RadialPointSeriesProps,
+    typeof RadialPointSeries
+  > | null;
+  tooltip: ReactElement<TooltipAreaProps, typeof TooltipArea>;
 }
 
 interface RadialAreaSeriesState {

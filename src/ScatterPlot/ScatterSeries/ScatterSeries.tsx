@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { CloneElement } from '../../common/utils/children';
 import { ScatterPoint, ScatterPointProps } from './ScatterPoint';
 
 export interface ScatterSeriesProps {
-  point: JSX.Element;
+  point: ReactElement<ScatterPointProps, typeof ScatterPoint>;
   yScale: any;
   xScale: any;
   data: ChartInternalShallowDataShape[];

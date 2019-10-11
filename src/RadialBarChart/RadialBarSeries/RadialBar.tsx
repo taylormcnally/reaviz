@@ -1,4 +1,4 @@
-import React, { Component, Fragment, createRef } from 'react';
+import React, { Component, Fragment, createRef, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { arc } from 'd3-shape';
 import { Gradient } from '../../common/Gradient';
@@ -22,7 +22,7 @@ export interface RadialBarProps {
   id: string;
   barCount: number;
   className?: any;
-  tooltip: JSX.Element;
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip>;
   curved: boolean;
   onClick: (event) => void;
   onMouseEnter: (event) => void;

@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactNode, ReactElement } from 'react';
 import css from './DiscreteLegendEntry.module.scss';
 import classNames from 'classnames';
 import {
@@ -10,7 +10,9 @@ import { CloneElement } from '../../utils/children';
 export interface DiscreteLegendEntryProps {
   label: string;
   color: string;
-  symbol: JSX.Element | ReactNode;
+  symbol:
+    | ReactElement<DiscreteLegendSymbolProps, typeof DiscreteLegendSymbol>
+    | ReactNode;
   active?: boolean;
   style?: any;
   className?: any;

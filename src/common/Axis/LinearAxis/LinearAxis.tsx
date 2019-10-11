@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, ReactElement } from 'react';
 import {
   LinearAxisTickSeries,
   LinearAxisTickSeriesProps
@@ -18,8 +18,11 @@ export interface LinearAxisProps {
   roundDomains?: boolean;
   type: 'value' | 'time' | 'category' | 'duration';
   position: 'start' | 'end' | 'center';
-  tickSeries: JSX.Element;
-  axisLine: JSX.Element | null;
+  tickSeries: ReactElement<
+    LinearAxisTickSeriesProps,
+    typeof LinearAxisTickSeries
+  >;
+  axisLine: ReactElement<LinearAxisLineProps, typeof LinearAxisLine> | null;
   height: number;
   width: number;
   scale: any;

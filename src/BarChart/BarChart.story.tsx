@@ -587,13 +587,23 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
             <StackedNormalizedBarSeries
               bar={
                 <Bar
-                  {...StackedNormalizedBarSeries.defaultProps.bar}
                   key="stacked-normalized-bar"
                   rx={rx}
                   ry={ry}
                   rounded={rounded}
                   gradient={gradient}
                   rangeLines={rangelines}
+                  tooltip={
+                    <ChartTooltip
+                      content={data => {
+                        const x = `${data.key} ∙ ${formatValue(data.x)}`;
+                        const y = `${formatValue(data.value)} ∙ ${formatValue(
+                          Math.floor((data.y1 - data.y0) * 100)
+                        )}%`;
+                        return <TooltipTemplate value={{ y, x }} />;
+                      }}
+                    />
+                  }
                 />
               }
               colorScheme={color}
@@ -640,13 +650,24 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
             <MarimekkoBarSeries
               bar={
                 <Bar
-                  {...MarimekkoBarSeries.defaultProps.bar}
                   key="marimekko-bar"
                   rx={rx}
                   ry={ry}
                   rounded={rounded}
+                  padding={10}
                   gradient={gradient}
                   rangeLines={rangelines}
+                  tooltip={
+                    <ChartTooltip
+                      content={data => {
+                        const x = `${data.key} ∙ ${formatValue(data.x)}`;
+                        const y = `${formatValue(data.value)} ∙ ${formatValue(
+                          Math.floor((data.y1 - data.y0) * 100)
+                        )}%`;
+                        return <TooltipTemplate value={{ y, x }} />;
+                      }}
+                    />
+                  }
                 />
               }
               colorScheme={color}

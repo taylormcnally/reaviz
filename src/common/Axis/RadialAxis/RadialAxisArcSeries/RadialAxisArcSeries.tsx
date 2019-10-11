@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { RadialAxisArc, RadialAxisArcProps } from './RadialAxisArc';
 import { CloneElement } from '../../../utils/children';
 import { scaleLinear } from 'd3-scale';
 
 export interface RadialAxisArcSeriesProps {
-  arc: JSX.Element;
+  arc: ReactElement<RadialAxisArcProps, typeof RadialAxisArc>;
   count: number;
   innerRadius: number;
   outerRadius: number;

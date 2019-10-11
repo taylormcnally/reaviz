@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import { area } from 'd3-shape';
 import { Gradient, GradientProps } from '../../common/Gradient';
 import { Mask, MaskProps } from '../../common/Mask';
@@ -27,8 +27,8 @@ export type AreaProps = {
   xScale: any;
   index: number;
   animated: boolean;
-  mask: JSX.Element | null;
-  gradient: JSX.Element | null;
+  mask: ReactElement<MaskProps, typeof Mask> | null;
+  gradient: ReactElement<GradientProps, typeof Gradient> | null;
 } & PropFunctionTypes;
 
 export class Area extends Component<AreaProps, {}> {

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { geoMercator, geoPath, GeoProjection, GeoPath } from 'd3-geo';
 import {
   ChartProps,
@@ -7,12 +7,14 @@ import {
 } from '../common/containers/ChartContainer';
 import classNames from 'classnames';
 import { CloneElement } from '../common/utils/children';
-import { MapMarkerProps } from './MapMarker';
+import { MapMarkerProps, MapMarker } from './MapMarker';
 import { motion } from 'framer-motion';
 import css from './Map.module.scss';
 
+type MarkerElement = ReactElement<MapMarkerProps, typeof MapMarker>;
+
 interface MapProps extends ChartProps {
-  markers?: JSX.Element[];
+  markers?: MarkerElement[];
   data: any;
 }
 
@@ -23,7 +25,11 @@ export class Map extends Component<MapProps> {
       .center([0, 35]);
   }
 
-  renderMarker(marker: JSX.Element, index: number, projection: GeoProjection) {
+  renderMarker(
+    marker: MarkerElement,
+    index: number,
+    projection: GeoProjection
+  ) {
     const position = projection(marker.props.coordinates);
 
     if (!position) {

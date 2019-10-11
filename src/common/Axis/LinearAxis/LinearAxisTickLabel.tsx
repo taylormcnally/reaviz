@@ -1,4 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
+import {
+  LinearAxisTickLine,
+  LinearAxisTickLineProps
+} from './LinearAxisTickLine';
 
 export interface LinearAxisTickLabelProps {
   text: string;
@@ -6,7 +10,7 @@ export interface LinearAxisTickLabelProps {
   angle: number;
   orientation: 'horizontal' | 'vertical';
   half: 'start' | 'end' | 'center';
-  line: JSX.Element;
+  line: ReactElement<LinearAxisTickLineProps, typeof LinearAxisTickLine>;
   format?: (v) => any;
   fill: string;
   fontSize: number;

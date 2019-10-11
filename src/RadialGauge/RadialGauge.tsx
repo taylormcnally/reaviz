@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import {
   ChartProps,
   ChartContainer,
@@ -15,7 +15,7 @@ export interface RadialGaugeProps extends ChartProps {
   maxValue: number;
   startAngle: number;
   endAngle: number;
-  series: JSX.Element;
+  series: ReactElement<RadialGaugeSeriesProps, typeof RadialGaugeSeries>;
 }
 
 export class RadialGauge extends Component<RadialGaugeProps> {

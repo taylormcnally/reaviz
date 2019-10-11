@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import classNames from 'classnames';
 import bind from 'memoize-bind';
 import { CloneElement } from '../../utils/children';
-import { DiscreteLegendEntryProps } from './DiscreteLegendEntry';
+import {
+  DiscreteLegendEntryProps,
+  DiscreteLegendEntry
+} from './DiscreteLegendEntry';
 import css from './DiscreteLegend.module.scss';
 
 export interface DiscreteLegendProps {
   className?: any;
   style?: any;
   orientation?: 'horizontal' | 'vertical';
-  entries: JSX.Element[];
+  entries: ReactElement<DiscreteLegendEntryProps, typeof DiscreteLegendEntry>[];
 }
 
 interface DiscreteLegendState {
