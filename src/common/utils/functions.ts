@@ -1,9 +1,16 @@
 import classNames from 'classnames';
 
-export type PropFunctionTypes = {
+export interface PropFunctionTypes {
+  /**
+   * Classnames to apply to the element.
+   */
   className?: any;
+
+  /**
+   * CSS styles to apply to the element.
+   */
   style?: any;
-};
+}
 
 export const functionProps = (prop: string, val: any, data: any) => {
   if (typeof val === 'function') {
