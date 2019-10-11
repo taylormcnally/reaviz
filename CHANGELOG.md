@@ -1,3 +1,7 @@
+# 5.2.1 - 10/11/19
+- [Fix] Fix some circular dep issues with new `BarLabel` component
+- [Chore] Improve types for docs
+
 # 5.2.0 - 10/10/19
 - [Feature] Add bar labels
 - [Fix] Tooltips for horizontal bar charts wrong
