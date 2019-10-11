@@ -17,21 +17,63 @@ import {
 } from '../../common/utils/functions';
 import { MotionPath, DEFAULT_TRANSITION } from '../../common/Motion';
 
-export type AreaProps = {
+export interface AreaProps extends PropFunctionTypes {
+  /**
+   * Id set internally by `AreaChart`.
+   */
   id: string;
+  /**
+   * Parsed data shape. Set internally by `AreaChart`.
+   */
   data: ChartInternalDataShape[];
-  width: number;
-  interpolation: InterpolationTypes;
-  color: any;
-  yScale: any;
-  xScale: any;
-  index: number;
-  animated: boolean;
-  mask: ReactElement<MaskProps, typeof Mask> | null;
-  gradient: ReactElement<GradientProps, typeof Gradient> | null;
-} & PropFunctionTypes;
 
-export class Area extends Component<AreaProps, {}> {
+  /**
+   * Width of the chart. Set internally by `AreaChart`.
+   */
+  width: number;
+
+  /**
+   * Interpolation for the area. Set internally by `AreaSeries`.
+   */
+  interpolation: InterpolationTypes;
+
+  /**
+   * Color for the area. Set internally by `AreaSeries`.
+   */
+  color: any;
+
+  /**
+   * D3 scale for X Axis. Set internally by `AreaChart`.
+   */
+  xScale: any;
+
+  /**
+   * D3 scale for Y Axis. Set internally by `AreaChart`.
+   */
+  yScale: any;
+
+  /**
+   * Index of the area in the series. Set internally by `AreaSeries`.
+   */
+  index: number;
+
+  /**
+   * Whether to animation the enter/update/exit. Set internally by `AreaSeries`.
+   */
+  animated: boolean;
+
+  /**
+   * Mask to apply to the area.
+   */
+  mask: ReactElement<MaskProps, typeof Mask> | null;
+
+  /**
+   * Gradient to apply to the area.
+   */
+  gradient: ReactElement<GradientProps, typeof Gradient> | null;
+}
+
+export class Area extends Component<AreaProps> {
   static defaultProps: Partial<AreaProps> = {
     gradient: <Gradient />,
     interpolation: 'linear'
