@@ -25,7 +25,7 @@ addParameters({
       ...themes.dark,
       brandImage: ReavizLogo,
       brandTitle: 'REAVIZ',
-      url: 'https://reaviz.io'
+      url: 'https://github.com/jask-oss/reaviz'
     }
   },
 });
