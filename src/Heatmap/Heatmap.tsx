@@ -28,10 +28,29 @@ import { scaleBand } from 'd3-scale';
 import { uniqueBy } from '../common/utils/array';
 
 export interface HeatmapProps extends ChartProps {
+  /**
+   * Data the chart will receive to render.
+   */
   data: ChartNestedDataShape[];
+
+  /**
+   * The series component that renders the cell components.
+   */
   series: ReactElement<HeatmapSeriesProps, typeof HeatmapSeries>;
-  yAxis: ReactElement<LinearAxisProps, typeof LinearYAxis>;
-  xAxis: ReactElement<LinearAxisProps, typeof LinearXAxis>;
+
+  /**
+   * The linear axis component for the Y Axis of the chart.
+   */
+  yAxis: ReactElement<LinearAxisProps, typeof LinearAxis>;
+
+  /**
+   * The linear axis component for the X Axis of the chart.
+   */
+  xAxis: ReactElement<LinearAxisProps, typeof LinearAxis>;
+
+  /**
+   * Any secondary axis components. Useful for multi-axis charts.
+   */
   secondaryAxis?: ReactElement<LinearAxisProps, typeof LinearAxis>[];
 }
 

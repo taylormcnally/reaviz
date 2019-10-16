@@ -6,13 +6,10 @@ import {
   Line,
   AreaSeriesProps
 } from '../AreaChart';
-import { ChartDataShape } from '../common/data';
 
-export interface LineChartProps extends AreaChartProps {
-  data: ChartDataShape[];
-}
+export type LineChartProps = AreaChartProps;
 
-export class LineSeries extends Component<AreaSeriesProps, {}> {
+export class LineSeries extends Component<AreaSeriesProps> {
   static defaultProps: Partial<AreaSeriesProps> = {
     ...AreaSeries.defaultProps,
     area: null,
@@ -24,7 +21,7 @@ export class LineSeries extends Component<AreaSeriesProps, {}> {
   }
 }
 
-export class LineChart extends Component<LineChartProps, {}> {
+export class LineChart extends Component<LineChartProps> {
   static defaultProps: Partial<LineChartProps> = {
     ...AreaChart.defaultProps,
     series: <LineSeries />

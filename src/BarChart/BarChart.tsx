@@ -41,12 +41,39 @@ import bind from 'memoize-bind';
 import { CloneElement } from '../common/utils/children';
 
 export interface BarChartProps extends ChartProps {
+  /**
+   * Data the chart will receive to render.
+   */
   data: ChartDataShape[];
+
+  /**
+   * The series component that renders the bar components.
+   */
   series: ReactElement<BarSeriesProps, typeof BarSeries>;
-  yAxis: ReactElement<LinearAxisProps, typeof LinearYAxis>;
-  xAxis: ReactElement<LinearAxisProps, typeof LinearXAxis>;
+
+  /**
+   * The linear axis component for the Y Axis of the chart.
+   */
+  yAxis: ReactElement<LinearAxisProps, typeof LinearAxis>;
+
+  /**
+   * The linear axis component for the X Axis of the chart.
+   */
+  xAxis: ReactElement<LinearAxisProps, typeof LinearAxis>;
+
+  /**
+   * The chart's background gridlines component.
+   */
   gridlines: ReactElement<GridlineSeriesProps, typeof GridlineSeries> | null;
+
+  /**
+   * The chart's brush component.
+   */
   brush: ReactElement<ChartBrushProps, typeof ChartBrush> | null;
+
+  /**
+   * Any secondary axis components. Useful for multi-axis charts.
+   */
   secondaryAxis?: ReactElement<LinearAxisProps, typeof LinearAxis>[];
 }
 
