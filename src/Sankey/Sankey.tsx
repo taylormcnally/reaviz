@@ -30,12 +30,39 @@ type Justification = 'justify' | 'center' | 'left' | 'right';
 type NodeElement = ReactElement<SankeyNodeProps, typeof SankeyNode>;
 
 export interface SankeyProps extends ChartProps {
+  /**
+   * Whether to animate the enter/update/exit. Set internally by `SankeyNode` and `SankeyLink`.
+   */
   animated: boolean;
+
+  /**
+   * Color scheme for the nodes. Set internally by `SankeyNode`.
+   */
   colorScheme: ColorSchemeType;
+
+  /**
+   * The node alignment method.
+   */
   justification: Justification;
+
+  /**
+   * Width of the node.
+   */
   nodeWidth: number;
+
+  /**
+   * Vertical padding between nodes in the same column.
+   */
   nodePadding: number;
+
+  /**
+   * Nodes that are rendered.
+   */
   nodes: NodeElement[];
+
+  /**
+   * Links that are rendered.
+   */
   links: ReactElement<SankeyLinkProps, typeof SankeyLink>[];
 }
 
