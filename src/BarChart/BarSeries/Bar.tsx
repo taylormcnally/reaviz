@@ -28,32 +28,139 @@ export type BarType =
   | 'waterfall';
 
 export type BarProps = {
+  /**
+   * D3 scale for X Axis. Set internally by `BarChart`.
+   */
   xScale: any;
-  xScale1: any;
-  data: ChartInternalShallowDataShape;
-  id: string;
-  gradient: ReactElement<GradientProps, typeof Gradient> | null;
-  rx: number;
-  ry: number;
+
+  /**
+   * D3 scale for Y Axis. Set internally by `BarChart`.
+   */
   yScale: any;
+
+  /**
+   * D3 scale for X Multi-Group Axis. Set internally by `BarChart`.
+   */
+  xScale1: any;
+
+  /**
+   * Parsed data shape. Set internally by `BarChart`.
+   */
+  data: ChartInternalShallowDataShape;
+
+  /**
+   * Id set internally by `BarChart`.
+   */
+  id: string;
+
+  /**
+   * Gradient shades for the bar.
+   */
+  gradient: ReactElement<GradientProps, typeof Gradient> | null;
+
+  /**
+   * SVG rx attribute for the bar.
+   */
+  rx: number;
+
+  /**
+   * SVG ry attribute for the bar.
+   */
+  ry: number;
+
+  /**
+   * Width of the bar. Set internally bby `BarSeries`.
+   */
   width: number;
+
+  /**
+   * Padding for the bar groups.
+   */
   padding: number;
+
+  /**
+   * Total number of bars used for animation. Set internally by `BarSeries`.
+   */
   barCount: number;
+
+  /**
+   * Color callback for the bbar.
+   */
   color: any;
+
+  /**
+   * Whether the bar is rounded or not.
+   */
   rounded: boolean;
+
+  /**
+   * Cursor for the bar element.
+   */
   cursor: string;
+
+  /**
+   * Index of the bar. Set internally by `BarSeries`.
+   */
   barIndex: number;
+
+  /**
+   * Index of the group. Set internally by `BarSeries`.
+   */
   groupIndex?: number;
+
+  /**
+   * Whether to animation the enter/update/exit. Set internally by `BarSeries`.
+   */
   animated: boolean;
+
+  /**
+   * Whether this is categorical chart or not. Set internally by `BarSeries`.
+   */
   isCategorical: boolean;
+
+  /**
+   * Rangelines element. for the bar.
+   */
   rangeLines: ReactElement<RangeLinesProps, typeof RangeLines> | null;
+
+  /**
+   * Mask element for the bar.
+   */
   mask: ReactElement<MaskProps, typeof Mask> | null;
+
+  /**
+   * Tooltip element.
+   */
   tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
+
+  /**
+   * Direction of the chart. Set internally by `BarSeries`.
+   */
   layout: Direction;
+
+  /**
+   * Type of bar chart. Set internally by `BarSeries`.
+   */
   type: BarType;
+
+  /**
+   * Label element.
+   */
   label: ReactElement<BarLabelProps, typeof BarLabel> | null;
+
+  /**
+   * Event for when a symbol is clicked.
+   */
   onClick: (event) => void;
+
+  /**
+   * Event for when the symbol has mouse enter.
+   */
   onMouseEnter: (event) => void;
+
+  /**
+   * Event for when the symbol has mouse leave.
+   */
   onMouseLeave: (event) => void;
 } & PropFunctionTypes;
 

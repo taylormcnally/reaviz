@@ -14,19 +14,71 @@ import { CountableTimeInterval } from 'd3-time';
 type BarElement = ReactElement<BarProps, typeof Bar>;
 
 export interface BarSeriesProps {
+  /**
+   * Parsed data shape. Set internally by `BarChart`.
+   */
   data: ChartInternalDataShape[];
+
+  /**
+   * Id of the bar chart. Set internally by `BarChart`.
+   */
   id: string;
+
+  /**
+   * D3 scale for X Axis. Set internally by `BarChart`.
+   */
   xScale: any;
-  xScale1: any;
+
+  /**
+   * D3 scale for Y Axis. Set internally by `BarChart`.
+   */
   yScale: any;
+
+  /**
+   * D3 scale for X Multi-Group Axis. Set internally by `BarChart`.
+   */
+  xScale1: any;
+
+  /**
+   * Bar element.
+   */
   bar: BarElement | BarElement[];
+
+  /**
+   * Type of the chart.
+   */
   type: BarType;
+
+  /**
+   * Color scheme for the chart.
+   */
   colorScheme: ColorSchemeType;
+
+  /**
+   * Whether the chart is animated or not.
+   */
   animated: boolean;
+
+  /**
+   * Amount of padding between each bar.
+   */
   padding: number;
+
+  /**
+   * Amount of padding between each group.
+   */
   groupPadding: number;
+
+  /**
+   * Whether the chart is categorical or not. Set internally by `BarChart`.
+   */
   isCategorical: boolean;
+
+  /**
+   * Direction of the chart
+   */
   layout: Direction;
+
   /**
    * Threshold for the binning of histogram charts.
    */

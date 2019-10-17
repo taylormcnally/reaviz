@@ -8,12 +8,39 @@ import { CloneElement } from '../../common/utils/children';
 import bind from 'memoize-bind';
 
 export interface RadialScatterSeriesProps {
-  data: ChartInternalShallowDataShape[];
-  xScale: any;
-  yScale: any;
-  id: string;
+  /**
+   * Point that is rendered.
+   */
   point: ReactElement<RadialScatterPointProps, typeof RadialScatterPoint>;
+
+  /**
+   * D3 scale for X Axis. Set internally by `RadialScatterPlot`.
+   */
+  xScale: any;
+
+  /**
+   * D3 scale for Y Axis. Set internally by `RadialScatterPlot`.
+   */
+  yScale: any;
+
+  /**
+   * Parsed data shape. Set internally by `RadialScatterPlot`.
+   */
+  data: ChartInternalShallowDataShape[];
+
+  /**
+   * Id set internally by `RadialScatterPlot`.
+   */
+  id: string;
+
+  /**
+   * Whether to animation the enter/update/exit.
+   */
   animated: boolean;
+
+  /**
+   * Active element ids to highlight.
+   */
   activeIds?: string[];
 }
 
