@@ -20,6 +20,7 @@ export interface LineProps extends PropFunctionTypes {
    * Id set internally by `AreaChart`.
    */
   id: string;
+
   /**
    * Parsed data shape. Set internally by `AreaChart`.
    */
@@ -56,7 +57,7 @@ export interface LineProps extends PropFunctionTypes {
   index: number;
 
   /**
-   * Whether to animation the enter/update/exit. Set internally by `AreaSeries`.
+   * Whether to animate the enter/update/exit. Set internally by `AreaSeries`.
    */
   animated: boolean;
 

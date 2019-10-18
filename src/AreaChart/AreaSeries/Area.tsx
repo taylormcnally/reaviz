@@ -19,18 +19,14 @@ import { MotionPath, DEFAULT_TRANSITION } from '../../common/Motion';
 
 export interface AreaProps extends PropFunctionTypes {
   /**
-   * Id set internally by `AreaChart`.
+   * Id set internally by `AreaSeries`.
    */
   id: string;
+
   /**
    * Parsed data shape. Set internally by `AreaChart`.
    */
   data: ChartInternalDataShape[];
-
-  /**
-   * Width of the chart. Set internally by `AreaChart`.
-   */
-  width: number;
 
   /**
    * Interpolation for the area. Set internally by `AreaSeries`.
@@ -58,7 +54,7 @@ export interface AreaProps extends PropFunctionTypes {
   index: number;
 
   /**
-   * Whether to animation the enter/update/exit. Set internally by `AreaSeries`.
+   * Whether to animate the enter/update/exit. Set internally by `AreaSeries`.
    */
   animated: boolean;
 

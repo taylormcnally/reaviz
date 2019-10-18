@@ -34,7 +34,7 @@ export interface RadialScatterSeriesProps {
   id: string;
 
   /**
-   * Whether to animation the enter/update/exit.
+   * Whether to animate the enter/update/exit.
    */
   animated: boolean;
 

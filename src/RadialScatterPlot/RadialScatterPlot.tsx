@@ -27,7 +27,7 @@ export interface RadialScatterPlotProps extends ChartProps {
   data: ChartShallowDataShape[];
 
   /**
-   * The series component that renders the bar components.
+   * The series component that renders the scatter components.
    */
   series: ReactElement<RadialScatterSeriesProps, typeof RadialScatterSeries>;
 

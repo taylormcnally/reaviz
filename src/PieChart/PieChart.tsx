@@ -12,8 +12,19 @@ import { CloneElement } from '../common/utils/children';
 import memoize from 'memoize-one';
 
 interface PieChartProps extends ChartProps {
+  /**
+   * Data the chart will receive to render.
+   */
   data: ChartDataShape[];
+
+  /**
+   * Whether the chart is disabled.
+   */
   disabled?: boolean;
+
+  /**
+   * The series component that renders the arc components.
+   */
   series: ReactElement<PieArcSeriesProps, typeof PieArcSeries>;
 }
 

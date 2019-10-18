@@ -184,8 +184,8 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
     );
   }
 
-  renderLink(computedLink: Link, index: number) {
-    const { animated, links, id } = this.props;
+  renderLink(computedLink: Link, index: number, chartId: string) {
+    const { animated, links } = this.props;
     const { activeLinks } = this.state;
     const active = activeLinks.some(link => link.index === computedLink.index);
     const disabled = activeLinks.length > 0 && !active;
@@ -196,7 +196,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
         active={active}
         animated={animated}
         key={`link-${index}`}
-        chartId={id}
+        chartId={chartId}
         disabled={disabled}
         {...computedLink}
         onMouseEnter={bind(this.onLinkActive, this, computedLink)}
@@ -206,7 +206,7 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
   }
 
   renderChart(containerProps: ChartContainerChildProps) {
-    const { chartWidth, chartHeight } = containerProps;
+    const { id, chartWidth, chartHeight } = containerProps;
     const { justification, nodeWidth, nodePadding } = this.props;
 
     const nodesCopy: Node[] = this.props.nodes.map((node, index) => ({
@@ -236,7 +236,9 @@ export class Sankey extends Component<SankeyProps, SankeyState> {
     return (
       containerProps.chartSized && (
         <Fragment key="group">
-          {links.map((link, index) => this.renderLink(link as Link, index))}
+          {links.map((link, index) =>
+            this.renderLink(link as Link, index, `sankey-${id}`)
+          )}
           {this.renderNodes(nodes as Node[], chartWidth)}
         </Fragment>
       )

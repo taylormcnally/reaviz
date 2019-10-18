@@ -11,19 +11,74 @@ import { Node, DEFAULT_COLOR } from '../utils';
 import css from './SankeyNode.module.scss';
 
 export interface SankeyNodeProps extends Node {
+  /**
+   * Whether the element is active or not. Set internally by `Sankey`.
+   */
   active: boolean;
+
+  /**
+   * Whether to animate the enter/update/exit.
+   */
   animated: boolean;
+
+  /**
+   * Width of the chart. Set internally by `Sankey`.
+   */
   chartWidth?: number;
+
+  /**
+   * CSS class to apply.
+   */
   className?: string;
+
+  /**
+   * Whether the node is disabled. Set internally by `Sankey`.
+   */
   disabled: boolean;
+
+  /**
+   * Label element.
+   */
   label: ReactElement<SankeyLabelProps, typeof SankeyLabel>;
+
+  /**
+   * Opacity callback for the node.
+   */
   opacity: (active: boolean, disabled: boolean) => number;
+
+  /**
+   * Whether to show the label or not.
+   */
   showLabel: boolean;
+
+  /**
+   * CSS styles to apply.
+   */
   style?: object;
+
+  /**
+   * Tooltip element.
+   */
   tooltip: ReactElement<TooltipProps, typeof Tooltip>;
+
+  /**
+   * Width of the node. Set internally by `Sankey`.
+   */
   width?: number;
+
+  /**
+   * Event for when the node is clicked.
+   */
   onClick: (event: React.MouseEvent<SVGRectElement>) => void;
+
+  /**
+   * Event for when the node has mouse enter.
+   */
   onMouseEnter: (event: React.MouseEvent<SVGRectElement>) => void;
+
+  /**
+   * Event for when the node has mouse leave.
+   */
   onMouseLeave: (event: React.MouseEvent<SVGRectElement>) => void;
 }
 

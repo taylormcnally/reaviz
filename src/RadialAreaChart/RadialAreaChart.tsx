@@ -18,9 +18,24 @@ import { getRadialYScale } from '../common/scales/radial';
 import memoize from 'memoize-one';
 
 export interface RadialAreaChartProps extends ChartProps {
+  /**
+   * Data the chart will receive to render.
+   */
   data: ChartShallowDataShape[];
+
+  /**
+   * The series component that renders the area components.
+   */
   series: ReactElement<RadialAreaSeriesProps, typeof RadialAreaSeries>;
+
+  /**
+   * The radial axis component for the chart.
+   */
   innerRadius: number;
+
+  /**
+   * The inner radius for the chart center.
+   */
   axis: ReactElement<RadialAxisProps, typeof RadialAxis> | null;
 }
 

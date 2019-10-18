@@ -56,7 +56,7 @@ export interface AreaSeriesProps {
   width: number;
 
   /**
-   * Whether to animation the enter/update/exit.
+   * Whether to animate the enter/update/exit.
    */
   animated: boolean;
 

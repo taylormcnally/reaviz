@@ -56,7 +56,7 @@ export type ScatterPointProps = {
   height: number;
 
   /**
-   * Whether to animation the enter/update/exit. Set internally by `ScatterSeries`.
+   * Whether to animate the enter/update/exit. Set internally by `ScatterSeries`.
    */
   animated: boolean;
 

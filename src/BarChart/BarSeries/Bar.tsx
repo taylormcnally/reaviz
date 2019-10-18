@@ -69,7 +69,7 @@ export type BarProps = {
   ry: number;
 
   /**
-   * Width of the bar. Set internally bby `BarSeries`.
+   * Width of the bar. Set internally by `BarSeries`.
    */
   width: number;
 
@@ -84,7 +84,7 @@ export type BarProps = {
   barCount: number;
 
   /**
-   * Color callback for the bbar.
+   * Color callback for the bar.
    */
   color: any;
 
@@ -109,7 +109,7 @@ export type BarProps = {
   groupIndex?: number;
 
   /**
-   * Whether to animation the enter/update/exit. Set internally by `BarSeries`.
+   * Whether to animate the enter/update/exit. Set internally by `BarSeries`.
    */
   animated: boolean;
 
@@ -149,17 +149,17 @@ export type BarProps = {
   label: ReactElement<BarLabelProps, typeof BarLabel> | null;
 
   /**
-   * Event for when a symbol is clicked.
+   * Event for when the bar is clicked.
    */
   onClick: (event) => void;
 
   /**
-   * Event for when the symbol has mouse enter.
+   * Event for when the bar has mouse enter.
    */
   onMouseEnter: (event) => void;
 
   /**
-   * Event for when the symbol has mouse leave.
+   * Event for when the bar has mouse leave.
    */
   onMouseLeave: (event) => void;
 } & PropFunctionTypes;
