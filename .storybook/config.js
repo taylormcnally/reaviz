@@ -54,6 +54,8 @@ const loadStories = () => {
     require.context('../docs', true, /Intro.story.mdx/),
     require.context('../docs', true, /GettingStarted.story.mdx/),
     require.context('../docs', true, /Data.story.mdx/),
+    require.context('../docs', true, /Developing.story.mdx/),
+    require.context('../docs', true, /Why.story.mdx/),
     require.context('../docs/charts', true, /\.story.mdx/),
     require.context('../docs/advanced', true, /\.story.mdx/),
     require.context('../src', true, /\.story\.(js|jsx|ts|tsx|mdx)$/)

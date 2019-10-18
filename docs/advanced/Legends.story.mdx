@@ -1,0 +1,76 @@
+import { Meta, Story, Props } from '@storybook/addon-docs/blocks';
+import { DiscreteLegend, DiscreteLegendEntry, DiscreteLegendSymbol, SequentialLegend } from '../../src';
+
+<Meta title="Docs|Advanced/Legends" />
+
+# Legends
+
+---
+
+REAVIZ supports two different types of legends:
+
+- Discrete
+- Sequential
+
+Out of the box, none of the charts include legends because we want to
+keep the library as modular as possible.
+
+## Discrete Legend
+The discrete legend is useful for categorical charts such as bar charts.
+This legend supports supports both vertical and horizontal layout.
+
+Below is a simple example of a discrete legend that has four different
+labels.
+
+```js
+<DiscreteLegend
+  orientation="horizontal"
+  entries={[
+    <DiscreteLegendEntry label="DLP" color="green" />,
+    <DiscreteLegendEntry label="SIEM" color="blue" />,
+    <DiscreteLegendEntry label="AWS" color="yellow" />,
+    <DiscreteLegendEntry label="AD" color="purple" />
+  ]}
+/>
+```
+
+which would result in:
+
+<br />
+<Story id="demos-legend-discrete-horizontal--simple" />
+
+### API
+#### [DiscreteLegend](https://github.com/jask-oss/reaviz/blob/master/src/common/legends/DiscreteLegend/DiscreteLegend.tsx)
+<Props of={DiscreteLegend} />
+
+#### [DiscreteLegendEntry](https://github.com/jask-oss/reaviz/blob/master/src/common/legends/DiscreteLegend/DiscreteLegendEntry.tsx)
+<Props of={DiscreteLegendEntry} />
+
+#### [DiscreteLegendSymbol](https://github.com/jask-oss/reaviz/blob/master/src/common/legends/DiscreteLegend/DiscreteLegendSymbol.tsx)
+<Props of={DiscreteLegendSymbol} />
+
+## Sequential Legend
+The sequential legend is useful for categorical charts such as heatmaps.
+This legend supports supports both vertical and horizontal layout.
+
+Below is a simple example of a sequential legend:
+
+```js
+<SequentialLegend
+  data={
+    [
+      { key: 'Foo', data: 200 },
+      { key: 'Bar', data: 0 }
+    ]
+  }
+/>
+```
+
+which would result in the following:
+
+<br />
+<Story id="demos-legend-sequential-horizontal--simple" />
+
+### API
+#### [SequentialLegend](https://github.com/jask-oss/reaviz/blob/master/src/common/legends/SequentialLegend/SequentialLegend.tsx)
+<Props of={SequentialLegend} />

@@ -33,11 +33,6 @@ locked to that specific version.
 
 If you later want to again update to the bleeding edge, you will have to run the above command again.
 
-## Compatibility
-
-REAVIZ is compatible with React v16+ and works with ReactDOM. React Native and SSR
-are not supported at this time.
-
 ## Configuration
 
 To customize various elements in the charts,
@@ -70,22 +65,6 @@ some sensible defaults here is what we use in the Storybook demo:
 </style>
 ```
 
-## Developing
+## Compatibility
 
-If you want to run the project locally, its really easy!
-
-The project uses Storybook for its demos and development
-environment. To run it locally:
-
-- Clone repo
-- `yarn install`
-- `yarn start`
-
-Once started the browser will open to the storybook url.
-From here you can tweak the charts and see them build
-and reload in real time.
-
-We use Rollup to build and package for distribution.
-You can run this by doing `yarn build` and it will
-create a `dist` folder with the type definitions, bundled
-javascript and css files.
+REAVIZ is compatible with React v16+ and works with ReactDOM. React Native is not supported at this time.
