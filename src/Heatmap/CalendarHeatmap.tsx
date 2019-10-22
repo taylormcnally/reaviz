@@ -19,9 +19,24 @@ import memoize from 'memoize-one';
 const weekDays = moment.weekdaysShort();
 
 export interface CalendarHeatmapProps extends Omit<HeatmapProps, 'data'> {
+  /**
+   * Chart data shape.
+   */
   data: ChartShallowDataShape[];
+
+  /**
+   * Height of the component.
+   */
   height: number;
+
+  /**
+   * Width of the component.
+   */
   width: number;
+
+  /**
+   * View of the calendar renderer.
+   */
   view: CalendarView;
 }
 
