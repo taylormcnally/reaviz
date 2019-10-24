@@ -3,7 +3,14 @@ import css from './DiscreteLegendSymbol.module.scss';
 import classNames from 'classnames';
 
 export interface DiscreteLegendSymbolProps {
+  /**
+   * Color for the symbol set by the `DiscreteLegendEntry`.
+   */
   color: string;
+
+  /**
+   * CSS Class names.
+   */
   className?: any;
 }
 

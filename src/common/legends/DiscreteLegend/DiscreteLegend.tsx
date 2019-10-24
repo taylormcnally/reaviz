@@ -9,9 +9,24 @@ import {
 import css from './DiscreteLegend.module.scss';
 
 export interface DiscreteLegendProps {
+  /**
+   * CSS Class name.
+   */
   className?: any;
+
+  /**
+   * CSS Styles.
+   */
   style?: any;
+
+  /**
+   * Orientation of the legend.
+   */
   orientation?: 'horizontal' | 'vertical';
+
+  /**
+   * Entry components to show in the legend.
+   */
   entries: ReactElement<DiscreteLegendEntryProps, typeof DiscreteLegendEntry>[];
 }
 

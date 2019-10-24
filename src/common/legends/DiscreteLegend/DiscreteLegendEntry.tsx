@@ -8,17 +8,56 @@ import {
 import { CloneElement } from '../../utils/children';
 
 export interface DiscreteLegendEntryProps {
+  /**
+   * Label for the entry.
+   */
   label: string;
+
+  /**
+   * Color for the entry.
+   */
   color: string;
+
+  /**
+   * Symbol for the entry.
+   */
   symbol:
     | ReactElement<DiscreteLegendSymbolProps, typeof DiscreteLegendSymbol>
     | ReactNode;
+
+  /**
+   * Whether the entry is active or not.
+   */
   active?: boolean;
+
+  /**
+   * CSS Styles.
+   */
   style?: any;
+
+  /**
+   * CSS Class names.
+   */
   className?: any;
+
+  /**
+   * Orientation of the entry set internally by `DiscreteLegend`.
+   */
   orientation: 'horizontal' | 'vertical';
+
+  /**
+   * Mouse enter event.
+   */
   onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) => void;
+
+  /**
+   * Mouse leave event.
+   */
   onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => void;
+
+  /**
+   * On click event.
+   */
   onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
