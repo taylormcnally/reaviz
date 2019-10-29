@@ -26,11 +26,6 @@ export interface DiscreteLegendEntryProps {
     | ReactNode;
 
   /**
-   * Whether the entry is active or not.
-   */
-  active?: boolean;
-
-  /**
    * CSS Styles.
    */
   style?: any;
@@ -79,7 +74,6 @@ export class DiscreteLegendEntry extends Component<DiscreteLegendEntryProps> {
       color,
       style,
       onClick,
-      active,
       orientation
     } = this.props;
     const className = classNames(css.entry, this.props.className, {
