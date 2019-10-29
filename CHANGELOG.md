@@ -1,4 +1,4 @@
-# Master
+# 5.3.1 - 10/29/19
 - [Feature] Single-series linear gauge chart
 - [Feature] Multi-series linear gauge chart
 - [Feature] Add `strokeDasharray` to `Gridlines`
