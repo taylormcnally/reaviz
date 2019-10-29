@@ -74,7 +74,9 @@ Chart types include:
 - Donut Chart
 - Sankey chart
 - Hive Plot
-- Radial Gauge Chart
+- Gauge
+  - Radial
+  - Linear
 - Map Chart
 - Heatmap
   - Standard
