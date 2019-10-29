@@ -83,7 +83,6 @@ export class DiscreteLegendEntry extends Component<DiscreteLegendEntryProps> {
       orientation
     } = this.props;
     const className = classNames(css.entry, this.props.className, {
-      [css.inactive]: active === false,
       [css.vertical]: orientation === 'vertical',
       [css.horizontal]: orientation === 'horizontal'
     });
