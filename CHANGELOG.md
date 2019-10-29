@@ -1,3 +1,6 @@
+# 5.3.2 - 10/29/19
+- [Fix] Fix some import issues with new charts
+
 # 5.3.1 - 10/29/19
 - [Feature] Single-series linear gauge chart
 - [Feature] Multi-series linear gauge chart
