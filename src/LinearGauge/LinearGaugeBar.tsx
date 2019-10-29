@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Bar, BarProps } from 'BarChart';
+import { Bar, BarProps } from '../BarChart';
 import { ChartTooltip, TooltipTemplate } from '../common/Tooltip';
 
 export type LinearGaugeBarProps = BarProps;

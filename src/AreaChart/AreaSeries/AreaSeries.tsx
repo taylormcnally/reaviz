@@ -195,7 +195,6 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
             xScale={xScale}
             yScale={yScale}
             data={data}
-            width={width}
             index={index}
             animated={animated}
             interpolation={interpolation}
