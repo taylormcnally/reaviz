@@ -1,3 +1,6 @@
+# 5.3.3 - 10/29/19
+- [Fix] Lock `framer-motion` due to bugs with latest
+
 # 5.3.2 - 10/29/19
 - [Fix] Fix some import issues with new charts
 
