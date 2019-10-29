@@ -550,7 +550,7 @@ export class Bar extends Component<BarProps, BarState> {
             reference={this.rect}
             color={color}
             value={tooltipData}
-            placement={placement}
+            placement={tooltip.props.placement || placement}
             data={data}
           />
         )}

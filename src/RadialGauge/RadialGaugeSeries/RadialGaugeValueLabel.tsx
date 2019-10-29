@@ -1,15 +1,22 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ChartShallowDataShape } from '../../common/data';
 import CountUp from 'react-countup';
 import classNames from 'classnames';
 import css from './RadialGaugeValueLabel.module.scss';
 
 export interface RadialGaugeValueLabelProps {
+  /**
+   * Data set by the `RadialGaugeSeries` component.
+   */
   data: ChartShallowDataShape;
+
+  /**
+   * Classname to apply to the value label.
+   */
   className?: any;
 }
 
-export class RadialGaugeValueLabel extends Component<
+export class RadialGaugeValueLabel extends PureComponent<
   RadialGaugeValueLabelProps
 > {
   static defaultProps: Partial<RadialGaugeValueLabelProps> = {};

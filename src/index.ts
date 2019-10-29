@@ -13,3 +13,4 @@ export * from './RadialBarChart';
 export * from './RadialGauge';
 export * from './RadialScatterPlot';
 export * from './Heatmap';
+export * from './LinearGauge';

@@ -12,21 +12,72 @@ import { range, min } from 'd3-array';
 import { scaleBand } from 'd3-scale';
 
 export interface RadialGaugeSeriesProps {
+  /**
+   * Data to render set bby `RadialGauge` component.
+   */
   data: ChartShallowDataShape[];
+
+  /**
+   * D3 scale function set bby `RadialGauge` component.
+   */
   scale: any;
+
+  /**
+   * Start angle set bby `RadialGauge` component.
+   */
   startAngle: number;
+
+  /**
+   * Start angle set bby `RadialGauge` component.
+   */
   endAngle: number;
+
+  /**
+   * Width set bby `RadialGauge` component.
+   */
   width: number;
+
+  /**
+   * Height set bby `RadialGauge` component.
+   */
   height: number;
+
+  /**
+   * Padding between each gauge.
+   */
   padding: number;
+
+  /**
+   * Color scheme to apply.
+   */
   colorScheme: ColorSchemeType;
+
+  /**
+   * Arc component.
+   */
   innerArc: ReactElement<RadialGaugeArcProps, typeof RadialGaugeArc>;
+
+  /**
+   * Outer arc component. This is the 'fill' element.
+   */
   outerArc: ReactElement<RadialGaugeArcProps, typeof RadialGaugeArc> | null;
+
+  /**
+   * Label component.
+   */
   label: ReactElement<RadialGaugeLabelProps, typeof RadialGaugeLabel> | null;
+
+  /**
+   * Value label component.
+   */
   valueLabel: ReactElement<
     RadialGaugeValueLabelProps,
     typeof RadialGaugeValueLabel
   > | null;
+
+  /**
+   * Min width for a guage. Only applicable in multi-series gauges.
+   */
   minGaugeWidth: number;
 }
 
@@ -72,7 +123,7 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
   }
 
   renderGauge(
-    data: ChartShallowDataShape,
+    point: ChartShallowDataShape,
     index: number,
     columns: number,
     height: number,
@@ -85,13 +136,15 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
       innerArc,
       outerArc,
       startAngle,
+      data,
       endAngle,
       label,
       valueLabel,
-      padding
+      padding,
+      colorScheme
     } = this.props;
 
-    const dataEndAngle = scale(data.data as number);
+    const dataEndAngle = scale(point.data as number);
 
     const baselineLabelHeight = 20;
     const outerRadius =
@@ -112,7 +165,7 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
     return (
       <g
         transform={`translate(${xOffset}, ${yOffset})`}
-        key={data.key.toLocaleString()}
+        key={point.key.toLocaleString()}
       >
         {outerArc && (
           <CloneElement<RadialGaugeArcProps>
@@ -127,24 +180,24 @@ export class RadialGaugeSeries extends Component<RadialGaugeSeriesProps> {
           outerRadius={outerRadius}
           startAngle={startAngle}
           endAngle={dataEndAngle}
-          data={data}
+          data={point}
           color={getColor({
-            data: this.props.data,
-            colorScheme: this.props.colorScheme,
-            point: data,
+            data,
+            colorScheme,
+            point,
             index
           })}
         />
         {valueLabel && (
           <CloneElement<RadialGaugeLabelProps>
             element={valueLabel}
-            data={data}
+            data={point}
           />
         )}
         {label && (
           <CloneElement<RadialGaugeLabelProps>
             element={label}
-            data={data}
+            data={point}
             offset={labelOffset}
           />
         )}

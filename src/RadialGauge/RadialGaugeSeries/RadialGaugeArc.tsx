@@ -5,18 +5,65 @@ import { ChartShallowDataShape } from '../../common/data';
 import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 
 export interface RadialGaugeArcProps {
+  /**
+   * Data set by the `RadialGaugeSeries` component.
+   */
   data?: ChartShallowDataShape;
+
+  /**
+   * Start angle set by the `RadialGaugeSeries` component.
+   */
   startAngle: number;
+
+  /**
+   * End angle set by the `RadialGaugeSeries` component.
+   */
   endAngle: number;
+
+  /**
+   * Outer radius set by the `RadialGaugeSeries` component.
+   */
   outerRadius: number;
+
+  /**
+   * Color set by the `RadialGaugeSeries` component.
+   */
   color: any;
+
+  /**
+   * Width set by the `RadialGaugeSeries` component.
+   */
   width: number;
+
+  /**
+   * Animation set by the `RadialGaugeSeries` component.
+   */
   animated: boolean;
+
+  /**
+   * Disable the interactions.
+   */
   disabled: boolean;
+
+  /**
+   * Tooltip component.
+   */
   tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
-  onClick: (e) => void;
-  onMouseEnter: (e) => void;
-  onMouseLeave: (e) => void;
+
+  /**
+   * Event for when the arc is clicked.
+   */
+  onClick: (event) => void;
+
+  /**
+   * Event for when the arc has mouse enter.
+   */
+  onMouseEnter: (event) => void;
+
+  /**
+   * Event for when the arc has mouse leave.
+   */
+  onMouseLeave: (event) => void;
 }
 
 export class RadialGaugeArc extends Component<RadialGaugeArcProps> {

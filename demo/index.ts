@@ -6,3 +6,4 @@ export * from './sankey';
 export * from './signals';
 export * from './utils';
 export * from './heatmap';
+export * from './mitre';

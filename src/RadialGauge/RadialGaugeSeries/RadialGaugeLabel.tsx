@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   ChartShallowDataShape,
   ChartInternalDataTypes
@@ -8,13 +8,28 @@ import css from './RadialGaugeLabel.module.scss';
 import classNames from 'classnames';
 
 export interface RadialGaugeLabelProps {
+  /**
+   * Data set by the `RadialGaugeSeries` component.
+   */
   data: ChartShallowDataShape;
+
+  /**
+   * Offset set by the `RadialGaugeSeries` component.
+   */
   offset: number;
+
+  /**
+   * Classname to apply to the label.
+   */
   className?: any;
-  onClick: (e: { data; nativeEvent }) => void;
+
+  /**
+   * Label click event.
+   */
+  onClick: (event: { data; nativeEvent }) => void;
 }
 
-export class RadialGaugeLabel extends Component<RadialGaugeLabelProps> {
+export class RadialGaugeLabel extends PureComponent<RadialGaugeLabelProps> {
   static defaultProps: Partial<RadialGaugeLabelProps> = {
     onClick: () => undefined
   };

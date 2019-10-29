@@ -1,5 +1,10 @@
 # Master
+- [Feature] Single-series linear gauge chart
+- [Feature] Multi-series linear gauge chart
 - [Feature] Add `strokeDasharray` to `Gridlines`
+- [Fix] Allow placement passing for `Bar` components on `Tooltip`
+- [Fix] Update some of the radial gauge components to `PureComponent`
+- [Style] Tweak font size of legend entry
 
 # 5.2.1 - 10/11/19
 - [Fix] Fix some circular dep issues with new `BarLabel` component
