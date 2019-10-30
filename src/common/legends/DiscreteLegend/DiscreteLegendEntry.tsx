@@ -36,6 +36,11 @@ export interface DiscreteLegendEntryProps {
   className?: any;
 
   /**
+   * HTML Title Attribute.
+   */
+  title?: string;
+
+  /**
    * Orientation of the entry set internally by `DiscreteLegend`.
    */
   orientation: 'horizontal' | 'vertical';
@@ -71,6 +76,7 @@ export class DiscreteLegendEntry extends Component<DiscreteLegendEntryProps> {
       symbol,
       onMouseEnter,
       onMouseLeave,
+      title,
       color,
       style,
       onClick,
@@ -83,6 +89,7 @@ export class DiscreteLegendEntry extends Component<DiscreteLegendEntryProps> {
 
     return (
       <div
+        title={title}
         className={className}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
