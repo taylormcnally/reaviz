@@ -1,6 +1,6 @@
 {
   "name": "reaviz",
-  "version": "5.3.3",
+  "version": "5.3.4",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook -p 9010 -s public",
@@ -129,9 +129,9 @@
     "jest": "^24.9.0",
     "jest-junit": "^8.0.0",
     "lint-staged": "^8.2.0",
+    "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "prettier": "^1.18.2",
-    "moment": "^2.24.0",
     "react": "^16.10.2",
     "react-codesandboxer": "^3.1.5",
     "react-docgen-typescript-loader": "^3.3.0",
