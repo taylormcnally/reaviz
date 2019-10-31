@@ -5411,26 +5411,10 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-framer-motion@^1.6.15:
-  version "1.6.15"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-1.6.15.tgz#64410f24c3a6efc1c4105c9b5be48871909b790f"
-  integrity sha512-PEnw903cJoOsUcbHgP9V+9uaZMVswCOZu2AVtwgjldjC5aS71/ZDtyi9MLAvNIKp5OV4We9x50Gl6QF3qo2zPg==
-  dependencies:
-    "@popmotion/easing" "^1.0.2"
-    "@popmotion/popcorn" "^0.4.2"
-    framesync "^4.0.4"
-    hey-listen "^1.0.8"
-    popmotion "9.0.0-beta-8"
-    style-value-types "^3.1.6"
-    stylefire "^7.0.0"
-    tslib "^1.10.0"
-  optionalDependencies:
-    "@emotion/is-prop-valid" "^0.8.2"
-
-framer-motion@^1.6.7:
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-1.6.9.tgz#1cada22387cc092de05824f9c1037536f4cea353"
-  integrity sha512-+TLqlpN2pH+1Ax2Y72VTSjxK8wfBxz1VRF1GZFZpkpoTr03UFNv4NpVEeHPp42YB7eLLTTwEGZR8oEnPEKfKJA==
+framer-motion@1.6.7:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-1.6.7.tgz#faba70c1654e95f825052ea20c506c5d8138a1c4"
+  integrity sha512-1tAqvyf70jj1b7ue86iDYEQ5ShwH4Ge6y+slAmkGrxPn9y+BgdZDP3pG10Gs6GgpNalNglKH9hRb8Uw75SwHog==
   dependencies:
     "@popmotion/easing" "^1.0.2"
     "@popmotion/popcorn" "^0.4.2"
@@ -10038,13 +10022,13 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-rdk@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/rdk/-/rdk-3.0.1.tgz#19f7e04eaecdfbf7d1086d6a660dd01a491658ed"
-  integrity sha512-Sbgz06COLRdbiIVqjobP1p/2T4Ql01B6hZZKyT3yqzKMvERvjpGppb5gBo7CYICI0UhZhcq9Jl/NSx/CroRr/g==
+rdk@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/rdk/-/rdk-3.0.2.tgz#5fa20971b97cc9450e519ac75f9378786c939478"
+  integrity sha512-kaAEVg473aY8YLB8A7Vj/5V2CIQe+ivK2Yt5W6CaRlIESAv8Nv+l289d6V2b+TjxnH1MWGUHlWV2woxB9HTceQ==
   dependencies:
     classnames "^2.2.6"
-    framer-motion "^1.6.7"
+    framer-motion "1.6.7"
     memoize-bind "^1.0.3"
     popper.js "^1.15.0"
     react-scrolllock "^4.0.1"
@@ -11702,16 +11686,6 @@ stylefire@^6.0.10:
   version "6.0.12"
   resolved "https://registry.yarnpkg.com/stylefire/-/stylefire-6.0.12.tgz#0564551eae9f8569802a20362bc6a60497d04752"
   integrity sha512-cE7pGHZpA1DZ6yIYFbrLpF13e98jRu0vWwU4oK/En1PKpAo6IrEdWo8rDd5qzQkUQ+Jl8ioDhK4yzj9UEHDOwQ==
-  dependencies:
-    "@popmotion/popcorn" "^0.4.2"
-    framesync "^4.0.0"
-    hey-listen "^1.0.8"
-    style-value-types "^3.1.6"
-
-stylefire@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/stylefire/-/stylefire-7.0.0.tgz#2ae16a97f41b8664f2501252ee40c19baba0ea22"
-  integrity sha512-Ea1knZTN5KmbUKSilTsjFEtHcGs+Vl+cQWNnvWQwqRVG+W6J/WgkWjo620hf4II/PTH8uSIF17vGrkpHC41nAA==
   dependencies:
     "@popmotion/popcorn" "^0.4.2"
     framesync "^4.0.0"
