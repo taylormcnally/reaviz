@@ -1,8 +1,37 @@
 import { range, min } from 'd3-array';
-import moment from 'moment';
 import { ChartShallowDataShape } from '../common/data';
 
 export type CalendarView = 'year' | 'month';
+
+const getFirstOfMonth = (date: Date) =>
+  new Date(date.getFullYear(), date.getMonth(), 1);
+
+export const addWeeksToDate = (date: Date, weeks: number) => {
+  let d = new Date(date.getTime());
+  d.setDate(d.getDate() + weeks * 7);
+  return d;
+};
+
+const getStartOfDay = (date: Date) => {
+  const d = new Date(date.getTime());
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
+const getNewDayFromDay = (date: Date, num: number) => {
+  const d = new Date(date.getTime());
+  d.setDate(d.getDate() + num);
+  return d;
+};
+
+export const weekDays: string[] = (() => {
+  const base = new Date(Date.UTC(2017, 0, 2));
+  return range(7).map(() => {
+    const name = base.toLocaleDateString('default', { weekday: 'short' });
+    base.setDate(base.getDate() + 1);
+    return name;
+  });
+})();
 
 export const buildDataScales = (
   rawData: ChartShallowDataShape[],
@@ -12,10 +41,9 @@ export const buildDataScales = (
   // From the end date, lets find the start year/month of that
   // From that start year/month, lets find the end year/month for our bounds
   const startDate = min(rawData, d => d.key);
-  const start = moment(startDate).startOf('month');
+  const start = getFirstOfMonth(startDate);
   const endDomain = view === 'year' ? 53 : 5;
-  const end = start.clone().add(endDomain, 'weeks');
-  // .endOf(view);
+  const end = addWeeksToDate(start, endDomain);
 
   // Base on the view type, swap out some ranges
   const xDomainRange = view === 'year' ? 53 : 5;
@@ -29,18 +57,18 @@ export const buildDataScales = (
   const dates = rawData
     .filter(
       d =>
-        moment(d.key as Date).isAfter(start) &&
-        moment(d.key as Date).isBefore(end)
+        (d.key as Date).getTime() > start.getTime() ||
+        (d.key as Date).getTime() < end.getTime()
     )
     .map(d => ({
-      key: moment(d.key as Date).startOf('day'),
+      key: getStartOfDay(d.key as Date),
       data: d.data
     }));
 
   // Find the first day of the duration and subtract the delta
-  const firstDayOfStart = start.weekday();
-  const curDate = start.clone().subtract(firstDayOfStart, 'days');
-  const rows = [] as any;
+  const firstDayOfStart = start.getDay();
+  const curDate = getNewDayFromDay(start, -firstDayOfStart);
+  const rows: any[] = [];
 
   // Build out the dataset for the n duration
   for (let week = 0; week < xDomainRange; week++) {
@@ -50,19 +78,19 @@ export const buildDataScales = (
     };
 
     for (let day = 0; day <= 6; day++) {
-      const dayValue = dates.find(d => d.key.isSame(curDate));
+      const dayValue = dates.find(d => d.key.getTime() === curDate.getTime());
 
       row.data.push({
         key: day,
         data: dayValue ? dayValue.data : undefined,
         metadata: {
-          date: curDate.clone().toDate(),
-          start: start.toDate(),
-          end: end.toDate()
+          date: new Date(curDate.getTime()),
+          start: start,
+          end: end
         }
       });
 
-      curDate.add(1, 'day');
+      curDate.setDate(curDate.getDate() + 1);
     }
 
     rows.push(row);
