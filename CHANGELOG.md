@@ -1,3 +1,10 @@
+# 5.3.4 - 10/31/19
+- [Fix] Remove moment depedency for smaller size
+- [Fix] Fix first/last padding on legend entries
+- [Fix] Add ability to pass title attribute to legend entries
+- [Fix] Update node-sass for Node 13
+- [Fix] Update RDK which locks framer-motion
+
 # 5.3.3 - 10/29/19
 - [Fix] Lock `framer-motion` due to bugs with latest
 
