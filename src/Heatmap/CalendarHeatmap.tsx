@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ChartShallowDataShape } from '../common/data';
 import { Heatmap, HeatmapProps } from './Heatmap';
-import moment from 'moment';
 import {
   LinearXAxis,
   LinearYAxis,
@@ -13,10 +12,13 @@ import {
 import { HeatmapSeries, HeatmapCell } from './HeatmapSeries';
 import { ChartTooltip } from '../common/Tooltip';
 import { formatValue } from '../common/utils/formatting';
-import { buildDataScales, CalendarView } from './calendarUtils';
+import {
+  buildDataScales,
+  CalendarView,
+  addWeeksToDate,
+  weekDays
+} from './calendarUtils';
 import memoize from 'memoize-one';
-
-const weekDays = moment.weekdaysShort();
 
 export interface CalendarHeatmapProps extends Omit<HeatmapProps, 'data'> {
   /**
@@ -84,10 +86,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps> {
 
     // Format the xAxis label for the start + n week
     const xAxisLabelFormat = d =>
-      start
-        .clone()
-        .add(d, 'weeks')
-        .format('MMMM');
+      addWeeksToDate(start, d).toLocaleString('default', { month: 'long' });
 
     return (
       <Heatmap
