@@ -1,9 +1,9 @@
-import React from 'react';
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { themes } from '@storybook/theming';
 import ReavizLogo from './assets/reaviz.svg';
 import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
+import centered from '@storybook/addon-centered/react';
 
 // Customize the UI a bit
 addParameters({
@@ -38,15 +38,19 @@ addParameters({
 });
 
 // Custom center decorator that supports docs extensions
-const CenterDecorator = storyFn => (
-  <div className="container">
-    {storyFn()}
-  </div>
-);
+addDecorator((...args) => {
+  const params = (new URL(document.location)).searchParams;
+  const isInDockView = params.get('viewMode') === 'docs';
+
+  if (isInDockView) {
+    return args[0]();
+  }
+
+  return centered(...args);
+});
 
 // Add all our decorators
 addDecorator(withKnobs);
-addDecorator(CenterDecorator);
 
 const loadStories = () => {
   return [
