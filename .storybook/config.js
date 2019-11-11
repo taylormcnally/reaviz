@@ -1,13 +1,21 @@
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { themes } from '@storybook/theming';
 import ReavizLogo from './assets/reaviz.svg';
 import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
 import centered from '@storybook/addon-centered/react';
+import { create } from '@storybook/theming';
+
+const theme = create({
+  base: 'dark',
+  brandImage: ReavizLogo,
+  brandTitle: 'REAVIZ',
+  url: 'https://github.com/jask-oss/reaviz'
+});
 
 // Customize the UI a bit
 addParameters({
   options: {
+    theme,
     showPanel: false,
     panelPosition: 'right',
     storySort: (a, b) => {
@@ -20,21 +28,12 @@ addParameters({
       }
 
       return 0;
-    },
-    theme: {
-      ...themes.dark,
-      brandImage: ReavizLogo,
-      brandTitle: 'REAVIZ',
-      url: 'https://github.com/jask-oss/reaviz'
     }
   },
-});
-
-addParameters({
   docs: {
     container: DocsContainer,
     page: DocsPage
-  },
+  }
 });
 
 // Custom center decorator that supports docs extensions
