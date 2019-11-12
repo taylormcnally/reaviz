@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { RadialBarChart } from './RadialBarChart';
-import { largeCategoryData } from '../../demo';
+import { largeCategoryData, medDateData } from '../../demo';
 import { number, boolean, object, select } from '@storybook/addon-knobs';
 import { RadialBarSeries, RadialBar } from './RadialBarSeries';
 import {
@@ -31,8 +31,9 @@ storiesOf('Demos|Bar Chart/Radial', module)
         },
         'inside'
       );
-      const data = object('Data', largeCategoryData);
+      const data = object('Data', medDateData);
       const gradient = hasGradient ? RadialBar.defaultProps.gradient : false;
+      const colorScheme = schemes[color][0];
 
       return (
         <RadialBarChart
@@ -43,7 +44,7 @@ storiesOf('Demos|Bar Chart/Radial', module)
           series={
             <RadialBarSeries
               animated={animated}
-              colorScheme={color}
+              colorScheme={colorScheme}
               bar={<RadialBar curved={curved} gradient={gradient} />}
             />
           }

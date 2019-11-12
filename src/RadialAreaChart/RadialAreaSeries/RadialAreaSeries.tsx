@@ -95,7 +95,6 @@ export interface RadialAreaSeriesProps {
 
 interface RadialAreaSeriesState {
   activeValues?: any;
-  activePoint?: number;
 }
 
 export class RadialAreaSeries extends Component<
@@ -126,14 +125,12 @@ export class RadialAreaSeries extends Component<
 
   onValueEnter(event: TooltipAreaEvent) {
     this.setState({
-      activePoint: event.pointX,
       activeValues: event.value
     });
   }
 
   onValueLeave() {
     this.setState({
-      activePoint: undefined,
       activeValues: undefined
     });
   }

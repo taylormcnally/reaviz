@@ -1,14 +1,13 @@
-import React, { Component, Fragment, createRef, ReactElement } from 'react';
+import React, { Component, Fragment, createRef } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { arc } from 'd3-shape';
 import { Gradient } from '../../common/Gradient';
 import bind from 'memoize-bind';
 import chroma from 'chroma-js';
-import { CloneElement } from '../../common/utils/children';
-import { ChartTooltipProps, ChartTooltip } from '../../common/Tooltip';
 import { path } from 'd3-path';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
 import { MotionBar } from './MotionBar';
+import isEqual from 'is-equal';
 
 export interface RadialBarProps {
   /**
@@ -67,11 +66,6 @@ export interface RadialBarProps {
   className?: any;
 
   /**
-   * Tooltip element.
-   */
-  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip>;
-
-  /**
    * Whether the bar is curved or not.
    */
   curved: boolean;
@@ -90,23 +84,22 @@ export interface RadialBarProps {
    * Event for when the symbol has mouse leave.
    */
   onMouseLeave: (event) => void;
+
+  /**
+   * Active values caused by hover.
+   */
+  activeValues?: any;
 }
 
-interface RadialBarState {
-  active?: boolean;
-}
-
-export class RadialBar extends Component<RadialBarProps, RadialBarState> {
+export class RadialBar extends Component<RadialBarProps> {
   static defaultProps: Partial<RadialBarProps> = {
     gradient: true,
-    tooltip: <ChartTooltip />,
     curved: false,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
   };
 
-  state: RadialBarState = {};
   ref = createRef<SVGPathElement>();
   previousEnter: any;
 
@@ -121,8 +114,6 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
   }
 
   onMouseEnter(event: MouseEvent) {
-    this.setState({ active: true });
-
     const { onMouseEnter, data } = this.props;
     onMouseEnter({
       value: data,
@@ -131,8 +122,6 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
   }
 
   onMouseLeave(event: MouseEvent) {
-    this.setState({ active: false });
-
     const { onMouseLeave, data } = this.props;
     onMouseLeave({
       value: data,
@@ -247,24 +236,15 @@ export class RadialBar extends Component<RadialBarProps, RadialBarState> {
   }
 
   render() {
-    const { data, index, color, gradient, id, tooltip } = this.props;
-    const { active } = this.state;
+    const { data, index, color, gradient, id, activeValues } = this.props;
 
     const fill = color(data, index);
+    const active = activeValues && data && isEqual(activeValues.x, data.x);
     const currentColorShade = active ? chroma(fill).brighten(0.5) : fill;
 
     return (
       <Fragment>
         {this.renderBar(currentColorShade)}
-        {!tooltip.props.disabled && (
-          <CloneElement<ChartTooltipProps>
-            element={tooltip}
-            visible={!!active}
-            reference={this.ref}
-            color={color}
-            value={data}
-          />
-        )}
         {gradient && (
           <Gradient id={`${id}-gradient`} color={currentColorShade} />
         )}

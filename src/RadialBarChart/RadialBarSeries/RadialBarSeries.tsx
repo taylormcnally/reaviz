@@ -2,7 +2,12 @@ import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { RadialBar, RadialBarProps } from './RadialBar';
 import { CloneElement } from '../../common/utils/children';
-import { ColorSchemeType, getColor } from '../../common/color';
+import { ColorSchemeType, getColor, schemes } from '../../common/color';
+import {
+  TooltipAreaProps,
+  TooltipArea,
+  TooltipAreaEvent
+} from '../../common/Tooltip';
 
 export interface RadialBarSeriesProps {
   /**
@@ -44,14 +49,51 @@ export interface RadialBarSeriesProps {
    * Whether to animate the enter/update/exit.
    */
   animated: boolean;
+
+  /**
+   * Height of the chart. Set internally by `RadialBarChart`.
+   */
+  height: number;
+
+  /**
+   * Width of the chart. Set internally by `RadialBarChart`.
+   */
+  width: number;
+
+  /**
+   * Tooltip for the chart area.
+   */
+  tooltip: ReactElement<TooltipAreaProps, typeof TooltipArea>;
 }
 
-export class RadialBarSeries extends Component<RadialBarSeriesProps> {
+interface RadialBarSeriesState {
+  activeValues?: any;
+}
+
+export class RadialBarSeries extends Component<
+  RadialBarSeriesProps,
+  RadialBarSeriesState
+> {
   static defaultProps: Partial<RadialBarSeriesProps> = {
-    colorScheme: 'cybertron',
+    colorScheme: schemes.cybertron[0],
+    tooltip: <TooltipArea />,
     bar: <RadialBar />,
     animated: true
   };
+
+  state: RadialBarSeriesState = {};
+
+  onValueEnter(event: TooltipAreaEvent) {
+    this.setState({
+      activeValues: event.value
+    });
+  }
+
+  onValueLeave() {
+    this.setState({
+      activeValues: undefined
+    });
+  }
 
   renderBar(point: ChartInternalShallowDataShape, index: number) {
     const {
@@ -64,6 +106,7 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
       animated,
       colorScheme
     } = this.props;
+    const { activeValues } = this.state;
 
     return (
       <Fragment key={index}>
@@ -75,9 +118,8 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
           xScale={xScale}
           yScale={yScale}
           innerRadius={innerRadius}
-          color={(point, index) =>
-            getColor({ data, point, index, colorScheme })
-          }
+          activeValues={activeValues}
+          color={point => getColor({ data, point, index: 0, colorScheme })}
           barCount={data.length}
           animated={animated}
         />
@@ -86,8 +128,36 @@ export class RadialBarSeries extends Component<RadialBarSeriesProps> {
   }
 
   render() {
-    const { data } = this.props;
+    const {
+      data,
+      id,
+      innerRadius,
+      xScale,
+      yScale,
+      height,
+      width,
+      tooltip,
+      colorScheme
+    } = this.props;
 
-    return <Fragment>{data.map((d, i) => this.renderBar(d, i))}</Fragment>;
+    return (
+      <CloneElement<TooltipAreaProps>
+        element={tooltip}
+        xScale={xScale}
+        yScale={yScale}
+        data={data}
+        height={height}
+        width={width}
+        isRadial={true}
+        innerRadius={innerRadius}
+        onValueEnter={this.onValueEnter.bind(this)}
+        onValueLeave={this.onValueLeave.bind(this)}
+        color={(point, index) => getColor({ data, point, index, colorScheme })}
+      >
+        <g clipPath={`url(#${id}-path)`}>
+          {data.map(this.renderBar.bind(this))}
+        </g>
+      </CloneElement>
+    );
   }
 }

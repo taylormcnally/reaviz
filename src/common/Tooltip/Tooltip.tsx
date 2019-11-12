@@ -13,16 +13,59 @@ import { motion } from 'framer-motion';
 const tooltips: Tooltip[] = [];
 
 export interface TooltipProps {
+  /**
+   * Content for the tooltip.
+   */
   content: any;
+
+  /**
+   * Reference of the tooltip to align to.
+   */
   reference?: ReferenceObject | HTMLElement | any;
+
+  /**
+   * Popperjs placement.
+   */
   placement: Placement;
+
+  /**
+   * Delay before showing tooltip.
+   */
   enterDelay: number;
+
+  /**
+   * Delay before closing tooltip.
+   */
   leaveDelay: number;
+
+  /**
+   * Popperjs modifiers.
+   */
   modifiers?: any;
+
+  /**
+   * External setter for visibility.
+   */
   visible: boolean;
+
+  /**
+   * Additiona CSS classnames.
+   */
   className?: any;
+
+  /**
+   * How the tooltip will be triggered.
+   */
   trigger: TriggerTypes[] | TriggerTypes;
+
+  /**
+   * Whether the tooltip is disabled.
+   */
   disabled?: boolean;
+
+  /**
+   * Whether the tooltip should move with the cursor or not.
+   */
   followCursor?: boolean;
 }
 
@@ -42,13 +85,9 @@ export class Tooltip extends Component<TooltipProps, TooltipState> {
 
   timeout: any;
 
-  constructor(props: TooltipProps) {
-    super(props);
-
-    this.state = {
-      visible: props.visible
-    };
-  }
+  state: TooltipState = {
+    visible: this.props.visible
+  };
 
   componentDidUpdate(prevProps: TooltipProps) {
     const { visible } = this.props;
@@ -109,9 +148,9 @@ export class Tooltip extends Component<TooltipProps, TooltipState> {
     return (
       <motion.div
         className={classNames(css.tooltip, className)}
-        initial={{ opacity: 0, scale: .3 }}
+        initial={{ opacity: 0, scale: 0.3 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: .3 }}
+        exit={{ opacity: 0, scale: 0.3 }}
       >
         {children}
       </motion.div>

@@ -16,8 +16,19 @@ interface MultipleTooltipValues {
 }
 
 interface TooltipTemplateProps {
+  /**
+   * Tooltip data value.
+   */
   value?: SingleTooltipValue | MultipleTooltipValues;
+
+  /**
+   * Color scheme to apply.
+   */
   color?: any;
+
+  /**
+   * Additional CSS classes to apply.
+   */
   className?: any;
 }
 

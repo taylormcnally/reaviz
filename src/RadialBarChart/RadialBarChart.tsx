@@ -99,6 +99,8 @@ export class RadialBarChart extends Component<RadialBarChartProps> {
           element={series}
           id={id}
           data={data}
+          height={chartHeight}
+          width={chartWidth}
           xScale={xScale}
           yScale={yScale}
           innerRadius={innerRadius}

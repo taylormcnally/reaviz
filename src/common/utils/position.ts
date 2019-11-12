@@ -2,10 +2,26 @@ import { bisector } from 'd3-array';
 import { applyToPoint, inverse, applyToPoints } from 'transformation-matrix';
 
 /**
+ * Add ability to calculate scale band position.
+ * Reference: https://stackoverflow.com/questions/38633082/d3-getting-invert-value-of-band-scales
+ */
+const scaleBandInvert = scale => {
+  const domain = scale.domain();
+  const paddingOuter = scale(domain[0]);
+  const eachBand = scale.step();
+
+  return value => {
+    const index = Math.floor((value - paddingOuter) / eachBand);
+    return domain[Math.max(0, Math.min(index, domain.length - 1))];
+  };
+};
+
+/**
  * Given a point position, get the closes data point in the dataset.
  */
 export function getClosestPoint(pos: number, scale, data, attr = 'x') {
-  const domain = scale.invert(pos);
+  // If we have a band scale, handle that special
+  const domain = scale.invert ? scale.invert(pos) : scaleBandInvert(scale)(pos);
 
   // Select the index
   const bisect = bisector((d: any) => d[attr]).right;
@@ -79,7 +95,10 @@ export function getPointFromMatrix(event, matrix) {
  * Get the start/end matrix.
  */
 export function getLimitMatrix(height: number, width: number, matrix) {
-  return applyToPoints(matrix, [{ x: 0, y: 0 }, { x: width, y: height }]);
+  return applyToPoints(matrix, [
+    { x: 0, y: 0 },
+    { x: width, y: height }
+  ]);
 }
 
 /**
