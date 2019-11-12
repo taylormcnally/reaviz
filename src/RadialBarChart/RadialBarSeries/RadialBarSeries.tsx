@@ -6,7 +6,8 @@ import { ColorSchemeType, getColor, schemes } from '../../common/color';
 import {
   TooltipAreaProps,
   TooltipArea,
-  TooltipAreaEvent
+  TooltipAreaEvent,
+  ChartTooltip
 } from '../../common/Tooltip';
 
 export interface RadialBarSeriesProps {
@@ -81,7 +82,7 @@ export class RadialBarSeries extends Component<
 > {
   static defaultProps: Partial<RadialBarSeriesProps> = {
     colorScheme: schemes.cybertron[0],
-    tooltip: <TooltipArea />,
+    tooltip: <TooltipArea tooltip={<ChartTooltip followCursor={true} />} />,
     bar: <RadialBar />,
     animated: true
   };
