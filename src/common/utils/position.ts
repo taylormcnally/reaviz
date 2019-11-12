@@ -20,28 +20,35 @@ const scaleBandInvert = scale => {
  * Given a point position, get the closes data point in the dataset.
  */
 export function getClosestPoint(pos: number, scale, data, attr = 'x') {
-  // If we have a band scale, handle that special
-  const domain = scale.invert ? scale.invert(pos) : scaleBandInvert(scale)(pos);
+  if (scale.invert) {
+    // If we have a band scale, handle that special
+    const domain = scale.invert(pos);
 
-  // Select the index
-  const bisect = bisector((d: any) => d[attr]).right;
-  const index = bisect(data, domain);
+    // Select the index
+    const bisect = bisector((d: any) => d[attr]).right;
+    const index = bisect(data, domain);
 
-  // Determine min index
-  const minIndex = Math.max(0, index - 1);
-  const before = data[minIndex];
+    // Determine min index
+    const minIndex = Math.max(0, index - 1);
+    const before = data[minIndex];
 
-  // Determine max index
-  const maxIndex = Math.min(data.length - 1, index);
-  const after = data[maxIndex];
+    // Determine max index
+    const maxIndex = Math.min(data.length - 1, index);
+    const after = data[maxIndex];
 
-  // Determine which is closest to the point
-  let beforeVal = before[attr];
-  let afterVal = after[attr];
-  beforeVal = domain - beforeVal;
-  afterVal = afterVal - domain;
+    // Determine which is closest to the point
+    let beforeVal = before[attr];
+    let afterVal = after[attr];
+    beforeVal = domain - beforeVal;
+    afterVal = afterVal - domain;
 
-  return beforeVal < afterVal ? before : after;
+    return beforeVal < afterVal ? before : after;
+  } else {
+    const domain = scale.domain();
+    const prop = scaleBandInvert(scale)(pos);
+    const idx = domain.indexOf(prop);
+    return data[idx];
+  }
 }
 
 /**
