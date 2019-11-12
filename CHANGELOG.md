@@ -1,3 +1,6 @@
+# Master
+- [Chore] Upgrade depedencies
+
 # 5.3.4 - 10/31/19
 - [Fix] Remove moment depedency for smaller size
 - [Fix] Fix first/last padding on legend entries
