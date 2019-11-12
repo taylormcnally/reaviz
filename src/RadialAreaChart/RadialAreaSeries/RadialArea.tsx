@@ -1,6 +1,6 @@
 import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
-import { radialArea, curveCardinalClosed, curveLinear } from 'd3-shape';
+import { radialArea, curveCardinalClosed, curveLinearClosed } from 'd3-shape';
 import { RadialGradient, RadialGradientProps } from '../../common/Gradient';
 import { CloneElement } from '../../common/utils';
 import { RadialInterpolationTypes } from '../../common/utils/interpolation';
@@ -81,7 +81,7 @@ export class RadialArea extends Component<RadialAreaProps> {
   getPath(data: ChartInternalShallowDataShape[]) {
     const { xScale, yScale, innerRadius, interpolation } = this.props;
     const curve =
-      interpolation === 'smooth' ? curveCardinalClosed : curveLinear;
+      interpolation === 'smooth' ? curveCardinalClosed : curveLinearClosed;
 
     const radialFn = radialArea()
       .angle((d: any) => xScale(d.x))
