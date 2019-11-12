@@ -1,3 +1,10 @@
+# 6.0.0 - 11/12/19
+- [BREAKING] Move `RadialBarChart` to use `TooltipArea` vs `Tooltip` on each bar.
+- [Fix] Default `RadialBarChart` to one color
+- [Perf] Improve performance of `TooltipArea` data parsing using memoization
+- [Chore] Remove unused state value from `RadialAreaSeries`
+- [Docs] Add docs to `Tooltip`, `TooltipArea`, `TooltipTemplate`, `RadialPointSeries`
+
 # 5.3.5 - 11/12/19
 - [Fix] Fix area ponts not matching area color
 - [Chore] Upgrade depedencies

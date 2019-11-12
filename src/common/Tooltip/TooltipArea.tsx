@@ -13,21 +13,77 @@ import { CloneElement } from '../utils/children';
 import { ChartTooltip, ChartTooltipProps } from './ChartTooltip';
 import { arc } from 'd3-shape';
 import isEqual from 'is-equal';
+import memoize from 'memoize-one';
 
 export interface TooltipAreaProps {
+  /**
+   * Popperjs placement.
+   */
   placement: Placement;
+
+  /**
+   * Chart height. Set internally.
+   */
   height: number;
+
+  /**
+   * Chart width. Set internally.
+   */
   width: number;
+
+  /**
+   * Chart D3 XScale. Set internally.
+   */
   xScale: any;
+
+  /**
+   * Chart D3 YScale. Set internally.
+   */
   yScale: any;
+
+  /**
+   * Whether the tooltip is disabled or not.
+   */
   disabled: boolean;
+
+  /**
+   * Color setter.
+   */
   color: any;
+
+  /**
+   * Chart internal data type.
+   */
   data: ChartInternalDataShape[];
+
+  /**
+   * Child elements to be contained by.
+   */
   children?: any;
+
+  /**
+   * Whether the area is radial or not.
+   */
   isRadial?: boolean;
+
+  /**
+   * Inner-radius to set the positioning by. Set internally.
+   */
   innerRadius?: number;
+
+  /**
+   * Tooltip element.
+   */
   tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip>;
+
+  /**
+   * When pointer entered mouse area.
+   */
   onValueEnter: (event: TooltipAreaEvent) => void;
+
+  /**
+   * When pointer left mouse area.
+   */
   onValueLeave: () => void;
 }
 
@@ -37,7 +93,6 @@ interface TooltipAreaState {
   value?: any;
   offsetX?: any;
   offsetY?: any;
-  data: Array<TooltipDataShape | ChartInternalShallowDataShape>;
 }
 
 interface TooltipDataShape {
@@ -57,23 +112,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
 
   prevX: number | undefined;
   prevY: number | undefined;
-
-  constructor(props: TooltipAreaProps) {
-    super(props);
-    this.state = {
-      data: this.transformData(props.data)
-    };
-  }
-
-  componentDidUpdate(prevProps: TooltipAreaProps) {
-    const { data } = this.props;
-
-    if (data !== prevProps.data) {
-      this.setState({
-        data: this.transformData(data)
-      });
-    }
-  }
+  state: TooltipAreaState = {};
 
   getXCoord(x: number, y: number) {
     const { isRadial, width, height } = this.props;
@@ -101,14 +140,16 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
       onValueEnter,
       height,
       width,
+      data,
       isRadial
     } = this.props;
     let placement = this.props.placement;
-    const { value, data } = this.state;
+    const { value } = this.state;
+    const transformed = this.transformData(data);
 
     const { x, y } = getPositionForTarget(event);
     const xCoord = this.getXCoord(x, y);
-    const newValue = getClosestPoint(xCoord, xScale, data);
+    const newValue = getClosestPoint(xCoord, xScale, transformed);
 
     if (!isEqual(newValue, value)) {
       const pointX = xScale(newValue.x);
@@ -194,7 +235,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
     };
   }
 
-  transformData(series: ChartInternalDataShape[]) {
+  transformData = memoize((series: ChartInternalDataShape[]) => {
     const result: TooltipDataShape[] = [];
 
     for (const point of series) {
@@ -231,7 +272,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
     }
 
     return result;
-  }
+  });
 
   renderRadial() {
     const { height, width } = this.props;
