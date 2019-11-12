@@ -3,10 +3,30 @@ import { Tooltip, TooltipProps } from './Tooltip';
 import { TooltipTemplate } from './TooltipTemplate';
 
 export interface ChartTooltipProps extends TooltipProps {
+  /**
+   * Content for the tooltip.
+   */
   content: any;
-  value: any;
-  color: any;
+
+  /**
+   * Tooltip data value.
+   */
+  value?: any;
+
+  /**
+   * Color scheme to apply.
+   */
+  color?: any;
+
+  /**
+   * Complete dataset.
+   */
   data: any;
+
+  /**
+   * Whether the tooltip should move with the cursor or not.
+   */
+  followCursor?: boolean;
 }
 
 export class ChartTooltip extends Component<ChartTooltipProps> {
