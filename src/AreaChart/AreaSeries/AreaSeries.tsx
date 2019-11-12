@@ -136,8 +136,6 @@ export class AreaSeries extends Component<AreaSeriesProps, AreaSeriesState> {
     const { activeValues } = this.state;
     const key = Array.isArray(point) ? point[0].key : point.key;
 
-    console.log('here', Array.isArray(point), key, point, index);
-
     return getColor({
       data,
       colorScheme,
