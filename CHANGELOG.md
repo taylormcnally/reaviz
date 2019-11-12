@@ -1,4 +1,5 @@
-# Master
+# 5.3.5 - 11/12/19
+- [Fix] Fix area ponts not matching area color
 - [Chore] Upgrade depedencies
 
 # 5.3.4 - 10/31/19
