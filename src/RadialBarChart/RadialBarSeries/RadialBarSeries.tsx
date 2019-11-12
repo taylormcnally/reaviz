@@ -26,6 +26,11 @@ export interface RadialBarSeriesProps {
   innerRadius: number;
 
   /**
+   * The outer radius for the chart center.
+   */
+  outerRadius: number;
+
+  /**
    * D3 scale for X Axis. Set internally by `RadialBarChart`.
    */
   xScale: any;
@@ -132,6 +137,7 @@ export class RadialBarSeries extends Component<
       data,
       id,
       innerRadius,
+      outerRadius,
       xScale,
       yScale,
       height,
@@ -150,6 +156,7 @@ export class RadialBarSeries extends Component<
         width={width}
         isRadial={true}
         innerRadius={innerRadius}
+        outerRadius={outerRadius}
         onValueEnter={this.onValueEnter.bind(this)}
         onValueLeave={this.onValueLeave.bind(this)}
         color={(point, index) => getColor({ data, point, index, colorScheme })}

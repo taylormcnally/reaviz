@@ -214,7 +214,8 @@ export class RadialAreaSeries extends Component<
       id,
       width,
       height,
-      innerRadius
+      innerRadius,
+      outerRadius
     } = this.props;
 
     return (
@@ -227,6 +228,7 @@ export class RadialAreaSeries extends Component<
         width={width}
         isRadial={true}
         innerRadius={innerRadius}
+        outerRadius={outerRadius}
         color={this.getColor.bind(this)}
         onValueEnter={bind(this.onValueEnter, this)}
         onValueLeave={bind(this.onValueLeave, this)}

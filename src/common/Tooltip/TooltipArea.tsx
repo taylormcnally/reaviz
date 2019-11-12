@@ -72,6 +72,11 @@ export interface TooltipAreaProps {
   innerRadius?: number;
 
   /**
+   * Outer-radius to set the positioning by. Set internally.
+   */
+  outerRadius?: number;
+
+  /**
    * Tooltip element.
    */
   tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip>;
@@ -278,7 +283,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
     const { height, width } = this.props;
 
     const innerRadius = this.props.innerRadius || 0;
-    const outerRadius = Math.min(width, height) / 2;
+    const outerRadius = this.props.outerRadius ||  Math.min(width, height) / 2;
 
     const d = arc()({
       innerRadius,

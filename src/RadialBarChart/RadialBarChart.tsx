@@ -104,6 +104,7 @@ export class RadialBarChart extends Component<RadialBarChartProps> {
           xScale={xScale}
           yScale={yScale}
           innerRadius={innerRadius}
+          outerRadius={outerRadius}
         />
       </Fragment>
     );
