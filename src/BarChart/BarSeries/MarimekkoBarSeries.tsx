@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BarSeriesProps, BarSeries } from './BarSeries';
 import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
-import { ChartTooltip, TooltipTemplate } from '../../common/Tooltip';
+import { ChartTooltip, TooltipTemplate, TooltipArea } from '../../common/Tooltip';
 import { formatValue } from '../../common/utils/formatting';
 import { Gradient, GradientStop } from '../../common/Gradient';
 
@@ -11,6 +11,31 @@ export class MarimekkoBarSeries extends Component<BarSeriesProps> {
     ...BarSeries.defaultProps,
     type: 'marimekko',
     padding: 10,
+    tooltip: (
+      <TooltipArea
+        tooltip={
+          <ChartTooltip
+            followCursor={true}
+            modifiers={{
+              offset: '5px, 5px'
+            }}
+            content={(point, color) => {
+              const data = {
+                ...point,
+                data: point.data.map(d => ({
+                  ...d,
+                  value: `${formatValue(d.value)} ∙ ${formatValue(
+                    Math.floor((d.y1 - d.y0) * 100)
+                  )}%`
+                }))
+              };
+
+              return <TooltipTemplate value={data} color={color} />;
+            }}
+          />
+        }
+      />
+    ),
     bar: (
       <Bar
         rounded={false}
@@ -21,17 +46,6 @@ export class MarimekkoBarSeries extends Component<BarSeriesProps> {
               <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
               <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
             ]}
-          />
-        }
-        tooltip={
-          <ChartTooltip
-            content={data => {
-              const x = `${data.key} ∙ ${formatValue(data.x)}`;
-              const y = `${formatValue(data.value)} ∙ ${formatValue(
-                Math.floor((data.y1 - data.y0) * 100)
-              )}%`;
-              return <TooltipTemplate value={{ y, x }} />;
-            }}
           />
         }
         rangeLines={<RangeLines position="top" strokeWidth={3} />}
