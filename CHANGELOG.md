@@ -1,3 +1,9 @@
+# 7.0.0 - 11/14/19
+- [BREAKING] Move `BarChart` to use `TooltipArea` vs `Tooltip` on each bar.
+- [BREAKING] Created new `HistogramBarChart` to wrap common features of histograms
+- [Feature] Add support for horizontal charts in `TooltipArea`
+- [Feature] Added `onMouseMove` to `Bar` component
+
 # 6.0.0 - 11/12/19
 - [BREAKING] Move `RadialBarChart` to use `TooltipArea` vs `Tooltip` on each bar.
 - [Fix] Default `RadialBarChart` to one color
