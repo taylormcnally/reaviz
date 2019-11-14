@@ -1,3 +1,9 @@
+# 7.0.2 - 11/14/19
+- [Fix] Fix marmekko tooltip issue
+- [Fix] Temp remove tooltip from linear gauge
+- [Fix] Type issues and loops for clone element
+- [Fix] Type issues with sparklines
+
 # 7.0.1 - 11/14/19
 - [Fix] Fix type issue with Babel TypeScript 
 
