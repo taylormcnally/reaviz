@@ -17,8 +17,8 @@ interface CloneElementProps {
  * This allows you to describe your cloning element declaratively
  * which is a more natural API for React.
  */
-export function CloneElement<T = any>(props: CloneElementProps & Partial<T>) {
-  type CombinedProps = CloneElementProps & Partial<T>;
+export function CloneElement<T = any>(props: CloneElementProps & Partial<T> & { ref?: any }) {
+  type CombinedProps = CloneElementProps & Partial<T> & { ref?: any };
 
   const Clone = forwardRef<CombinedProps, any>(
     ({ children, element, ...rest }, ref: Ref<unknown>) => {

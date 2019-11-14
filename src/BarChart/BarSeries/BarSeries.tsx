@@ -108,7 +108,7 @@ export interface BarSeriesProps {
   /**
    * Tooltip for the chart area.
    */
-  tooltip: ReactElement<TooltipAreaProps, typeof TooltipArea>;
+  tooltip: ReactElement<TooltipAreaProps, typeof TooltipArea> | null;
 }
 
 interface BarSeriesState {

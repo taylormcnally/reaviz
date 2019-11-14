@@ -20,7 +20,7 @@ import { TooltipArea } from '../Tooltip';
 import { ChartBrush } from './ChartBrush';
 import { ScatterPlot, ScatterSeries, ScatterPoint } from '../../ScatterPlot';
 import { timeDay } from 'd3-time';
-import { BarChart, BarSeries, Bar } from '../../BarChart';
+import { BarChart, BarSeries } from '../../BarChart';
 import { range } from 'd3-array';
 import { Tooltip } from '../../common/Tooltip';
 import { GridlineSeries, Gridline, GridStripe } from '../Gridline';
@@ -108,7 +108,7 @@ storiesOf('Demos|Brush', module)
           />
         }
         series={
-          <BarSeries bar={<Bar tooltip={<Tooltip disabled={true} />} />} />
+          <BarSeries tooltip={null} />
         }
       />
     );

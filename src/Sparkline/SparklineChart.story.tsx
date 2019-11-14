@@ -43,7 +43,6 @@ storiesOf('Demos|Sparkline', module)
           colorScheme="rgb(17, 207, 247)"
           bar={[
             <Bar
-              tooltip={null}
               rounded={false}
               width={1}
               rangeLines={null}
@@ -58,7 +57,6 @@ storiesOf('Demos|Sparkline', module)
             />,
             <Bar
               rounded={false}
-              tooltip={null}
               width={1}
               rangeLines={null}
               gradient={
