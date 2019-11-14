@@ -1,13 +1,12 @@
 import {
   cloneElement,
-  useMemo,
-  ReactNode
+  useMemo
 } from 'react';
 import classNames from 'classnames';
 
 interface CloneElementProps {
-  element: any | null;
-  children?: ReactNode;
+  element: any;
+  children?: any;
 }
 
 /**
@@ -45,18 +44,22 @@ export function CloneElement<T = any>({ children, element, ...rest }: CloneEleme
     return children;
   }
 
+  // Tricky logic around functional vs class components
+  const elementRef = element.ref;
+  const ref = elementRef ?
+    node => {
+      if (typeof elementRef === 'function') {
+        elementRef(node)
+      } else if (ref) {
+        elementRef.current = node;
+      }
+    } : undefined;
+
   const newProps = getProjectedProps(rest);
   return cloneElement(element, {
     ...element.props,
     ...newProps,
     children,
-    ref: node => {
-      const { ref } = element
-      if (typeof ref === 'function') {
-        ref(node)
-      } else if (ref) {
-        ref.current = node;
-      }
-    }
+    ref
   });
 }
