@@ -1,25 +1,27 @@
-import { cloneElement, useMemo, forwardRef, Ref } from 'react';
+import React, {
+  cloneElement,
+  useMemo,
+  forwardRef,
+  Ref,
+  ReactNode
+} from 'react';
 import classNames from 'classnames';
 
 interface CloneElementProps {
   element: any | null;
-  children?: any;
+  children?: ReactNode;
 }
 
 /**
  * CloneElement is a wrapper component for createElement function.
  * This allows you to describe your cloning element declaratively
  * which is a more natural API for React.
- *
- * Note: I also give up on making TS happy w/ this stupid const generic
  */
-// @ts-ignore
-export const CloneElement = <T>(
-  forwardRef(
-    (
-      { element, children, ...rest }: CloneElementProps & any,
-      ref: Ref<unknown>
-    ) => {
+export function CloneElement<T = any>(props: CloneElementProps & Partial<T>) {
+  type CombinedProps = CloneElementProps & Partial<T>;
+
+  const Clone = forwardRef<CombinedProps, any>(
+    ({ children, element, ...rest }, ref: Ref<unknown>) => {
       const getProjectedProps = useMemo(
         () => props => {
           const childProps = element.props;
@@ -57,5 +59,7 @@ export const CloneElement = <T>(
         children
       });
     }
-  )
-);
+  );
+
+  return <Clone {...props} />;
+}

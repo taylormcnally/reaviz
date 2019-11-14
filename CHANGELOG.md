@@ -1,3 +1,6 @@
+# 7.0.1 - 11/14/19
+- [Fix] Fix type issue with Babel TypeScript 
+
 # 7.0.0 - 11/14/19
 - [BREAKING] Move `BarChart` to use `TooltipArea` vs `Tooltip` on each bar.
 - [BREAKING] Created new `HistogramBarChart` to wrap common features of histograms
