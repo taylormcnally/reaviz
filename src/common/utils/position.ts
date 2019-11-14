@@ -9,9 +9,16 @@ const scaleBandInvert = scale => {
   const domain = scale.domain();
   const paddingOuter = scale(domain[0]);
   const eachBand = scale.step();
+  const [, end] = scale.range();
 
-  return value => {
-    const index = Math.floor((value - paddingOuter) / eachBand);
+  return offset => {
+    let index = Math.floor((offset - paddingOuter) / eachBand);
+
+    // Handle horizontal charts...
+    if (end === 0) {
+      index = index * -1;
+    }
+
     return domain[Math.max(0, Math.min(index, domain.length - 1))];
   };
 };
@@ -19,9 +26,8 @@ const scaleBandInvert = scale => {
 /**
  * Given a point position, get the closes data point in the dataset.
  */
-export function getClosestPoint(pos: number, scale, data, attr = 'x') {
+export const getClosestPoint = (pos: number, scale, data, attr = 'x') => {
   if (scale.invert) {
-    // If we have a band scale, handle that special
     const domain = scale.invert(pos);
 
     // Select the index
@@ -44,17 +50,26 @@ export function getClosestPoint(pos: number, scale, data, attr = 'x') {
 
     return beforeVal < afterVal ? before : after;
   } else {
+    // If we have a band scale, handle that special
     const domain = scale.domain();
-    const prop = scaleBandInvert(scale)(pos);
+    let prop;
+
+    // Of course the Marimekko is a pain...
+    if (scale.mariemkoInvert) {
+      prop = scale.mariemkoInvert(pos);
+    } else {
+      prop = scaleBandInvert(scale)(pos);
+    }
+
     const idx = domain.indexOf(prop);
     return data[idx];
   }
-}
+};
 
 /**
  * Given an event, get the parent svg element;
  */
-export function getParentSVG(event) {
+export const getParentSVG = event => {
   // set node to targets owner svg
   let node = event.target.ownerSVGElement;
 
@@ -66,23 +81,23 @@ export function getParentSVG(event) {
   }
 
   return node;
-}
+};
 
 /**
  * Given an event, get the relative X/Y position for a target.
  */
-export function getPositionForTarget({ target, clientX, clientY }) {
+export const getPositionForTarget = ({ target, clientX, clientY }) => {
   const { top, left } = target.getBoundingClientRect();
   return {
     x: clientX - left - target.clientLeft,
     y: clientY - top - target.clientTop
   };
-}
+};
 
 /**
  * Gets the point from q given matrix.
  */
-export function getPointFromMatrix(event, matrix) {
+export const getPointFromMatrix = (event, matrix) => {
   const parent = getParentSVG(event);
 
   if (!parent) {
@@ -96,22 +111,21 @@ export function getPointFromMatrix(event, matrix) {
 
   // Transforms the coordinate to world coordinate (in the SVG/DIV world)
   return applyToPoint(inverse(matrix), { x, y });
-}
+};
 
 /**
  * Get the start/end matrix.
  */
-export function getLimitMatrix(height: number, width: number, matrix) {
-  return applyToPoints(matrix, [
+export const getLimitMatrix = (height: number, width: number, matrix) =>
+  applyToPoints(matrix, [
     { x: 0, y: 0 },
     { x: width, y: height }
   ]);
-}
 
 /**
  * Constrain the matrix.
  */
-export function constrainMatrix(height: number, width: number, matrix) {
+export const constrainMatrix = (height: number, width: number, matrix) => {
   const [min, max] = getLimitMatrix(height, width, matrix);
 
   if (max.x < width || max.y < height) {
@@ -123,27 +137,25 @@ export function constrainMatrix(height: number, width: number, matrix) {
   }
 
   return false;
-}
+};
 
 /**
  * Determine if scale factor is less than allowed.
  */
-function lessThanScaleFactorMin(value, scaleFactor: number) {
-  return value.scaleFactorMin && value.d * scaleFactor <= value.scaleFactorMin;
-}
+const lessThanScaleFactorMin = (value, scaleFactor: number) =>
+  value.scaleFactorMin && value.d * scaleFactor <= value.scaleFactorMin;
 
 /**
  * Determine if scale factor is larger than allowed.
  */
-function moreThanScaleFactorMax(value, scaleFactor: number) {
-  return value.scaleFactorMax && value.d * scaleFactor >= value.scaleFactorMax;
-}
+const moreThanScaleFactorMax = (value, scaleFactor: number) =>
+  value.scaleFactorMax && value.d * scaleFactor >= value.scaleFactorMax;
 
 /**
  * Determine if both min and max scale fctors are going out of bounds.
  */
-export function isZoomLevelGoingOutOfBounds(value, scaleFactor: number) {
+export const isZoomLevelGoingOutOfBounds = (value, scaleFactor: number) => {
   const a = lessThanScaleFactorMin(value, scaleFactor) && scaleFactor < 1;
   const b = moreThanScaleFactorMax(value, scaleFactor) && scaleFactor > 1;
   return a || b;
-}
+};

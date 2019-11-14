@@ -28,7 +28,8 @@ import {
   StackedNormalizedBarSeries,
   MarimekkoBarSeries,
   RangeLines,
-  BarLabel
+  BarLabel,
+  HistogramBarSeries
 } from './BarSeries';
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import {
@@ -40,11 +41,10 @@ import {
   LinearYAxisTickLabel
 } from '../common/Axis/LinearAxis';
 import { Stripes } from '../common/Mask';
-import { ChartTooltip, TooltipTemplate } from '../common/Tooltip';
-import { formatValue } from '../common/utils';
 import { Gradient, GradientStop } from '../common/Gradient';
 import { schemes } from '../common/color';
 import { getXScale, getYScale } from '../common/scales';
+import { HistogramBarChart } from './HistogramBarChart';
 
 storiesOf('Demos|Bar Chart/Vertical/Single Series', module)
   .add(
@@ -257,7 +257,7 @@ storiesOf('Demos|Bar Chart/Vertical/Histogram', module)
       const data = object('Data', medDateData);
 
       return (
-        <BarChart
+        <HistogramBarChart
           width={350}
           height={250}
           xAxis={
@@ -279,7 +279,7 @@ storiesOf('Demos|Bar Chart/Vertical/Histogram', module)
       const data = object('Data', numberData);
 
       return (
-        <BarChart
+        <HistogramBarChart
           width={350}
           height={250}
           xAxis={<LinearXAxis type="value" />}
@@ -295,7 +295,7 @@ storiesOf('Demos|Bar Chart/Vertical/Histogram', module)
       const data = object('Data', medDateData);
 
       return (
-        <BarChart
+        <HistogramBarChart
           width={350}
           height={250}
           data={data}
@@ -306,7 +306,7 @@ storiesOf('Demos|Bar Chart/Vertical/Histogram', module)
               tickSeries={<LinearXAxisTickSeries interval={timeMonth} />}
             />
           }
-          series={<BarSeries binThreshold={timeWeek} />}
+          series={<HistogramBarSeries binThreshold={timeWeek} />}
         />
       );
     },
@@ -591,17 +591,6 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
                   rounded={rounded}
                   gradient={gradient}
                   rangeLines={rangelines}
-                  tooltip={
-                    <ChartTooltip
-                      content={data => {
-                        const x = `${data.key} ∙ ${formatValue(data.x)}`;
-                        const y = `${formatValue(data.value)} ∙ ${formatValue(
-                          Math.floor((data.y1 - data.y0) * 100)
-                        )}%`;
-                        return <TooltipTemplate value={{ y, x }} />;
-                      }}
-                    />
-                  }
                 />
               }
               colorScheme={color}
@@ -655,17 +644,6 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
                   padding={10}
                   gradient={gradient}
                   rangeLines={rangelines}
-                  tooltip={
-                    <ChartTooltip
-                      content={data => {
-                        const x = `${data.key} ∙ ${formatValue(data.x)}`;
-                        const y = `${formatValue(data.value)} ∙ ${formatValue(
-                          Math.floor((data.y1 - data.y0) * 100)
-                        )}%`;
-                        return <TooltipTemplate value={{ y, x }} />;
-                      }}
-                    />
-                  }
                 />
               }
               colorScheme={color}
@@ -983,18 +961,6 @@ storiesOf('Demos|Bar Chart/Horizontal/Multi Series', module)
               }
               rounded={false}
               rangeLines={<RangeLines position="top" strokeWidth={3} />}
-              tooltip={
-                <ChartTooltip
-                  content={data => {
-                    const x = `${data.key} ∙ ${formatValue(data.y)}`;
-                    const y = `${formatValue(data.value)} ∙ ${formatValue(
-                      Math.floor((data.x1 - data.x0) * 100)
-                    )}%`;
-
-                    return <TooltipTemplate value={{ y, x }} />;
-                  }}
-                />
-              }
             />
           }
         />

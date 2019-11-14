@@ -2,14 +2,44 @@ import React, { Component } from 'react';
 import { BarSeriesProps, BarSeries } from './BarSeries';
 import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
-import { ChartTooltip, TooltipTemplate } from '../../common/Tooltip';
+import {
+  ChartTooltip,
+  TooltipTemplate,
+  TooltipArea
+} from '../../common/Tooltip';
 import { formatValue } from '../../common/utils/formatting';
 import { Gradient, GradientStop } from '../../common/Gradient';
 
-export class StackedNormalizedBarSeries extends Component<BarSeriesProps, {}> {
+export class StackedNormalizedBarSeries extends Component<BarSeriesProps> {
   static defaultProps: Partial<BarSeriesProps> = {
     ...BarSeries.defaultProps,
     type: 'stackedNormalized',
+    tooltip: (
+      <TooltipArea
+        tooltip={
+          <ChartTooltip
+            followCursor={true}
+            modifiers={{
+              offset: '5px, 5px'
+            }}
+            content={(point, color) => {
+              point.data = point.data.map(d => {
+                // Handle horz case
+                const start = isNaN(d.y0) ? d.x0 : d.y0;
+                const end = isNaN(d.y1) ? d.x1 : d.y1;
+
+                return {
+                  ...d,
+                  value: `${formatValue(Math.floor((end - start) * 100))}%`
+                };
+              });
+
+              return <TooltipTemplate value={point} color={color} />;
+            }}
+          />
+        }
+      />
+    ),
     bar: (
       <Bar
         rounded={false}
@@ -22,23 +52,13 @@ export class StackedNormalizedBarSeries extends Component<BarSeriesProps, {}> {
           />
         }
         rangeLines={<RangeLines position="top" strokeWidth={3} />}
-        tooltip={
-          <ChartTooltip
-            content={data => {
-              const x = `${data.key} ∙ ${formatValue(data.x)}`;
-              const y = `${formatValue(data.value)} ∙ ${formatValue(
-                Math.floor((data.y1 - data.y0) * 100)
-              )}%`;
-              return <TooltipTemplate value={{ y, x }} />;
-            }}
-          />
-        }
       />
     )
   };
 
   render() {
     const { type, ...rest } = this.props;
+
     return <BarSeries type="stackedNormalized" {...rest} />;
   }
 }

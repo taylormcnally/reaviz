@@ -5,3 +5,4 @@ export * from './MarimekkoBarSeries';
 export * from './Bar';
 export * from './RangeLines';
 export * from './BarLabel';
+export * from './HistogramBarSeries';

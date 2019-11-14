@@ -1,4 +1,4 @@
-import React, { Fragment, Component, ReactElement } from 'react';
+import React, { Fragment, Component, ReactElement, createRef } from 'react';
 import { Bar, BarProps, BarType } from './Bar';
 import {
   ChartInternalDataShape,
@@ -10,6 +10,12 @@ import { getColor, ColorSchemeType } from '../../common/color';
 import { CloneElement } from '../../common/utils/children';
 import { ThresholdCountGenerator, ThresholdArrayGenerator } from 'd3-array';
 import { CountableTimeInterval } from 'd3-time';
+import {
+  TooltipAreaProps,
+  TooltipArea,
+  ChartTooltip,
+  TooltipAreaEvent
+} from '../../common/Tooltip';
 
 type BarElement = ReactElement<BarProps, typeof Bar>;
 
@@ -88,18 +94,52 @@ export interface BarSeriesProps {
     | ArrayLike<number | Date>
     | ThresholdArrayGenerator
     | CountableTimeInterval;
+
+  /**
+   * Height of the chart. Set internally by `BarChart`.
+   */
+  height: number;
+
+  /**
+   * Width of the chart. Set internally by `BarChart`.
+   */
+  width: number;
+
+  /**
+   * Tooltip for the chart area.
+   */
+  tooltip: ReactElement<TooltipAreaProps, typeof TooltipArea>;
 }
 
-export class BarSeries extends Component<BarSeriesProps> {
+interface BarSeriesState {
+  activeValues?: any;
+}
+
+export class BarSeries extends Component<BarSeriesProps, BarSeriesState> {
   static defaultProps: Partial<BarSeriesProps> = {
     type: 'standard',
     padding: 0.1,
     groupPadding: 16,
     animated: true,
+    tooltip: (
+      <TooltipArea
+        tooltip={
+          <ChartTooltip
+            followCursor={true}
+            modifiers={{
+              offset: '5px, 5px'
+            }}
+          />
+        }
+      />
+    ),
     colorScheme: 'cybertron',
     bar: <Bar />,
     layout: 'vertical'
   };
+
+  state: BarSeriesState = {};
+  ref = createRef<TooltipArea>();
 
   getIsMulti() {
     const { type } = this.props;
@@ -162,6 +202,11 @@ export class BarSeries extends Component<BarSeriesProps> {
     });
   }
 
+  onMouseMove(event) {
+    // Manuallly call mouse move so we don't have to kill bar pointer events
+    this.ref.current?.onMouseMove(event);
+  }
+
   renderBar(
     data: ChartInternalShallowDataShape,
     barIndex: number,
@@ -178,6 +223,8 @@ export class BarSeries extends Component<BarSeriesProps> {
       type,
       id
     } = this.props;
+    const { activeValues } = this.state;
+    const active = activeValues && activeValues.x === data.key;
 
     const isVertical = layout === 'vertical';
     let yScale = this.props.yScale;
@@ -208,6 +255,7 @@ export class BarSeries extends Component<BarSeriesProps> {
           element={barElements}
           id={`${id}-bar-${groupIndex}-${barIndex}`}
           animated={animated}
+          active={active}
           xScale={xScale}
           xScale1={xScale1}
           yScale={yScale}
@@ -220,6 +268,7 @@ export class BarSeries extends Component<BarSeriesProps> {
           color={this.getColor.bind(this)}
           layout={layout}
           type={type}
+          onMouseMove={this.onMouseMove.bind(this)}
         />
       </Fragment>
     );
@@ -242,12 +291,37 @@ export class BarSeries extends Component<BarSeriesProps> {
     );
   }
 
+  onValueEnter(event: TooltipAreaEvent) {
+    this.setState({
+      activeValues: event.value
+    });
+  }
+
+  onValueLeave() {
+    this.setState({
+      activeValues: undefined
+    });
+  }
+
   render() {
-    const { data } = this.props;
+    const { data, tooltip, xScale, yScale, height, width, layout } = this.props;
     const isMulti = this.getIsMulti();
 
     return (
-      <Fragment>
+      <CloneElement<TooltipAreaProps>
+        element={tooltip}
+        ref={this.ref}
+        xScale={xScale}
+        yScale={yScale}
+        data={data}
+        height={height}
+        width={width}
+        inverse={false}
+        isHorizontal={layout === 'horizontal'}
+        color={this.getColor.bind(this)}
+        onValueEnter={this.onValueEnter.bind(this)}
+        onValueLeave={this.onValueLeave.bind(this)}
+      >
         {isMulti &&
           (data as ChartInternalNestedDataShape[]).map((groupData, index) => (
             <g
@@ -266,7 +340,7 @@ export class BarSeries extends Component<BarSeriesProps> {
             data as ChartInternalShallowDataShape[],
             data.length
           )}
-      </Fragment>
+      </CloneElement>
     );
   }
 }

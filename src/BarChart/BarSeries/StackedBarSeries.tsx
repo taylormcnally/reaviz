@@ -4,7 +4,7 @@ import { Bar } from './Bar';
 import { RangeLines } from './RangeLines';
 import { Gradient, GradientStop } from '../../common';
 
-export class StackedBarSeries extends Component<BarSeriesProps, {}> {
+export class StackedBarSeries extends Component<BarSeriesProps> {
   static defaultProps: Partial<BarSeriesProps> = {
     ...BarSeries.defaultProps,
     type: 'stacked',

@@ -6,7 +6,7 @@ import { ChartTooltip, TooltipTemplate } from '../../common/Tooltip';
 import { formatValue } from '../../common/utils/formatting';
 import { Gradient, GradientStop } from '../../common/Gradient';
 
-export class MarimekkoBarSeries extends Component<BarSeriesProps, {}> {
+export class MarimekkoBarSeries extends Component<BarSeriesProps> {
   static defaultProps: Partial<BarSeriesProps> = {
     ...BarSeries.defaultProps,
     type: 'marimekko',

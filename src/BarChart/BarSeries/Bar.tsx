@@ -1,6 +1,5 @@
-import React, { Fragment, Component, createRef, ReactElement } from 'react';
+import React, { Fragment, Component, ReactElement } from 'react';
 import chroma from 'chroma-js';
-import { ChartTooltip, ChartTooltipProps } from '../../common/Tooltip';
 import { Gradient, GradientProps } from '../../common/Gradient';
 import classNames from 'classnames';
 import { ChartInternalShallowDataShape, Direction } from '../../common/data';
@@ -28,6 +27,11 @@ export type BarType =
   | 'waterfall';
 
 export type BarProps = {
+  /**
+   * Whether the bar is active or not.
+   */
+  active: boolean;
+
   /**
    * D3 scale for X Axis. Set internally by `BarChart`.
    */
@@ -129,11 +133,6 @@ export type BarProps = {
   mask: ReactElement<MaskProps, typeof Mask> | null;
 
   /**
-   * Tooltip element.
-   */
-  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
-
-  /**
    * Direction of the chart. Set internally by `BarSeries`.
    */
   layout: Direction;
@@ -162,11 +161,12 @@ export type BarProps = {
    * Event for when the bar has mouse leave.
    */
   onMouseLeave: (event) => void;
-} & PropFunctionTypes;
 
-interface BarState {
-  active?: boolean;
-}
+  /**
+   * Event for when a bar has mouse move.
+   */
+  onMouseMove: (event) => void;
+} & PropFunctionTypes;
 
 interface BarCoordinates {
   width: number;
@@ -175,31 +175,21 @@ interface BarCoordinates {
   y: number;
 }
 
-// Set padding modifier for the tooltips
-const modifiers = {
-  offset: {
-    offset: '0, 5px'
-  }
-};
-
-export class Bar extends Component<BarProps, BarState> {
+export class Bar extends Component<BarProps> {
   static defaultProps: Partial<BarProps> = {
     rounded: true,
     rx: 0,
     ry: 0,
     cursor: 'auto',
-    tooltip: <ChartTooltip />,
     rangeLines: null,
     label: null,
+    layout: 'vertical',
     gradient: <Gradient />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined,
-    layout: 'vertical'
+    onMouseMove: () => undefined
   };
-
-  rect = createRef<SVGGElement>();
-  state: BarState = {};
 
   getExit({ x, y, width, height }: BarCoordinates) {
     const { yScale, xScale, type } = this.props;
@@ -364,8 +354,6 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   onMouseEnter(event: MouseEvent) {
-    this.setState({ active: true });
-
     const { onMouseEnter, data } = this.props;
     onMouseEnter({
       value: data,
@@ -374,8 +362,6 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   onMouseLeave(event: MouseEvent) {
-    this.setState({ active: false });
-
     const { onMouseLeave, data } = this.props;
     onMouseLeave({
       value: data,
@@ -456,7 +442,7 @@ export class Bar extends Component<BarProps, BarState> {
   }
 
   renderBar(currentColorShade: string, coords: BarCoordinates, index: number) {
-    const { rounded, cursor, mask, id, data, rx, ry } = this.props;
+    const { rounded, cursor, mask, id, data, rx, ry, onMouseMove } = this.props;
     const maskPath = mask ? `url(#mask-${id})` : '';
     const fill = this.getFill(currentColorShade);
     const initialExit = this.getExit(coords);
@@ -465,29 +451,28 @@ export class Bar extends Component<BarProps, BarState> {
     const transition = this.getTransition(index);
 
     return (
-      <g ref={this.rect}>
-        <motion.rect
-          className={classNames(
-            {
-              [css.rounded]: rounded,
-              [css.vertical]: isVertical,
-              [css.horizontal]: !isVertical
-            },
-            extras.className
-          )}
-          style={{ ...extras.style, cursor }}
-          mask={maskPath}
-          rx={rx}
-          ry={ry}
-          initial={{ ...initialExit, fill }}
-          animate={{ ...coords, fill }}
-          exit={{ ...initialExit, fill }}
-          transition={transition}
-          onMouseEnter={bind(this.onMouseEnter, this)}
-          onMouseLeave={bind(this.onMouseLeave, this)}
-          onClick={bind(this.onMouseClick, this)}
-        />
-      </g>
+      <motion.rect
+        className={classNames(
+          {
+            [css.rounded]: rounded,
+            [css.vertical]: isVertical,
+            [css.horizontal]: !isVertical
+          },
+          extras.className
+        )}
+        style={{ ...extras.style, cursor }}
+        mask={maskPath}
+        rx={rx}
+        ry={ry}
+        initial={{ ...initialExit, fill }}
+        animate={{ ...coords, fill }}
+        exit={{ ...initialExit, fill }}
+        transition={transition}
+        onMouseEnter={bind(this.onMouseEnter, this)}
+        onMouseLeave={bind(this.onMouseLeave, this)}
+        onClick={bind(this.onMouseClick, this)}
+        onMouseMove={onMouseMove}
+      />
     );
   }
 
@@ -500,7 +485,6 @@ export class Bar extends Component<BarProps, BarState> {
       color,
       yScale,
       barCount,
-      tooltip,
       xScale,
       groupIndex,
       rangeLines,
@@ -508,9 +492,9 @@ export class Bar extends Component<BarProps, BarState> {
       type,
       layout,
       mask,
-      label
+      label,
+      active
     } = this.props;
-    const { active } = this.state;
     const stroke = color(data, barIndex);
     const coords = this.getCoords();
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
@@ -519,7 +503,6 @@ export class Bar extends Component<BarProps, BarState> {
       ? chroma(rangeLineColor).brighten(0.5)
       : rangeLineColor;
     const index = groupIndex !== undefined ? groupIndex : barIndex;
-    const placement = layout === 'vertical' ? 'top' : 'right';
     const isVertical = this.getIsVertical();
     const scale = isVertical ? yScale : xScale;
     const tooltipData = this.getTooltipData();
@@ -540,18 +523,6 @@ export class Bar extends Component<BarProps, BarState> {
             animated={animated}
             layout={layout}
             type={type}
-          />
-        )}
-        {tooltip && !tooltip.props.disabled && (
-          <CloneElement<ChartTooltipProps>
-            element={tooltip}
-            visible={!!active}
-            modifiers={tooltip.props.modifiers || modifiers}
-            reference={this.rect}
-            color={color}
-            value={tooltipData}
-            placement={tooltip.props.placement || placement}
-            data={data}
           />
         )}
         {mask && (

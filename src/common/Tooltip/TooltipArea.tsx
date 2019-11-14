@@ -1,4 +1,4 @@
-import React, { Fragment, Component, ReactElement } from 'react';
+import React, { Fragment, Component, ReactElement, createRef } from 'react';
 import { TooltipAreaEvent } from './TooltipAreaEvent';
 import { Placement } from 'rdk';
 import {
@@ -82,6 +82,11 @@ export interface TooltipAreaProps {
   tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip>;
 
   /**
+   * Whether to inverse the data or not.
+   */
+  inverse: boolean;
+
+  /**
    * When pointer entered mouse area.
    */
   onValueEnter: (event: TooltipAreaEvent) => void;
@@ -90,6 +95,11 @@ export interface TooltipAreaProps {
    * When pointer left mouse area.
    */
   onValueLeave: () => void;
+
+  /**
+   * Whether the layout is horizontal or not.
+   */
+  isHorizontal: boolean;
 }
 
 interface TooltipAreaState {
@@ -108,9 +118,9 @@ interface TooltipDataShape {
 
 export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
   static defaultProps: Partial<TooltipAreaProps> = {
-    placement: 'top',
     isRadial: false,
     tooltip: <ChartTooltip />,
+    inverse: true,
     onValueEnter: () => undefined,
     onValueLeave: () => undefined
   };
@@ -118,6 +128,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
   prevX: number | undefined;
   prevY: number | undefined;
   state: TooltipAreaState = {};
+  ref = createRef<SVGRectElement | SVGPathElement | any>();
 
   getXCoord(x: number, y: number) {
     const { isRadial, width, height } = this.props;
@@ -146,26 +157,61 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
       height,
       width,
       data,
-      isRadial
+      isRadial,
+      isHorizontal,
+      placement
     } = this.props;
-    let placement = this.props.placement;
     const { value } = this.state;
     const transformed = this.transformData(data);
 
-    const { x, y } = getPositionForTarget(event);
-    const xCoord = this.getXCoord(x, y);
-    const newValue = getClosestPoint(xCoord, xScale, transformed);
+    // Get our default placement
+    let newPlacement = placement;
+    if (!placement) {
+      if (isHorizontal) {
+        newPlacement = 'right';
+      } else {
+        newPlacement = 'top';
+      }
+    }
 
-    if (!isEqual(newValue, value)) {
-      const pointX = xScale(newValue.x);
-      let pointY = yScale(newValue.y);
+    // Get the path container element
+    let target = this.ref.current;
+
+    const { y, x } = getPositionForTarget({
+      target: target,
+      // Manually pass the x/y from the event
+      clientX: event.clientX,
+      clientY: event.clientY
+    });
+
+    // Need to flip scales/coords if we are a horz layout
+    let keyScale;
+    let valueScale;
+    let coord;
+    if (isHorizontal) {
+      keyScale = yScale;
+      valueScale = xScale;
+      coord = y;
+    } else {
+      coord = this.getXCoord(x, y);
+      keyScale = xScale;
+      valueScale = yScale;
+    }
+
+    const newValue = getClosestPoint(coord, keyScale, transformed);
+
+    if (!isEqual(newValue, value) && newValue) {
+      const pointX = keyScale(newValue.x);
+      let pointY = valueScale(newValue.y);
       let marginX = 0;
       let marginY = 0;
 
       if (isNaN(pointY)) {
         pointY = height / 2;
         marginX = 10;
-        placement = 'right';
+        if (!placement) {
+          newPlacement = 'right';
+        }
       } else {
         marginY = -10;
       }
@@ -198,7 +244,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
       offsetY += top + marginY;
 
       this.setState({
-        placement,
+        placement: newPlacement,
         visible: true,
         value: newValue,
         offsetX,
@@ -241,38 +287,69 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
   }
 
   transformData = memoize((series: ChartInternalDataShape[]) => {
+    const { inverse, isHorizontal } = this.props;
     const result: TooltipDataShape[] = [];
 
-    for (const point of series) {
-      const seriesPoint = point as ChartInternalNestedDataShape;
-      if (Array.isArray(seriesPoint.data)) {
-        for (const nestedPoint of seriesPoint.data) {
-          const right = nestedPoint.x;
-          let idx = result.findIndex(r => {
-            const left = r.x;
-            if (left instanceof Date && right instanceof Date) {
-              return left.getTime() === right.getTime();
-            }
-            return left === right;
-          });
-
-          if (idx === -1) {
-            result.push({
-              x: nestedPoint.x,
-              data: []
+    if (inverse) {
+      for (const point of series) {
+        const seriesPoint = point as ChartInternalNestedDataShape;
+        if (Array.isArray(seriesPoint.data)) {
+          for (const nestedPoint of seriesPoint.data) {
+            const right = nestedPoint.x;
+            let idx = result.findIndex(r => {
+              const left = r.x;
+              if (left instanceof Date && right instanceof Date) {
+                return left.getTime() === right.getTime();
+              }
+              return left === right;
             });
 
-            idx = result.length - 1;
-          }
+            if (idx === -1) {
+              result.push({
+                x: nestedPoint.x,
+                data: []
+              });
 
-          const data = result[idx].data;
+              idx = result.length - 1;
+            }
 
-          if (Array.isArray(data)) {
-            data.push(nestedPoint);
+            const data = result[idx].data;
+
+            if (Array.isArray(data)) {
+              data.push(nestedPoint);
+            }
           }
+        } else {
+          result.push(point);
         }
-      } else {
-        result.push(point);
+      }
+    } else {
+      for (const point of series) {
+        const nestedPoint = point as ChartInternalNestedDataShape;
+        if (Array.isArray(nestedPoint.data)) {
+          result.push({
+            x: point.key,
+            data: nestedPoint.data.map(
+              d =>
+                ({
+                  ...d,
+                  key: !isHorizontal ? d.x : d.y,
+                  value: !isHorizontal ? d.y : d.x
+                } as any)
+            )
+          });
+        } else {
+          const shallowPoint = point as ChartInternalShallowDataShape;
+          result.push({
+            ...shallowPoint,
+            // Histograms special logic...
+            x: shallowPoint.key === undefined ? shallowPoint.x0 : point.key,
+            y:
+              shallowPoint.value === undefined
+                ? shallowPoint.y
+                : shallowPoint.value
+          });
+        }
       }
     }
 
@@ -280,10 +357,10 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
   });
 
   renderRadial() {
-    const { height, width } = this.props;
+    let { height, width, innerRadius, outerRadius } = this.props;
 
-    const innerRadius = this.props.innerRadius || 0;
-    const outerRadius = this.props.outerRadius ||  Math.min(width, height) / 2;
+    innerRadius = innerRadius || 0;
+    outerRadius = outerRadius || Math.min(width, height) / 2;
 
     const d = arc()({
       innerRadius,
@@ -297,6 +374,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
         d={d!}
         opacity="0"
         cursor="auto"
+        ref={this.ref}
         onMouseMove={bind(this.onMouseMove, this)}
       />
     );
@@ -308,6 +386,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
     return (
       <rect
         height={height}
+        ref={this.ref}
         width={width}
         opacity={0}
         cursor="auto"
@@ -331,6 +410,11 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
               element={tooltip}
               visible={visible}
               placement={placement}
+              modifiers={{
+                offset: {
+                  offset: '0, 10px'
+                }
+              }}
               reference={this.getTooltipReference()}
               color={color}
               value={value}

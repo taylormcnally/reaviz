@@ -206,6 +206,7 @@ export class RangeLines extends Component<RangeLinesProps> {
 
     return (
       <motion.rect
+        pointerEvents="none"
         fill={color}
         width={width}
         height={height}

@@ -1,53 +1,61 @@
-import { cloneElement, PureComponent } from 'react';
+import { cloneElement, useMemo, forwardRef, Ref } from 'react';
 import classNames from 'classnames';
-import memoize from 'memoize-one';
 
 interface CloneElementProps {
   element: any | null;
+  children?: any;
 }
 
 /**
  * CloneElement is a wrapper component for createElement function.
  * This allows you to describe your cloning element declaratively
  * which is a more natural API for React.
+ *
+ * Note: I also give up on making TS happy w/ this stupid const generic
  */
-export class CloneElement<T = any> extends PureComponent<
-  CloneElementProps & Partial<T>
-> {
-  getProjectedProps = memoize(props => {
-    const childProps = this.props.element.props;
+// @ts-ignore
+export const CloneElement = <T>(
+  forwardRef(
+    (
+      { element, children, ...rest }: CloneElementProps & any,
+      ref: Ref<unknown>
+    ) => {
+      const getProjectedProps = useMemo(
+        () => props => {
+          const childProps = element.props;
 
-    return Object.keys(props).reduce((acc, key) => {
-      const prop = props[key];
-      const childProp = childProps[key];
+          return Object.keys(props).reduce((acc, key) => {
+            const prop = props[key];
+            const childProp = childProps[key];
 
-      if (typeof prop === 'function' && typeof childProp === 'function') {
-        acc[key] = args => {
-          prop(args);
-          childProp(args);
-        };
-      } else if (key === 'className') {
-        acc[key] = classNames(prop, childProp);
-      } else {
-        acc[key] = prop;
+            if (typeof prop === 'function' && typeof childProp === 'function') {
+              acc[key] = args => {
+                prop(args);
+                childProp(args);
+              };
+            } else if (key === 'className') {
+              acc[key] = classNames(prop, childProp);
+            } else {
+              acc[key] = prop;
+            }
+
+            return acc;
+          }, {});
+        },
+        [rest]
+      );
+
+      if (element === null) {
+        return children;
       }
 
-      return acc;
-    }, {});
-  });
-
-  render() {
-    const { element, children, ...rest } = this.props;
-
-    if (element === null) {
-      return children;
+      const newProps = getProjectedProps(rest);
+      return cloneElement(element, {
+        ref,
+        ...element.props,
+        ...newProps,
+        children
+      });
     }
-
-    const newProps = this.getProjectedProps(rest);
-    return cloneElement(element, {
-      ...element.props,
-      ...newProps,
-      children
-    });
-  }
-}
+  )
+);

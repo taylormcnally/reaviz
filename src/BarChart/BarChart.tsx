@@ -369,6 +369,8 @@ export class BarChart extends Component<BarChartProps> {
               element={series}
               id={`bar-series-${id}`}
               data={data}
+              height={chartHeight}
+              width={chartWidth}
               isCategorical={isCategorical}
               xScale={xScale}
               xScale1={xScale1}
