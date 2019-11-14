@@ -310,7 +310,7 @@ export class BarSeries extends Component<BarSeriesProps, BarSeriesState> {
     return (
       <CloneElement<TooltipAreaProps>
         element={tooltip}
-        ref={this.ref}
+        childRef={this.ref}
         xScale={xScale}
         yScale={yScale}
         data={data}

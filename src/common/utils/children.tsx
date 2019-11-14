@@ -7,6 +7,7 @@ import classNames from 'classnames';
 interface CloneElementProps {
   element: any;
   children?: any;
+  childRef?: any;
 }
 
 /**
@@ -14,7 +15,7 @@ interface CloneElementProps {
  * This allows you to describe your cloning element declaratively
  * which is a more natural API for React.
  */
-export function CloneElement<T = any>({ children, element, ...rest }: CloneElementProps & Partial<T> & { ref?: any }) {
+export function CloneElement<T = any>({ children, element, childRef, ...rest }: CloneElementProps & Partial<T>) {
   const getProjectedProps = useMemo(
     () => props => {
       const childProps = element.props;
@@ -45,13 +46,12 @@ export function CloneElement<T = any>({ children, element, ...rest }: CloneEleme
   }
 
   // Tricky logic around functional vs class components
-  const elementRef = element.ref;
-  const ref = elementRef ?
+  const ref = childRef ?
     node => {
-      if (typeof elementRef === 'function') {
-        elementRef(node)
+      if (typeof childRef === 'function') {
+        childRef(node)
       } else if (ref) {
-        elementRef.current = node;
+        childRef.current = node;
       }
     } : undefined;
 
