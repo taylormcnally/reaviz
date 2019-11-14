@@ -1027,7 +1027,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
             layout="horizontal"
             type="stackedDiverging"
             colorScheme={['#ACB7C9', '#418AD7']}
-            bar={
+            bar={[
               <Bar
                 rounded={false}
                 width={10}
@@ -1036,7 +1036,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
                     stops={[
                       <GradientStop
                         offset="5%"
-                        stopOpacity={0.1}
+                        stopOpacity={0.25}
                         key="start"
                       />,
                       <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
@@ -1044,8 +1044,25 @@ storiesOf('Demos|Bar Chart/Axis', module)
                   />
                 }
                 rangeLines={<RangeLines position="top" strokeWidth={3} />}
+              />,
+              <Bar
+                rounded={false}
+                width={10}
+                gradient={
+                  <Gradient
+                    stops={[
+                      <GradientStop offset="5%" stopOpacity={0.7} key="stop" />,
+                      <GradientStop
+                        offset="90%"
+                        stopOpacity={0.25}
+                        key="start"
+                      />
+                    ]}
+                  />
+                }
+                rangeLines={<RangeLines position="top" strokeWidth={3} />}
               />
-            }
+            ]}
           />
         }
         xAxis={
@@ -1121,7 +1138,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
           <StackedBarSeries
             type="stackedDiverging"
             colorScheme={['#ACB7C9', '#418AD7']}
-            bar={
+            bar={[
               <Bar
                 rounded={false}
                 width={25}
@@ -1130,7 +1147,7 @@ storiesOf('Demos|Bar Chart/Axis', module)
                     stops={[
                       <GradientStop
                         offset="5%"
-                        stopOpacity={0.1}
+                        stopOpacity={0.25}
                         key="start"
                       />,
                       <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
@@ -1138,8 +1155,25 @@ storiesOf('Demos|Bar Chart/Axis', module)
                   />
                 }
                 rangeLines={<RangeLines position="top" strokeWidth={3} />}
+              />,
+              <Bar
+                rounded={false}
+                width={25}
+                gradient={
+                  <Gradient
+                    stops={[
+                      <GradientStop offset="5%" stopOpacity={0.7} key="stop" />,
+                      <GradientStop
+                        offset="90%"
+                        stopOpacity={0.25}
+                        key="start"
+                      />
+                    ]}
+                  />
+                }
+                rangeLines={<RangeLines position="top" strokeWidth={3} />}
               />
-            }
+            ]}
           />
         }
         yAxis={
