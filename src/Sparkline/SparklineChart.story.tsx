@@ -17,7 +17,11 @@ import {
   LinearYAxis,
   LinearXAxis,
   LinearYAxisTickSeries,
-  LinearXAxisTickSeries
+  LinearXAxisTickSeries,
+  TooltipArea,
+  ChartTooltip,
+  TooltipTemplate,
+  formatValue
 } from '../common';
 
 storiesOf('Demos|Sparkline', module)
@@ -41,6 +45,27 @@ storiesOf('Demos|Sparkline', module)
         <StackedBarSeries
           type="stackedDiverging"
           colorScheme="rgb(17, 207, 247)"
+          tooltip={
+            <TooltipArea
+              tooltip={
+                <ChartTooltip
+                  followCursor={true}
+                  modifiers={{
+                    offset: '5px, 5px'
+                  }}
+                  content={(data, color) => (
+                    <TooltipTemplate
+                      color={color}
+                      value={{
+                        x: formatValue(data.x),
+                        y: `${formatValue(Math.abs(data.data[0].y))}`
+                      }}
+                    />
+                  )}
+                />
+              }
+            />
+          }
           bar={[
             <Bar
               rounded={false}
