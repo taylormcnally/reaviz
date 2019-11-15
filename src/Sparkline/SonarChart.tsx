@@ -40,22 +40,15 @@ export const SonarChart: FC<Partial<SonarChartProps>> = props => (
                 modifiers={{
                   offset: '5px, 5px'
                 }}
-                content={(data, color) => {
-                  const [first] = data.data;
-                  const y = !first.metadata?.empty
-                    ? `${formatValue(Math.abs(data.data[0].y))}`
-                    : 0;
-
-                  return (
-                    <TooltipTemplate
-                      color={color}
-                      value={{
-                        x: formatValue(data.x),
-                        y
-                      }}
-                    />
-                  );
-                }}
+                content={(data, color) => (
+                  <TooltipTemplate
+                    color={color}
+                    value={{
+                      x: formatValue(data.x),
+                      y: `${formatValue(Math.abs(data.data[0].y))}`
+                    }}
+                  />
+                )}
               />
             }
           />
@@ -65,6 +58,7 @@ export const SonarChart: FC<Partial<SonarChartProps>> = props => (
             rounded={false}
             width={1}
             rangeLines={null}
+            minHeight={1}
             gradient={
               <Gradient
                 stops={[
@@ -78,6 +72,7 @@ export const SonarChart: FC<Partial<SonarChartProps>> = props => (
             rounded={false}
             width={1}
             rangeLines={null}
+            minHeight={1}
             gradient={
               <Gradient
                 stops={[
