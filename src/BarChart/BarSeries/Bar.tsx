@@ -148,6 +148,11 @@ export type BarProps = {
   label: ReactElement<BarLabelProps, typeof BarLabel> | null;
 
   /**
+   * Force a min height on the bar.
+   */
+  minHeight?: number;
+
+  /**
    * Event for when the bar is clicked.
    */
   onClick: (event) => void;
@@ -276,8 +281,9 @@ export class Bar extends Component<BarProps> {
     const c0 = scale(v0);
     const c1 = scale(v1);
     const size = Math.abs(c0 - c1);
+    const minSize = Math.max(this.props.minHeight || 0, size)
 
-    return { offset: Math.min(c0, c1), size };
+    return { offset: Math.min(c0, c1), size: minSize };
   }
 
   getIsVertical() {
