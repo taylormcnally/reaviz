@@ -328,15 +328,13 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
         const nestedPoint = point as ChartInternalNestedDataShape;
         if (Array.isArray(nestedPoint.data)) {
           result.push({
-            x: point.key,
-            data: nestedPoint.data.map(
-              d =>
-                ({
-                  ...d,
-                  key: !isHorizontal ? d.x : d.y,
-                  value: !isHorizontal ? d.y : d.x
-                } as any)
-            )
+            ...nestedPoint,
+            x: nestedPoint.key,
+            data: nestedPoint.data.map(d => ({
+              ...d,
+              key: !isHorizontal ? d.x : d.y,
+              value: !isHorizontal ? d.y : d.x
+            }))
           });
         } else {
           const shallowPoint = point as ChartInternalShallowDataShape;

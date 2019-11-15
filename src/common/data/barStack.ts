@@ -38,6 +38,7 @@ function transformDataToStack(data: ChartNestedDataShape[]) {
 
       if (idx === -1) {
         result.push({
+          metadata: category.metadata,
           x: category.key,
           formattedValues: {}
         });
@@ -95,6 +96,7 @@ function transformStackToData(
       const [y0, y1] = point;
 
       result[idx].data.push({
+        metadata: point.data.metadata,
         key,
         x: isVertical ? categoryKey : y1,
         x0: isVertical ? categoryKey : y0,
@@ -118,7 +120,11 @@ export function buildBarStackData(
   offset: StackTypes = 'default',
   direction = 'vertical'
 ) {
-  const keys = uniqueBy<ChartNestedDataShape>(data, d => d.data, d => d.key);
+  const keys = uniqueBy<ChartNestedDataShape>(
+    data,
+    d => d.data,
+    d => d.key
+  );
   const stackData = transformDataToStack(data);
 
   let stackFn = stack();
