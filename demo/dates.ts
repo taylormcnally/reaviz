@@ -77,6 +77,20 @@ export const sonarData = generateBinnedData(90).map(d => ({
   ]
 }));
 
+export const sonarDataEmpties = generateBinnedData(90).map((d, i) => ({
+  ...d,
+  metadata: i < 30 || i > 60 ? { empty: true } : undefined,
+  data: i > 30 && i < 60 ?
+    [
+      d.data[0],
+      { ...d.data[1], data: -d.data[0].data }
+    ] :
+    [
+      { key: 'Closed', data: 1, },
+      { key: 'Opened', data: -1 }
+    ]
+}));
+
 export const singleDateData = generateDateData();
 
 export const nonZeroDateData = [
