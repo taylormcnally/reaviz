@@ -410,7 +410,7 @@ export class TooltipArea extends Component<TooltipAreaProps, TooltipAreaState> {
               placement={placement}
               modifiers={{
                 offset: {
-                  offset: '0, 10px'
+                  offset: '0, 15px'
                 }
               }}
               reference={this.getTooltipReference()}
