@@ -1,3 +1,11 @@
+# Master
+- [Feature] Guide Bar for Radial Bar Charts
+- [Feature] Add ability to pass `minHeight` to `Bar` component
+- [Feature] Add `SonarChart` component and improve demo
+- [Fix] Fix bug with not passing `metadata` in stacked charts
+- [Chore] Bump depepdencies
+- [Chore] Move `Tooltip` to `FC`
+
 # 7.0.2 - 11/14/19
 - [Fix] Fix marmekko tooltip issue
 - [Fix] Temp remove tooltip from linear gauge
