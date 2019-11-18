@@ -127,7 +127,6 @@ export class RadialBarSeries extends Component<
           active={active}
           yScale={yScale}
           innerRadius={innerRadius}
-          activeValues={activeValues}
           color={point => getColor({ data, point, index: 0, colorScheme })}
           barCount={data.length}
           animated={animated}

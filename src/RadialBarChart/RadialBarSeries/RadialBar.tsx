@@ -229,7 +229,7 @@ export class RadialBar extends Component<RadialBarProps> {
     return (
       <Fragment>
         {guide && (
-          <CloneElement<RadialBarProps>
+          <CloneElement<RadialGuideBarProps>
             element={guide}
             active={active}
             path={guidePath}
