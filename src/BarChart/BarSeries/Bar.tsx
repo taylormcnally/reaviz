@@ -1,4 +1,4 @@
-import React, { Fragment, Component, ReactElement } from 'react';
+import React, { Fragment, Component, ReactElement, createRef } from 'react';
 import chroma from 'chroma-js';
 import { Gradient, GradientProps } from '../../common/Gradient';
 import classNames from 'classnames';
@@ -17,6 +17,7 @@ import { DEFAULT_TRANSITION } from '../../common/Motion';
 import { BarLabelProps, BarLabel } from './BarLabel';
 import { formatValue } from '../../common/utils/formatting';
 import { GuideBarProps, GuideBar } from './GuideBar';
+import { ChartTooltipProps, ChartTooltip } from 'common/Tooltip';
 
 export type BarType =
   | 'standard'
@@ -134,6 +135,11 @@ export type BarProps = {
   mask: ReactElement<MaskProps, typeof Mask> | null;
 
   /**
+   * Tooltip element.
+   */
+  tooltip: ReactElement<ChartTooltipProps, typeof ChartTooltip> | null;
+
+  /**
    * Direction of the chart. Set internally by `BarSeries`.
    */
   layout: Direction;
@@ -186,7 +192,11 @@ interface BarCoordinates {
   y: number;
 }
 
-export class Bar extends Component<BarProps> {
+interface BarState {
+  active?: boolean;
+}
+
+export class Bar extends Component<BarProps, BarState> {
   static defaultProps: Partial<BarProps> = {
     rounded: true,
     rx: 0,
@@ -194,6 +204,7 @@ export class Bar extends Component<BarProps> {
     cursor: 'auto',
     rangeLines: null,
     label: null,
+    tooltip: null,
     layout: 'vertical',
     guide: null,
     gradient: <Gradient />,
@@ -202,6 +213,9 @@ export class Bar extends Component<BarProps> {
     onMouseLeave: () => undefined,
     onMouseMove: () => undefined
   };
+
+  state: BarState = {};
+  rect = createRef<SVGGElement>();
 
   getExit({ x, y, width, height }: BarCoordinates) {
     const { yScale, xScale, type } = this.props;
@@ -367,7 +381,13 @@ export class Bar extends Component<BarProps> {
   }
 
   onMouseEnter(event: MouseEvent) {
-    const { onMouseEnter, data } = this.props;
+    const { onMouseEnter, data, tooltip } = this.props;
+
+    // Only tooltip bars rely on this...
+    if (tooltip) {
+      this.setState({ active: true });
+    }
+
     onMouseEnter({
       value: data,
       nativeEvent: event
@@ -375,7 +395,13 @@ export class Bar extends Component<BarProps> {
   }
 
   onMouseLeave(event: MouseEvent) {
-    const { onMouseLeave, data } = this.props;
+    const { onMouseLeave, data, tooltip } = this.props;
+
+    // Only tooltip bars rely on this...
+    if (tooltip) {
+      this.setState({ active: false });
+    }
+
     onMouseLeave({
       value: data,
       nativeEvent: event
@@ -464,28 +490,30 @@ export class Bar extends Component<BarProps> {
     const transition = this.getTransition(index);
 
     return (
-      <motion.rect
-        className={classNames(
-          {
-            [css.rounded]: rounded,
-            [css.vertical]: isVertical,
-            [css.horizontal]: !isVertical
-          },
-          extras.className
-        )}
-        style={{ ...extras.style, cursor }}
-        mask={maskPath}
-        rx={rx}
-        ry={ry}
-        initial={{ ...initialExit, fill }}
-        animate={{ ...coords, fill }}
-        exit={{ ...initialExit, fill }}
-        transition={transition}
-        onMouseEnter={bind(this.onMouseEnter, this)}
-        onMouseLeave={bind(this.onMouseLeave, this)}
-        onClick={bind(this.onMouseClick, this)}
-        onMouseMove={onMouseMove}
-      />
+      <g ref={this.rect}>
+        <motion.rect
+          className={classNames(
+            {
+              [css.rounded]: rounded,
+              [css.vertical]: isVertical,
+              [css.horizontal]: !isVertical
+            },
+            extras.className
+          )}
+          style={{ ...extras.style, cursor }}
+          mask={maskPath}
+          rx={rx}
+          ry={ry}
+          initial={{ ...initialExit, fill }}
+          animate={{ ...coords, fill }}
+          exit={{ ...initialExit, fill }}
+          transition={transition}
+          onMouseEnter={bind(this.onMouseEnter, this)}
+          onMouseLeave={bind(this.onMouseLeave, this)}
+          onClick={bind(this.onMouseClick, this)}
+          onMouseMove={onMouseMove}
+        />
+      </g>
     );
   }
 
@@ -549,11 +577,12 @@ export class Bar extends Component<BarProps> {
       rangeLines,
       animated,
       type,
+      tooltip,
       layout,
       mask,
-      label,
-      active
+      label
     } = this.props;
+    const active = tooltip ? this.state.active : this.props.active;
     const stroke = color(data, barIndex);
     const coords = this.getCoords(data);
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
@@ -566,6 +595,7 @@ export class Bar extends Component<BarProps> {
     const scale = isVertical ? yScale : xScale;
     const tooltipData = this.getTooltipData();
     const barLabel = isVertical ? tooltipData.y : tooltipData.x;
+    const placement = layout === 'vertical' ? 'top' : 'right';
 
     return (
       <Fragment>
@@ -616,6 +646,17 @@ export class Bar extends Component<BarProps> {
             animated={animated}
             layout={layout}
             type={type}
+          />
+        )}
+        {tooltip && (
+          <CloneElement<ChartTooltipProps>
+            element={tooltip}
+            visible={!!active}
+            reference={this.rect}
+            color={color}
+            value={tooltipData}
+            placement={tooltip.props.placement || placement}
+            data={data}
           />
         )}
       </Fragment>

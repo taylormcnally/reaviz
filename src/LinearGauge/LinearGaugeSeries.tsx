@@ -58,6 +58,7 @@ export const LinearGaugeSeries: FC<Partial<LinearGaugeSeriesProps>> = ({
     <BarSeries
       {...rest}
       layout="horizontal"
+      tooltip={null}
       bar={
         <CloneElement<LinearGaugeOuterBarProps>
           element={bar || defaultProps.bar}

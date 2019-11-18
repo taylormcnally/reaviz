@@ -1,4 +1,8 @@
-# 7.1.0
+# 7.2.0 - 11/18/19
+- [Feature] Add ability to have tooltip only show up on bar hover
+- [Fix] Fix linear guage tooltip not working correctly
+
+# 7.1.0 - 11/18/19
 - [Feature] Guide Bar for Radial Bar Charts
 - [Feature] Guide Bar for Linear Bar Charts
 - [Feature] Add ability to pass `minHeight` to `Bar` component
