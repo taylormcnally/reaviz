@@ -1,8 +1,10 @@
-# Master
+# 7.1.0
 - [Feature] Guide Bar for Radial Bar Charts
+- [Feature] Guide Bar for Linear Bar Charts
 - [Feature] Add ability to pass `minHeight` to `Bar` component
 - [Feature] Add `SonarChart` component and improve demo
 - [Fix] Fix bug with not passing `metadata` in stacked charts
+- [Fix] Increase `TooltipArea` padding by `5px`
 - [Chore] Bump depepdencies
 - [Chore] Move `Tooltip` to `FC`
 
