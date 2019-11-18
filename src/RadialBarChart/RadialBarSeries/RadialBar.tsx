@@ -1,4 +1,4 @@
-import React, { Component, Fragment, createRef } from 'react';
+import React, { Component, Fragment, ReactElement } from 'react';
 import { ChartInternalShallowDataShape } from '../../common/data';
 import { arc } from 'd3-shape';
 import { Gradient } from '../../common/Gradient';
@@ -7,7 +7,8 @@ import chroma from 'chroma-js';
 import { path } from 'd3-path';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
 import { MotionBar } from './MotionBar';
-import isEqual from 'is-equal';
+import { RadialGuideBar, RadialGuideBarProps } from './RadialGuideBar';
+import { CloneElement } from '../../common/utils';
 
 export interface RadialBarProps {
   /**
@@ -71,6 +72,16 @@ export interface RadialBarProps {
   curved: boolean;
 
   /**
+   * Guide bar component.
+   */
+  guide: ReactElement<RadialGuideBarProps, typeof RadialGuideBar> | null;
+
+  /**
+   * Active caused by hover.
+   */
+  active: boolean;
+
+  /**
    * Event for when a symbol is clicked.
    */
   onClick: (event) => void;
@@ -84,23 +95,18 @@ export interface RadialBarProps {
    * Event for when the symbol has mouse leave.
    */
   onMouseLeave: (event) => void;
-
-  /**
-   * Active values caused by hover.
-   */
-  activeValues?: any;
 }
 
 export class RadialBar extends Component<RadialBarProps> {
   static defaultProps: Partial<RadialBarProps> = {
     gradient: true,
     curved: false,
+    guide: <RadialGuideBar />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
     onMouseLeave: () => undefined
   };
 
-  ref = createRef<SVGPathElement>();
   previousEnter: any;
 
   getFill(color: string) {
@@ -198,7 +204,7 @@ export class RadialBar extends Component<RadialBarProps> {
   }
 
   renderBar(color: string) {
-    const { className, data, yScale } = this.props;
+    const { className, data, yScale, active, guide } = this.props;
 
     const fill = this.getFill(color);
     const transition = this.getTransition();
@@ -209,14 +215,26 @@ export class RadialBar extends Component<RadialBarProps> {
       : undefined;
     this.previousEnter = { ...data };
 
-    const [yStart] = yScale.domain();
+    const [yStart, yEnd] = yScale.domain();
     const exit = {
       ...data,
       y: yStart
     };
 
+    const guidePath = this.getArc({
+      ...data,
+      y: yEnd
+    }) as string;
+
     return (
-      <g ref={this.ref}>
+      <Fragment>
+        {guide && (
+          <CloneElement<RadialBarProps>
+            element={guide}
+            active={active}
+            path={guidePath}
+          />
+        )}
         <MotionBar
           arc={this.getArc.bind(this)}
           custom={{
@@ -231,15 +249,13 @@ export class RadialBar extends Component<RadialBarProps> {
           onMouseLeave={bind(this.onMouseLeave, this)}
           onClick={bind(this.onMouseClick, this)}
         />
-      </g>
+      </Fragment>
     );
   }
 
   render() {
-    const { data, index, color, gradient, id, activeValues } = this.props;
-
+    const { data, index, color, gradient, id, active } = this.props;
     const fill = color(data, index);
-    const active = activeValues && data && isEqual(activeValues.x, data.x);
     const currentColorShade = active ? chroma(fill).brighten(0.5) : fill;
 
     return (

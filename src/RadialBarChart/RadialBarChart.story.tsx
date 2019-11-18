@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { RadialBarChart } from './RadialBarChart';
 import { largeCategoryData, medDateData } from '../../demo';
 import { number, boolean, object, select } from '@storybook/addon-knobs';
-import { RadialBarSeries, RadialBar } from './RadialBarSeries';
+import { RadialBarSeries, RadialBar, RadialGuideBar } from './RadialBarSeries';
 import {
   RadialAxis,
   RadialAxisArcSeries,
@@ -21,6 +21,7 @@ storiesOf('Demos|Bar Chart/Radial', module)
       const curved = boolean('Curved', false);
       const hasGradient = boolean('Gradient', true);
       const animated = boolean('Animated', true);
+      const hasGuide = boolean('Show Guide', true);
       const color = select('Color Scheme', schemes, 'cybertron');
       const arcCount = number('Arc Count', 10);
       const tickPosition = select(
@@ -34,6 +35,7 @@ storiesOf('Demos|Bar Chart/Radial', module)
       const data = object('Data', medDateData);
       const gradient = hasGradient ? RadialBar.defaultProps.gradient : false;
       const colorScheme = schemes[color][0];
+      const guide = hasGuide ? <RadialGuideBar /> : null;
 
       return (
         <RadialBarChart
@@ -45,7 +47,9 @@ storiesOf('Demos|Bar Chart/Radial', module)
             <RadialBarSeries
               animated={animated}
               colorScheme={colorScheme}
-              bar={<RadialBar curved={curved} gradient={gradient} />}
+              bar={
+                <RadialBar curved={curved} gradient={gradient} guide={guide} />
+              }
             />
           }
           axis={

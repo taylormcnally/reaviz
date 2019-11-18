@@ -9,6 +9,7 @@ import {
   TooltipAreaEvent,
   ChartTooltip
 } from '../../common/Tooltip';
+import isEqual from 'is-equal';
 
 export interface RadialBarSeriesProps {
   /**
@@ -113,6 +114,7 @@ export class RadialBarSeries extends Component<
       colorScheme
     } = this.props;
     const { activeValues } = this.state;
+    const active = activeValues && data && isEqual(activeValues.x, point.x);
 
     return (
       <Fragment key={index}>
@@ -122,6 +124,7 @@ export class RadialBarSeries extends Component<
           index={index}
           data={point}
           xScale={xScale}
+          active={active}
           yScale={yScale}
           innerRadius={innerRadius}
           activeValues={activeValues}
