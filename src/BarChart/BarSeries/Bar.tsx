@@ -16,6 +16,7 @@ import { motion } from 'framer-motion';
 import { DEFAULT_TRANSITION } from '../../common/Motion';
 import { BarLabelProps, BarLabel } from './BarLabel';
 import { formatValue } from '../../common/utils/formatting';
+import { GuideBarProps, GuideBar } from './GuideBar';
 
 export type BarType =
   | 'standard'
@@ -148,6 +149,11 @@ export type BarProps = {
   label: ReactElement<BarLabelProps, typeof BarLabel> | null;
 
   /**
+   * Guide bar component.
+   */
+  guide: ReactElement<GuideBarProps, typeof GuideBar> | null;
+
+  /**
    * Force a min height on the bar.
    */
   minHeight?: number;
@@ -189,6 +195,7 @@ export class Bar extends Component<BarProps> {
     rangeLines: null,
     label: null,
     layout: 'vertical',
+    guide: null,
     gradient: <Gradient />,
     onClick: () => undefined,
     onMouseEnter: () => undefined,
@@ -281,7 +288,7 @@ export class Bar extends Component<BarProps> {
     const c0 = scale(v0);
     const c1 = scale(v1);
     const size = Math.abs(c0 - c1);
-    const minSize = Math.max(this.props.minHeight || 0, size)
+    const minSize = Math.max(this.props.minHeight || 0, size);
 
     return { offset: Math.min(c0, c1), size: minSize };
   }
@@ -290,8 +297,8 @@ export class Bar extends Component<BarProps> {
     return this.props.layout === 'vertical';
   }
 
-  getCoords(): BarCoordinates {
-    const { isCategorical, data, width, padding, xScale1 } = this.props;
+  getCoords(data: ChartInternalShallowDataShape): BarCoordinates {
+    const { isCategorical, width, padding, xScale1 } = this.props;
 
     const isVertical = this.getIsVertical();
     let yScale = this.props.yScale;
@@ -482,6 +489,52 @@ export class Bar extends Component<BarProps> {
     );
   }
 
+  renderGuideBar() {
+    const { data, yScale, active, barIndex, type, guide, xScale } = this.props;
+
+    if (!guide) {
+      return null;
+    }
+
+    // If we are stacked, only render the first bar
+    if (type === 'stacked' && barIndex !== 0) {
+      return null;
+    }
+
+    // No reason to show them since they are always 100% tall
+    if (type === 'stackedNormalized' || type === 'marimekko') {
+      console.error('Guide bars are not supported for these chart types');
+      return null;
+    }
+
+    const vertical = this.getIsVertical();
+    const valueScale = vertical ? yScale : xScale;
+    const [start, end] = valueScale.domain();
+    const attr = vertical ? 'y' : 'x';
+
+    // For stacked diverging we need to flip the points for positive / negative bars
+    const attrStart = type === 'stackedDiverging' ? '0' : '1';
+    const endPoint = type === 'stackedDiverging' ? start : end;
+    const startPoint =
+      type === 'stackedDiverging' && data[attr]! > 0 ? end : endPoint;
+
+    const coords = this.getCoords({
+      ...data,
+      [attr]: endPoint,
+      [`${attr}${attrStart}`]: startPoint
+    });
+
+    return (
+      <CloneElement<GuideBarProps>
+        element={guide}
+        {...coords}
+        x={coords.x}
+        width={coords.width}
+        active={active}
+      />
+    );
+  }
+
   render() {
     const {
       id,
@@ -502,7 +555,7 @@ export class Bar extends Component<BarProps> {
       active
     } = this.props;
     const stroke = color(data, barIndex);
-    const coords = this.getCoords();
+    const coords = this.getCoords(data);
     const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
     const rangeLineColor = (rangeLines && rangeLines.props.color) || stroke;
     const rangeLineColorShade = active
@@ -516,6 +569,7 @@ export class Bar extends Component<BarProps> {
 
     return (
       <Fragment>
+        {this.renderGuideBar()}
         {this.renderBar(currentColorShade, coords, index)}
         {rangeLines && (
           <CloneElement<RangeLinesProps>

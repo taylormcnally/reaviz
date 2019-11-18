@@ -29,7 +29,8 @@ import {
   MarimekkoBarSeries,
   RangeLines,
   BarLabel,
-  HistogramBarSeries
+  HistogramBarSeries,
+  GuideBar
 } from './BarSeries';
 import { GridlineSeries, Gridline } from '../common/Gridline';
 import {
@@ -52,11 +53,13 @@ storiesOf('Demos|Bar Chart/Vertical/Single Series', module)
     () => {
       const color = select('Color Scheme', schemes, 'cybertron');
       const hasGradient = boolean('Gradient', true);
+      const hasGuideBar = boolean('Guide Bar', true);
       const rounded = boolean('Rounded', true);
       const padding = number('Padding', 0.1);
       const height = number('Height', 350);
       const width = number('Width', 400);
       const gradient = hasGradient ? Bar.defaultProps.gradient : null;
+      const guide = hasGuideBar ? <GuideBar /> : null;
 
       return (
         <BarChart
@@ -67,7 +70,7 @@ storiesOf('Demos|Bar Chart/Vertical/Single Series', module)
             <BarSeries
               colorScheme={color}
               padding={padding}
-              bar={<Bar rounded={rounded} gradient={gradient} />}
+              bar={<Bar rounded={rounded} gradient={gradient} guide={guide} />}
             />
           }
         />
@@ -324,6 +327,8 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       const hasRangelines = boolean('Rangelines', false);
       const rounded = boolean('Rounded', true);
       const color = select('Color Scheme', schemes, 'cybertron');
+      const hasGuideBar = boolean('Guide Bar', false);
+      const guide = hasGuideBar ? <GuideBar /> : null;
 
       const gradient = hasGradient ? <Gradient /> : null;
       const rangelines = hasRangelines ? (
@@ -343,6 +348,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
                   rounded={rounded}
                   gradient={gradient}
                   rangeLines={rangelines}
+                  guide={guide}
                 />
               }
               colorScheme={color}
@@ -366,8 +372,10 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       const hasRangelines = boolean('Rangelines', true);
       const rounded = boolean('Rounded', false);
       const color = select('Color Scheme', schemes, 'cybertron');
+      const hasGuideBar = boolean('Guide Bar', false);
       const data = object('Data', multiCategory);
 
+      const guide = hasGuideBar ? <GuideBar /> : null;
       const gradient = hasGradient ? (
         <Gradient
           stops={[
@@ -395,6 +403,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
                   rounded={rounded}
                   gradient={gradient}
                   rangeLines={rangelines}
+                  guide={guide}
                 />
               }
               colorScheme={color}
@@ -471,6 +480,8 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
       const hasGradient = boolean('Gradient', true);
       const hasRangelines = boolean('Rangelines', true);
       const rounded = boolean('Rounded', false);
+      const hasGuideBar = boolean('Guide Bar', false);
+      const guide = hasGuideBar ? <GuideBar /> : null;
 
       const gradientBottom = hasGradient ? (
         <Gradient
@@ -508,6 +519,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
                 <Bar
                   rx={rx}
                   ry={ry}
+                  guide={guide}
                   rounded={rounded}
                   gradient={gradientTop}
                   rangeLines={rangelines}
@@ -515,6 +527,7 @@ storiesOf('Demos|Bar Chart/Vertical/Multi Series', module)
                 <Bar
                   rx={rx}
                   ry={ry}
+                  guide={guide}
                   rounded={rounded}
                   gradient={gradientBottom}
                   rangeLines={rangelines}
@@ -665,6 +678,8 @@ storiesOf('Demos|Bar Chart/Horizontal/Single Series', module)
       const height = number('Height', 350);
       const width = number('Width', 500);
       const color = select('Color Scheme', schemes, 'cybertron');
+      const hasGuideBar = boolean('Guide Bar', false);
+      const guide = hasGuideBar ? <GuideBar /> : null;
       const data = object('Data', categoryData);
       const gradient = hasGradient ? Bar.defaultProps.gradient : null;
 
@@ -685,7 +700,7 @@ storiesOf('Demos|Bar Chart/Horizontal/Single Series', module)
               colorScheme={color}
               layout="horizontal"
               padding={padding}
-              bar={<Bar rounded={rounded} gradient={gradient} />}
+              bar={<Bar rounded={rounded} gradient={gradient} guide={guide} />}
             />
           }
         />

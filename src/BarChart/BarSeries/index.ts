@@ -6,3 +6,4 @@ export * from './Bar';
 export * from './RangeLines';
 export * from './BarLabel';
 export * from './HistogramBarSeries';
+export * from './GuideBar';
