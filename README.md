@@ -110,6 +110,7 @@ Additional features:
 - Mark Lines
 - BigInt Support
 - Auto Sizing
+- Bar Guidelines
 - Range Lines
 - SSR
 
