@@ -17,7 +17,7 @@ import { DEFAULT_TRANSITION } from '../../common/Motion';
 import { BarLabelProps, BarLabel } from './BarLabel';
 import { formatValue } from '../../common/utils/formatting';
 import { GuideBarProps, GuideBar } from './GuideBar';
-import { ChartTooltipProps, ChartTooltip } from 'common/Tooltip';
+import { ChartTooltipProps, ChartTooltip } from '../../common/Tooltip';
 
 export type BarType =
   | 'standard'
