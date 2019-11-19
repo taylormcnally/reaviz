@@ -87,6 +87,13 @@ jobs:
       - store_artifacts:
           path: ./coverage
 
+  chroma:
+    <<: *job_defaults
+    steps:
+      - *checkout_code
+      - *attach_workspace
+      - run: npx chroma publish
+
   publish_storybook:
     <<: *job_defaults
     steps:
@@ -130,6 +137,14 @@ workflows:
           requires:
             - build_storybook
             - build_package
+      - chroma:
+          requires:
+            - build_storybook
+            - build_package
+            - test
+          filters:
+            branches:
+              ignore: master
       - publish_storybook:
           filters:
             branches:

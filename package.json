@@ -4,6 +4,7 @@
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook -p 9010 -s public",
+    "build-storybook": "build-storybook -s public",
     "storybook:build": "build-storybook -s public",
     "storybook:deploy": "storybook-to-ghpages --existing-output-dir=storybook-static",
     "storybook:ci": "storybook-to-ghpages --existing-output-dir=storybook-static --ci",
@@ -12,7 +13,8 @@
     "publish:dev": "node .circleci/publish-dev-builds.js",
     "publish:tag": "node .circleci/publish-tag-builds.js",
     "test": "jest --env=jsdom",
-    "prettier": "prettier --loglevel warn --write 'src/**/*.{ts,tsx,js,jsx}'"
+    "prettier": "prettier --loglevel warn --write 'src/**/*.{ts,tsx,js,jsx}'",
+    "chroma": "CHROMA_APP_CODE=6dhu12mvtl9 chroma"
   },
   "source": "src/index.ts",
   "main": "dist/index.cjs.js",
@@ -97,6 +99,7 @@
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "storybook-chroma": "^3.1.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
