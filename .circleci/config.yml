@@ -142,9 +142,6 @@ workflows:
             - build_storybook
             - build_package
             - test
-          filters:
-            branches:
-              ignore: master
       - publish_storybook:
           filters:
             branches:
