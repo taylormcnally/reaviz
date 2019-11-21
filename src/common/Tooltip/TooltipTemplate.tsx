@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, FC } from 'react';
 import { formatValue } from '../utils/formatting';
 import { ChartInternalDataTypes } from '../data';
 import css from './TooltipTemplate.module.scss';
@@ -32,9 +32,16 @@ interface TooltipTemplateProps {
   className?: any;
 }
 
-export class TooltipTemplate extends PureComponent<TooltipTemplateProps> {
-  renderValues(data: SingleTooltipValue, index: number) {
-    const { color } = this.props;
+export const TooltipTemplate: FC<TooltipTemplateProps> = ({
+  value,
+  color,
+  className
+}) => {
+  if (!value) {
+    return null;
+  }
+
+  const renderValues = (data: SingleTooltipValue, index: number) => {
     const fill = color(data, index);
 
     return (
@@ -46,46 +53,38 @@ export class TooltipTemplate extends PureComponent<TooltipTemplateProps> {
         <span>{formatValue(data.value || data.y)}</span>
       </span>
     );
-  }
+  };
 
-  renderMultiple(value: MultipleTooltipValues) {
+  const renderMultiple = (value: MultipleTooltipValues) => {
     const excessCount = value.data.length - 15;
     const pagedValues = value.data.slice(0, 15);
 
     return (
       <Fragment>
         {pagedValues.map((point, i) => (
-          <Fragment key={i}>{this.renderValues(point, i)}</Fragment>
+          <Fragment key={i}>{renderValues(point, i)}</Fragment>
         ))}
         {excessCount > 0 && <div>...{excessCount} more...</div>}
       </Fragment>
     );
-  }
+  };
 
-  render() {
-    const { value, className } = this.props;
+  const isMultiple = Array.isArray((value as any).data);
 
-    if (!value) {
-      return null;
-    }
-
-    const isMultiple = Array.isArray((value as any).data);
-
-    return (
-      <div className={className}>
-        <div className={css.label}>{formatValue(value!.x)}</div>
-        <div className={css.value}>
-          {isMultiple && this.renderMultiple(value as MultipleTooltipValues)}
-          {!isMultiple && (
-            <Fragment>
-              {formatValue(
-                (value as SingleTooltipValue).value ||
-                  (value as SingleTooltipValue).y
-              )}
-            </Fragment>
-          )}
-        </div>
+  return (
+    <div className={className}>
+      <div className={css.label}>{formatValue(value!.x)}</div>
+      <div className={css.value}>
+        {isMultiple && renderMultiple(value as MultipleTooltipValues)}
+        {!isMultiple && (
+          <Fragment>
+            {formatValue(
+              (value as SingleTooltipValue).value ||
+                (value as SingleTooltipValue).y
+            )}
+          </Fragment>
+        )}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
