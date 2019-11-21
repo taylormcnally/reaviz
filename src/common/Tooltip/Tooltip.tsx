@@ -98,7 +98,7 @@ export const Tooltip: FC<Partial<TooltipProps>> = ({
       clearTimeout(timeout.current);
       deactivate();
     };
-  });
+  }, [visible]);
 
   const deactivateAll = () =>
     tooltips.forEach((r, i) => {
