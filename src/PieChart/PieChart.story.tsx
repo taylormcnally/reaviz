@@ -48,6 +48,14 @@ storiesOf('Demos|Pie Chart/Pie', module)
   .add('Label Overlap', () => (
     <PieChart width={350} height={250} data={browserData} />
   ))
+  .add('Display All Labels', () => (
+    <PieChart
+      width={350}
+      height={250}
+      data={browserData}
+      displayAllLabels={true}
+    />
+  ))
   .add('Live Updating', () => <LiveUpdatingStory />)
   .add('Autosize', () => (
     <div style={{ width: '50vw', height: '50vh', border: 'solid 1px red' }}>

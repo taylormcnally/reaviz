@@ -1,3 +1,6 @@
+# 7.3.0 - 11/18/19
+- [Feature] Add `displayAllLabels` to `PieChart` component
+
 # 7.2.0 - 11/18/19
 - [Feature] Add ability to have tooltip only show up on bar hover
 - [Fix] Fix linear guage tooltip not working correctly

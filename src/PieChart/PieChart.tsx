@@ -23,6 +23,11 @@ interface PieChartProps extends ChartProps {
   disabled?: boolean;
 
   /**
+   * Whether to display labels even if their value has a small display radius.
+   */
+  displayAllLabels?: boolean;
+
+  /**
    * The series component that renders the arc components.
    */
   series: ReactElement<PieArcSeriesProps, typeof PieArcSeries>;
@@ -31,6 +36,7 @@ interface PieChartProps extends ChartProps {
 export class PieChart extends Component<PieChartProps> {
   static defaultProps: PieChartProps = {
     disabled: false,
+    displayAllLabels: false,
     data: [],
     margins: 10,
     series: (
@@ -39,6 +45,7 @@ export class PieChart extends Component<PieChartProps> {
         doughnut={false}
         innerRadius={0}
         arcWidth={0.25}
+        displayAllLabels={false}
       />
     )
   };
@@ -56,7 +63,7 @@ export class PieChart extends Component<PieChartProps> {
 
   renderChart(containerProps: ChartContainerChildProps) {
     const { chartWidth, chartHeight } = containerProps;
-    const { series } = this.props;
+    const { series, displayAllLabels } = this.props;
     const data = this.getData(this.props.data, this.props.series.props.explode);
 
     return (
@@ -65,6 +72,7 @@ export class PieChart extends Component<PieChartProps> {
         data={data}
         height={chartHeight}
         width={chartWidth}
+        displayAllLabels={displayAllLabels}
       />
     );
   }

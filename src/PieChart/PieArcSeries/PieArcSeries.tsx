@@ -14,6 +14,7 @@ export interface PieArcSeriesProps {
   arcWidth: number;
   doughnut: boolean;
   explode: boolean;
+  displayAllLabels: boolean;
   height: number;
   width: number;
   label?: ReactElement<PieArcLabelProps, typeof PieArcLabel> | null;
@@ -31,6 +32,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
     colorScheme: 'cybertron',
     innerRadius: 0,
     explode: false,
+    displayAllLabels: false,
     arcWidth: 0.25,
     label: <PieArcLabel />,
     arc: <PieArc />
@@ -48,6 +50,12 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
     };
   }
 
+  shouldDisplayLabel(arcData) {
+    const { displayAllLabels } = this.props
+
+    return displayAllLabels || labelVisible(arcData)
+  }
+
   calculateLabelPositions(outerArc, outerRadius) {
     const { label, data } = this.props;
 
@@ -62,7 +70,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
 
       for (let i = 0; i < data.length - 1; i++) {
         const a = data[i];
-        if (!labelVisible(a)) {
+        if (!this.shouldDisplayLabel(a)) {
           continue;
         }
 
@@ -70,7 +78,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
 
         for (let j = i + 1; j < data.length; j++) {
           const b = data[j];
-          if (!labelVisible(b)) {
+          if (!this.shouldDisplayLabel(b)) {
             continue;
           }
 
@@ -147,7 +155,7 @@ export class PieArcSeries extends Component<PieArcSeriesProps> {
       <Fragment>
         {data.map((arcData: any, index: number) => (
           <Fragment key={arcData.data.key.toString()}>
-            {label && labelVisible(arcData) && (
+            {label && this.shouldDisplayLabel(arcData) && (
               <CloneElement<PieArcLabelProps>
                 element={label}
                 data={arcData}

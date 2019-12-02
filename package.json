@@ -1,6 +1,6 @@
 {
   "name": "reaviz",
-  "version": "7.2.0",
+  "version": "7.3.0",
   "description": "Data Visualization using React and D3.js",
   "scripts": {
     "start": "start-storybook -p 9010 -s public",
@@ -99,7 +99,6 @@
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
-    "storybook-chroma": "^3.1.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
@@ -152,6 +151,7 @@
     "rollup-plugin-typescript2": "^0.25.2",
     "sass-loader": "^8.0.0",
     "semver": "^6.3.0",
+    "storybook-chroma": "^3.1.0",
     "topojson-client": "^3.1.0",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.1",
