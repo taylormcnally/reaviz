@@ -1,5 +1,8 @@
-# 7.3.0 - 11/18/19
+# 7.2.1 - 12/2/19
 - [Feature] Add `displayAllLabels` to `PieChart` component
+- [Fix] Improve performance of `Tooltip`
+- [Chore] Move more components to `FC`
+- [Chore] Bump depepdencies
 
 # 7.2.0 - 11/18/19
 - [Feature] Add ability to have tooltip only show up on bar hover
