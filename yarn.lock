@@ -6279,48 +6279,10 @@ es-abstract@^1.10.0, es-abstract@^1.12.0, es-abstract@^1.13.0, es-abstract@^1.14
     string.prototype.trimleft "^2.1.0"
     string.prototype.trimright "^2.1.0"
 
-es-abstract@^1.16.2:
-  version "1.16.2"
-  resolved "https://registry.npmjs.org/es-abstract/-/es-abstract-1.16.2.tgz#4e874331645e9925edef141e74fc4bd144669d34"
-  integrity sha512-jYo/J8XU2emLXl3OLwfwtuFfuF2w6DYPs+xy9ZfVyPkDcrauu6LYrw/q2TyCtrbc/KUdCiC5e9UajRhgNkVopA==
-  dependencies:
-    es-to-primitive "^1.2.1"
-    function-bind "^1.1.1"
-    has "^1.0.3"
-    has-symbols "^1.0.1"
-    is-callable "^1.1.4"
-    is-regex "^1.0.4"
-    object-inspect "^1.7.0"
-    object-keys "^1.1.1"
-    string.prototype.trimleft "^2.1.0"
-    string.prototype.trimright "^2.1.0"
-
-es-get-iterator@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/es-get-iterator/-/es-get-iterator-1.0.1.tgz#ebc4d3bbc2d59dd95a0ecef441ca2dbce7d9e2cd"
-  integrity sha512-pswpctxWRElQDcP0RJy0qmNrpf6nH9SeQl8dra5fFHBPHKfpVIST27Kv4j5enE8JhIssRBI4QPMrNvcyIPhapQ==
-  dependencies:
-    es-abstract "^1.16.2"
-    has-symbols "^1.0.1"
-    is-arguments "^1.0.4"
-    is-map "^2.0.0"
-    is-set "^2.0.0"
-    is-string "^1.0.4"
-    isarray "^2.0.5"
-
 es-to-primitive@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/es-to-primitive/-/es-to-primitive-1.2.0.tgz#edf72478033456e8dda8ef09e00ad9650707f377"
   integrity sha512-qZryBOJjV//LaxLTV6UC//WewneB3LcXOL9NP++ozKVXsIIIpm/2c13UDiD9Jp2eThsecw9m3jPqDwTyobcdbg==
-  dependencies:
-    is-callable "^1.1.4"
-    is-date-object "^1.0.1"
-    is-symbol "^1.0.2"
-
-es-to-primitive@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/es-to-primitive/-/es-to-primitive-1.2.1.tgz#e55cd4c9cdc188bcefb03b366c736323fc5c898a"
-  integrity sha512-QCOllgZJtaUo9miYBcLChTUaHNjJF3PYs1VidD7AwiEj1kYxKeQTctLAezAOH5ZKRH0g2IgPn6KwB4IT8iRpvA==
   dependencies:
     is-callable "^1.1.4"
     is-date-object "^1.0.1"
@@ -7094,11 +7056,6 @@ functions-have-names@^1.1.1:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.1.1.tgz#79d35927f07b8e7103d819fed475b64ccf7225ea"
   integrity sha512-U0kNHUoxwPNPWOJaMG7Z00d4a/qZVrFtzWJRaK8V9goaVOCXBSQSJpt3MYGNtkScKEBKovxLjnNdC9MlXwo5Pw==
 
-functions-have-names@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/functions-have-names/-/functions-have-names-1.2.0.tgz#83da7583e4ea0c9ac5ff530f73394b033e0bf77d"
-  integrity sha512-zKXyzksTeaCSw5wIX79iCA40YAa6CJMJgNg9wdkU/ERBrIdPSimPICYiLp65lRbSBqtiHql/HZfS2DyI/AH6tQ==
-
 fuse.js@^3.4.4:
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-3.4.5.tgz#8954fb43f9729bd5dbcb8c08f251db552595a7a6"
@@ -7440,11 +7397,6 @@ has-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-symbols/-/has-symbols-1.0.0.tgz#ba1a8f1af2a0fc39650f5c850367704122063b44"
   integrity sha1-uhqPGvKg/DllD1yFA2dwQSIGO0Q=
-
-has-symbols@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/has-symbols/-/has-symbols-1.0.1.tgz#9f5214758a44196c406d9bd76cebf81ec2dd31e8"
-  integrity sha512-PLcsoqu++dmEIZB+6totNFKq/7Do+Z0u4oT0zKOJNl3lYK6vGwwu2hjHs+68OEZbTjiUE9bgOABXbP/GvrS0Kg==
 
 has-to-string-tag-x@^1.2.0:
   version "1.4.1"
@@ -8024,11 +7976,6 @@ is-alphanumerical@^1.0.0:
     is-alphabetical "^1.0.0"
     is-decimal "^1.0.0"
 
-is-arguments@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/is-arguments/-/is-arguments-1.0.4.tgz#3faf966c7cba0ff437fb31f6250082fcf0448cf3"
-  integrity sha512-xPh0Rmt8NE65sNzvyUmWgI1tz3mKq74lGA0mL8LYZcoIzKOzDh6HmrYm3d18k60nHerC8A9Km8kYu87zfSFnLA==
-
 is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
@@ -8144,13 +8091,11 @@ is-directory@^0.3.1:
   resolved "https://registry.yarnpkg.com/is-directory/-/is-directory-0.3.1.tgz#61339b6f2475fc772fd9c9d83f5c8575dc154ae1"
   integrity sha1-YTObbyR1/Hcv2cnYP1yFddwVSuE=
 
-is-equal@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.npmjs.org/is-equal/-/is-equal-1.6.1.tgz#74fafde5060fcaf187041c05f11f0b9f020bb9b3"
-  integrity sha512-3/79QTolnfNFrxQAvqH8M+O01uGWsVq54BUPG2mXQH7zi4BE/0TY+fmA444t8xSBvIwyNMvsTmCZ5ViVDlqPJg==
+is-equal@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.npmjs.org/is-equal/-/is-equal-1.6.0.tgz#2099c05962695135dd90434c2455b6ac1e12f510"
+  integrity sha512-MAMPTV860UxGx7BC8dtbVvB8dNdu27SLhQ0BXUslRXJ5ho6rRSWxRlnvXOAlhrXoAPKGRw7d51xrBvwLJI0lzQ==
   dependencies:
-    es-get-iterator "^1.0.1"
-    functions-have-names "^1.2.0"
     has "^1.0.3"
     is-arrow-function "^2.0.3"
     is-bigint "^1.0.0"
@@ -8161,12 +8106,8 @@ is-equal@^1.6.1:
     is-number-object "^1.0.3"
     is-regex "^1.0.4"
     is-string "^1.0.4"
-    is-symbol "^1.0.3"
-    isarray "^2.0.5"
-    object-inspect "^1.7.0"
+    is-symbol "^1.0.2"
     object.entries "^1.1.0"
-    which-boxed-primitive "^1.0.1"
-    which-collection "^1.0.0"
 
 is-extendable@^0.1.0, is-extendable@^0.1.1:
   version "0.1.1"
@@ -8237,11 +8178,6 @@ is-hexadecimal@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/is-hexadecimal/-/is-hexadecimal-1.0.3.tgz#e8a426a69b6d31470d3a33a47bb825cda02506ee"
   integrity sha512-zxQ9//Q3D/34poZf8fiy3m3XVpbQc7ren15iKqrTtLPwkPD/t3Scy9Imp63FujULGxuK0ZlCwoo5xNpktFgbOA==
-
-is-map@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/is-map/-/is-map-2.0.0.tgz#1d223ada48a1f5fdb7b3c5c21a45b6a4d48aec3c"
-  integrity sha512-ptj+FffEGJN9hLuakga2S3mYQt5PVN+w7+fL3SAgxKhlCePSt24Q3fiSozhvphbwCQ0+QPA1rJnLSoS2LnbCVw==
 
 is-module@^1.0.0:
   version "1.0.0"
@@ -8355,11 +8291,6 @@ is-root@2.1.0:
   resolved "https://registry.yarnpkg.com/is-root/-/is-root-2.1.0.tgz#809e18129cf1129644302a4f8544035d51984a9c"
   integrity sha512-AGOriNp96vNBd3HtU+RzFEc75FfR5ymiYv8E553I71SCeXBiMsVDUtdio1OEFvrPyLIQ9tVR5RxXIFe5PUFjMg==
 
-is-set@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/is-set/-/is-set-2.0.0.tgz#ae93342b1de5560c720b4b71599abc799d183cf4"
-  integrity sha512-So5/xwRDzU3X7kOt2vpvrsj/Asx5E7Q5IyX6itksB96FJgyydSe9tFwfCq7IZ8URDS4h45FhNgfENToTgBfmgw==
-
 is-ssh@^1.3.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/is-ssh/-/is-ssh-1.3.1.tgz#f349a8cadd24e65298037a522cf7520f2e81a0f3"
@@ -8396,13 +8327,6 @@ is-symbol@^1.0.2:
   dependencies:
     has-symbols "^1.0.0"
 
-is-symbol@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/is-symbol/-/is-symbol-1.0.3.tgz#38e1014b9e6329be0de9d24a414fd7441ec61937"
-  integrity sha512-OwijhaRSgqvhm/0ZdAcXNZt9lYdKFpcRDT5ULUuYXPoT794UNOdU+gpT6Rzo7b4V2HUl/op6GqY894AZwv9faQ==
-  dependencies:
-    has-symbols "^1.0.1"
-
 is-typedarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
@@ -8417,16 +8341,6 @@ is-utf8@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-utf8/-/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
   integrity sha1-Sw2hRCEE0bM2NA6AeX6GXPOffXI=
-
-is-weakmap@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/is-weakmap/-/is-weakmap-2.0.0.tgz#88bd0b8ec3a5724477637d58ed96cb00552593fd"
-  integrity sha512-vZKPGTqgcrNWsav9/lvXA4DvZtxqzdkSm624p85UvZV47pk1cvw+JQ5YrZfQ1KqsogYxnIztAtu4WBdPNz/n/w==
-
-is-weakset@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/is-weakset/-/is-weakset-2.0.0.tgz#119577bcf75528e7d5b4c7ebaa4fdee9e2d3e5d7"
-  integrity sha512-bDiKqyPK2GeWiZNsm1zHf0adJJ2I0gNzwjBxu4iajQPgJH3UZiXTGUPMNmbQ3TIBYPs+tVNpiDSF/eF5U4EF7A==
 
 is-whitespace-character@^1.0.0:
   version "1.0.3"
@@ -8452,11 +8366,6 @@ isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
-
-isarray@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.npmjs.org/isarray/-/isarray-2.0.5.tgz#8af1e4c1221244cc62459faf38940d4e644a5723"
-  integrity sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==
 
 isexe@^2.0.0:
   version "2.0.0"
@@ -10428,11 +10337,6 @@ object-inspect@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.6.0.tgz#c70b6cbf72f274aab4c34c0c82f5167bf82cf15b"
   integrity sha512-GJzfBZ6DgDAmnuaM3104jR4s1Myxr3Y3zfIyN4z3UdqN69oSRacNK8UhnobDdC+7J2AHCjGwxQubNJfE70SXXQ==
-
-object-inspect@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.npmjs.org/object-inspect/-/object-inspect-1.7.0.tgz#f4f6bd181ad77f006b5ece60bd0b6f398ff74a67"
-  integrity sha512-a7pEHdh1xKIAgTySUGgLMx/xwDZskN1Ud6egYYN3EdRW4ZMPNEDUTF+hwy2LUC+Bl+SyLXANnwz/jyh/qutKUw==
 
 object-keys@^1.0.11, object-keys@^1.0.12, object-keys@^1.1.1:
   version "1.1.1"
@@ -14734,27 +14638,6 @@ whatwg-url@^7.0.0:
     lodash.sortby "^4.7.0"
     tr46 "^1.0.1"
     webidl-conversions "^4.0.2"
-
-which-boxed-primitive@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/which-boxed-primitive/-/which-boxed-primitive-1.0.1.tgz#cbe8f838ebe91ba2471bb69e9edbda67ab5a5ec1"
-  integrity sha512-7BT4TwISdDGBgaemWU0N0OU7FeAEJ9Oo2P1PHRm/FCWoEi2VLWC9b6xvxAA3C/NMpxg3HXVgi0sMmGbNUbNepQ==
-  dependencies:
-    is-bigint "^1.0.0"
-    is-boolean-object "^1.0.0"
-    is-number-object "^1.0.3"
-    is-string "^1.0.4"
-    is-symbol "^1.0.2"
-
-which-collection@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/which-collection/-/which-collection-1.0.0.tgz#303d38022473f4b7048b529b45f6c842d8814269"
-  integrity sha512-mG4RtFHE+17N2AxRNvBQ488oBjrhaOaI/G+soUaRJwdyDbu5zmqoAKPYBlY7Zd+QTwpfvInRLKo40feo2si1yA==
-  dependencies:
-    is-map "^2.0.0"
-    is-set "^2.0.0"
-    is-weakmap "^2.0.0"
-    is-weakset "^2.0.0"
 
 which-module@^1.0.0:
   version "1.0.0"

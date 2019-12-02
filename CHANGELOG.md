@@ -1,3 +1,6 @@
+# 7.2.2 - 12/2/19
+- [Fix] Lock `is-equal` dep due to errors
+
 # 7.2.1 - 12/2/19
 - [Feature] Add `displayAllLabels` to `PieChart` component
 - [Fix] Improve performance of `Tooltip`
