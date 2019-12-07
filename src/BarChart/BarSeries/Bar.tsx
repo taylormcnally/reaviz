@@ -35,6 +35,12 @@ export type BarProps = {
   active: boolean;
 
   /**
+   * Chroma brightness factor to brighten the active bar. See
+   * https://gka.github.io/chroma.js/#color-brighten for more info.
+   */
+  activeBrightness?: number;
+
+  /**
    * D3 scale for X Axis. Set internally by `BarChart`.
    */
   xScale: any;
@@ -198,6 +204,7 @@ interface BarState {
 
 export class Bar extends Component<BarProps, BarState> {
   static defaultProps: Partial<BarProps> = {
+    activeBrightness: 0.5,
     rounded: true,
     rx: 0,
     ry: 0,
@@ -565,6 +572,7 @@ export class Bar extends Component<BarProps, BarState> {
 
   render() {
     const {
+      activeBrightness,
       id,
       gradient,
       data,
@@ -585,10 +593,12 @@ export class Bar extends Component<BarProps, BarState> {
     const active = tooltip ? this.state.active : this.props.active;
     const stroke = color(data, barIndex);
     const coords = this.getCoords(data);
-    const currentColorShade = active ? chroma(stroke).brighten(0.5) : stroke;
+    const currentColorShade = active
+      ? chroma(stroke).brighten(activeBrightness)
+      : stroke;
     const rangeLineColor = (rangeLines && rangeLines.props.color) || stroke;
     const rangeLineColorShade = active
-      ? chroma(rangeLineColor).brighten(0.5)
+      ? chroma(rangeLineColor).brighten(activeBrightness)
       : rangeLineColor;
     const index = groupIndex !== undefined ? groupIndex : barIndex;
     const isVertical = this.getIsVertical();
